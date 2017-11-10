@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -978,7 +980,7 @@ impl AnalyticsS3ExportFileFormatSerializer {
     }
 }
 
-pub struct StreamingBody(Box<Read>);
+pub struct StreamingBody(Box<FuturesStream<Item = Vec<u8>, Error = HttpDispatchError> + Send>);
 
 impl fmt::Debug for StreamingBody {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -986,23 +988,12 @@ impl fmt::Debug for StreamingBody {
     }
 }
 
-impl ::std::ops::Deref for StreamingBody {
-    type Target = Box<Read>;
+impl FuturesStream for StreamingBody {
+    type Item = Vec<u8>;
+    type Error = HttpDispatchError;
 
-    fn deref(&self) -> &Box<Read> {
-        &self.0
-    }
-}
-
-impl ::std::ops::DerefMut for StreamingBody {
-    fn deref_mut(&mut self) -> &mut Box<Read> {
-        &mut self.0
-    }
-}
-
-impl ::std::io::Read for StreamingBody {
-    fn read(&mut self, buf: &mut [u8]) -> ::std::io::Result<usize> {
-        self.0.read(buf)
+    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+        self.0.poll()
     }
 }
 
@@ -18163,441 +18154,472 @@ impl Error for UploadPartCopyError {
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
 pub trait S3 {
     #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
-    fn abort_multipart_upload(&self,
-                              input: &AbortMultipartUploadRequest)
-                              -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError>;
+    fn abort_multipart_upload
+        (&self,
+         input: &AbortMultipartUploadRequest)
+         -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError>;
 
 
     #[doc="Completes a multipart upload by assembling previously uploaded parts."]
     fn complete_multipart_upload
         (&self,
          input: &CompleteMultipartUploadRequest)
-         -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
+         -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
 
 
     #[doc="Creates a copy of an object that is already stored in Amazon S3."]
-    fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError>;
+    fn copy_object(&self,
+                   input: &CopyObjectRequest)
+                   -> RusotoFuture<CopyObjectOutput, CopyObjectError>;
 
 
     #[doc="Creates a new bucket."]
     fn create_bucket(&self,
                      input: &CreateBucketRequest)
-                     -> Result<CreateBucketOutput, CreateBucketError>;
+                     -> RusotoFuture<CreateBucketOutput, CreateBucketError>;
 
 
     #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
     fn create_multipart_upload
         (&self,
          input: &CreateMultipartUploadRequest)
-         -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError>;
+         -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError>;
 
 
     #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
-    fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError>;
+    fn delete_bucket(&self, input: &DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError>;
 
 
     #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
     fn delete_bucket_analytics_configuration
         (&self,
          input: &DeleteBucketAnalyticsConfigurationRequest)
-         -> Result<(), DeleteBucketAnalyticsConfigurationError>;
+         -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError>;
 
 
     #[doc="Deletes the cors configuration information set for the bucket."]
     fn delete_bucket_cors(&self,
                           input: &DeleteBucketCorsRequest)
-                          -> Result<(), DeleteBucketCorsError>;
+                          -> RusotoFuture<(), DeleteBucketCorsError>;
 
 
     #[doc="Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
     fn delete_bucket_inventory_configuration
         (&self,
          input: &DeleteBucketInventoryConfigurationRequest)
-         -> Result<(), DeleteBucketInventoryConfigurationError>;
+         -> RusotoFuture<(), DeleteBucketInventoryConfigurationError>;
 
 
     #[doc="Deletes the lifecycle configuration from the bucket."]
     fn delete_bucket_lifecycle(&self,
                                input: &DeleteBucketLifecycleRequest)
-                               -> Result<(), DeleteBucketLifecycleError>;
+                               -> RusotoFuture<(), DeleteBucketLifecycleError>;
 
 
     #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
-    fn delete_bucket_metrics_configuration(&self,
-                                           input: &DeleteBucketMetricsConfigurationRequest)
-                                           -> Result<(), DeleteBucketMetricsConfigurationError>;
+    fn delete_bucket_metrics_configuration
+        (&self,
+         input: &DeleteBucketMetricsConfigurationRequest)
+         -> RusotoFuture<(), DeleteBucketMetricsConfigurationError>;
 
 
     #[doc="Deletes the policy from the bucket."]
     fn delete_bucket_policy(&self,
                             input: &DeleteBucketPolicyRequest)
-                            -> Result<(), DeleteBucketPolicyError>;
+                            -> RusotoFuture<(), DeleteBucketPolicyError>;
 
 
     #[doc="Deletes the replication configuration from the bucket."]
     fn delete_bucket_replication(&self,
                                  input: &DeleteBucketReplicationRequest)
-                                 -> Result<(), DeleteBucketReplicationError>;
+                                 -> RusotoFuture<(), DeleteBucketReplicationError>;
 
 
     #[doc="Deletes the tags from the bucket."]
     fn delete_bucket_tagging(&self,
                              input: &DeleteBucketTaggingRequest)
-                             -> Result<(), DeleteBucketTaggingError>;
+                             -> RusotoFuture<(), DeleteBucketTaggingError>;
 
 
     #[doc="This operation removes the website configuration from the bucket."]
     fn delete_bucket_website(&self,
                              input: &DeleteBucketWebsiteRequest)
-                             -> Result<(), DeleteBucketWebsiteError>;
+                             -> RusotoFuture<(), DeleteBucketWebsiteError>;
 
 
     #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
     fn delete_object(&self,
                      input: &DeleteObjectRequest)
-                     -> Result<DeleteObjectOutput, DeleteObjectError>;
+                     -> RusotoFuture<DeleteObjectOutput, DeleteObjectError>;
 
 
     #[doc="Removes the tag-set from an existing object."]
-    fn delete_object_tagging(&self,
-                             input: &DeleteObjectTaggingRequest)
-                             -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
+    fn delete_object_tagging
+        (&self,
+         input: &DeleteObjectTaggingRequest)
+         -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
 
 
     #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
     fn delete_objects(&self,
                       input: &DeleteObjectsRequest)
-                      -> Result<DeleteObjectsOutput, DeleteObjectsError>;
+                      -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError>;
 
 
     #[doc="Returns the accelerate configuration of a bucket."]
     fn get_bucket_accelerate_configuration
         (&self,
          input: &GetBucketAccelerateConfigurationRequest)
-         -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>;
+         -> RusotoFuture<GetBucketAccelerateConfigurationOutput,
+                         GetBucketAccelerateConfigurationError>;
 
 
     #[doc="Gets the access control policy for the bucket."]
     fn get_bucket_acl(&self,
                       input: &GetBucketAclRequest)
-                      -> Result<GetBucketAclOutput, GetBucketAclError>;
+                      -> RusotoFuture<GetBucketAclOutput, GetBucketAclError>;
 
 
     #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
     fn get_bucket_analytics_configuration
         (&self,
          input: &GetBucketAnalyticsConfigurationRequest)
-         -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
+         -> RusotoFuture<GetBucketAnalyticsConfigurationOutput,
+                         GetBucketAnalyticsConfigurationError>;
 
 
     #[doc="Returns the cors configuration for the bucket."]
     fn get_bucket_cors(&self,
                        input: &GetBucketCorsRequest)
-                       -> Result<GetBucketCorsOutput, GetBucketCorsError>;
+                       -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError>;
 
 
     #[doc="Returns an inventory configuration (identified by the inventory ID) from the bucket."]
     fn get_bucket_inventory_configuration
         (&self,
          input: &GetBucketInventoryConfigurationRequest)
-         -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>;
+         -> RusotoFuture<GetBucketInventoryConfigurationOutput,
+                         GetBucketInventoryConfigurationError>;
 
 
     #[doc="Deprecated, see the GetBucketLifecycleConfiguration operation."]
     fn get_bucket_lifecycle(&self,
                             input: &GetBucketLifecycleRequest)
-                            -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError>;
+                            -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError>;
 
 
     #[doc="Returns the lifecycle configuration information set on the bucket."]
     fn get_bucket_lifecycle_configuration
         (&self,
          input: &GetBucketLifecycleConfigurationRequest)
-         -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>;
+         -> RusotoFuture<GetBucketLifecycleConfigurationOutput,
+                         GetBucketLifecycleConfigurationError>;
 
 
     #[doc="Returns the region the bucket resides in."]
     fn get_bucket_location(&self,
                            input: &GetBucketLocationRequest)
-                           -> Result<GetBucketLocationOutput, GetBucketLocationError>;
+                           -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError>;
 
 
     #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
     fn get_bucket_logging(&self,
                           input: &GetBucketLoggingRequest)
-                          -> Result<GetBucketLoggingOutput, GetBucketLoggingError>;
+                          -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError>;
 
 
     #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
     fn get_bucket_metrics_configuration
         (&self,
          input: &GetBucketMetricsConfigurationRequest)
-         -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
+         -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
 
 
     #[doc="Deprecated, see the GetBucketNotificationConfiguration operation."]
     fn get_bucket_notification
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
-         -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError>;
+         -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError>;
 
 
     #[doc="Returns the notification configuration of a bucket."]
     fn get_bucket_notification_configuration
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
-         -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError>;
+         -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError>;
 
 
     #[doc="Returns the policy of a specified bucket."]
     fn get_bucket_policy(&self,
                          input: &GetBucketPolicyRequest)
-                         -> Result<GetBucketPolicyOutput, GetBucketPolicyError>;
+                         -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError>;
 
 
     #[doc="Returns the replication configuration of a bucket."]
-    fn get_bucket_replication(&self,
-                              input: &GetBucketReplicationRequest)
-                              -> Result<GetBucketReplicationOutput, GetBucketReplicationError>;
+    fn get_bucket_replication
+        (&self,
+         input: &GetBucketReplicationRequest)
+         -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError>;
 
 
     #[doc="Returns the request payment configuration of a bucket."]
     fn get_bucket_request_payment
         (&self,
          input: &GetBucketRequestPaymentRequest)
-         -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
+         -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
 
 
     #[doc="Returns the tag set associated with the bucket."]
     fn get_bucket_tagging(&self,
                           input: &GetBucketTaggingRequest)
-                          -> Result<GetBucketTaggingOutput, GetBucketTaggingError>;
+                          -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError>;
 
 
     #[doc="Returns the versioning state of a bucket."]
-    fn get_bucket_versioning(&self,
-                             input: &GetBucketVersioningRequest)
-                             -> Result<GetBucketVersioningOutput, GetBucketVersioningError>;
+    fn get_bucket_versioning
+        (&self,
+         input: &GetBucketVersioningRequest)
+         -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError>;
 
 
     #[doc="Returns the website configuration for a bucket."]
     fn get_bucket_website(&self,
                           input: &GetBucketWebsiteRequest)
-                          -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError>;
+                          -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError>;
 
 
     #[doc="Retrieves objects from Amazon S3."]
-    fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError>;
+    fn get_object(&self,
+                  input: &GetObjectRequest)
+                  -> RusotoFuture<GetObjectOutput, GetObjectError>;
 
 
     #[doc="Returns the access control list (ACL) of an object."]
     fn get_object_acl(&self,
                       input: &GetObjectAclRequest)
-                      -> Result<GetObjectAclOutput, GetObjectAclError>;
+                      -> RusotoFuture<GetObjectAclOutput, GetObjectAclError>;
 
 
     #[doc="Returns the tag-set of an object."]
     fn get_object_tagging(&self,
                           input: &GetObjectTaggingRequest)
-                          -> Result<GetObjectTaggingOutput, GetObjectTaggingError>;
+                          -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError>;
 
 
     #[doc="Return torrent files from a bucket."]
     fn get_object_torrent(&self,
                           input: &GetObjectTorrentRequest)
-                          -> Result<GetObjectTorrentOutput, GetObjectTorrentError>;
+                          -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError>;
 
 
     #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
-    fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError>;
+    fn head_bucket(&self, input: &HeadBucketRequest) -> RusotoFuture<(), HeadBucketError>;
 
 
     #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
-    fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError>;
+    fn head_object(&self,
+                   input: &HeadObjectRequest)
+                   -> RusotoFuture<HeadObjectOutput, HeadObjectError>;
 
 
     #[doc="Lists the analytics configurations for the bucket."]
     fn list_bucket_analytics_configurations
         (&self,
          input: &ListBucketAnalyticsConfigurationsRequest)
-         -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>;
+         -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput,
+                         ListBucketAnalyticsConfigurationsError>;
 
 
     #[doc="Returns a list of inventory configurations for the bucket."]
     fn list_bucket_inventory_configurations
         (&self,
          input: &ListBucketInventoryConfigurationsRequest)
-         -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>;
+         -> RusotoFuture<ListBucketInventoryConfigurationsOutput,
+                         ListBucketInventoryConfigurationsError>;
 
 
     #[doc="Lists the metrics configurations for the bucket."]
     fn list_bucket_metrics_configurations
         (&self,
          input: &ListBucketMetricsConfigurationsRequest)
-         -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>;
+         -> RusotoFuture<ListBucketMetricsConfigurationsOutput,
+                         ListBucketMetricsConfigurationsError>;
 
 
     #[doc="Returns a list of all buckets owned by the authenticated sender of the request."]
-    fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError>;
+    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError>;
 
 
     #[doc="This operation lists in-progress multipart uploads."]
-    fn list_multipart_uploads(&self,
-                              input: &ListMultipartUploadsRequest)
-                              -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError>;
+    fn list_multipart_uploads
+        (&self,
+         input: &ListMultipartUploadsRequest)
+         -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError>;
 
 
     #[doc="Returns metadata about all of the versions of objects in a bucket."]
     fn list_object_versions(&self,
                             input: &ListObjectVersionsRequest)
-                            -> Result<ListObjectVersionsOutput, ListObjectVersionsError>;
+                            -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError>;
 
 
     #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
     fn list_objects(&self,
                     input: &ListObjectsRequest)
-                    -> Result<ListObjectsOutput, ListObjectsError>;
+                    -> RusotoFuture<ListObjectsOutput, ListObjectsError>;
 
 
     #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
     fn list_objects_v2(&self,
                        input: &ListObjectsV2Request)
-                       -> Result<ListObjectsV2Output, ListObjectsV2Error>;
+                       -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error>;
 
 
     #[doc="Lists the parts that have been uploaded for a specific multipart upload."]
-    fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError>;
+    fn list_parts(&self,
+                  input: &ListPartsRequest)
+                  -> RusotoFuture<ListPartsOutput, ListPartsError>;
 
 
     #[doc="Sets the accelerate configuration of an existing bucket."]
-    fn put_bucket_accelerate_configuration(&self,
-                                           input: &PutBucketAccelerateConfigurationRequest)
-                                           -> Result<(), PutBucketAccelerateConfigurationError>;
+    fn put_bucket_accelerate_configuration
+        (&self,
+         input: &PutBucketAccelerateConfigurationRequest)
+         -> RusotoFuture<(), PutBucketAccelerateConfigurationError>;
 
 
     #[doc="Sets the permissions on a bucket using access control lists (ACL)."]
-    fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError>;
+    fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError>;
 
 
     #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-    fn put_bucket_analytics_configuration(&self,
-                                          input: &PutBucketAnalyticsConfigurationRequest)
-                                          -> Result<(), PutBucketAnalyticsConfigurationError>;
+    fn put_bucket_analytics_configuration
+        (&self,
+         input: &PutBucketAnalyticsConfigurationRequest)
+         -> RusotoFuture<(), PutBucketAnalyticsConfigurationError>;
 
 
     #[doc="Sets the cors configuration for a bucket."]
-    fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError>;
+    fn put_bucket_cors(&self,
+                       input: &PutBucketCorsRequest)
+                       -> RusotoFuture<(), PutBucketCorsError>;
 
 
     #[doc="Adds an inventory configuration (identified by the inventory ID) from the bucket."]
-    fn put_bucket_inventory_configuration(&self,
-                                          input: &PutBucketInventoryConfigurationRequest)
-                                          -> Result<(), PutBucketInventoryConfigurationError>;
+    fn put_bucket_inventory_configuration
+        (&self,
+         input: &PutBucketInventoryConfigurationRequest)
+         -> RusotoFuture<(), PutBucketInventoryConfigurationError>;
 
 
     #[doc="Deprecated, see the PutBucketLifecycleConfiguration operation."]
     fn put_bucket_lifecycle(&self,
                             input: &PutBucketLifecycleRequest)
-                            -> Result<(), PutBucketLifecycleError>;
+                            -> RusotoFuture<(), PutBucketLifecycleError>;
 
 
     #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
-    fn put_bucket_lifecycle_configuration(&self,
-                                          input: &PutBucketLifecycleConfigurationRequest)
-                                          -> Result<(), PutBucketLifecycleConfigurationError>;
+    fn put_bucket_lifecycle_configuration
+        (&self,
+         input: &PutBucketLifecycleConfigurationRequest)
+         -> RusotoFuture<(), PutBucketLifecycleConfigurationError>;
 
 
     #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
     fn put_bucket_logging(&self,
                           input: &PutBucketLoggingRequest)
-                          -> Result<(), PutBucketLoggingError>;
+                          -> RusotoFuture<(), PutBucketLoggingError>;
 
 
     #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
     fn put_bucket_metrics_configuration(&self,
                                         input: &PutBucketMetricsConfigurationRequest)
-                                        -> Result<(), PutBucketMetricsConfigurationError>;
+                                        -> RusotoFuture<(), PutBucketMetricsConfigurationError>;
 
 
     #[doc="Deprecated, see the PutBucketNotificationConfiguraiton operation."]
     fn put_bucket_notification(&self,
                                input: &PutBucketNotificationRequest)
-                               -> Result<(), PutBucketNotificationError>;
+                               -> RusotoFuture<(), PutBucketNotificationError>;
 
 
     #[doc="Enables notifications of specified events for a bucket."]
     fn put_bucket_notification_configuration
         (&self,
          input: &PutBucketNotificationConfigurationRequest)
-         -> Result<(), PutBucketNotificationConfigurationError>;
+         -> RusotoFuture<(), PutBucketNotificationConfigurationError>;
 
 
     #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
     fn put_bucket_policy(&self,
                          input: &PutBucketPolicyRequest)
-                         -> Result<(), PutBucketPolicyError>;
+                         -> RusotoFuture<(), PutBucketPolicyError>;
 
 
     #[doc="Creates a new replication configuration (or replaces an existing one, if present)."]
     fn put_bucket_replication(&self,
                               input: &PutBucketReplicationRequest)
-                              -> Result<(), PutBucketReplicationError>;
+                              -> RusotoFuture<(), PutBucketReplicationError>;
 
 
     #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
     fn put_bucket_request_payment(&self,
                                   input: &PutBucketRequestPaymentRequest)
-                                  -> Result<(), PutBucketRequestPaymentError>;
+                                  -> RusotoFuture<(), PutBucketRequestPaymentError>;
 
 
     #[doc="Sets the tags for a bucket."]
     fn put_bucket_tagging(&self,
                           input: &PutBucketTaggingRequest)
-                          -> Result<(), PutBucketTaggingError>;
+                          -> RusotoFuture<(), PutBucketTaggingError>;
 
 
     #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
     fn put_bucket_versioning(&self,
                              input: &PutBucketVersioningRequest)
-                             -> Result<(), PutBucketVersioningError>;
+                             -> RusotoFuture<(), PutBucketVersioningError>;
 
 
     #[doc="Set the website configuration for a bucket."]
     fn put_bucket_website(&self,
                           input: &PutBucketWebsiteRequest)
-                          -> Result<(), PutBucketWebsiteError>;
+                          -> RusotoFuture<(), PutBucketWebsiteError>;
 
 
     #[doc="Adds an object to a bucket."]
-    fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError>;
+    fn put_object(&self,
+                  input: &PutObjectRequest)
+                  -> RusotoFuture<PutObjectOutput, PutObjectError>;
 
 
     #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
     fn put_object_acl(&self,
                       input: &PutObjectAclRequest)
-                      -> Result<PutObjectAclOutput, PutObjectAclError>;
+                      -> RusotoFuture<PutObjectAclOutput, PutObjectAclError>;
 
 
     #[doc="Sets the supplied tag-set to an object that already exists in a bucket"]
     fn put_object_tagging(&self,
                           input: &PutObjectTaggingRequest)
-                          -> Result<PutObjectTaggingOutput, PutObjectTaggingError>;
+                          -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError>;
 
 
     #[doc="Restores an archived copy of an object back into Amazon S3"]
     fn restore_object(&self,
                       input: &RestoreObjectRequest)
-                      -> Result<RestoreObjectOutput, RestoreObjectError>;
+                      -> RusotoFuture<RestoreObjectOutput, RestoreObjectError>;
 
 
     #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
-    fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError>;
+    fn upload_part(&self,
+                   input: &UploadPartRequest)
+                   -> RusotoFuture<UploadPartOutput, UploadPartError>;
 
 
     #[doc="Uploads a part by copying data from an existing object as data source."]
     fn upload_part_copy(&self,
                         input: &UploadPartCopyRequest)
-                        -> Result<UploadPartCopyOutput, UploadPartCopyError>;
+                        -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError>;
 }
 /// A client for the Amazon S3 API.
 pub struct S3Client<P, D>
@@ -18628,9 +18650,10 @@ impl<P, D> S3 for S3Client<P, D>
 {
     #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
     #[allow(unused_variables, warnings)]
-    fn abort_multipart_upload(&self,
-                              input: &AbortMultipartUploadRequest)
-                              -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+    fn abort_multipart_upload
+        (&self,
+         input: &AbortMultipartUploadRequest)
+         -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -18644,18 +18667,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = AbortMultipartUploadOutput::default();
@@ -18670,18 +18706,25 @@ impl<P, D> S3 for S3Client<P, D>
                         try!(AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name,
                                                                                  &mut stack));
                 }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Completes a multipart upload by assembling previously uploaded parts."]
@@ -18689,7 +18732,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn complete_multipart_upload
         (&self,
          input: &CompleteMultipartUploadRequest)
-         -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
+         -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -18714,68 +18757,75 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            if body.is_empty() {
+                result = CompleteMultipartUploadOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
 
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CompleteMultipartUploadOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            if let Some(expiration) = response_headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                  };
+if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                  };
+if let Some(ssekms_key_id) = response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                  };
+if let Some(server_side_encryption) = response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                  };
+if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
-            }
-        }
+                  };
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Creates a copy of an object that is already stored in Amazon S3."]
     #[allow(unused_variables, warnings)]
-    fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError> {
+    fn copy_object(&self,
+                   input: &CopyObjectRequest)
+                   -> RusotoFuture<CopyObjectOutput, CopyObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -18914,18 +18964,31 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CopyObjectOutput::default();
@@ -18939,64 +19002,64 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(CopyObjectOutputDeserializer::deserialize(&actual_tag_name,
                                                                             &mut stack));
                 }
+
                 if let Some(copy_source_version_id) =
-                    response.headers.get("x-amz-copy-source-version-id") {
+                    response_headers.get("x-amz-copy-source-version-id") {
                     let value = copy_source_version_id.to_owned();
                     result.copy_source_version_id = Some(value)
                 };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                if let Some(expiration) = response_headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                    response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
                 };
                 if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                    response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
                 };
                 if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                    response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
                 };
                 if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                    response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                 };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CopyObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CopyObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Creates a new bucket."]
     #[allow(unused_variables, warnings)]
     fn create_bucket(&self,
                      input: &CreateBucketRequest)
-                     -> Result<CreateBucketOutput, CreateBucketError> {
+                     -> RusotoFuture<CreateBucketOutput, CreateBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -19042,18 +19105,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CreateBucketOutput::default();
@@ -19067,18 +19143,24 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(CreateBucketOutputDeserializer::deserialize(&actual_tag_name,
                                                                               &mut stack));
                 }
-                if let Some(location) = response.headers.get("Location") {
+
+                if let Some(location) = response_headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateBucketError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
@@ -19086,7 +19168,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn create_multipart_upload
         (&self,
          input: &CreateMultipartUploadRequest)
-         -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError> {
+         -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -19182,81 +19264,81 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            if body.is_empty() {
+                result = CreateMultipartUploadOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
 
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateMultipartUploadOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+            if let Some(abort_date) = response_headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
-                };
-                if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+                  };
+if let Some(abort_rule_id) = response_headers.get("x-amz-abort-rule-id") {
                     let value = abort_rule_id.to_owned();
                     result.abort_rule_id = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                  };
+if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                  };
+if let Some(sse_customer_algorithm) = response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                  };
+if let Some(sse_customer_key_md5) = response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                  };
+if let Some(ssekms_key_id) = response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                  };
+if let Some(server_side_encryption) = response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
-                };
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                  };
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
     #[allow(unused_variables, warnings)]
-    fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError> {
+    fn delete_bucket(&self, input: &DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19265,24 +19347,37 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
@@ -19290,7 +19385,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_analytics_configuration
         (&self,
          input: &DeleteBucketAnalyticsConfigurationRequest)
-         -> Result<(), DeleteBucketAnalyticsConfigurationError> {
+         -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19302,31 +19397,37 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deletes the cors configuration information set for the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_cors(&self,
                           input: &DeleteBucketCorsRequest)
-                          -> Result<(), DeleteBucketCorsError> {
+                          -> RusotoFuture<(), DeleteBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19337,24 +19438,37 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
@@ -19362,7 +19476,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn delete_bucket_inventory_configuration
         (&self,
          input: &DeleteBucketInventoryConfigurationRequest)
-         -> Result<(), DeleteBucketInventoryConfigurationError> {
+         -> RusotoFuture<(), DeleteBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19374,31 +19488,37 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deletes the lifecycle configuration from the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_lifecycle(&self,
                                input: &DeleteBucketLifecycleRequest)
-                               -> Result<(), DeleteBucketLifecycleError> {
+                               -> RusotoFuture<(), DeleteBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19409,31 +19529,46 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_metrics_configuration(&self,
-                                           input: &DeleteBucketMetricsConfigurationRequest)
-                                           -> Result<(), DeleteBucketMetricsConfigurationError> {
+    fn delete_bucket_metrics_configuration
+        (&self,
+         input: &DeleteBucketMetricsConfigurationRequest)
+         -> RusotoFuture<(), DeleteBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19445,31 +19580,37 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deletes the policy from the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_policy(&self,
                             input: &DeleteBucketPolicyRequest)
-                            -> Result<(), DeleteBucketPolicyError> {
+                            -> RusotoFuture<(), DeleteBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19480,31 +19621,44 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Deletes the replication configuration from the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_replication(&self,
                                  input: &DeleteBucketReplicationRequest)
-                                 -> Result<(), DeleteBucketReplicationError> {
+                                 -> RusotoFuture<(), DeleteBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19515,32 +19669,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Deletes the tags from the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_tagging(&self,
                              input: &DeleteBucketTaggingRequest)
-                             -> Result<(), DeleteBucketTaggingError> {
+                             -> RusotoFuture<(), DeleteBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19551,31 +19718,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="This operation removes the website configuration from the bucket."]
     #[allow(unused_variables, warnings)]
     fn delete_bucket_website(&self,
                              input: &DeleteBucketWebsiteRequest)
-                             -> Result<(), DeleteBucketWebsiteError> {
+                             -> RusotoFuture<(), DeleteBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19586,31 +19767,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
     #[allow(unused_variables, warnings)]
     fn delete_object(&self,
                      input: &DeleteObjectRequest)
-                     -> Result<DeleteObjectOutput, DeleteObjectError> {
+                     -> RusotoFuture<DeleteObjectOutput, DeleteObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19630,18 +19825,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = DeleteObjectOutput::default();
@@ -19655,33 +19863,40 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(DeleteObjectOutputDeserializer::deserialize(&actual_tag_name,
                                                                               &mut stack));
                 }
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+
+                if let Some(delete_marker) = response_headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
                     result.delete_marker = Some(value.parse::<bool>().unwrap())
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Removes the tag-set from an existing object."]
     #[allow(unused_variables, warnings)]
-    fn delete_object_tagging(&self,
-                             input: &DeleteObjectTaggingRequest)
-                             -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
+    fn delete_object_tagging
+        (&self,
+         input: &DeleteObjectTaggingRequest)
+         -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19695,18 +19910,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = DeleteObjectTaggingOutput::default();
@@ -19721,25 +19949,32 @@ impl<P, D> S3 for S3Client<P, D>
                         try!(DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
                                                                                 &mut stack));
                 }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
     #[allow(unused_variables, warnings)]
     fn delete_objects(&self,
                       input: &DeleteObjectsRequest)
-                      -> Result<DeleteObjectsOutput, DeleteObjectsError> {
+                      -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -19764,18 +19999,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = DeleteObjectsOutput::default();
@@ -19789,18 +20037,24 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name,
                                                                                &mut stack));
                 }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteObjectsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the accelerate configuration of a bucket."]
@@ -19808,7 +20062,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_accelerate_configuration
         (&self,
          input: &GetBucketAccelerateConfigurationRequest)
-         -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError> {
+         -> RusotoFuture<GetBucketAccelerateConfigurationOutput,
+                         GetBucketAccelerateConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -19819,46 +20074,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketAccelerateConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketAccelerateConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Gets the access control policy for the bucket."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_acl(&self,
                       input: &GetBucketAclRequest)
-                      -> Result<GetBucketAclOutput, GetBucketAclError> {
+                      -> RusotoFuture<GetBucketAclOutput, GetBucketAclError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -19869,18 +20134,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketAclOutput::default();
@@ -19895,14 +20173,20 @@ impl<P, D> S3 for S3Client<P, D>
                                                                               &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketAclError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
@@ -19910,7 +20194,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_analytics_configuration
         (&self,
          input: &GetBucketAnalyticsConfigurationRequest)
-         -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError> {
+         -> RusotoFuture<GetBucketAnalyticsConfigurationOutput,
+                         GetBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -19922,47 +20207,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketAnalyticsConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketAnalyticsConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns the cors configuration for the bucket."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_cors(&self,
                        input: &GetBucketCorsRequest)
-                       -> Result<GetBucketCorsOutput, GetBucketCorsError> {
+                       -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -19973,18 +20267,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketCorsOutput::default();
@@ -19999,14 +20306,20 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketCorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns an inventory configuration (identified by the inventory ID) from the bucket."]
@@ -20014,7 +20327,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_inventory_configuration
         (&self,
          input: &GetBucketInventoryConfigurationRequest)
-         -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError> {
+         -> RusotoFuture<GetBucketInventoryConfigurationOutput,
+                         GetBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20026,47 +20340,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketInventoryConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketInventoryConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deprecated, see the GetBucketLifecycleConfiguration operation."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_lifecycle(&self,
                             input: &GetBucketLifecycleRequest)
-                            -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError> {
+                            -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20077,18 +20400,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketLifecycleOutput::default();
@@ -20104,14 +20440,20 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the lifecycle configuration information set on the bucket."]
@@ -20119,7 +20461,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_lifecycle_configuration
         (&self,
          input: &GetBucketLifecycleConfigurationRequest)
-         -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError> {
+         -> RusotoFuture<GetBucketLifecycleConfigurationOutput,
+                         GetBucketLifecycleConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20130,47 +20473,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketLifecycleConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketLifecycleConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns the region the bucket resides in."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_location(&self,
                            input: &GetBucketLocationRequest)
-                           -> Result<GetBucketLocationOutput, GetBucketLocationError> {
+                           -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20181,18 +20533,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketLocationOutput::default();
@@ -20208,21 +20573,27 @@ impl<P, D> S3 for S3Client<P, D>
                                                                               &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketLocationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_logging(&self,
                           input: &GetBucketLoggingRequest)
-                          -> Result<GetBucketLoggingOutput, GetBucketLoggingError> {
+                          -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20233,18 +20604,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketLoggingOutput::default();
@@ -20260,14 +20644,20 @@ impl<P, D> S3 for S3Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
@@ -20275,7 +20665,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_metrics_configuration
         (&self,
          input: &GetBucketMetricsConfigurationRequest)
-         -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
+         -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20287,40 +20677,49 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketMetricsConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketMetricsConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deprecated, see the GetBucketNotificationConfiguration operation."]
@@ -20328,7 +20727,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_notification
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
-         -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError> {
+         -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20339,39 +20738,49 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = NotificationConfigurationDeprecated::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = NotificationConfigurationDeprecated::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns the notification configuration of a bucket."]
@@ -20379,7 +20788,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_notification_configuration
         (&self,
          input: &GetBucketNotificationConfigurationRequest)
-         -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError> {
+         -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20390,48 +20799,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = NotificationConfiguration::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = NotificationConfiguration::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns the policy of a specified bucket."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_policy(&self,
                          input: &GetBucketPolicyRequest)
-                         -> Result<GetBucketPolicyOutput, GetBucketPolicyError> {
+                         -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20442,37 +20859,57 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
+                                                future::Either::A(response_body
+                                                                      .map_err(|err| {
+                                                                                   err.into()
+                                                                               })
+                                                                      .concat2()
+                                                                      .map(move |body| {
                 let mut result = GetBucketPolicyOutput::default();
-                result.policy = Some(String::from_utf8_lossy(&body).into());
+                result.policy = Some(String::from_utf8_lossy(body.as_ref()).into());
 
+                result
+            }))
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the replication configuration of a bucket."]
     #[allow(unused_variables, warnings)]
-    fn get_bucket_replication(&self,
-                              input: &GetBucketReplicationRequest)
-                              -> Result<GetBucketReplicationOutput, GetBucketReplicationError> {
+    fn get_bucket_replication
+        (&self,
+         input: &GetBucketReplicationRequest)
+         -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20483,18 +20920,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketReplicationOutput::default();
@@ -20510,14 +20960,21 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the request payment configuration of a bucket."]
@@ -20525,7 +20982,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn get_bucket_request_payment
         (&self,
          input: &GetBucketRequestPaymentRequest)
-         -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
+         -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20536,47 +20993,56 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetBucketRequestPaymentOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetBucketRequestPaymentOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns the tag set associated with the bucket."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_tagging(&self,
                           input: &GetBucketTaggingRequest)
-                          -> Result<GetBucketTaggingOutput, GetBucketTaggingError> {
+                          -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20587,18 +21053,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketTaggingOutput::default();
@@ -20614,21 +21093,28 @@ impl<P, D> S3 for S3Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the versioning state of a bucket."]
     #[allow(unused_variables, warnings)]
-    fn get_bucket_versioning(&self,
-                             input: &GetBucketVersioningRequest)
-                             -> Result<GetBucketVersioningOutput, GetBucketVersioningError> {
+    fn get_bucket_versioning
+        (&self,
+         input: &GetBucketVersioningRequest)
+         -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20639,18 +21125,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketVersioningOutput::default();
@@ -20666,21 +21165,28 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                 &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the website configuration for a bucket."]
     #[allow(unused_variables, warnings)]
     fn get_bucket_website(&self,
                           input: &GetBucketWebsiteRequest)
-                          -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError> {
+                          -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20691,18 +21197,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetBucketWebsiteOutput::default();
@@ -20718,19 +21237,27 @@ impl<P, D> S3 for S3Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Retrieves objects from Amazon S3."]
     #[allow(unused_variables, warnings)]
-    fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError> {
+    fn get_object(&self,
+                  input: &GetObjectRequest)
+                  -> RusotoFuture<GetObjectOutput, GetObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20802,158 +21329,192 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-
-
-                let mut result = GetObjectOutput::default();
-                result.body = Some(StreamingBody(response.body));
-
-                if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-                    let value = accept_ranges.to_owned();
-                    result.accept_ranges = Some(value)
-                };
-                if let Some(cache_control) = response.headers.get("Cache-Control") {
-                    let value = cache_control.to_owned();
-                    result.cache_control = Some(value)
-                };
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                    let value = content_disposition.to_owned();
-                    result.content_disposition = Some(value)
-                };
-                if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                    let value = content_encoding.to_owned();
-                    result.content_encoding = Some(value)
-                };
-                if let Some(content_language) = response.headers.get("Content-Language") {
-                    let value = content_language.to_owned();
-                    result.content_language = Some(value)
-                };
-                if let Some(content_length) = response.headers.get("Content-Length") {
-                    let value = content_length.to_owned();
-                    result.content_length = Some(value.parse::<i64>().unwrap())
-                };
-                if let Some(content_range) = response.headers.get("Content-Range") {
-                    let value = content_range.to_owned();
-                    result.content_range = Some(value)
-                };
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                    let value = delete_marker.to_owned();
-                    result.delete_marker = Some(value.parse::<bool>().unwrap())
-                };
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(expires) = response.headers.get("Expires") {
-                    let value = expires.to_owned();
-                    result.expires = Some(value)
-                };
-                if let Some(last_modified) = response.headers.get("Last-Modified") {
-                    let value = last_modified.to_owned();
-                    result.last_modified = Some(value)
-                };
-                let mut values = ::std::collections::HashMap::new();
-                for (key, value) in response.headers.iter() {
-                    if key.starts_with("x-amz-meta-") {
-                        values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
-                    }
-                }
-                result.metadata = Some(values);
-                if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-                    let value = missing_meta.to_owned();
-                    result.missing_meta = Some(value.parse::<i64>().unwrap())
-                };
-                if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-                    let value = parts_count.to_owned();
-                    result.parts_count = Some(value.parse::<i64>().unwrap())
-                };
-                if let Some(replication_status) =
-                    response.headers.get("x-amz-replication-status") {
-                    let value = replication_status.to_owned();
-                    result.replication_status = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(restore) = response.headers.get("x-amz-restore") {
-                    let value = restore.to_owned();
-                    result.restore = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-                    let value = storage_class.to_owned();
-                    result.storage_class = Some(value)
-                };
-                if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
-                    let value = tag_count.to_owned();
-                    result.tag_count = Some(value.parse::<i64>().unwrap())
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                if let Some(website_redirect_location) =
-                    response.headers.get("x-amz-website-redirect-location") {
-                    let value = website_redirect_location.to_owned();
-                    result.website_redirect_location = Some(value)
-                };
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
+
+                                                let mut result = GetObjectOutput::default();
+                                                result.body = Some(StreamingBody(response_body));
+                                                if let Some(accept_ranges) =
+                response_headers.get("accept-ranges") {
+                                                    let value = accept_ranges.to_owned();
+                                                    result.accept_ranges = Some(value)
+                                                };
+                                                if let Some(cache_control) =
+                response_headers.get("Cache-Control") {
+                                                    let value = cache_control.to_owned();
+                                                    result.cache_control = Some(value)
+                                                };
+                                                if let Some(content_disposition) =
+                response_headers.get("Content-Disposition") {
+                                                    let value = content_disposition.to_owned();
+                                                    result.content_disposition = Some(value)
+                                                };
+                                                if let Some(content_encoding) =
+                response_headers.get("Content-Encoding") {
+                                                    let value = content_encoding.to_owned();
+                                                    result.content_encoding = Some(value)
+                                                };
+                                                if let Some(content_language) =
+                response_headers.get("Content-Language") {
+                                                    let value = content_language.to_owned();
+                                                    result.content_language = Some(value)
+                                                };
+                                                if let Some(content_length) =
+                response_headers.get("Content-Length") {
+                                                    let value = content_length.to_owned();
+                                                    result.content_length =
+                                                        Some(value.parse::<i64>().unwrap())
+                                                };
+                                                if let Some(content_range) =
+                response_headers.get("Content-Range") {
+                                                    let value = content_range.to_owned();
+                                                    result.content_range = Some(value)
+                                                };
+                                                if let Some(content_type) =
+                response_headers.get("Content-Type") {
+                                                    let value = content_type.to_owned();
+                                                    result.content_type = Some(value)
+                                                };
+                                                if let Some(delete_marker) =
+                response_headers.get("x-amz-delete-marker") {
+                                                    let value = delete_marker.to_owned();
+                                                    result.delete_marker =
+                                                        Some(value.parse::<bool>().unwrap())
+                                                };
+                                                if let Some(e_tag) = response_headers.get("ETag") {
+                                                    let value = e_tag.to_owned();
+                                                    result.e_tag = Some(value)
+                                                };
+                                                if let Some(expiration) =
+                response_headers.get("x-amz-expiration") {
+                                                    let value = expiration.to_owned();
+                                                    result.expiration = Some(value)
+                                                };
+                                                if let Some(expires) =
+                response_headers.get("Expires") {
+                                                    let value = expires.to_owned();
+                                                    result.expires = Some(value)
+                                                };
+                                                if let Some(last_modified) =
+                response_headers.get("Last-Modified") {
+                                                    let value = last_modified.to_owned();
+                                                    result.last_modified = Some(value)
+                                                };
+                                                let mut values = ::std::collections::HashMap::new();
+                                                for (key, value) in response_headers.iter() {
+                                                    if key.starts_with("x-amz-meta-") {
+                                                        values.insert(key.replace("x-amz-meta-",
+                                                                                  ""),
+                                                                      value.to_owned());
+                                                    }
+                                                }
+                                                result.metadata = Some(values);
+                                                if let Some(missing_meta) =
+                response_headers.get("x-amz-missing-meta") {
+                                                    let value = missing_meta.to_owned();
+                                                    result.missing_meta =
+                                                        Some(value.parse::<i64>().unwrap())
+                                                };
+                                                if let Some(parts_count) =
+                response_headers.get("x-amz-mp-parts-count") {
+                                                    let value = parts_count.to_owned();
+                                                    result.parts_count =
+                                                        Some(value.parse::<i64>().unwrap())
+                                                };
+                                                if let Some(replication_status) =
+                response_headers.get("x-amz-replication-status") {
+                                                    let value = replication_status.to_owned();
+                                                    result.replication_status = Some(value)
+                                                };
+                                                if let Some(request_charged) =
+                response_headers.get("x-amz-request-charged") {
+                                                    let value = request_charged.to_owned();
+                                                    result.request_charged = Some(value)
+                                                };
+                                                if let Some(restore) =
+                response_headers.get("x-amz-restore") {
+                                                    let value = restore.to_owned();
+                                                    result.restore = Some(value)
+                                                };
+                                                if let Some(sse_customer_algorithm) =
+                response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
+                                                    let value = sse_customer_algorithm.to_owned();
+                                                    result.sse_customer_algorithm = Some(value)
+                                                };
+                                                if let Some(sse_customer_key_md5) =
+                response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
+                                                    let value = sse_customer_key_md5.to_owned();
+                                                    result.sse_customer_key_md5 = Some(value)
+                                                };
+                                                if let Some(ssekms_key_id) =
+                response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
+                                                    let value = ssekms_key_id.to_owned();
+                                                    result.ssekms_key_id = Some(value)
+                                                };
+                                                if let Some(server_side_encryption) =
+                response_headers.get("x-amz-server-side-encryption") {
+                                                    let value = server_side_encryption.to_owned();
+                                                    result.server_side_encryption = Some(value)
+                                                };
+                                                if let Some(storage_class) =
+                response_headers.get("x-amz-storage-class") {
+                                                    let value = storage_class.to_owned();
+                                                    result.storage_class = Some(value)
+                                                };
+                                                if let Some(tag_count) =
+                response_headers.get("x-amz-tagging-count") {
+                                                    let value = tag_count.to_owned();
+                                                    result.tag_count =
+                                                        Some(value.parse::<i64>().unwrap())
+                                                };
+                                                if let Some(version_id) =
+                response_headers.get("x-amz-version-id") {
+                                                    let value = version_id.to_owned();
+                                                    result.version_id = Some(value)
+                                                };
+                                                if let Some(website_redirect_location) =
+                response_headers.get("x-amz-website-redirect-location") {
+                                                    let value = website_redirect_location
+                                                        .to_owned();
+                                                    result.website_redirect_location = Some(value)
+                                                };
+                                                future::Either::A(future::ok(result))
+
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the access control list (ACL) of an object."]
     #[allow(unused_variables, warnings)]
     fn get_object_acl(&self,
                       input: &GetObjectAclRequest)
-                      -> Result<GetObjectAclOutput, GetObjectAclError> {
+                      -> RusotoFuture<GetObjectAclOutput, GetObjectAclError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20970,18 +21531,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetObjectAclOutput::default();
@@ -20995,25 +21569,31 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(GetObjectAclOutputDeserializer::deserialize(&actual_tag_name,
                                                                               &mut stack));
                 }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetObjectAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetObjectAclError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns the tag-set of an object."]
     #[allow(unused_variables, warnings)]
     fn get_object_tagging(&self,
                           input: &GetObjectTaggingRequest)
-                          -> Result<GetObjectTaggingOutput, GetObjectTaggingError> {
+                          -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21027,18 +21607,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetObjectTaggingOutput::default();
@@ -21053,25 +21646,31 @@ impl<P, D> S3 for S3Client<P, D>
                         try!(GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
                                                                              &mut stack));
                 }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Return torrent files from a bucket."]
     #[allow(unused_variables, warnings)]
     fn get_object_torrent(&self,
                           input: &GetObjectTorrentRequest)
-                          -> Result<GetObjectTorrentOutput, GetObjectTorrentError> {
+                          -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21085,37 +21684,51 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-
-
-                let mut result = GetObjectTorrentOutput::default();
-                result.body = Some(StreamingBody(response.body));
-
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
+
+                                                let mut result = GetObjectTorrentOutput::default();
+                                                result.body = Some(StreamingBody(response_body));
+                                                if let Some(request_charged) =
+                response_headers.get("x-amz-request-charged") {
+                                                    let value = request_charged.to_owned();
+                                                    result.request_charged = Some(value)
+                                                };
+                                                future::Either::A(future::ok(result))
+
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
     #[allow(unused_variables, warnings)]
-    fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError> {
+    fn head_bucket(&self, input: &HeadBucketRequest) -> RusotoFuture<(), HeadBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
@@ -21124,29 +21737,44 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(HeadBucketError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(HeadBucketError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
     #[allow(unused_variables, warnings)]
-    fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError> {
+    fn head_object(&self,
+                   input: &HeadObjectRequest)
+                   -> RusotoFuture<HeadObjectOutput, HeadObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
@@ -21200,18 +21828,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = HeadObjectOutput::default();
@@ -21225,129 +21866,129 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(HeadObjectOutputDeserializer::deserialize(&actual_tag_name,
                                                                             &mut stack));
                 }
-                if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+
+                if let Some(accept_ranges) = response_headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
                     result.accept_ranges = Some(value)
                 };
-                if let Some(cache_control) = response.headers.get("Cache-Control") {
+                if let Some(cache_control) = response_headers.get("Cache-Control") {
                     let value = cache_control.to_owned();
                     result.cache_control = Some(value)
                 };
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                if let Some(content_disposition) = response_headers.get("Content-Disposition") {
                     let value = content_disposition.to_owned();
                     result.content_disposition = Some(value)
                 };
-                if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+                if let Some(content_encoding) = response_headers.get("Content-Encoding") {
                     let value = content_encoding.to_owned();
                     result.content_encoding = Some(value)
                 };
-                if let Some(content_language) = response.headers.get("Content-Language") {
+                if let Some(content_language) = response_headers.get("Content-Language") {
                     let value = content_language.to_owned();
                     result.content_language = Some(value)
                 };
-                if let Some(content_length) = response.headers.get("Content-Length") {
+                if let Some(content_length) = response_headers.get("Content-Length") {
                     let value = content_length.to_owned();
                     result.content_length = Some(value.parse::<i64>().unwrap())
                 };
-                if let Some(content_type) = response.headers.get("Content-Type") {
+                if let Some(content_type) = response_headers.get("Content-Type") {
                     let value = content_type.to_owned();
                     result.content_type = Some(value)
                 };
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+                if let Some(delete_marker) = response_headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
                     result.delete_marker = Some(value.parse::<bool>().unwrap())
                 };
-                if let Some(e_tag) = response.headers.get("ETag") {
+                if let Some(e_tag) = response_headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                 };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                if let Some(expiration) = response_headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
                 };
-                if let Some(expires) = response.headers.get("Expires") {
+                if let Some(expires) = response_headers.get("Expires") {
                     let value = expires.to_owned();
                     result.expires = Some(value)
                 };
-                if let Some(last_modified) = response.headers.get("Last-Modified") {
+                if let Some(last_modified) = response_headers.get("Last-Modified") {
                     let value = last_modified.to_owned();
                     result.last_modified = Some(value)
                 };
                 let mut values = ::std::collections::HashMap::new();
-                for (key, value) in response.headers.iter() {
+                for (key, value) in response_headers.iter() {
                     if key.starts_with("x-amz-meta-") {
                         values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
                     }
                 }
                 result.metadata = Some(values);
-                if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
+                if let Some(missing_meta) = response_headers.get("x-amz-missing-meta") {
                     let value = missing_meta.to_owned();
                     result.missing_meta = Some(value.parse::<i64>().unwrap())
                 };
-                if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
+                if let Some(parts_count) = response_headers.get("x-amz-mp-parts-count") {
                     let value = parts_count.to_owned();
                     result.parts_count = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(replication_status) =
-                    response.headers.get("x-amz-replication-status") {
+                    response_headers.get("x-amz-replication-status") {
                     let value = replication_status.to_owned();
                     result.replication_status = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
-                if let Some(restore) = response.headers.get("x-amz-restore") {
+                if let Some(restore) = response_headers.get("x-amz-restore") {
                     let value = restore.to_owned();
                     result.restore = Some(value)
                 };
                 if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                    response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
                 };
                 if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                    response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
                 };
                 if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                    response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
                 };
                 if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                    response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                 };
-                if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
+                if let Some(storage_class) = response_headers.get("x-amz-storage-class") {
                     let value = storage_class.to_owned();
                     result.storage_class = Some(value)
                 };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 if let Some(website_redirect_location) =
-                    response.headers.get("x-amz-website-redirect-location") {
+                    response_headers.get("x-amz-website-redirect-location") {
                     let value = website_redirect_location.to_owned();
                     result.website_redirect_location = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(HeadObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(HeadObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Lists the analytics configurations for the bucket."]
@@ -21355,7 +21996,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_bucket_analytics_configurations
         (&self,
          input: &ListBucketAnalyticsConfigurationsRequest)
-         -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError> {
+         -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput,
+                         ListBucketAnalyticsConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21369,39 +22011,49 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListBucketAnalyticsConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListBucketAnalyticsConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns a list of inventory configurations for the bucket."]
@@ -21409,7 +22061,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_bucket_inventory_configurations
         (&self,
          input: &ListBucketInventoryConfigurationsRequest)
-         -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError> {
+         -> RusotoFuture<ListBucketInventoryConfigurationsOutput,
+                         ListBucketInventoryConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21423,39 +22076,49 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListBucketInventoryConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListBucketInventoryConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Lists the metrics configurations for the bucket."]
@@ -21463,7 +22126,8 @@ impl<P, D> S3 for S3Client<P, D>
     fn list_bucket_metrics_configurations
         (&self,
          input: &ListBucketMetricsConfigurationsRequest)
-         -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError> {
+         -> RusotoFuture<ListBucketMetricsConfigurationsOutput,
+                         ListBucketMetricsConfigurationsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21477,45 +22141,54 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListBucketMetricsConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListBucketMetricsConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Returns a list of all buckets owned by the authenticated sender of the request."]
     #[allow(unused_variables, warnings)]
-    fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError> {
+    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError> {
         let request_uri = "/";
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21524,18 +22197,31 @@ impl<P, D> S3 for S3Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListBucketsOutput::default();
@@ -21550,21 +22236,28 @@ impl<P, D> S3 for S3Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBucketsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListBucketsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="This operation lists in-progress multipart uploads."]
     #[allow(unused_variables, warnings)]
-    fn list_multipart_uploads(&self,
-                              input: &ListMultipartUploadsRequest)
-                              -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+    fn list_multipart_uploads
+        (&self,
+         input: &ListMultipartUploadsRequest)
+         -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21593,18 +22286,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListMultipartUploadsOutput::default();
@@ -21620,21 +22326,28 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns metadata about all of the versions of objects in a bucket."]
     #[allow(unused_variables, warnings)]
     fn list_object_versions(&self,
                             input: &ListObjectVersionsRequest)
-                            -> Result<ListObjectVersionsOutput, ListObjectVersionsError> {
+                            -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21663,18 +22376,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListObjectVersionsOutput::default();
@@ -21690,21 +22416,27 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
     #[allow(unused_variables, warnings)]
     fn list_objects(&self,
                     input: &ListObjectsRequest)
-                    -> Result<ListObjectsOutput, ListObjectsError> {
+                    -> RusotoFuture<ListObjectsOutput, ListObjectsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21732,18 +22464,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListObjectsOutput::default();
@@ -21758,21 +22503,27 @@ impl<P, D> S3 for S3Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListObjectsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
     #[allow(unused_variables, warnings)]
     fn list_objects_v2(&self,
                        input: &ListObjectsV2Request)
-                       -> Result<ListObjectsV2Output, ListObjectsV2Error> {
+                       -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21807,18 +22558,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListObjectsV2Output::default();
@@ -21833,19 +22597,27 @@ impl<P, D> S3 for S3Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Lists the parts that have been uploaded for a specific multipart upload."]
     #[allow(unused_variables, warnings)]
-    fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError> {
+    fn list_parts(&self,
+                  input: &ListPartsRequest)
+                  -> RusotoFuture<ListPartsOutput, ListPartsError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21865,18 +22637,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListPartsOutput::default();
@@ -21890,33 +22675,40 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(ListPartsOutputDeserializer::deserialize(&actual_tag_name,
                                                                            &mut stack));
                 }
-                if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+
+                if let Some(abort_date) = response_headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
                 };
-                if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+                if let Some(abort_rule_id) = response_headers.get("x-amz-abort-rule-id") {
                     let value = abort_rule_id.to_owned();
                     result.abort_rule_id = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPartsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListPartsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets the accelerate configuration of an existing bucket."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_accelerate_configuration(&self,
-                                           input: &PutBucketAccelerateConfigurationRequest)
-                                           -> Result<(), PutBucketAccelerateConfigurationError> {
+    fn put_bucket_accelerate_configuration
+        (&self,
+         input: &PutBucketAccelerateConfigurationRequest)
+         -> RusotoFuture<(), PutBucketAccelerateConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -21934,29 +22726,35 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Sets the permissions on a bucket using access control lists (ACL)."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError> {
+    fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22005,31 +22803,45 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketAclError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_analytics_configuration(&self,
-                                          input: &PutBucketAnalyticsConfigurationRequest)
-                                          -> Result<(), PutBucketAnalyticsConfigurationError> {
+    fn put_bucket_analytics_configuration
+        (&self,
+         input: &PutBucketAnalyticsConfigurationRequest)
+         -> RusotoFuture<(), PutBucketAnalyticsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22048,30 +22860,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Sets the cors configuration for a bucket."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError> {
+    fn put_bucket_cors(&self,
+                       input: &PutBucketCorsRequest)
+                       -> RusotoFuture<(), PutBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22094,31 +22913,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketCorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Adds an inventory configuration (identified by the inventory ID) from the bucket."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_inventory_configuration(&self,
-                                          input: &PutBucketInventoryConfigurationRequest)
-                                          -> Result<(), PutBucketInventoryConfigurationError> {
+    fn put_bucket_inventory_configuration
+        (&self,
+         input: &PutBucketInventoryConfigurationRequest)
+         -> RusotoFuture<(), PutBucketInventoryConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22137,32 +22970,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deprecated, see the PutBucketLifecycleConfiguration operation."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_lifecycle(&self,
                             input: &PutBucketLifecycleRequest)
-                            -> Result<(), PutBucketLifecycleError> {
+                            -> RusotoFuture<(), PutBucketLifecycleError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22192,31 +23030,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
     #[allow(unused_variables, warnings)]
-    fn put_bucket_lifecycle_configuration(&self,
-                                          input: &PutBucketLifecycleConfigurationRequest)
-                                          -> Result<(), PutBucketLifecycleConfigurationError> {
+    fn put_bucket_lifecycle_configuration
+        (&self,
+         input: &PutBucketLifecycleConfigurationRequest)
+         -> RusotoFuture<(), PutBucketLifecycleConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22243,32 +23095,37 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_logging(&self,
                           input: &PutBucketLoggingRequest)
-                          -> Result<(), PutBucketLoggingError> {
+                          -> RusotoFuture<(), PutBucketLoggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22289,31 +23146,44 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_metrics_configuration(&self,
                                         input: &PutBucketMetricsConfigurationRequest)
-                                        -> Result<(), PutBucketMetricsConfigurationError> {
+                                        -> RusotoFuture<(), PutBucketMetricsConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22332,32 +23202,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Deprecated, see the PutBucketNotificationConfiguraiton operation."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_notification(&self,
                                input: &PutBucketNotificationRequest)
-                               -> Result<(), PutBucketNotificationError> {
+                               -> RusotoFuture<(), PutBucketNotificationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22376,24 +23251,38 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Enables notifications of specified events for a bucket."]
@@ -22401,7 +23290,7 @@ impl<P, D> S3 for S3Client<P, D>
     fn put_bucket_notification_configuration
         (&self,
          input: &PutBucketNotificationConfigurationRequest)
-         -> Result<(), PutBucketNotificationConfigurationError> {
+         -> RusotoFuture<(), PutBucketNotificationConfigurationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22419,31 +23308,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    future::Either::A(future::ok(::std::mem::drop(response_body)))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_policy(&self,
                          input: &PutBucketPolicyRequest)
-                         -> Result<(), PutBucketPolicyError> {
+                         -> RusotoFuture<(), PutBucketPolicyError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22462,31 +23357,44 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Creates a new replication configuration (or replaces an existing one, if present)."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_replication(&self,
                               input: &PutBucketReplicationRequest)
-                              -> Result<(), PutBucketReplicationError> {
+                              -> RusotoFuture<(), PutBucketReplicationError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22509,31 +23417,45 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
     #[allow(unused_variables, warnings)]
     fn put_bucket_request_payment(&self,
                                   input: &PutBucketRequestPaymentRequest)
-                                  -> Result<(), PutBucketRequestPaymentError> {
+                                  -> RusotoFuture<(), PutBucketRequestPaymentError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22554,32 +23476,45 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets the tags for a bucket."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_tagging(&self,
                           input: &PutBucketTaggingRequest)
-                          -> Result<(), PutBucketTaggingError> {
+                          -> RusotoFuture<(), PutBucketTaggingError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22600,31 +23535,44 @@ impl<P, D> S3 for S3Client<P, D>
         request.add_header("Content-MD5", &base64::encode(&(*digest)));
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_versioning(&self,
                              input: &PutBucketVersioningRequest)
-                             -> Result<(), PutBucketVersioningError> {
+                             -> RusotoFuture<(), PutBucketVersioningError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22649,31 +23597,45 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Set the website configuration for a bucket."]
     #[allow(unused_variables, warnings)]
     fn put_bucket_website(&self,
                           input: &PutBucketWebsiteRequest)
-                          -> Result<(), PutBucketWebsiteError> {
+                          -> RusotoFuture<(), PutBucketWebsiteError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22694,29 +23656,44 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+            let response_status = response.status;
+            let response_headers = response.headers;
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Adds an object to a bucket."]
     #[allow(unused_variables, warnings)]
-    fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError> {
+    fn put_object(&self,
+                  input: &PutObjectRequest)
+                  -> RusotoFuture<PutObjectOutput, PutObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22821,18 +23798,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = PutObjectOutput::default();
@@ -22846,63 +23836,63 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(PutObjectOutputDeserializer::deserialize(&actual_tag_name,
                                                                            &mut stack));
                 }
-                if let Some(e_tag) = response.headers.get("ETag") {
+
+                if let Some(e_tag) = response_headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                 };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                if let Some(expiration) = response_headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                    response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
                 };
                 if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                    response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
                 };
                 if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                    response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
                 };
                 if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                    response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                 };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
     #[allow(unused_variables, warnings)]
     fn put_object_acl(&self,
                       input: &PutObjectAclRequest)
-                      -> Result<PutObjectAclOutput, PutObjectAclError> {
+                      -> RusotoFuture<PutObjectAclOutput, PutObjectAclError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22958,18 +23948,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = PutObjectAclOutput::default();
@@ -22983,25 +23986,31 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(PutObjectAclOutputDeserializer::deserialize(&actual_tag_name,
                                                                               &mut stack));
                 }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutObjectAclError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutObjectAclError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Sets the supplied tag-set to an object that already exists in a bucket"]
     #[allow(unused_variables, warnings)]
     fn put_object_tagging(&self,
                           input: &PutObjectTaggingRequest)
-                          -> Result<PutObjectTaggingOutput, PutObjectTaggingError> {
+                          -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23023,18 +24032,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = PutObjectTaggingOutput::default();
@@ -23049,25 +24071,31 @@ impl<P, D> S3 for S3Client<P, D>
                         try!(PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
                                                                              &mut stack));
                 }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
+
+                if let Some(version_id) = response_headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Restores an archived copy of an object back into Amazon S3"]
     #[allow(unused_variables, warnings)]
     fn restore_object(&self,
                       input: &RestoreObjectRequest)
-                      -> Result<RestoreObjectOutput, RestoreObjectError> {
+                      -> RusotoFuture<RestoreObjectOutput, RestoreObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -23095,18 +24123,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = RestoreObjectOutput::default();
@@ -23120,23 +24161,31 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(RestoreObjectOutputDeserializer::deserialize(&actual_tag_name,
                                                                                &mut stack));
                 }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RestoreObjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(RestoreObjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
     #[allow(unused_variables, warnings)]
-    fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError> {
+    fn upload_part(&self,
+                   input: &UploadPartRequest)
+                   -> RusotoFuture<UploadPartOutput, UploadPartError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23177,18 +24226,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         request.set_payload(Some(payload));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = UploadPartOutput::default();
@@ -23202,55 +24264,55 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(UploadPartOutputDeserializer::deserialize(&actual_tag_name,
                                                                             &mut stack));
                 }
-                if let Some(e_tag) = response.headers.get("ETag") {
+
+                if let Some(e_tag) = response_headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                    response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
                 };
                 if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                    response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
                 };
                 if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                    response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
                 };
                 if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                    response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UploadPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UploadPartError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="Uploads a part by copying data from an existing object as data source."]
     #[allow(unused_variables, warnings)]
     fn upload_part_copy(&self,
                         input: &UploadPartCopyRequest)
-                        -> Result<UploadPartCopyOutput, UploadPartCopyError> {
+                        -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23321,18 +24383,31 @@ impl<P, D> S3 for S3Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = UploadPartCopyOutput::default();
@@ -23346,49 +24421,49 @@ impl<P, D> S3 for S3Client<P, D>
                     result = try!(UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name,
                                                                                 &mut stack));
                 }
+
                 if let Some(copy_source_version_id) =
-                    response.headers.get("x-amz-copy-source-version-id") {
+                    response_headers.get("x-amz-copy-source-version-id") {
                     let value = copy_source_version_id.to_owned();
                     result.copy_source_version_id = Some(value)
                 };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                if let Some(request_charged) = response_headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
                 };
                 if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
+                    response_headers.get("x-amz-server-side-encryption-customer-algorithm") {
                     let value = sse_customer_algorithm.to_owned();
                     result.sse_customer_algorithm = Some(value)
                 };
                 if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
+                    response_headers.get("x-amz-server-side-encryption-customer-key-MD5") {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
                 };
                 if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                    response_headers.get("x-amz-server-side-encryption-aws-kms-key-id") {
                     let value = ssekms_key_id.to_owned();
                     result.ssekms_key_id = Some(value)
                 };
                 if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
+                    response_headers.get("x-amz-server-side-encryption") {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
                 };
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UploadPartCopyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 
@@ -23409,7 +24484,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateBucketRequest::default();
-        let result = client.create_bucket(&request);
+        let result = client.create_bucket(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23421,7 +24496,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
-        let result = client.list_objects(&request);
+        let result = client.list_objects(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23432,7 +24507,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketAclRequest::default();
-        let result = client.get_bucket_acl(&request);
+        let result = client.get_bucket_acl(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23444,7 +24519,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLocationRequest::default();
-        let result = client.get_bucket_location(&request);
+        let result = client.get_bucket_location(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23456,7 +24531,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLoggingRequest::default();
-        let result = client.get_bucket_logging(&request);
+        let result = client.get_bucket_logging(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23468,7 +24543,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketPolicyRequest::default();
-        let result = client.get_bucket_policy(&request);
+        let result = client.get_bucket_policy(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23480,7 +24555,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.list_buckets();
+        let result = client.list_buckets().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23492,7 +24567,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListMultipartUploadsRequest::default();
-        let result = client.list_multipart_uploads(&request);
+        let result = client.list_multipart_uploads(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23504,7 +24579,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectVersionsRequest::default();
-        let result = client.list_object_versions(&request);
+        let result = client.list_object_versions(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -23516,7 +24591,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
-        let result = client.list_objects(&request);
+        let result = client.list_objects(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

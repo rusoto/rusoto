@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1949,29 +1951,29 @@ impl Error for UpdateJobError {
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 pub trait ImportExport {
     #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
-    fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError>;
+    fn cancel_job(&self, input: &CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
 
 
     #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
-    fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError>;
+    fn create_job(&self, input: &CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError>;
 
 
     #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
     fn get_shipping_label(&self,
                           input: &GetShippingLabelInput)
-                          -> Result<GetShippingLabelOutput, GetShippingLabelError>;
+                          -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError>;
 
 
     #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
-    fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError>;
+    fn get_status(&self, input: &GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError>;
 
 
     #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
-    fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError>;
+    fn list_jobs(&self, input: &ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
 
 
     #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
-    fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError>;
+    fn update_job(&self, input: &UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
 pub struct ImportExportClient<P, D>
@@ -2001,7 +2003,7 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
-    fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError> {
+    fn cancel_job(&self, input: &CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
                                              &self.region,
@@ -2013,14 +2015,27 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         CancelJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CancelJobOutput::default();
@@ -2037,19 +2052,26 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CancelJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
-    fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError> {
+    fn create_job(&self, input: &CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
                                              &self.region,
@@ -2061,14 +2083,27 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         CreateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CreateJobOutput::default();
@@ -2085,21 +2120,28 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing."]
     fn get_shipping_label(&self,
                           input: &GetShippingLabelInput)
-                          -> Result<GetShippingLabelOutput, GetShippingLabelError> {
+                          -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
                                              &self.region,
@@ -2111,43 +2153,55 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetShippingLabelOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetShippingLabelOutputDeserializer::deserialize("GetShippingLabelResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetShippingLabelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = GetShippingLabelOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(GetShippingLabelOutputDeserializer::deserialize("GetShippingLabelResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(GetShippingLabelError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
-    fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError> {
+    fn get_status(&self, input: &GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
                                              &self.region,
@@ -2159,14 +2213,27 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         GetStatusInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetStatusOutput::default();
@@ -2183,19 +2250,26 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
-    fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
+    fn list_jobs(&self, input: &ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
         let mut request =
             SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
         let mut params = Params::new();
@@ -2205,14 +2279,27 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         ListJobsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListJobsOutput::default();
@@ -2229,19 +2316,26 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
-    fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError> {
+    fn update_job(&self, input: &UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
                                              &self.region,
@@ -2253,14 +2347,27 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
         UpdateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = UpdateJobOutput::default();
@@ -2277,14 +2384,21 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 
@@ -2305,7 +2419,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStatusInput::default();
-        let result = client.get_status(&request);
+        let result = client.get_status(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -2316,7 +2430,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListJobsInput::default();
-        let result = client.list_jobs(&request);
+        let result = client.list_jobs(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

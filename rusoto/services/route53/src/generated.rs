@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -12674,320 +12676,319 @@ pub trait Route53 {
     fn associate_vpc_with_hosted_zone
         (&self,
          input: &AssociateVPCWithHostedZoneRequest)
-         -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError>;
+         -> RusotoFuture<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError>;
 
 
     #[doc="<p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see \"Examples.\"</p> <p>Don't refer to the syntax in the \"Parameter Syntax\" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Amazon Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers within 60 seconds. For more information, see <a>GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     fn change_resource_record_sets
         (&self,
          input: &ChangeResourceRecordSetsRequest)
-         -> Result<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError>;
+         -> RusotoFuture<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError>;
 
 
     #[doc="<p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
     fn change_tags_for_resource
         (&self,
          input: &ChangeTagsForResourceRequest)
-         -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError>;
+         -> RusotoFuture<ChangeTagsForResourceResponse, ChangeTagsForResourceError>;
 
 
     #[doc="<p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you're registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
     fn create_health_check(&self,
                            input: &CreateHealthCheckRequest)
-                           -> Result<CreateHealthCheckResponse, CreateHealthCheckError>;
+                           -> RusotoFuture<CreateHealthCheckResponse, CreateHealthCheckError>;
 
 
     #[doc="<p>Creates a new public hosted zone, which you use to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>You can't convert a public hosted zones to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. This means that the NS and SOA records are not yet available on all Amazon Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>"]
     fn create_hosted_zone(&self,
                           input: &CreateHostedZoneRequest)
-                          -> Result<CreateHostedZoneResponse, CreateHostedZoneError>;
+                          -> RusotoFuture<CreateHostedZoneResponse, CreateHostedZoneError>;
 
 
     #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
     fn create_reusable_delegation_set
         (&self,
          input: &CreateReusableDelegationSetRequest)
-         -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError>;
+         -> RusotoFuture<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError>;
 
 
     #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>"]
-    fn create_traffic_policy(&self,
-                             input: &CreateTrafficPolicyRequest)
-                             -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError>;
+    fn create_traffic_policy
+        (&self,
+         input: &CreateTrafficPolicyRequest)
+         -> RusotoFuture<CreateTrafficPolicyResponse, CreateTrafficPolicyError>;
 
 
     #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>"]
     fn create_traffic_policy_instance
         (&self,
          input: &CreateTrafficPolicyInstanceRequest)
-         -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError>;
+         -> RusotoFuture<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError>;
 
 
     #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>"]
     fn create_traffic_policy_version
         (&self,
          input: &CreateTrafficPolicyVersionRequest)
-         -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError>;
+         -> RusotoFuture<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError>;
 
 
     #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note>"]
-    fn create_vpc_association_authorization
-        (&self,
-         input: &CreateVPCAssociationAuthorizationRequest)
-         -> Result<CreateVPCAssociationAuthorizationResponse,
-                   CreateVPCAssociationAuthorizationError>;
+    fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> RusotoFuture<CreateVPCAssociationAuthorizationResponse, CreateVPCAssociationAuthorizationError>;
 
 
     #[doc="<p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important>"]
     fn delete_health_check(&self,
                            input: &DeleteHealthCheckRequest)
-                           -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError>;
+                           -> RusotoFuture<DeleteHealthCheckResponse, DeleteHealthCheckError>;
 
 
     #[doc="<p>Deletes a hosted zone.</p> <important> <p>If the name servers for the hosted zone are associated with a domain and if you want to make the domain unavailable on the Internet, we recommend that you delete the name servers from the domain to prevent future DNS queries from possibly being misrouted. If the domain is registered with Amazon Route 53, see <code>UpdateDomainNameservers</code>. If the domain is registered with another registrar, use the method provided by the registrar to delete name servers for the domain.</p> <p>Some domain registries don't allow you to remove all of the name servers for a domain. If the registry for your domain requires one or more name servers, we recommend that you delete the hosted zone only if you transfer DNS service to another service provider, and you replace the name servers for the domain with name servers from the new provider.</p> </important> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Amazon Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul>"]
     fn delete_hosted_zone(&self,
                           input: &DeleteHostedZoneRequest)
-                          -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError>;
+                          -> RusotoFuture<DeleteHostedZoneResponse, DeleteHostedZoneError>;
 
 
     #[doc="<p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>"]
     fn delete_reusable_delegation_set
         (&self,
          input: &DeleteReusableDelegationSetRequest)
-         -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError>;
+         -> RusotoFuture<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError>;
 
 
     #[doc="<p>Deletes a traffic policy.</p>"]
-    fn delete_traffic_policy(&self,
-                             input: &DeleteTrafficPolicyRequest)
-                             -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError>;
+    fn delete_traffic_policy
+        (&self,
+         input: &DeleteTrafficPolicyRequest)
+         -> RusotoFuture<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError>;
 
 
     #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     fn delete_traffic_policy_instance
         (&self,
          input: &DeleteTrafficPolicyInstanceRequest)
-         -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError>;
+         -> RusotoFuture<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError>;
 
 
     #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important>"]
-    fn delete_vpc_association_authorization
-        (&self,
-         input: &DeleteVPCAssociationAuthorizationRequest)
-         -> Result<DeleteVPCAssociationAuthorizationResponse,
-                   DeleteVPCAssociationAuthorizationError>;
+    fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> RusotoFuture<DeleteVPCAssociationAuthorizationResponse, DeleteVPCAssociationAuthorizationError>;
 
 
     #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
     fn disassociate_vpc_from_hosted_zone
         (&self,
          input: &DisassociateVPCFromHostedZoneRequest)
-         -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
+         -> RusotoFuture<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
 
 
     #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
-    fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError>;
+    fn get_change(&self,
+                  input: &GetChangeRequest)
+                  -> RusotoFuture<GetChangeResponse, GetChangeError>;
 
 
     #[doc="<p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html\">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
-    fn get_checker_ip_ranges(&self,
-                             input: &GetCheckerIpRangesRequest)
-                             -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError>;
+    fn get_checker_ip_ranges
+        (&self,
+         input: &GetCheckerIpRangesRequest)
+         -> RusotoFuture<GetCheckerIpRangesResponse, GetCheckerIpRangesError>;
 
 
     #[doc="<p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?ContinentCode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i>&amp;SubdivisionCode=<i>subdivision code</i> </code> </p>"]
     fn get_geo_location(&self,
                         input: &GetGeoLocationRequest)
-                        -> Result<GetGeoLocationResponse, GetGeoLocationError>;
+                        -> RusotoFuture<GetGeoLocationResponse, GetGeoLocationError>;
 
 
     #[doc="<p>Gets information about a specified health check.</p>"]
     fn get_health_check(&self,
                         input: &GetHealthCheckRequest)
-                        -> Result<GetHealthCheckResponse, GetHealthCheckError>;
+                        -> RusotoFuture<GetHealthCheckResponse, GetHealthCheckError>;
 
 
     #[doc="<p>Retrieves the number of health checks that are associated with the current AWS account.</p>"]
-    fn get_health_check_count(&self,
-                              input: &GetHealthCheckCountRequest)
-                              -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError>;
+    fn get_health_check_count
+        (&self,
+         input: &GetHealthCheckCountRequest)
+         -> RusotoFuture<GetHealthCheckCountResponse, GetHealthCheckCountError>;
 
 
     #[doc="<p>Gets the reason that a specified health check failed most recently.</p>"]
     fn get_health_check_last_failure_reason
         (&self,
          input: &GetHealthCheckLastFailureReasonRequest)
-         -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError>;
+         -> RusotoFuture<GetHealthCheckLastFailureReasonResponse,
+                         GetHealthCheckLastFailureReasonError>;
 
 
     #[doc="<p>Gets status of a specified health check. </p>"]
     fn get_health_check_status
         (&self,
          input: &GetHealthCheckStatusRequest)
-         -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError>;
+         -> RusotoFuture<GetHealthCheckStatusResponse, GetHealthCheckStatusError>;
 
 
     #[doc="<p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>"]
     fn get_hosted_zone(&self,
                        input: &GetHostedZoneRequest)
-                       -> Result<GetHostedZoneResponse, GetHostedZoneError>;
+                       -> RusotoFuture<GetHostedZoneResponse, GetHostedZoneError>;
 
 
     #[doc="<p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>"]
-    fn get_hosted_zone_count(&self,
-                             input: &GetHostedZoneCountRequest)
-                             -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError>;
+    fn get_hosted_zone_count
+        (&self,
+         input: &GetHostedZoneCountRequest)
+         -> RusotoFuture<GetHostedZoneCountResponse, GetHostedZoneCountError>;
 
 
     #[doc="<p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>"]
     fn get_reusable_delegation_set
         (&self,
          input: &GetReusableDelegationSetRequest)
-         -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
+         -> RusotoFuture<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
 
 
     #[doc="<p>Gets information about a specific traffic policy version.</p>"]
     fn get_traffic_policy(&self,
                           input: &GetTrafficPolicyRequest)
-                          -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError>;
+                          -> RusotoFuture<GetTrafficPolicyResponse, GetTrafficPolicyError>;
 
 
     #[doc="<p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     fn get_traffic_policy_instance
         (&self,
          input: &GetTrafficPolicyInstanceRequest)
-         -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError>;
+         -> RusotoFuture<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError>;
 
 
     #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>"]
     fn get_traffic_policy_instance_count
         (&self,
          input: &GetTrafficPolicyInstanceCountRequest)
-         -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>;
+         -> RusotoFuture<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>;
 
 
     #[doc="<p>Retrieves a list of supported geo locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>"]
     fn list_geo_locations(&self,
                           input: &ListGeoLocationsRequest)
-                          -> Result<ListGeoLocationsResponse, ListGeoLocationsError>;
+                          -> RusotoFuture<ListGeoLocationsResponse, ListGeoLocationsError>;
 
 
     #[doc="<p>Retrieve a list of the health checks that are associated with the current AWS account. </p>"]
     fn list_health_checks(&self,
                           input: &ListHealthChecksRequest)
-                          -> Result<ListHealthChecksResponse, ListHealthChecksError>;
+                          -> RusotoFuture<ListHealthChecksResponse, ListHealthChecksError>;
 
 
     #[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_hosted_zones(&self,
                          input: &ListHostedZonesRequest)
-                         -> Result<ListHostedZonesResponse, ListHostedZonesError>;
+                         -> RusotoFuture<ListHostedZonesResponse, ListHostedZonesError>;
 
 
     #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
     fn list_hosted_zones_by_name
         (&self,
          input: &ListHostedZonesByNameRequest)
-         -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError>;
+         -> RusotoFuture<ListHostedZonesByNameResponse, ListHostedZonesByNameError>;
 
 
     #[doc="<p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements. The action sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>When multiple records have the same DNS name, the action sorts results by the record type.</p> <p>You can use the name and type elements to adjust the beginning position of the list of resource record sets returned:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Amazon Route 53 DNS servers.</p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p>"]
     fn list_resource_record_sets
         (&self,
          input: &ListResourceRecordSetsRequest)
-         -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError>;
+         -> RusotoFuture<ListResourceRecordSetsResponse, ListResourceRecordSetsError>;
 
 
     #[doc="<p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
     fn list_reusable_delegation_sets
         (&self,
          input: &ListReusableDelegationSetsRequest)
-         -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError>;
+         -> RusotoFuture<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError>;
 
 
     #[doc="<p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+    fn list_tags_for_resource
+        (&self,
+         input: &ListTagsForResourceRequest)
+         -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
 
     #[doc="<p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
     fn list_tags_for_resources
         (&self,
          input: &ListTagsForResourcesRequest)
-         -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError>;
+         -> RusotoFuture<ListTagsForResourcesResponse, ListTagsForResourcesError>;
 
 
     #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order in which they were created. </p>"]
-    fn list_traffic_policies(&self,
-                             input: &ListTrafficPoliciesRequest)
-                             -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError>;
+    fn list_traffic_policies
+        (&self,
+         input: &ListTrafficPoliciesRequest)
+         -> RusotoFuture<ListTrafficPoliciesResponse, ListTrafficPoliciesError>;
 
 
     #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_traffic_policy_instances
         (&self,
          input: &ListTrafficPolicyInstancesRequest)
-         -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError>;
+         -> RusotoFuture<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError>;
 
 
     #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
-    fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>;
+    fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> RusotoFuture<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>;
 
 
     #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
-    fn list_traffic_policy_instances_by_policy
-        (&self,
-         input: &ListTrafficPolicyInstancesByPolicyRequest)
-         -> Result<ListTrafficPolicyInstancesByPolicyResponse,
-                   ListTrafficPolicyInstancesByPolicyError>;
+    fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> RusotoFuture<ListTrafficPolicyInstancesByPolicyResponse, ListTrafficPolicyInstancesByPolicyError>;
 
 
     #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>"]
     fn list_traffic_policy_versions
         (&self,
          input: &ListTrafficPolicyVersionsRequest)
-         -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError>;
+         -> RusotoFuture<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError>;
 
 
     #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>"]
     fn list_vpc_association_authorizations
         (&self,
          input: &ListVPCAssociationAuthorizationsRequest)
-         -> Result<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError>;
+         -> RusotoFuture<ListVPCAssociationAuthorizationsResponse,
+                         ListVPCAssociationAuthorizationsError>;
 
 
     #[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
     fn test_dns_answer(&self,
                        input: &TestDNSAnswerRequest)
-                       -> Result<TestDNSAnswerResponse, TestDNSAnswerError>;
+                       -> RusotoFuture<TestDNSAnswerResponse, TestDNSAnswerError>;
 
 
     #[doc="<p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     fn update_health_check(&self,
                            input: &UpdateHealthCheckRequest)
-                           -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError>;
+                           -> RusotoFuture<UpdateHealthCheckResponse, UpdateHealthCheckError>;
 
 
     #[doc="<p>Updates the comment for a specified hosted zone.</p>"]
     fn update_hosted_zone_comment
         (&self,
          input: &UpdateHostedZoneCommentRequest)
-         -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError>;
+         -> RusotoFuture<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError>;
 
 
     #[doc="<p>Updates the comment for a specified traffic policy version.</p>"]
     fn update_traffic_policy_comment
         (&self,
          input: &UpdateTrafficPolicyCommentRequest)
-         -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError>;
+         -> RusotoFuture<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError>;
 
 
     #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
     fn update_traffic_policy_instance
         (&self,
          input: &UpdateTrafficPolicyInstanceRequest)
-         -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError>;
+         -> RusotoFuture<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError>;
 }
 /// A client for the Route 53 API.
 pub struct Route53Client<P, D>
@@ -13021,7 +13022,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn associate_vpc_with_hosted_zone
         (&self,
          input: &AssociateVPCWithHostedZoneRequest)
-         -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError> {
+         -> RusotoFuture<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}/associatevpc",
                                   id = input.hosted_zone_id);
 
@@ -13037,40 +13038,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = AssociateVPCWithHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = AssociateVPCWithHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see \"Examples.\"</p> <p>Don't refer to the syntax in the \"Parameter Syntax\" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Amazon Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers within 60 seconds. For more information, see <a>GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
@@ -13078,7 +13088,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn change_resource_record_sets
         (&self,
          input: &ChangeResourceRecordSetsRequest)
-         -> Result<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError> {
+         -> RusotoFuture<ChangeResourceRecordSetsResponse, ChangeResourceRecordSetsError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset/",
                                   id = input.hosted_zone_id);
 
@@ -13094,40 +13104,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ChangeResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ChangeResourceRecordSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Adds, edits, or deletes tags for a health check or a hosted zone.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
@@ -13135,7 +13154,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn change_tags_for_resource
         (&self,
          input: &ChangeTagsForResourceRequest)
-         -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError> {
+         -> RusotoFuture<ChangeTagsForResourceResponse, ChangeTagsForResourceError> {
         let request_uri = format!("/2013-04-01/tags/{resource_type}/{resource_id}",
                                   resource_id = input.resource_id,
                                   resource_type = input.resource_type);
@@ -13152,46 +13171,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ChangeTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ChangeTagsForResourceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you're registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn create_health_check(&self,
                            input: &CreateHealthCheckRequest)
-                           -> Result<CreateHealthCheckResponse, CreateHealthCheckError> {
+                           -> RusotoFuture<CreateHealthCheckResponse, CreateHealthCheckError> {
         let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13206,18 +13235,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CreateHealthCheckResponse::default();
@@ -13232,23 +13274,29 @@ impl<P, D> Route53 for Route53Client<P, D>
                         try!(CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
                                                                                 &mut stack));
                 }
-                let value = response.headers.get("Location").unwrap().to_owned();
+
+                let value = response_headers.get("Location").unwrap().to_owned();
                 result.location = value;
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Creates a new public hosted zone, which you use to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>You can't convert a public hosted zones to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. This means that the NS and SOA records are not yet available on all Amazon Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_hosted_zone(&self,
                           input: &CreateHostedZoneRequest)
-                          -> Result<CreateHostedZoneResponse, CreateHostedZoneError> {
+                          -> RusotoFuture<CreateHostedZoneResponse, CreateHostedZoneError> {
         let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13263,18 +13311,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CreateHostedZoneResponse::default();
@@ -13289,16 +13350,22 @@ impl<P, D> Route53 for Route53Client<P, D>
                         try!(CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
                                                                                &mut stack));
                 }
-                let value = response.headers.get("Location").unwrap().to_owned();
+
+                let value = response_headers.get("Location").unwrap().to_owned();
                 result.location = value;
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
@@ -13306,7 +13373,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_reusable_delegation_set
         (&self,
          input: &CreateReusableDelegationSetRequest)
-         -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
+         -> RusotoFuture<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError> {
         let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13321,48 +13388,58 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = CreateReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            let value = response_headers.get("Location").unwrap().to_owned();
+                 result.location = value;
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>"]
     #[allow(unused_variables, warnings)]
-    fn create_traffic_policy(&self,
-                             input: &CreateTrafficPolicyRequest)
-                             -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
+    fn create_traffic_policy
+        (&self,
+         input: &CreateTrafficPolicyRequest)
+         -> RusotoFuture<CreateTrafficPolicyResponse, CreateTrafficPolicyError> {
         let request_uri = "/2013-04-01/trafficpolicy";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13377,40 +13454,50 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = CreateTrafficPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            let value = response_headers.get("Location").unwrap().to_owned();
+                 result.location = value;
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>"]
@@ -13418,7 +13505,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_traffic_policy_instance
         (&self,
          input: &CreateTrafficPolicyInstanceRequest)
-         -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
+         -> RusotoFuture<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError> {
         let request_uri = "/2013-04-01/trafficpolicyinstance";
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13433,41 +13520,50 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = CreateTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            let value = response_headers.get("Location").unwrap().to_owned();
+                 result.location = value;
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>"]
@@ -13475,7 +13571,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn create_traffic_policy_version
         (&self,
          input: &CreateTrafficPolicyVersionRequest)
-         -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
+         -> RusotoFuture<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError> {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -13490,50 +13586,55 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateTrafficPolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = CreateTrafficPolicyVersionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            let value = response_headers.get("Location").unwrap().to_owned();
+                 result.location = value;
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note>"]
     #[allow(unused_variables, warnings)]
-    fn create_vpc_association_authorization
-        (&self,
-         input: &CreateVPCAssociationAuthorizationRequest)
-         -> Result<CreateVPCAssociationAuthorizationResponse,
-                   CreateVPCAssociationAuthorizationError> {
+fn create_vpc_association_authorization(&self, input: &CreateVPCAssociationAuthorizationRequest) -> RusotoFuture<CreateVPCAssociationAuthorizationResponse, CreateVPCAssociationAuthorizationError>{
         let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
                                   id = input.hosted_zone_id);
 
@@ -13549,46 +13650,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = CreateVPCAssociationAuthorizationResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important>"]
     #[allow(unused_variables, warnings)]
     fn delete_health_check(&self,
                            input: &DeleteHealthCheckRequest)
-                           -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError> {
+                           -> RusotoFuture<DeleteHealthCheckResponse, DeleteHealthCheckError> {
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
@@ -13598,18 +13709,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = DeleteHealthCheckResponse::default();
@@ -13625,21 +13749,27 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                 &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Deletes a hosted zone.</p> <important> <p>If the name servers for the hosted zone are associated with a domain and if you want to make the domain unavailable on the Internet, we recommend that you delete the name servers from the domain to prevent future DNS queries from possibly being misrouted. If the domain is registered with Amazon Route 53, see <code>UpdateDomainNameservers</code>. If the domain is registered with another registrar, use the method provided by the registrar to delete name servers for the domain.</p> <p>Some domain registries don't allow you to remove all of the name servers for a domain. If the registry for your domain requires one or more name servers, we recommend that you delete the hosted zone only if you transfer DNS service to another service provider, and you replace the name servers for the domain with name servers from the new provider.</p> </important> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Amazon Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn delete_hosted_zone(&self,
                           input: &DeleteHostedZoneRequest)
-                          -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError> {
+                          -> RusotoFuture<DeleteHostedZoneResponse, DeleteHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -13648,18 +13778,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = DeleteHostedZoneResponse::default();
@@ -13675,14 +13818,20 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>"]
@@ -13690,7 +13839,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn delete_reusable_delegation_set
         (&self,
          input: &DeleteReusableDelegationSetRequest)
-         -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
+         -> RusotoFuture<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -13699,47 +13848,57 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = DeleteReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Deletes a traffic policy.</p>"]
     #[allow(unused_variables, warnings)]
-    fn delete_traffic_policy(&self,
-                             input: &DeleteTrafficPolicyRequest)
-                             -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError> {
+    fn delete_traffic_policy
+        (&self,
+         input: &DeleteTrafficPolicyRequest)
+         -> RusotoFuture<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError> {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
                                   id = input.id,
                                   version = input.version);
@@ -13750,39 +13909,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = DeleteTrafficPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
@@ -13790,7 +13959,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn delete_traffic_policy_instance
         (&self,
          input: &DeleteTrafficPolicyInstanceRequest)
-         -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
+         -> RusotoFuture<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -13799,49 +13968,54 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = DeleteTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important>"]
     #[allow(unused_variables, warnings)]
-    fn delete_vpc_association_authorization
-        (&self,
-         input: &DeleteVPCAssociationAuthorizationRequest)
-         -> Result<DeleteVPCAssociationAuthorizationResponse,
-                   DeleteVPCAssociationAuthorizationError> {
+fn delete_vpc_association_authorization(&self, input: &DeleteVPCAssociationAuthorizationRequest) -> RusotoFuture<DeleteVPCAssociationAuthorizationResponse, DeleteVPCAssociationAuthorizationError>{
         let request_uri = format!("/2013-04-01/hostedzone/{id}/deauthorizevpcassociation",
                                   id = input.hosted_zone_id);
 
@@ -13857,39 +14031,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = DeleteVPCAssociationAuthorizationResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
@@ -13897,7 +14081,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn disassociate_vpc_from_hosted_zone
         (&self,
          input: &DisassociateVPCFromHostedZoneRequest)
-         -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError> {
+         -> RusotoFuture<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}/disassociatevpc",
                                   id = input.hosted_zone_id);
 
@@ -13913,45 +14097,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DisassociateVPCFromHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = DisassociateVPCFromHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
-    fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError> {
+    fn get_change(&self,
+                  input: &GetChangeRequest)
+                  -> RusotoFuture<GetChangeResponse, GetChangeError> {
         let request_uri = format!("/2013-04-01/change/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13960,18 +14155,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetChangeResponse::default();
@@ -13986,21 +14194,28 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetChangeError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetChangeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html\">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
-    fn get_checker_ip_ranges(&self,
-                             input: &GetCheckerIpRangesRequest)
-                             -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
+    fn get_checker_ip_ranges
+        (&self,
+         input: &GetCheckerIpRangesRequest)
+         -> RusotoFuture<GetCheckerIpRangesResponse, GetCheckerIpRangesError> {
         let request_uri = "/2013-04-01/checkeripranges";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14009,18 +14224,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetCheckerIpRangesResponse::default();
@@ -14036,21 +14264,27 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?ContinentCode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i>&amp;SubdivisionCode=<i>subdivision code</i> </code> </p>"]
     #[allow(unused_variables, warnings)]
     fn get_geo_location(&self,
                         input: &GetGeoLocationRequest)
-                        -> Result<GetGeoLocationResponse, GetGeoLocationError> {
+                        -> RusotoFuture<GetGeoLocationResponse, GetGeoLocationError> {
         let request_uri = "/2013-04-01/geolocation";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14069,18 +14303,31 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetGeoLocationResponse::default();
@@ -14096,21 +14343,27 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetGeoLocationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Gets information about a specified health check.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_health_check(&self,
                         input: &GetHealthCheckRequest)
-                        -> Result<GetHealthCheckResponse, GetHealthCheckError> {
+                        -> RusotoFuture<GetHealthCheckResponse, GetHealthCheckError> {
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
@@ -14120,18 +14373,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetHealthCheckResponse::default();
@@ -14147,21 +14413,28 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                              &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetHealthCheckError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieves the number of health checks that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
-    fn get_health_check_count(&self,
-                              input: &GetHealthCheckCountRequest)
-                              -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError> {
+    fn get_health_check_count
+        (&self,
+         input: &GetHealthCheckCountRequest)
+         -> RusotoFuture<GetHealthCheckCountResponse, GetHealthCheckCountError> {
         let request_uri = "/2013-04-01/healthcheckcount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14170,39 +14443,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetHealthCheckCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetHealthCheckCountResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets the reason that a specified health check failed most recently.</p>"]
@@ -14210,7 +14493,8 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_health_check_last_failure_reason
         (&self,
          input: &GetHealthCheckLastFailureReasonRequest)
-         -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError> {
+         -> RusotoFuture<GetHealthCheckLastFailureReasonResponse,
+                         GetHealthCheckLastFailureReasonError> {
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/lastfailurereason",
                                   health_check_id = input.health_check_id);
 
@@ -14220,40 +14504,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetHealthCheckLastFailureReasonResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetHealthCheckLastFailureReasonResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets status of a specified health check. </p>"]
@@ -14261,7 +14554,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_health_check_status
         (&self,
          input: &GetHealthCheckStatusRequest)
-         -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError> {
+         -> RusotoFuture<GetHealthCheckStatusResponse, GetHealthCheckStatusError> {
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}/status",
                                   health_check_id = input.health_check_id);
 
@@ -14271,46 +14564,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetHealthCheckStatusResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetHealthCheckStatusResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_hosted_zone(&self,
                        input: &GetHostedZoneRequest)
-                       -> Result<GetHostedZoneResponse, GetHostedZoneError> {
+                       -> RusotoFuture<GetHostedZoneResponse, GetHostedZoneError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14319,18 +14622,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetHostedZoneResponse::default();
@@ -14345,21 +14661,28 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
-    fn get_hosted_zone_count(&self,
-                             input: &GetHostedZoneCountRequest)
-                             -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError> {
+    fn get_hosted_zone_count
+        (&self,
+         input: &GetHostedZoneCountRequest)
+         -> RusotoFuture<GetHostedZoneCountResponse, GetHostedZoneCountError> {
         let request_uri = "/2013-04-01/hostedzonecount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14368,18 +14691,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetHostedZoneCountResponse::default();
@@ -14395,14 +14731,20 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>"]
@@ -14410,7 +14752,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_reusable_delegation_set
         (&self,
          input: &GetReusableDelegationSetRequest)
-         -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
+         -> RusotoFuture<GetReusableDelegationSetResponse, GetReusableDelegationSetError> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14419,47 +14761,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about a specific traffic policy version.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_traffic_policy(&self,
                           input: &GetTrafficPolicyRequest)
-                          -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError> {
+                          -> RusotoFuture<GetTrafficPolicyResponse, GetTrafficPolicyError> {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
                                   id = input.id,
                                   version = input.version);
@@ -14470,18 +14821,31 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetTrafficPolicyResponse::default();
@@ -14497,14 +14861,20 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
@@ -14512,7 +14882,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_traffic_policy_instance
         (&self,
          input: &GetTrafficPolicyInstanceRequest)
-         -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
+         -> RusotoFuture<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14521,40 +14891,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>"]
@@ -14562,7 +14941,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn get_traffic_policy_instance_count
         (&self,
          input: &GetTrafficPolicyInstanceCountRequest)
-         -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError> {
+         -> RusotoFuture<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError> {
         let request_uri = "/2013-04-01/trafficpolicyinstancecount";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14571,47 +14950,56 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetTrafficPolicyInstanceCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = GetTrafficPolicyInstanceCountResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Retrieves a list of supported geo locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_geo_locations(&self,
                           input: &ListGeoLocationsRequest)
-                          -> Result<ListGeoLocationsResponse, ListGeoLocationsError> {
+                          -> RusotoFuture<ListGeoLocationsResponse, ListGeoLocationsError> {
         let request_uri = "/2013-04-01/geolocations";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14633,18 +15021,31 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListGeoLocationsResponse::default();
@@ -14660,21 +15061,27 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieve a list of the health checks that are associated with the current AWS account. </p>"]
     #[allow(unused_variables, warnings)]
     fn list_health_checks(&self,
                           input: &ListHealthChecksRequest)
-                          -> Result<ListHealthChecksResponse, ListHealthChecksError> {
+                          -> RusotoFuture<ListHealthChecksResponse, ListHealthChecksError> {
         let request_uri = "/2013-04-01/healthcheck";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14690,18 +15097,31 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListHealthChecksResponse::default();
@@ -14717,21 +15137,27 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                                &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListHealthChecksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_hosted_zones(&self,
                          input: &ListHostedZonesRequest)
-                         -> Result<ListHostedZonesResponse, ListHostedZonesError> {
+                         -> RusotoFuture<ListHostedZonesResponse, ListHostedZonesError> {
         let request_uri = "/2013-04-01/hostedzone";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14750,18 +15176,31 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListHostedZonesResponse::default();
@@ -14777,14 +15216,20 @@ impl<P, D> Route53 for Route53Client<P, D>
                                                                               &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListHostedZonesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
@@ -14792,7 +15237,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_hosted_zones_by_name
         (&self,
          input: &ListHostedZonesByNameRequest)
-         -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
+         -> RusotoFuture<ListHostedZonesByNameResponse, ListHostedZonesByNameError> {
         let request_uri = "/2013-04-01/hostedzonesbyname";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14811,39 +15256,49 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListHostedZonesByNameResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListHostedZonesByNameResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements. The action sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>When multiple records have the same DNS name, the action sorts results by the record type.</p> <p>You can use the name and type elements to adjust the beginning position of the list of resource record sets returned:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Amazon Route 53 DNS servers.</p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p>"]
@@ -14851,7 +15306,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_resource_record_sets
         (&self,
          input: &ListResourceRecordSetsRequest)
-         -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError> {
+         -> RusotoFuture<ListResourceRecordSetsResponse, ListResourceRecordSetsError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}/rrset",
                                   id = input.hosted_zone_id);
 
@@ -14874,39 +15329,49 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListResourceRecordSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
@@ -14914,7 +15379,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_reusable_delegation_sets
         (&self,
          input: &ListReusableDelegationSetsRequest)
-         -> Result<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
+         -> RusotoFuture<ListReusableDelegationSetsResponse, ListReusableDelegationSetsError> {
         let request_uri = "/2013-04-01/delegationset";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14930,47 +15395,57 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListReusableDelegationSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListReusableDelegationSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Lists tags for one health check or hosted zone. </p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    fn list_tags_for_resource
+        (&self,
+         input: &ListTagsForResourceRequest)
+         -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
         let request_uri = format!("/2013-04-01/tags/{resource_type}/{resource_id}",
                                   resource_id = input.resource_id,
                                   resource_type = input.resource_type);
@@ -14981,39 +15456,49 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTagsForResourceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Lists tags for up to 10 health checks or hosted zones.</p> <p>For information about using tags for cost allocation, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>"]
@@ -15021,7 +15506,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_tags_for_resources
         (&self,
          input: &ListTagsForResourcesRequest)
-         -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError> {
+         -> RusotoFuture<ListTagsForResourcesResponse, ListTagsForResourcesError> {
         let request_uri = format!("/2013-04-01/tags/{resource_type}",
                                   resource_type = input.resource_type);
 
@@ -15037,46 +15522,57 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTagsForResourcesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTagsForResourcesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order in which they were created. </p>"]
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policies(&self,
-                             input: &ListTrafficPoliciesRequest)
-                             -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
+    fn list_traffic_policies
+        (&self,
+         input: &ListTrafficPoliciesRequest)
+         -> RusotoFuture<ListTrafficPoliciesResponse, ListTrafficPoliciesError> {
         let request_uri = "/2013-04-01/trafficpolicies";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15092,39 +15588,49 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTrafficPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTrafficPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
@@ -15132,7 +15638,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     fn list_traffic_policy_instances
         (&self,
          input: &ListTrafficPolicyInstancesRequest)
-         -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
+         -> RusotoFuture<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError> {
         let request_uri = "/2013-04-01/trafficpolicyinstances";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15154,45 +15660,54 @@ impl<P, D> Route53 for Route53Client<P, D>
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTrafficPolicyInstancesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTrafficPolicyInstancesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
-fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>{
+fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> RusotoFuture<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>{
         let request_uri = "/2013-04-01/trafficpolicyinstances/hostedzone";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15212,48 +15727,54 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
-    fn list_traffic_policy_instances_by_policy
-        (&self,
-         input: &ListTrafficPolicyInstancesByPolicyRequest)
-         -> Result<ListTrafficPolicyInstancesByPolicyResponse,
-                   ListTrafficPolicyInstancesByPolicyError> {
+fn list_traffic_policy_instances_by_policy(&self, input: &ListTrafficPolicyInstancesByPolicyRequest) -> RusotoFuture<ListTrafficPolicyInstancesByPolicyResponse, ListTrafficPolicyInstancesByPolicyError>{
         let request_uri = "/2013-04-01/trafficpolicyinstances/trafficpolicy";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15277,39 +15798,49 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTrafficPolicyInstancesByPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTrafficPolicyInstancesByPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>"]
@@ -15317,7 +15848,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn list_traffic_policy_versions
         (&self,
          input: &ListTrafficPolicyVersionsRequest)
-         -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
+         -> RusotoFuture<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError> {
         let request_uri = format!("/2013-04-01/trafficpolicies/{id}/versions", id = input.id);
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15333,40 +15864,49 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListTrafficPolicyVersionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListTrafficPolicyVersionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>"]
@@ -15374,7 +15914,8 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn list_vpc_association_authorizations
         (&self,
          input: &ListVPCAssociationAuthorizationsRequest)
-         -> Result<ListVPCAssociationAuthorizationsResponse, ListVPCAssociationAuthorizationsError> {
+         -> RusotoFuture<ListVPCAssociationAuthorizationsResponse,
+                         ListVPCAssociationAuthorizationsError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}/authorizevpcassociation",
                                   id = input.hosted_zone_id);
 
@@ -15391,46 +15932,56 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListVPCAssociationAuthorizationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = ListVPCAssociationAuthorizationsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
     #[allow(unused_variables, warnings)]
     fn test_dns_answer(&self,
                        input: &TestDNSAnswerRequest)
-                       -> Result<TestDNSAnswerResponse, TestDNSAnswerError> {
+                       -> RusotoFuture<TestDNSAnswerResponse, TestDNSAnswerError> {
         let request_uri = "/2013-04-01/testdnsanswer";
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -15452,18 +16003,31 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         request.set_params(params);
 
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = TestDNSAnswerResponse::default();
@@ -15478,21 +16042,27 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                                                                                  &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
     fn update_health_check(&self,
                            input: &UpdateHealthCheckRequest)
-                           -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError> {
+                           -> RusotoFuture<UpdateHealthCheckResponse, UpdateHealthCheckError> {
         let request_uri = format!("/2013-04-01/healthcheck/{health_check_id}",
                                   health_check_id = input.health_check_id);
 
@@ -15508,18 +16078,31 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        let mut response = try!(self.dispatcher.dispatch(&request));
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok |
+                                            StatusCode::NoContent |
+                                            StatusCode::PartialContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                let response_body = response.body;
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = UpdateHealthCheckResponse::default();
@@ -15535,14 +16118,20 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
                                                                                 &mut stack));
                 }
 
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
     #[doc="<p>Updates the comment for a specified hosted zone.</p>"]
@@ -15550,7 +16139,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn update_hosted_zone_comment
         (&self,
          input: &UpdateHostedZoneCommentRequest)
-         -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
+         -> RusotoFuture<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -15565,40 +16154,49 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateHostedZoneCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = UpdateHostedZoneCommentResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Updates the comment for a specified traffic policy version.</p>"]
@@ -15606,7 +16204,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn update_traffic_policy_comment
         (&self,
          input: &UpdateTrafficPolicyCommentRequest)
-         -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError> {
+         -> RusotoFuture<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError> {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}/{version}",
                                   id = input.id,
                                   version = input.version);
@@ -15623,40 +16221,49 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateTrafficPolicyCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = UpdateTrafficPolicyCommentResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 
     #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
@@ -15664,7 +16271,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
     fn update_traffic_policy_instance
         (&self,
          input: &UpdateTrafficPolicyInstanceRequest)
-         -> Result<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
+         -> RusotoFuture<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id);
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -15679,40 +16286,49 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         request.set_payload(Some(writer.into_inner()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
-                let mut result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let mut result;
+
+            if body.is_empty() {
+                result = UpdateTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                                },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        }))
     }
 }
 
@@ -15733,7 +16349,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = Route53Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetHostedZoneRequest::default();
-        let result = client.get_hosted_zone(&request);
+        let result = client.get_hosted_zone(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 

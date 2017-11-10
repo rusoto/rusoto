@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -3571,163 +3573,172 @@ pub trait CloudWatchLogs {
     #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
     fn cancel_export_task(&self,
                           input: &CancelExportTaskRequest)
-                          -> Result<(), CancelExportTaskError>;
+                          -> RusotoFuture<(), CancelExportTaskError>;
 
 
     #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
     fn create_export_task(&self,
                           input: &CreateExportTaskRequest)
-                          -> Result<CreateExportTaskResponse, CreateExportTaskError>;
+                          -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError>;
 
 
     #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
-    fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError>;
+    fn create_log_group(&self,
+                        input: &CreateLogGroupRequest)
+                        -> RusotoFuture<(), CreateLogGroupError>;
 
 
     #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
     fn create_log_stream(&self,
                          input: &CreateLogStreamRequest)
-                         -> Result<(), CreateLogStreamError>;
+                         -> RusotoFuture<(), CreateLogStreamError>;
 
 
     #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
     fn delete_destination(&self,
                           input: &DeleteDestinationRequest)
-                          -> Result<(), DeleteDestinationError>;
+                          -> RusotoFuture<(), DeleteDestinationError>;
 
 
     #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
-    fn delete_log_group(&self, input: &DeleteLogGroupRequest) -> Result<(), DeleteLogGroupError>;
+    fn delete_log_group(&self,
+                        input: &DeleteLogGroupRequest)
+                        -> RusotoFuture<(), DeleteLogGroupError>;
 
 
     #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
     fn delete_log_stream(&self,
                          input: &DeleteLogStreamRequest)
-                         -> Result<(), DeleteLogStreamError>;
+                         -> RusotoFuture<(), DeleteLogStreamError>;
 
 
     #[doc="<p>Deletes the specified metric filter.</p>"]
     fn delete_metric_filter(&self,
                             input: &DeleteMetricFilterRequest)
-                            -> Result<(), DeleteMetricFilterError>;
+                            -> RusotoFuture<(), DeleteMetricFilterError>;
 
 
     #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
     fn delete_retention_policy(&self,
                                input: &DeleteRetentionPolicyRequest)
-                               -> Result<(), DeleteRetentionPolicyError>;
+                               -> RusotoFuture<(), DeleteRetentionPolicyError>;
 
 
     #[doc="<p>Deletes the specified subscription filter.</p>"]
     fn delete_subscription_filter(&self,
                                   input: &DeleteSubscriptionFilterRequest)
-                                  -> Result<(), DeleteSubscriptionFilterError>;
+                                  -> RusotoFuture<(), DeleteSubscriptionFilterError>;
 
 
     #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-    fn describe_destinations(&self,
-                             input: &DescribeDestinationsRequest)
-                             -> Result<DescribeDestinationsResponse, DescribeDestinationsError>;
+    fn describe_destinations
+        (&self,
+         input: &DescribeDestinationsRequest)
+         -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError>;
 
 
     #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
+    fn describe_export_tasks
+        (&self,
+         input: &DescribeExportTasksRequest)
+         -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
 
 
     #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
     fn describe_log_groups(&self,
                            input: &DescribeLogGroupsRequest)
-                           -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError>;
+                           -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError>;
 
 
     #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-    fn describe_log_streams(&self,
-                            input: &DescribeLogStreamsRequest)
-                            -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError>;
+    fn describe_log_streams
+        (&self,
+         input: &DescribeLogStreamsRequest)
+         -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError>;
 
 
     #[doc="<p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>"]
     fn describe_metric_filters
         (&self,
          input: &DescribeMetricFiltersRequest)
-         -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
+         -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
 
 
     #[doc="<p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>"]
     fn describe_subscription_filters
         (&self,
          input: &DescribeSubscriptionFiltersRequest)
-         -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
+         -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
 
 
     #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
     fn filter_log_events(&self,
                          input: &FilterLogEventsRequest)
-                         -> Result<FilterLogEventsResponse, FilterLogEventsError>;
+                         -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError>;
 
 
     #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
     fn get_log_events(&self,
                       input: &GetLogEventsRequest)
-                      -> Result<GetLogEventsResponse, GetLogEventsError>;
+                      -> RusotoFuture<GetLogEventsResponse, GetLogEventsError>;
 
 
     #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
     fn list_tags_log_group(&self,
                            input: &ListTagsLogGroupRequest)
-                           -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError>;
+                           -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError>;
 
 
     #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
     fn put_destination(&self,
                        input: &PutDestinationRequest)
-                       -> Result<PutDestinationResponse, PutDestinationError>;
+                       -> RusotoFuture<PutDestinationResponse, PutDestinationError>;
 
 
     #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
     fn put_destination_policy(&self,
                               input: &PutDestinationPolicyRequest)
-                              -> Result<(), PutDestinationPolicyError>;
+                              -> RusotoFuture<(), PutDestinationPolicyError>;
 
 
     #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
     fn put_log_events(&self,
                       input: &PutLogEventsRequest)
-                      -> Result<PutLogEventsResponse, PutLogEventsError>;
+                      -> RusotoFuture<PutLogEventsResponse, PutLogEventsError>;
 
 
     #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
     fn put_metric_filter(&self,
                          input: &PutMetricFilterRequest)
-                         -> Result<(), PutMetricFilterError>;
+                         -> RusotoFuture<(), PutMetricFilterError>;
 
 
     #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
     fn put_retention_policy(&self,
                             input: &PutRetentionPolicyRequest)
-                            -> Result<(), PutRetentionPolicyError>;
+                            -> RusotoFuture<(), PutRetentionPolicyError>;
 
 
     #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
     fn put_subscription_filter(&self,
                                input: &PutSubscriptionFilterRequest)
-                               -> Result<(), PutSubscriptionFilterError>;
+                               -> RusotoFuture<(), PutSubscriptionFilterError>;
 
 
     #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
-    fn tag_log_group(&self, input: &TagLogGroupRequest) -> Result<(), TagLogGroupError>;
+    fn tag_log_group(&self, input: &TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError>;
 
 
     #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
     fn test_metric_filter(&self,
                           input: &TestMetricFilterRequest)
-                          -> Result<TestMetricFilterResponse, TestMetricFilterError>;
+                          -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError>;
 
 
     #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
-    fn untag_log_group(&self, input: &UntagLogGroupRequest) -> Result<(), UntagLogGroupError>;
+    fn untag_log_group(&self,
+                       input: &UntagLogGroupRequest)
+                       -> RusotoFuture<(), UntagLogGroupError>;
 }
 /// A client for the Amazon CloudWatch Logs API.
 pub struct CloudWatchLogsClient<P, D>
@@ -3759,7 +3770,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
     #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
     fn cancel_export_task(&self,
                           input: &CancelExportTaskRequest)
-                          -> Result<(), CancelExportTaskError> {
+                          -> RusotoFuture<(), CancelExportTaskError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3767,25 +3778,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
     fn create_export_task(&self,
                           input: &CreateExportTaskRequest)
-                          -> Result<CreateExportTaskResponse, CreateExportTaskError> {
+                          -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3793,29 +3819,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateExportTaskError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
-    fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError> {
+    fn create_log_group(&self,
+                        input: &CreateLogGroupRequest)
+                        -> RusotoFuture<(), CreateLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3823,25 +3859,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
     fn create_log_stream(&self,
                          input: &CreateLogStreamRequest)
-                         -> Result<(), CreateLogStreamError> {
+                         -> RusotoFuture<(), CreateLogStreamError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3849,25 +3899,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
     fn delete_destination(&self,
                           input: &DeleteDestinationRequest)
-                          -> Result<(), DeleteDestinationError> {
+                          -> RusotoFuture<(), DeleteDestinationError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3875,23 +3940,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
-    fn delete_log_group(&self, input: &DeleteLogGroupRequest) -> Result<(), DeleteLogGroupError> {
+    fn delete_log_group(&self,
+                        input: &DeleteLogGroupRequest)
+                        -> RusotoFuture<(), DeleteLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3899,25 +3981,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
     fn delete_log_stream(&self,
                          input: &DeleteLogStreamRequest)
-                         -> Result<(), DeleteLogStreamError> {
+                         -> RusotoFuture<(), DeleteLogStreamError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3925,25 +4021,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified metric filter.</p>"]
     fn delete_metric_filter(&self,
                             input: &DeleteMetricFilterRequest)
-                            -> Result<(), DeleteMetricFilterError> {
+                            -> RusotoFuture<(), DeleteMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3951,25 +4062,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
     fn delete_retention_policy(&self,
                                input: &DeleteRetentionPolicyRequest)
-                               -> Result<(), DeleteRetentionPolicyError> {
+                               -> RusotoFuture<(), DeleteRetentionPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3977,25 +4103,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified subscription filter.</p>"]
     fn delete_subscription_filter(&self,
                                   input: &DeleteSubscriptionFilterRequest)
-                                  -> Result<(), DeleteSubscriptionFilterError> {
+                                  -> RusotoFuture<(), DeleteSubscriptionFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4003,26 +4144,35 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-    fn describe_destinations(&self,
-                             input: &DescribeDestinationsRequest)
-                             -> Result<DescribeDestinationsResponse, DescribeDestinationsError> {
+    fn describe_destinations
+        (&self,
+         input: &DescribeDestinationsRequest)
+         -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4030,29 +4180,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
+    fn describe_export_tasks
+        (&self,
+         input: &DescribeExportTasksRequest)
+         -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4060,29 +4221,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
     fn describe_log_groups(&self,
                            input: &DescribeLogGroupsRequest)
-                           -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError> {
+                           -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4090,29 +4261,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-    fn describe_log_streams(&self,
-                            input: &DescribeLogStreamsRequest)
-                            -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError> {
+    fn describe_log_streams
+        (&self,
+         input: &DescribeLogStreamsRequest)
+         -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4120,22 +4302,32 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -4143,7 +4335,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
     fn describe_metric_filters
         (&self,
          input: &DescribeMetricFiltersRequest)
-         -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
+         -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4151,22 +4343,32 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -4174,7 +4376,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
     fn describe_subscription_filters
         (&self,
          input: &DescribeSubscriptionFiltersRequest)
-         -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
+         -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4182,30 +4384,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
     fn filter_log_events(&self,
                          input: &FilterLogEventsRequest)
-                         -> Result<FilterLogEventsResponse, FilterLogEventsError> {
+                         -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4213,31 +4424,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(FilterLogEventsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
     fn get_log_events(&self,
                       input: &GetLogEventsRequest)
-                      -> Result<GetLogEventsResponse, GetLogEventsError> {
+                      -> RusotoFuture<GetLogEventsResponse, GetLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4245,31 +4464,51 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetLogEventsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
     fn list_tags_log_group(&self,
                            input: &ListTagsLogGroupRequest)
-                           -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError> {
+                           -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4277,31 +4516,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
     fn put_destination(&self,
                        input: &PutDestinationRequest)
-                       -> Result<PutDestinationResponse, PutDestinationError> {
+                       -> RusotoFuture<PutDestinationResponse, PutDestinationError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4309,31 +4556,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutDestinationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
     fn put_destination_policy(&self,
                               input: &PutDestinationPolicyRequest)
-                              -> Result<(), PutDestinationPolicyError> {
+                              -> RusotoFuture<(), PutDestinationPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4341,25 +4596,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
     fn put_log_events(&self,
                       input: &PutLogEventsRequest)
-                      -> Result<PutLogEventsResponse, PutLogEventsError> {
+                      -> RusotoFuture<PutLogEventsResponse, PutLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4367,31 +4637,51 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutLogEventsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
     fn put_metric_filter(&self,
                          input: &PutMetricFilterRequest)
-                         -> Result<(), PutMetricFilterError> {
+                         -> RusotoFuture<(), PutMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4399,25 +4689,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
     fn put_retention_policy(&self,
                             input: &PutRetentionPolicyRequest)
-                            -> Result<(), PutRetentionPolicyError> {
+                            -> RusotoFuture<(), PutRetentionPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4425,25 +4730,40 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
     fn put_subscription_filter(&self,
                                input: &PutSubscriptionFilterRequest)
-                               -> Result<(), PutSubscriptionFilterError> {
+                               -> RusotoFuture<(), PutSubscriptionFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4451,23 +4771,38 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
-    fn tag_log_group(&self, input: &TagLogGroupRequest) -> Result<(), TagLogGroupError> {
+    fn tag_log_group(&self, input: &TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4475,25 +4810,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(TagLogGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
     fn test_metric_filter(&self,
                           input: &TestMetricFilterRequest)
-                          -> Result<TestMetricFilterResponse, TestMetricFilterError> {
+                          -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4501,29 +4850,39 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(TestMetricFilterError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
-    fn untag_log_group(&self, input: &UntagLogGroupRequest) -> Result<(), UntagLogGroupError> {
+    fn untag_log_group(&self,
+                       input: &UntagLogGroupRequest)
+                       -> RusotoFuture<(), UntagLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4531,18 +4890,32 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

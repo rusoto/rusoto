@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2273,100 +2275,104 @@ impl Error for UpdateJobQueueError {
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
 pub trait Batch {
     #[doc="<p>Cancels jobs in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no jobs are cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>"]
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError>;
+    fn cancel_job(&self,
+                  input: &CancelJobRequest)
+                  -> RusotoFuture<CancelJobResponse, CancelJobError>;
 
 
     #[doc="<p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the compute resources within the environment, based on the compute resources that you specify. Instances launched into a managed compute environment use the latest Amazon ECS-optimized AMI. You can choose to use Amazon EC2 On-Demand instances in your managed compute environment, or you can use Amazon EC2 Spot instances that only launch when the Spot bid price is below a specified percentage of the On-Demand price.</p> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html\">Container Instance AMIs</a> in the <i>Amazon EC2 Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it and then manually launch your container instances into that Amazon ECS cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html\">Launching an Amazon ECS Container Instance</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     fn create_compute_environment
         (&self,
          input: &CreateComputeEnvironmentRequest)
-         -> Result<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError>;
+         -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError>;
 
 
     #[doc="<p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>"]
     fn create_job_queue(&self,
                         input: &CreateJobQueueRequest)
-                        -> Result<CreateJobQueueResponse, CreateJobQueueError>;
+                        -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError>;
 
 
     #[doc="<p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>"]
     fn delete_compute_environment
         (&self,
          input: &DeleteComputeEnvironmentRequest)
-         -> Result<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError>;
+         -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError>;
 
 
     #[doc="<p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation and terminate any jobs that have not completed with the <a>TerminateJob</a>.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>"]
     fn delete_job_queue(&self,
                         input: &DeleteJobQueueRequest)
-                        -> Result<DeleteJobQueueResponse, DeleteJobQueueError>;
+                        -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError>;
 
 
     #[doc="<p>Deregisters an AWS Batch job definition.</p>"]
     fn deregister_job_definition
         (&self,
          input: &DeregisterJobDefinitionRequest)
-         -> Result<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError>;
+         -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError>;
 
 
     #[doc="<p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>"]
     fn describe_compute_environments
         (&self,
          input: &DescribeComputeEnvironmentsRequest)
-         -> Result<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError>;
+         -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError>;
 
 
     #[doc="<p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>"]
     fn describe_job_definitions
         (&self,
          input: &DescribeJobDefinitionsRequest)
-         -> Result<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError>;
+         -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError>;
 
 
     #[doc="<p>Describes one or more of your job queues.</p>"]
     fn describe_job_queues(&self,
                            input: &DescribeJobQueuesRequest)
-                           -> Result<DescribeJobQueuesResponse, DescribeJobQueuesError>;
+                           -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError>;
 
 
     #[doc="<p>Describes a list of AWS Batch jobs.</p>"]
     fn describe_jobs(&self,
                      input: &DescribeJobsRequest)
-                     -> Result<DescribeJobsResponse, DescribeJobsError>;
+                     -> RusotoFuture<DescribeJobsResponse, DescribeJobsError>;
 
 
     #[doc="<p>Returns a list of task jobs for a specified job queue. You can filter the results by job status with the <code>jobStatus</code> parameter.</p>"]
-    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
 
 
     #[doc="<p>Registers an AWS Batch job definition. </p>"]
     fn register_job_definition
         (&self,
          input: &RegisterJobDefinitionRequest)
-         -> Result<RegisterJobDefinitionResponse, RegisterJobDefinitionError>;
+         -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError>;
 
 
     #[doc="<p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>"]
-    fn submit_job(&self, input: &SubmitJobRequest) -> Result<SubmitJobResponse, SubmitJobError>;
+    fn submit_job(&self,
+                  input: &SubmitJobRequest)
+                  -> RusotoFuture<SubmitJobResponse, SubmitJobError>;
 
 
     #[doc="<p>Terminates jobs in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>"]
     fn terminate_job(&self,
                      input: &TerminateJobRequest)
-                     -> Result<TerminateJobResponse, TerminateJobError>;
+                     -> RusotoFuture<TerminateJobResponse, TerminateJobError>;
 
 
     #[doc="<p>Updates an AWS Batch compute environment.</p>"]
     fn update_compute_environment
         (&self,
          input: &UpdateComputeEnvironmentRequest)
-         -> Result<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError>;
+         -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError>;
 
 
     #[doc="<p>Updates a job queue.</p>"]
     fn update_job_queue(&self,
                         input: &UpdateJobQueueRequest)
-                        -> Result<UpdateJobQueueResponse, UpdateJobQueueError>;
+                        -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError>;
 }
 /// A client for the AWS Batch API.
 pub struct BatchClient<P, D>
@@ -2396,7 +2402,9 @@ impl<P, D> Batch for BatchClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Cancels jobs in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no jobs are cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>"]
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
+    fn cancel_job(&self,
+                  input: &CancelJobRequest)
+                  -> RusotoFuture<CancelJobResponse, CancelJobError> {
         let request_uri = "/v1/canceljob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2408,33 +2416,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CancelJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2442,7 +2470,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn create_compute_environment
         (&self,
          input: &CreateComputeEnvironmentRequest)
-         -> Result<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
+         -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
         let request_uri = "/v1/createcomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2454,42 +2482,62 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateComputeEnvironmentResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateComputeEnvironmentError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>"]
     fn create_job_queue(&self,
                         input: &CreateJobQueueRequest)
-                        -> Result<CreateJobQueueResponse, CreateJobQueueError> {
+                        -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError> {
         let request_uri = "/v1/createjobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2501,33 +2549,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateJobQueueResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateJobQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2535,7 +2603,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn delete_compute_environment
         (&self,
          input: &DeleteComputeEnvironmentRequest)
-         -> Result<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
+         -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
         let request_uri = "/v1/deletecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2547,42 +2615,62 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeleteComputeEnvironmentResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteComputeEnvironmentError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation and terminate any jobs that have not completed with the <a>TerminateJob</a>.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>"]
     fn delete_job_queue(&self,
                         input: &DeleteJobQueueRequest)
-                        -> Result<DeleteJobQueueResponse, DeleteJobQueueError> {
+                        -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError> {
         let request_uri = "/v1/deletejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2594,33 +2682,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeleteJobQueueResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteJobQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2628,7 +2736,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn deregister_job_definition
         (&self,
          input: &DeregisterJobDefinitionRequest)
-         -> Result<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
+         -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
         let request_uri = "/v1/deregisterjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2640,35 +2748,55 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeregisterJobDefinitionResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterJobDefinitionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeregisterJobDefinitionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2676,7 +2804,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn describe_compute_environments
         (&self,
          input: &DescribeComputeEnvironmentsRequest)
-         -> Result<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
+         -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
         let request_uri = "/v1/describecomputeenvironments";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2688,35 +2816,55 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeComputeEnvironmentsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeComputeEnvironmentsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeComputeEnvironmentsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2724,7 +2872,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn describe_job_definitions
         (&self,
          input: &DescribeJobDefinitionsRequest)
-         -> Result<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
+         -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
         let request_uri = "/v1/describejobdefinitions";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2736,41 +2884,62 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeJobDefinitionsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeJobDefinitionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeJobDefinitionsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes one or more of your job queues.</p>"]
     fn describe_job_queues(&self,
                            input: &DescribeJobQueuesRequest)
-                           -> Result<DescribeJobQueuesResponse, DescribeJobQueuesError> {
+                           -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError> {
         let request_uri = "/v1/describejobqueues";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2782,40 +2951,60 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeJobQueuesResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeJobQueuesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeJobQueuesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes a list of AWS Batch jobs.</p>"]
     fn describe_jobs(&self,
                      input: &DescribeJobsRequest)
-                     -> Result<DescribeJobsResponse, DescribeJobsError> {
+                     -> RusotoFuture<DescribeJobsResponse, DescribeJobsError> {
         let request_uri = "/v1/describejobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2827,38 +3016,58 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeJobsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Returns a list of task jobs for a specified job queue. You can filter the results by job status with the <code>jobStatus</code> parameter.</p>"]
-    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError> {
+    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
         let request_uri = "/v1/listjobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2870,33 +3079,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ListJobsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -2904,7 +3133,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn register_job_definition
         (&self,
          input: &RegisterJobDefinitionRequest)
-         -> Result<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
+         -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
         let request_uri = "/v1/registerjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2916,39 +3145,62 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<RegisterJobDefinitionResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterJobDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(RegisterJobDefinitionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>"]
-    fn submit_job(&self, input: &SubmitJobRequest) -> Result<SubmitJobResponse, SubmitJobError> {
+    fn submit_job(&self,
+                  input: &SubmitJobRequest)
+                  -> RusotoFuture<SubmitJobResponse, SubmitJobError> {
         let request_uri = "/v1/submitjob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2960,40 +3212,60 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<SubmitJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SubmitJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SubmitJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Terminates jobs in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>"]
     fn terminate_job(&self,
                      input: &TerminateJobRequest)
-                     -> Result<TerminateJobResponse, TerminateJobError> {
+                     -> RusotoFuture<TerminateJobResponse, TerminateJobError> {
         let request_uri = "/v1/terminatejob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -3005,33 +3277,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<TerminateJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TerminateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(TerminateJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -3039,7 +3331,7 @@ impl<P, D> Batch for BatchClient<P, D>
     fn update_compute_environment
         (&self,
          input: &UpdateComputeEnvironmentRequest)
-         -> Result<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
+         -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
         let request_uri = "/v1/updatecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -3051,42 +3343,62 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdateComputeEnvironmentResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateComputeEnvironmentError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateComputeEnvironmentError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Updates a job queue.</p>"]
     fn update_job_queue(&self,
                         input: &UpdateJobQueueRequest)
-                        -> Result<UpdateJobQueueResponse, UpdateJobQueueError> {
+                        -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError> {
         let request_uri = "/v1/updatejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -3098,33 +3410,53 @@ impl<P, D> Batch for BatchClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdateJobQueueResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateJobQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateJobQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 

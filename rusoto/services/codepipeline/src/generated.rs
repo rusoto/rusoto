@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -3702,167 +3704,173 @@ pub trait CodePipeline {
     #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
     fn acknowledge_job(&self,
                        input: &AcknowledgeJobInput)
-                       -> Result<AcknowledgeJobOutput, AcknowledgeJobError>;
+                       -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError>;
 
 
     #[doc="<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>"]
     fn acknowledge_third_party_job
         (&self,
          input: &AcknowledgeThirdPartyJobInput)
-         -> Result<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
+         -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
 
 
     #[doc="<p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>"]
     fn create_custom_action_type
         (&self,
          input: &CreateCustomActionTypeInput)
-         -> Result<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
+         -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
 
 
     #[doc="<p>Creates a pipeline.</p>"]
     fn create_pipeline(&self,
                        input: &CreatePipelineInput)
-                       -> Result<CreatePipelineOutput, CreatePipelineError>;
+                       -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
 
 
     #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
     fn delete_custom_action_type(&self,
                                  input: &DeleteCustomActionTypeInput)
-                                 -> Result<(), DeleteCustomActionTypeError>;
+                                 -> RusotoFuture<(), DeleteCustomActionTypeError>;
 
 
     #[doc="<p>Deletes the specified pipeline.</p>"]
-    fn delete_pipeline(&self, input: &DeletePipelineInput) -> Result<(), DeletePipelineError>;
+    fn delete_pipeline(&self,
+                       input: &DeletePipelineInput)
+                       -> RusotoFuture<(), DeletePipelineError>;
 
 
     #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
     fn disable_stage_transition(&self,
                                 input: &DisableStageTransitionInput)
-                                -> Result<(), DisableStageTransitionError>;
+                                -> RusotoFuture<(), DisableStageTransitionError>;
 
 
     #[doc="<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
     fn enable_stage_transition(&self,
                                input: &EnableStageTransitionInput)
-                               -> Result<(), EnableStageTransitionError>;
+                               -> RusotoFuture<(), EnableStageTransitionError>;
 
 
     #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
     fn get_job_details(&self,
                        input: &GetJobDetailsInput)
-                       -> Result<GetJobDetailsOutput, GetJobDetailsError>;
+                       -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError>;
 
 
     #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
     fn get_pipeline(&self,
                     input: &GetPipelineInput)
-                    -> Result<GetPipelineOutput, GetPipelineError>;
+                    -> RusotoFuture<GetPipelineOutput, GetPipelineError>;
 
 
     #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
-    fn get_pipeline_execution(&self,
-                              input: &GetPipelineExecutionInput)
-                              -> Result<GetPipelineExecutionOutput, GetPipelineExecutionError>;
+    fn get_pipeline_execution
+        (&self,
+         input: &GetPipelineExecutionInput)
+         -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError>;
 
 
     #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
     fn get_pipeline_state(&self,
                           input: &GetPipelineStateInput)
-                          -> Result<GetPipelineStateOutput, GetPipelineStateError>;
+                          -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError>;
 
 
     #[doc="<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
     fn get_third_party_job_details
         (&self,
          input: &GetThirdPartyJobDetailsInput)
-         -> Result<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
+         -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
 
 
     #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
     fn list_action_types(&self,
                          input: &ListActionTypesInput)
-                         -> Result<ListActionTypesOutput, ListActionTypesError>;
+                         -> RusotoFuture<ListActionTypesOutput, ListActionTypesError>;
 
 
     #[doc="<p>Gets a summary of the most recent executions for a pipeline.</p>"]
     fn list_pipeline_executions
         (&self,
          input: &ListPipelineExecutionsInput)
-         -> Result<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
+         -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
 
 
     #[doc="<p>Gets a summary of all of the pipelines associated with your account.</p>"]
     fn list_pipelines(&self,
                       input: &ListPipelinesInput)
-                      -> Result<ListPipelinesOutput, ListPipelinesError>;
+                      -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
 
 
     #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
     fn poll_for_jobs(&self,
                      input: &PollForJobsInput)
-                     -> Result<PollForJobsOutput, PollForJobsError>;
+                     -> RusotoFuture<PollForJobsOutput, PollForJobsError>;
 
 
     #[doc="<p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important>"]
     fn poll_for_third_party_jobs
         (&self,
          input: &PollForThirdPartyJobsInput)
-         -> Result<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
+         -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
 
 
     #[doc="<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
     fn put_action_revision(&self,
                            input: &PutActionRevisionInput)
-                           -> Result<PutActionRevisionOutput, PutActionRevisionError>;
+                           -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError>;
 
 
     #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
     fn put_approval_result(&self,
                            input: &PutApprovalResultInput)
-                           -> Result<PutApprovalResultOutput, PutApprovalResultError>;
+                           -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError>;
 
 
     #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
     fn put_job_failure_result(&self,
                               input: &PutJobFailureResultInput)
-                              -> Result<(), PutJobFailureResultError>;
+                              -> RusotoFuture<(), PutJobFailureResultError>;
 
 
     #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
     fn put_job_success_result(&self,
                               input: &PutJobSuccessResultInput)
-                              -> Result<(), PutJobSuccessResultError>;
+                              -> RusotoFuture<(), PutJobSuccessResultError>;
 
 
     #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-    fn put_third_party_job_failure_result(&self,
-                                          input: &PutThirdPartyJobFailureResultInput)
-                                          -> Result<(), PutThirdPartyJobFailureResultError>;
+    fn put_third_party_job_failure_result
+        (&self,
+         input: &PutThirdPartyJobFailureResultInput)
+         -> RusotoFuture<(), PutThirdPartyJobFailureResultError>;
 
 
     #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-    fn put_third_party_job_success_result(&self,
-                                          input: &PutThirdPartyJobSuccessResultInput)
-                                          -> Result<(), PutThirdPartyJobSuccessResultError>;
+    fn put_third_party_job_success_result
+        (&self,
+         input: &PutThirdPartyJobSuccessResultInput)
+         -> RusotoFuture<(), PutThirdPartyJobSuccessResultError>;
 
 
     #[doc="<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
-    fn retry_stage_execution(&self,
-                             input: &RetryStageExecutionInput)
-                             -> Result<RetryStageExecutionOutput, RetryStageExecutionError>;
+    fn retry_stage_execution
+        (&self,
+         input: &RetryStageExecutionInput)
+         -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError>;
 
 
     #[doc="<p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>"]
     fn start_pipeline_execution
         (&self,
          input: &StartPipelineExecutionInput)
-         -> Result<StartPipelineExecutionOutput, StartPipelineExecutionError>;
+         -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError>;
 
 
     #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
     fn update_pipeline(&self,
                        input: &UpdatePipelineInput)
-                       -> Result<UpdatePipelineOutput, UpdatePipelineError>;
+                       -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError>;
 }
 /// A client for the CodePipeline API.
 pub struct CodePipelineClient<P, D>
@@ -3894,7 +3902,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     #[doc="<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>"]
     fn acknowledge_job(&self,
                        input: &AcknowledgeJobInput)
-                       -> Result<AcknowledgeJobOutput, AcknowledgeJobError> {
+                       -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3902,24 +3910,44 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AcknowledgeJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AcknowledgeJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -3927,7 +3955,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn acknowledge_third_party_job
         (&self,
          input: &AcknowledgeThirdPartyJobInput)
-         -> Result<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
+         -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3936,23 +3964,32 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AcknowledgeThirdPartyJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -3960,7 +3997,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn create_custom_action_type
         (&self,
          input: &CreateCustomActionTypeInput)
-         -> Result<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
+         -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3969,29 +4006,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateCustomActionTypeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a pipeline.</p>"]
     fn create_pipeline(&self,
                        input: &CreatePipelineInput)
-                       -> Result<CreatePipelineOutput, CreatePipelineError> {
+                       -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3999,31 +4046,51 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreatePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important>"]
     fn delete_custom_action_type(&self,
                                  input: &DeleteCustomActionTypeInput)
-                                 -> Result<(), DeleteCustomActionTypeError> {
+                                 -> RusotoFuture<(), DeleteCustomActionTypeError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4032,23 +4099,40 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteCustomActionTypeError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes the specified pipeline.</p>"]
-    fn delete_pipeline(&self, input: &DeletePipelineInput) -> Result<(), DeletePipelineError> {
+    fn delete_pipeline(&self,
+                       input: &DeletePipelineInput)
+                       -> RusotoFuture<(), DeletePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4056,25 +4140,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeletePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>"]
     fn disable_stage_transition(&self,
                                 input: &DisableStageTransitionInput)
-                                -> Result<(), DisableStageTransitionError> {
+                                -> RusotoFuture<(), DisableStageTransitionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4083,25 +4181,40 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableStageTransitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DisableStageTransitionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>"]
     fn enable_stage_transition(&self,
                                input: &EnableStageTransitionInput)
-                               -> Result<(), EnableStageTransitionError> {
+                               -> RusotoFuture<(), EnableStageTransitionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4110,25 +4223,40 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableStageTransitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(EnableStageTransitionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
     fn get_job_details(&self,
                        input: &GetJobDetailsInput)
-                       -> Result<GetJobDetailsOutput, GetJobDetailsError> {
+                       -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4136,31 +4264,51 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetJobDetailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetJobDetailsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>"]
     fn get_pipeline(&self,
                     input: &GetPipelineInput)
-                    -> Result<GetPipelineOutput, GetPipelineError> {
+                    -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4168,31 +4316,52 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetPipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>"]
-    fn get_pipeline_execution(&self,
-                              input: &GetPipelineExecutionInput)
-                              -> Result<GetPipelineExecutionOutput, GetPipelineExecutionError> {
+    fn get_pipeline_execution
+        (&self,
+         input: &GetPipelineExecutionInput)
+         -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4200,29 +4369,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetPipelineExecutionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns information about the state of a pipeline, including the stages and actions.</p>"]
     fn get_pipeline_state(&self,
                           input: &GetPipelineStateInput)
-                          -> Result<GetPipelineStateOutput, GetPipelineStateError> {
+                          -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4230,24 +4409,32 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPipelineStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetPipelineStateError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -4255,7 +4442,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn get_third_party_job_details
         (&self,
          input: &GetThirdPartyJobDetailsInput)
-         -> Result<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
+         -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4264,30 +4451,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetThirdPartyJobDetailsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>"]
     fn list_action_types(&self,
                          input: &ListActionTypesInput)
-                         -> Result<ListActionTypesOutput, ListActionTypesError> {
+                         -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4295,24 +4491,32 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListActionTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListActionTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -4320,7 +4524,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn list_pipeline_executions
         (&self,
          input: &ListPipelineExecutionsInput)
-         -> Result<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
+         -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4329,29 +4533,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPipelineExecutionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPipelineExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListPipelineExecutionsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListPipelineExecutionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets a summary of all of the pipelines associated with your account.</p>"]
     fn list_pipelines(&self,
                       input: &ListPipelinesInput)
-                      -> Result<ListPipelinesOutput, ListPipelinesError> {
+                      -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4359,31 +4573,51 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListPipelinesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>"]
     fn poll_for_jobs(&self,
                      input: &PollForJobsInput)
-                     -> Result<PollForJobsOutput, PollForJobsError> {
+                     -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4391,24 +4625,44 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PollForJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PollForJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -4416,7 +4670,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn poll_for_third_party_jobs
         (&self,
          input: &PollForThirdPartyJobsInput)
-         -> Result<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
+         -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4425,29 +4679,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PollForThirdPartyJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Provides information to AWS CodePipeline about new revisions to a source.</p>"]
     fn put_action_revision(&self,
                            input: &PutActionRevisionInput)
-                           -> Result<PutActionRevisionOutput, PutActionRevisionError> {
+                           -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4455,31 +4719,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutActionRevisionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutActionRevisionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>"]
     fn put_approval_result(&self,
                            input: &PutApprovalResultInput)
-                           -> Result<PutApprovalResultOutput, PutApprovalResultError> {
+                           -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4487,31 +4759,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutApprovalResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutApprovalResultError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
     fn put_job_failure_result(&self,
                               input: &PutJobFailureResultInput)
-                              -> Result<(), PutJobFailureResultError> {
+                              -> RusotoFuture<(), PutJobFailureResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4519,25 +4799,40 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutJobFailureResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutJobFailureResultError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>"]
     fn put_job_success_result(&self,
                               input: &PutJobSuccessResultInput)
-                              -> Result<(), PutJobSuccessResultError> {
+                              -> RusotoFuture<(), PutJobSuccessResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4545,25 +4840,41 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(PutJobSuccessResultError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-    fn put_third_party_job_failure_result(&self,
-                                          input: &PutThirdPartyJobFailureResultInput)
-                                          -> Result<(), PutThirdPartyJobFailureResultError> {
+    fn put_third_party_job_failure_result
+        (&self,
+         input: &PutThirdPartyJobFailureResultInput)
+         -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4572,26 +4883,35 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutThirdPartyJobFailureResultError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>"]
-    fn put_third_party_job_success_result(&self,
-                                          input: &PutThirdPartyJobSuccessResultInput)
-                                          -> Result<(), PutThirdPartyJobSuccessResultError> {
+    fn put_third_party_job_success_result
+        (&self,
+         input: &PutThirdPartyJobSuccessResultInput)
+         -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4600,26 +4920,35 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutThirdPartyJobSuccessResultError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>"]
-    fn retry_stage_execution(&self,
-                             input: &RetryStageExecutionInput)
-                             -> Result<RetryStageExecutionOutput, RetryStageExecutionError> {
+    fn retry_stage_execution
+        (&self,
+         input: &RetryStageExecutionInput)
+         -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4627,22 +4956,32 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RetryStageExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RetryStageExecutionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -4650,7 +4989,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
     fn start_pipeline_execution
         (&self,
          input: &StartPipelineExecutionInput)
-         -> Result<StartPipelineExecutionOutput, StartPipelineExecutionError> {
+         -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4659,29 +4998,39 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StartPipelineExecutionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"]
     fn update_pipeline(&self,
                        input: &UpdatePipelineInput)
-                       -> Result<UpdatePipelineOutput, UpdatePipelineError> {
+                       -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4689,24 +5038,44 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

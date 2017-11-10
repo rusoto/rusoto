@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1427,69 +1429,73 @@ pub trait ServerMigrationService {
     fn create_replication_job
         (&self,
          input: &CreateReplicationJobRequest)
-         -> Result<CreateReplicationJobResponse, CreateReplicationJobError>;
+         -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError>;
 
 
     #[doc="The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service."]
     fn delete_replication_job
         (&self,
          input: &DeleteReplicationJobRequest)
-         -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError>;
+         -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError>;
 
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self)
-                             -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError>;
+    fn delete_server_catalog
+        (&self)
+         -> RusotoFuture<DeleteServerCatalogResponse, DeleteServerCatalogError>;
 
 
     #[doc="The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs."]
     fn disassociate_connector
         (&self,
          input: &DisassociateConnectorRequest)
-         -> Result<DisassociateConnectorResponse, DisassociateConnectorError>;
+         -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError>;
 
 
     #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
     fn get_connectors(&self,
                       input: &GetConnectorsRequest)
-                      -> Result<GetConnectorsResponse, GetConnectorsError>;
+                      -> RusotoFuture<GetConnectorsResponse, GetConnectorsError>;
 
 
     #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
-    fn get_replication_jobs(&self,
-                            input: &GetReplicationJobsRequest)
-                            -> Result<GetReplicationJobsResponse, GetReplicationJobsError>;
+    fn get_replication_jobs
+        (&self,
+         input: &GetReplicationJobsRequest)
+         -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError>;
 
 
     #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
-    fn get_replication_runs(&self,
-                            input: &GetReplicationRunsRequest)
-                            -> Result<GetReplicationRunsResponse, GetReplicationRunsError>;
+    fn get_replication_runs
+        (&self,
+         input: &GetReplicationRunsRequest)
+         -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError>;
 
 
     #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
     fn get_servers(&self,
                    input: &GetServersRequest)
-                   -> Result<GetServersResponse, GetServersError>;
+                   -> RusotoFuture<GetServersResponse, GetServersError>;
 
 
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self)
-                             -> Result<ImportServerCatalogResponse, ImportServerCatalogError>;
+    fn import_server_catalog
+        (&self)
+         -> RusotoFuture<ImportServerCatalogResponse, ImportServerCatalogError>;
 
 
     #[doc="The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period."]
     fn start_on_demand_replication_run
         (&self,
          input: &StartOnDemandReplicationRunRequest)
-         -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
+         -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
 
 
     #[doc="The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun."]
     fn update_replication_job
         (&self,
          input: &UpdateReplicationJobRequest)
-         -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError>;
+         -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError>;
 }
 /// A client for the SMS API.
 pub struct ServerMigrationServiceClient<P, D>
@@ -1522,7 +1528,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn create_replication_job
         (&self,
          input: &CreateReplicationJobRequest)
-         -> Result<CreateReplicationJobResponse, CreateReplicationJobError> {
+         -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1531,22 +1537,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateReplicationJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1554,7 +1570,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn delete_replication_job
         (&self,
          input: &DeleteReplicationJobRequest)
-         -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError> {
+         -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1563,28 +1579,39 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteReplicationJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self)
-                             -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
+    fn delete_server_catalog
+        (&self)
+         -> RusotoFuture<DeleteServerCatalogResponse, DeleteServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1592,22 +1619,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
                            "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteServerCatalogError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1615,7 +1652,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn disassociate_connector
         (&self,
          input: &DisassociateConnectorRequest)
-         -> Result<DisassociateConnectorResponse, DisassociateConnectorError> {
+         -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1624,29 +1661,39 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateConnectorError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateConnectorError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
     fn get_connectors(&self,
                       input: &GetConnectorsRequest)
-                      -> Result<GetConnectorsResponse, GetConnectorsError> {
+                      -> RusotoFuture<GetConnectorsResponse, GetConnectorsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1655,31 +1702,40 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetConnectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetConnectorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
-    fn get_replication_jobs(&self,
-                            input: &GetReplicationJobsRequest)
-                            -> Result<GetReplicationJobsResponse, GetReplicationJobsError> {
+    fn get_replication_jobs
+        (&self,
+         input: &GetReplicationJobsRequest)
+         -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1688,29 +1744,40 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetReplicationJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetReplicationJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
-    fn get_replication_runs(&self,
-                            input: &GetReplicationRunsRequest)
-                            -> Result<GetReplicationRunsResponse, GetReplicationRunsError> {
+    fn get_replication_runs
+        (&self,
+         input: &GetReplicationRunsRequest)
+         -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1719,29 +1786,39 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetReplicationRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetReplicationRunsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
     fn get_servers(&self,
                    input: &GetServersRequest)
-                   -> Result<GetServersResponse, GetServersError> {
+                   -> RusotoFuture<GetServersResponse, GetServersError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1750,30 +1827,51 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetServersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self)
-                             -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
+    fn import_server_catalog
+        (&self)
+         -> RusotoFuture<ImportServerCatalogResponse, ImportServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1781,22 +1879,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
                            "AWSServerMigrationService_V2016_10_24.ImportServerCatalog");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ImportServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ImportServerCatalogError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1804,7 +1912,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn start_on_demand_replication_run
         (&self,
          input: &StartOnDemandReplicationRunRequest)
-         -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
+         -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1813,23 +1921,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1837,7 +1954,7 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
     fn update_replication_job
         (&self,
          input: &UpdateReplicationJobRequest)
-         -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError> {
+         -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1846,22 +1963,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateReplicationJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

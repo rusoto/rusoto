@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -362,20 +364,21 @@ pub trait CostAndUsageReport {
     fn delete_report_definition
         (&self,
          input: &DeleteReportDefinitionRequest)
-         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
+         -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
 
 
     #[doc="Describe a list of report definitions owned by the account"]
     fn describe_report_definitions
         (&self,
          input: &DescribeReportDefinitionsRequest)
-         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
+         -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
 
 
     #[doc="Create a new report definition"]
-    fn put_report_definition(&self,
-                             input: &PutReportDefinitionRequest)
-                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError>;
+    fn put_report_definition
+        (&self,
+         input: &PutReportDefinitionRequest)
+         -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
 pub struct CostAndUsageReportClient<P, D>
@@ -408,7 +411,7 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
     fn delete_report_definition
         (&self,
          input: &DeleteReportDefinitionRequest)
-         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
+         -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -417,22 +420,32 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReportDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteReportDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteReportDefinitionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteReportDefinitionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -440,7 +453,7 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
     fn describe_report_definitions
         (&self,
          input: &DescribeReportDefinitionsRequest)
-         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
+         -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -449,30 +462,40 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeReportDefinitionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeReportDefinitionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeReportDefinitionsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeReportDefinitionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="Create a new report definition"]
-    fn put_report_definition(&self,
-                             input: &PutReportDefinitionRequest)
-                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError> {
+    fn put_report_definition
+        (&self,
+         input: &PutReportDefinitionRequest)
+         -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -481,22 +504,32 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutReportDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutReportDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutReportDefinitionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutReportDefinitionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

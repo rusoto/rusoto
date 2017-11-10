@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5721,229 +5723,237 @@ pub trait Workdocs {
     #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
     fn abort_document_version_upload(&self,
                                      input: &AbortDocumentVersionUploadRequest)
-                                     -> Result<(), AbortDocumentVersionUploadError>;
+                                     -> RusotoFuture<(), AbortDocumentVersionUploadError>;
 
 
     #[doc="<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
     fn activate_user(&self,
                      input: &ActivateUserRequest)
-                     -> Result<ActivateUserResponse, ActivateUserError>;
+                     -> RusotoFuture<ActivateUserResponse, ActivateUserError>;
 
 
     #[doc="<p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>"]
     fn add_resource_permissions
         (&self,
          input: &AddResourcePermissionsRequest)
-         -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError>;
+         -> RusotoFuture<AddResourcePermissionsResponse, AddResourcePermissionsError>;
 
 
     #[doc="<p>Adds a new comment to the specified document version.</p>"]
     fn create_comment(&self,
                       input: &CreateCommentRequest)
-                      -> Result<CreateCommentResponse, CreateCommentError>;
+                      -> RusotoFuture<CreateCommentResponse, CreateCommentError>;
 
 
     #[doc="<p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>"]
     fn create_custom_metadata
         (&self,
          input: &CreateCustomMetadataRequest)
-         -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError>;
+         -> RusotoFuture<CreateCustomMetadataResponse, CreateCustomMetadataError>;
 
 
     #[doc="<p>Creates a folder with the specified name and parent folder.</p>"]
     fn create_folder(&self,
                      input: &CreateFolderRequest)
-                     -> Result<CreateFolderResponse, CreateFolderError>;
+                     -> RusotoFuture<CreateFolderResponse, CreateFolderError>;
 
 
     #[doc="<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
     fn create_labels(&self,
                      input: &CreateLabelsRequest)
-                     -> Result<CreateLabelsResponse, CreateLabelsError>;
+                     -> RusotoFuture<CreateLabelsResponse, CreateLabelsError>;
 
 
     #[doc="<p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm\">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>"]
     fn create_notification_subscription
         (&self,
          input: &CreateNotificationSubscriptionRequest)
-         -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>;
+         -> RusotoFuture<CreateNotificationSubscriptionResponse,
+                         CreateNotificationSubscriptionError>;
 
 
     #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
     fn create_user(&self,
                    input: &CreateUserRequest)
-                   -> Result<CreateUserResponse, CreateUserError>;
+                   -> RusotoFuture<CreateUserResponse, CreateUserError>;
 
 
     #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
-    fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError>;
+    fn deactivate_user(&self,
+                       input: &DeactivateUserRequest)
+                       -> RusotoFuture<(), DeactivateUserError>;
 
 
     #[doc="<p>Deletes the specified comment from the document version.</p>"]
-    fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError>;
+    fn delete_comment(&self, input: &DeleteCommentRequest) -> RusotoFuture<(), DeleteCommentError>;
 
 
     #[doc="<p>Deletes custom metadata from the specified resource.</p>"]
     fn delete_custom_metadata
         (&self,
          input: &DeleteCustomMetadataRequest)
-         -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
+         -> RusotoFuture<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
 
 
     #[doc="<p>Permanently deletes the specified document and its associated metadata.</p>"]
-    fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError>;
+    fn delete_document(&self,
+                       input: &DeleteDocumentRequest)
+                       -> RusotoFuture<(), DeleteDocumentError>;
 
 
     #[doc="<p>Permanently deletes the specified folder and its contents.</p>"]
-    fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError>;
+    fn delete_folder(&self, input: &DeleteFolderRequest) -> RusotoFuture<(), DeleteFolderError>;
 
 
     #[doc="<p>Deletes the contents of the specified folder.</p>"]
     fn delete_folder_contents(&self,
                               input: &DeleteFolderContentsRequest)
-                              -> Result<(), DeleteFolderContentsError>;
+                              -> RusotoFuture<(), DeleteFolderContentsError>;
 
 
     #[doc="<p>Deletes the specified list of labels from a resource.</p>"]
     fn delete_labels(&self,
                      input: &DeleteLabelsRequest)
-                     -> Result<DeleteLabelsResponse, DeleteLabelsError>;
+                     -> RusotoFuture<DeleteLabelsResponse, DeleteLabelsError>;
 
 
     #[doc="<p>Deletes the specified subscription from the specified organization.</p>"]
-    fn delete_notification_subscription(&self,
-                                        input: &DeleteNotificationSubscriptionRequest)
-                                        -> Result<(), DeleteNotificationSubscriptionError>;
+    fn delete_notification_subscription
+        (&self,
+         input: &DeleteNotificationSubscriptionRequest)
+         -> RusotoFuture<(), DeleteNotificationSubscriptionError>;
 
 
     #[doc="<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
-    fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
+    fn delete_user(&self, input: &DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
 
 
     #[doc="<p>Describes the user activities in a specified time period.</p>"]
     fn describe_activities(&self,
                            input: &DescribeActivitiesRequest)
-                           -> Result<DescribeActivitiesResponse, DescribeActivitiesError>;
+                           -> RusotoFuture<DescribeActivitiesResponse, DescribeActivitiesError>;
 
 
     #[doc="<p>List all the comments for the specified document version.</p>"]
     fn describe_comments(&self,
                          input: &DescribeCommentsRequest)
-                         -> Result<DescribeCommentsResponse, DescribeCommentsError>;
+                         -> RusotoFuture<DescribeCommentsResponse, DescribeCommentsError>;
 
 
     #[doc="<p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>"]
     fn describe_document_versions
         (&self,
          input: &DescribeDocumentVersionsRequest)
-         -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
+         -> RusotoFuture<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
 
 
     #[doc="<p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>"]
     fn describe_folder_contents
         (&self,
          input: &DescribeFolderContentsRequest)
-         -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError>;
+         -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError>;
 
 
     #[doc="<p>Lists the specified notification subscriptions.</p>"]
-    fn describe_notification_subscriptions
-        (&self,
-         input: &DescribeNotificationSubscriptionsRequest)
-         -> Result<DescribeNotificationSubscriptionsResponse,
-                   DescribeNotificationSubscriptionsError>;
+    fn describe_notification_subscriptions(&self, input: &DescribeNotificationSubscriptionsRequest) -> RusotoFuture<DescribeNotificationSubscriptionsResponse, DescribeNotificationSubscriptionsError>;
 
 
     #[doc="<p>Describes the permissions of a specified resource.</p>"]
     fn describe_resource_permissions
         (&self,
          input: &DescribeResourcePermissionsRequest)
-         -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
+         -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
 
 
     #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn describe_root_folders(&self,
-                             input: &DescribeRootFoldersRequest)
-                             -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError>;
+    fn describe_root_folders
+        (&self,
+         input: &DescribeRootFoldersRequest)
+         -> RusotoFuture<DescribeRootFoldersResponse, DescribeRootFoldersError>;
 
 
     #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
     fn describe_users(&self,
                       input: &DescribeUsersRequest)
-                      -> Result<DescribeUsersResponse, DescribeUsersError>;
+                      -> RusotoFuture<DescribeUsersResponse, DescribeUsersError>;
 
 
     #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
     fn get_current_user(&self,
                         input: &GetCurrentUserRequest)
-                        -> Result<GetCurrentUserResponse, GetCurrentUserError>;
+                        -> RusotoFuture<GetCurrentUserResponse, GetCurrentUserError>;
 
 
     #[doc="<p>Retrieves details of a document.</p>"]
     fn get_document(&self,
                     input: &GetDocumentRequest)
-                    -> Result<GetDocumentResponse, GetDocumentError>;
+                    -> RusotoFuture<GetDocumentResponse, GetDocumentError>;
 
 
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
     fn get_document_path(&self,
                          input: &GetDocumentPathRequest)
-                         -> Result<GetDocumentPathResponse, GetDocumentPathError>;
+                         -> RusotoFuture<GetDocumentPathResponse, GetDocumentPathError>;
 
 
     #[doc="<p>Retrieves version metadata for the specified document.</p>"]
-    fn get_document_version(&self,
-                            input: &GetDocumentVersionRequest)
-                            -> Result<GetDocumentVersionResponse, GetDocumentVersionError>;
+    fn get_document_version
+        (&self,
+         input: &GetDocumentVersionRequest)
+         -> RusotoFuture<GetDocumentVersionResponse, GetDocumentVersionError>;
 
 
     #[doc="<p>Retrieves the metadata of the specified folder.</p>"]
-    fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError>;
+    fn get_folder(&self,
+                  input: &GetFolderRequest)
+                  -> RusotoFuture<GetFolderResponse, GetFolderError>;
 
 
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
     fn get_folder_path(&self,
                        input: &GetFolderPathRequest)
-                       -> Result<GetFolderPathResponse, GetFolderPathError>;
+                       -> RusotoFuture<GetFolderPathResponse, GetFolderPathError>;
 
 
     #[doc="<p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>"]
     fn initiate_document_version_upload
         (&self,
          input: &InitiateDocumentVersionUploadRequest)
-         -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
+         -> RusotoFuture<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
 
 
     #[doc="<p>Removes all the permissions from the specified resource.</p>"]
     fn remove_all_resource_permissions(&self,
                                        input: &RemoveAllResourcePermissionsRequest)
-                                       -> Result<(), RemoveAllResourcePermissionsError>;
+                                       -> RusotoFuture<(), RemoveAllResourcePermissionsError>;
 
 
     #[doc="<p>Removes the permission for the specified principal from the specified resource.</p>"]
     fn remove_resource_permission(&self,
                                   input: &RemoveResourcePermissionRequest)
-                                  -> Result<(), RemoveResourcePermissionError>;
+                                  -> RusotoFuture<(), RemoveResourcePermissionError>;
 
 
     #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
-    fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError>;
+    fn update_document(&self,
+                       input: &UpdateDocumentRequest)
+                       -> RusotoFuture<(), UpdateDocumentError>;
 
 
     #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
     fn update_document_version(&self,
                                input: &UpdateDocumentVersionRequest)
-                               -> Result<(), UpdateDocumentVersionError>;
+                               -> RusotoFuture<(), UpdateDocumentVersionError>;
 
 
     #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
-    fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError>;
+    fn update_folder(&self, input: &UpdateFolderRequest) -> RusotoFuture<(), UpdateFolderError>;
 
 
     #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
     fn update_user(&self,
                    input: &UpdateUserRequest)
-                   -> Result<UpdateUserResponse, UpdateUserError>;
+                   -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
 }
 /// A client for the Amazon WorkDocs API.
 pub struct WorkdocsClient<P, D>
@@ -5975,7 +5985,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     #[doc="<p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>"]
     fn abort_document_version_upload(&self,
                                      input: &AbortDocumentVersionUploadRequest)
-                                     -> Result<(), AbortDocumentVersionUploadError> {
+                                     -> RusotoFuture<(), AbortDocumentVersionUploadError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
                                   document_id = input.document_id,
                                   version_id = input.version_id);
@@ -5991,30 +6001,51 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AbortDocumentVersionUploadError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(AbortDocumentVersionUploadError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>"]
     fn activate_user(&self,
                      input: &ActivateUserRequest)
-                     -> Result<ActivateUserResponse, ActivateUserError> {
+                     -> RusotoFuture<ActivateUserResponse, ActivateUserError> {
         let request_uri = format!("/api/v1/users/{user_id}/activation",
                                   user_id = input.user_id);
 
@@ -6029,33 +6060,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ActivateUserResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ActivateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ActivateUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6063,7 +6114,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn add_resource_permissions
         (&self,
          input: &AddResourcePermissionsRequest)
-         -> Result<AddResourcePermissionsResponse, AddResourcePermissionsError> {
+         -> RusotoFuture<AddResourcePermissionsResponse, AddResourcePermissionsError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
                                   resource_id = input.resource_id);
 
@@ -6079,41 +6130,62 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<AddResourcePermissionsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddResourcePermissionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(AddResourcePermissionsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Adds a new comment to the specified document version.</p>"]
     fn create_comment(&self,
                       input: &CreateCommentRequest)
-                      -> Result<CreateCommentResponse, CreateCommentError> {
+                      -> RusotoFuture<CreateCommentResponse, CreateCommentError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comment",
                                   document_id = input.document_id,
                                   version_id = input.version_id);
@@ -6130,33 +6202,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateCommentResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCommentError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateCommentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6164,7 +6256,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn create_custom_metadata
         (&self,
          input: &CreateCustomMetadataRequest)
-         -> Result<CreateCustomMetadataResponse, CreateCustomMetadataError> {
+         -> RusotoFuture<CreateCustomMetadataResponse, CreateCustomMetadataError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/customMetadata",
                                   resource_id = input.resource_id);
 
@@ -6184,40 +6276,61 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateCustomMetadataResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCustomMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateCustomMetadataError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates a folder with the specified name and parent folder.</p>"]
     fn create_folder(&self,
                      input: &CreateFolderRequest)
-                     -> Result<CreateFolderResponse, CreateFolderError> {
+                     -> RusotoFuture<CreateFolderResponse, CreateFolderError> {
         let request_uri = "/api/v1/folders";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -6232,40 +6345,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateFolderResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateFolderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Adds the specified list of labels to the given resource (a document or folder)</p>"]
     fn create_labels(&self,
                      input: &CreateLabelsRequest)
-                     -> Result<CreateLabelsResponse, CreateLabelsError> {
+                     -> RusotoFuture<CreateLabelsResponse, CreateLabelsError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/labels",
                                   resource_id = input.resource_id);
 
@@ -6281,33 +6414,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateLabelsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateLabelsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6315,7 +6468,8 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn create_notification_subscription
         (&self,
          input: &CreateNotificationSubscriptionRequest)
-         -> Result<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError> {
+         -> RusotoFuture<CreateNotificationSubscriptionResponse,
+                         CreateNotificationSubscriptionError> {
         let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions",
                                   organization_id = input.organization_id);
 
@@ -6328,43 +6482,51 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateNotificationSubscriptionResponse>(&body)
-                        .unwrap();
-
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateNotificationSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_status = response.status;
+                                let response_headers = response.headers;
+                                future::Either::A(response.body.concat2().from_err().map(move |body| {
+                                    
+            let mut body = body.to_vec();
+
+            if body == b"{}" {
+                body = b"null".to_vec();
+            }
+
+            debug!("Response body: {:?}", body);
+            debug!("Response status: {}", response_status);
+            let  result = serde_json::from_slice::<CreateNotificationSubscriptionResponse>(&body).unwrap();
+            
+                                    
+                                    
+                                    result
+                                }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(CreateNotificationSubscriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is \"ACTIVE\". New users can access Amazon WorkDocs.</p>"]
     fn create_user(&self,
                    input: &CreateUserRequest)
-                   -> Result<CreateUserResponse, CreateUserError> {
+                   -> RusotoFuture<CreateUserResponse, CreateUserError> {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -6379,38 +6541,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateUserResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>"]
-    fn deactivate_user(&self, input: &DeactivateUserRequest) -> Result<(), DeactivateUserError> {
+    fn deactivate_user(&self,
+                       input: &DeactivateUserRequest)
+                       -> RusotoFuture<(), DeactivateUserError> {
         let request_uri = format!("/api/v1/users/{user_id}/activation",
                                   user_id = input.user_id);
 
@@ -6425,27 +6609,48 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeactivateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeactivateUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified comment from the document version.</p>"]
-    fn delete_comment(&self, input: &DeleteCommentRequest) -> Result<(), DeleteCommentError> {
+    fn delete_comment(&self, input: &DeleteCommentRequest) -> RusotoFuture<(), DeleteCommentError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
                                   comment_id = input.comment_id,
                                   document_id = input.document_id,
@@ -6462,22 +6667,43 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCommentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteCommentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6485,7 +6711,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn delete_custom_metadata
         (&self,
          input: &DeleteCustomMetadataRequest)
-         -> Result<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
+         -> RusotoFuture<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/customMetadata",
                                   resource_id = input.resource_id);
 
@@ -6512,38 +6738,61 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeleteCustomMetadataResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCustomMetadataError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteCustomMetadataError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Permanently deletes the specified document and its associated metadata.</p>"]
-    fn delete_document(&self, input: &DeleteDocumentRequest) -> Result<(), DeleteDocumentError> {
+    fn delete_document(&self,
+                       input: &DeleteDocumentRequest)
+                       -> RusotoFuture<(), DeleteDocumentError> {
         let request_uri = format!("/api/v1/documents/{document_id}",
                                   document_id = input.document_id);
 
@@ -6558,27 +6807,48 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteDocumentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Permanently deletes the specified folder and its contents.</p>"]
-    fn delete_folder(&self, input: &DeleteFolderRequest) -> Result<(), DeleteFolderError> {
+    fn delete_folder(&self, input: &DeleteFolderRequest) -> RusotoFuture<(), DeleteFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -6592,29 +6862,50 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteFolderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the contents of the specified folder.</p>"]
     fn delete_folder_contents(&self,
                               input: &DeleteFolderContentsRequest)
-                              -> Result<(), DeleteFolderContentsError> {
+                              -> RusotoFuture<(), DeleteFolderContentsError> {
         let request_uri = format!("/api/v1/folders/{folder_id}/contents",
                                   folder_id = input.folder_id);
 
@@ -6629,29 +6920,51 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFolderContentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteFolderContentsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified list of labels from a resource.</p>"]
     fn delete_labels(&self,
                      input: &DeleteLabelsRequest)
-                     -> Result<DeleteLabelsResponse, DeleteLabelsError> {
+                     -> RusotoFuture<DeleteLabelsResponse, DeleteLabelsError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/labels",
                                   resource_id = input.resource_id);
 
@@ -6675,40 +6988,61 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeleteLabelsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLabelsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteLabelsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified subscription from the specified organization.</p>"]
-    fn delete_notification_subscription(&self,
-                                        input: &DeleteNotificationSubscriptionRequest)
-                                        -> Result<(), DeleteNotificationSubscriptionError> {
+    fn delete_notification_subscription
+        (&self,
+         input: &DeleteNotificationSubscriptionRequest)
+         -> RusotoFuture<(), DeleteNotificationSubscriptionError> {
         let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
                                   organization_id = input.organization_id,
                                   subscription_id = input.subscription_id);
@@ -6721,28 +7055,39 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteNotificationSubscriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_status = response.status;
+                                let response_headers = response.headers;
+                                future::Either::A(response.body.concat2().from_err().map(move |body| {
+                                    let result = ();
+                                    
+                                    
+                                    result
+                                }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteNotificationSubscriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>"]
-    fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
+    fn delete_user(&self, input: &DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -6756,29 +7101,50 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes the user activities in a specified time period.</p>"]
     fn describe_activities(&self,
                            input: &DescribeActivitiesRequest)
-                           -> Result<DescribeActivitiesResponse, DescribeActivitiesError> {
+                           -> RusotoFuture<DescribeActivitiesResponse, DescribeActivitiesError> {
         let request_uri = "/api/v1/activities";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6811,40 +7177,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeActivitiesResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeActivitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeActivitiesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>List all the comments for the specified document version.</p>"]
     fn describe_comments(&self,
                          input: &DescribeCommentsRequest)
-                         -> Result<DescribeCommentsResponse, DescribeCommentsError> {
+                         -> RusotoFuture<DescribeCommentsResponse, DescribeCommentsError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}/comments",
                                   document_id = input.document_id,
                                   version_id = input.version_id);
@@ -6867,33 +7253,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeCommentsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeCommentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeCommentsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6901,7 +7307,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn describe_document_versions
         (&self,
          input: &DescribeDocumentVersionsRequest)
-         -> Result<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
+         -> RusotoFuture<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions",
                                   document_id = input.document_id);
 
@@ -6929,35 +7335,55 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeDocumentVersionsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDocumentVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeDocumentVersionsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -6965,7 +7391,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn describe_folder_contents
         (&self,
          input: &DescribeFolderContentsRequest)
-         -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError> {
+         -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError> {
         let request_uri = format!("/api/v1/folders/{folder_id}/contents",
                                   folder_id = input.folder_id);
 
@@ -6999,43 +7425,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeFolderContentsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeFolderContentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeFolderContentsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Lists the specified notification subscriptions.</p>"]
-    fn describe_notification_subscriptions
-        (&self,
-         input: &DescribeNotificationSubscriptionsRequest)
-         -> Result<DescribeNotificationSubscriptionsResponse,
-                   DescribeNotificationSubscriptionsError> {
+fn describe_notification_subscriptions(&self, input: &DescribeNotificationSubscriptionsRequest) -> RusotoFuture<DescribeNotificationSubscriptionsResponse, DescribeNotificationSubscriptionsError>{
         let request_uri = format!("/api/v1/organizations/{organization_id}/subscriptions",
                                   organization_id = input.organization_id);
 
@@ -7054,35 +7497,44 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body)
-                        .unwrap();
-
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeNotificationSubscriptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_status = response.status;
+                                let response_headers = response.headers;
+                                future::Either::A(response.body.concat2().from_err().map(move |body| {
+                                    
+            let mut body = body.to_vec();
+
+            if body == b"{}" {
+                body = b"null".to_vec();
+            }
+
+            debug!("Response body: {:?}", body);
+            debug!("Response status: {}", response_status);
+            let  result = serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body).unwrap();
+            
+                                    
+                                    
+                                    result
+                                }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeNotificationSubscriptionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -7090,7 +7542,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn describe_resource_permissions
         (&self,
          input: &DescribeResourcePermissionsRequest)
-         -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
+         -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
                                   resource_id = input.resource_id);
 
@@ -7112,42 +7564,63 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeResourcePermissionsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeResourcePermissionsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeResourcePermissionsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>"]
-    fn describe_root_folders(&self,
-                             input: &DescribeRootFoldersRequest)
-                             -> Result<DescribeRootFoldersResponse, DescribeRootFoldersError> {
+    fn describe_root_folders
+        (&self,
+         input: &DescribeRootFoldersRequest)
+         -> RusotoFuture<DescribeRootFoldersResponse, DescribeRootFoldersError> {
         let request_uri = "/api/v1/me/root";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -7165,40 +7638,61 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeRootFoldersResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRootFoldersError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeRootFoldersError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>"]
     fn describe_users(&self,
                       input: &DescribeUsersRequest)
-                      -> Result<DescribeUsersResponse, DescribeUsersError> {
+                      -> RusotoFuture<DescribeUsersResponse, DescribeUsersError> {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -7240,40 +7734,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DescribeUsersResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeUsersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>"]
     fn get_current_user(&self,
                         input: &GetCurrentUserRequest)
-                        -> Result<GetCurrentUserResponse, GetCurrentUserError> {
+                        -> RusotoFuture<GetCurrentUserResponse, GetCurrentUserError> {
         let request_uri = "/api/v1/me";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -7284,40 +7798,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         request.add_header("Authentication", &input.authentication_token);
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetCurrentUserResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCurrentUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetCurrentUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves details of a document.</p>"]
     fn get_document(&self,
                     input: &GetDocumentRequest)
-                    -> Result<GetDocumentResponse, GetDocumentError> {
+                    -> RusotoFuture<GetDocumentResponse, GetDocumentError> {
         let request_uri = format!("/api/v1/documents/{document_id}",
                                   document_id = input.document_id);
 
@@ -7336,40 +7870,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetDocumentResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetDocumentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>"]
     fn get_document_path(&self,
                          input: &GetDocumentPathRequest)
-                         -> Result<GetDocumentPathResponse, GetDocumentPathError> {
+                         -> RusotoFuture<GetDocumentPathResponse, GetDocumentPathError> {
         let request_uri = format!("/api/v1/documents/{document_id}/path",
                                   document_id = input.document_id);
 
@@ -7394,40 +7948,61 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetDocumentPathResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetDocumentPathError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves version metadata for the specified document.</p>"]
-    fn get_document_version(&self,
-                            input: &GetDocumentVersionRequest)
-                            -> Result<GetDocumentVersionResponse, GetDocumentVersionError> {
+    fn get_document_version
+        (&self,
+         input: &GetDocumentVersionRequest)
+         -> RusotoFuture<GetDocumentVersionResponse, GetDocumentVersionError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
                                   document_id = input.document_id,
                                   version_id = input.version_id);
@@ -7450,38 +8025,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetDocumentVersionResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetDocumentVersionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves the metadata of the specified folder.</p>"]
-    fn get_folder(&self, input: &GetFolderRequest) -> Result<GetFolderResponse, GetFolderError> {
+    fn get_folder(&self,
+                  input: &GetFolderRequest)
+                  -> RusotoFuture<GetFolderResponse, GetFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -7499,40 +8096,60 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetFolderResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetFolderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>"]
     fn get_folder_path(&self,
                        input: &GetFolderPathRequest)
-                       -> Result<GetFolderPathResponse, GetFolderPathError> {
+                       -> RusotoFuture<GetFolderPathResponse, GetFolderPathError> {
         let request_uri = format!("/api/v1/folders/{folder_id}/path",
                                   folder_id = input.folder_id);
 
@@ -7557,33 +8174,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<GetFolderPathResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFolderPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetFolderPathError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -7591,7 +8228,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
     fn initiate_document_version_upload
         (&self,
          input: &InitiateDocumentVersionUploadRequest)
-         -> Result<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError> {
+         -> RusotoFuture<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError> {
         let request_uri = "/api/v1/documents";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -7606,42 +8243,51 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Created => {
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body)
-                    .unwrap();
-
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(InitiateDocumentVersionUploadError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Created => {
+                                let response_status = response.status;
+                                let response_headers = response.headers;
+                                future::Either::A(response.body.concat2().from_err().map(move |body| {
+                                    
+            let mut body = body.to_vec();
+
+            if body == b"{}" {
+                body = b"null".to_vec();
+            }
+
+            debug!("Response body: {:?}", body);
+            debug!("Response status: {}", response_status);
+            let  result = serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body).unwrap();
+            
+                                    
+                                    
+                                    result
+                                }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(InitiateDocumentVersionUploadError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Removes all the permissions from the specified resource.</p>"]
     fn remove_all_resource_permissions(&self,
                                        input: &RemoveAllResourcePermissionsRequest)
-                                       -> Result<(), RemoveAllResourcePermissionsError> {
+                                       -> RusotoFuture<(), RemoveAllResourcePermissionsError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/permissions",
                                   resource_id = input.resource_id);
 
@@ -7656,30 +8302,41 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveAllResourcePermissionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::NoContent => {
+                                let response_status = response.status;
+                                let response_headers = response.headers;
+                                future::Either::A(response.body.concat2().from_err().map(move |body| {
+                                    let result = ();
+                                    
+                                    
+                                    result
+                                }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(RemoveAllResourcePermissionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Removes the permission for the specified principal from the specified resource.</p>"]
     fn remove_resource_permission(&self,
                                   input: &RemoveResourcePermissionRequest)
-                                  -> Result<(), RemoveResourcePermissionError> {
+                                  -> RusotoFuture<(), RemoveResourcePermissionError> {
         let request_uri = format!("/api/v1/resources/{resource_id}/permissions/{principal_id}",
                                   principal_id = input.principal_id,
                                   resource_id = input.resource_id);
@@ -7699,28 +8356,51 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveResourcePermissionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::NoContent => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(RemoveResourcePermissionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>"]
-    fn update_document(&self, input: &UpdateDocumentRequest) -> Result<(), UpdateDocumentError> {
+    fn update_document(&self,
+                       input: &UpdateDocumentRequest)
+                       -> RusotoFuture<(), UpdateDocumentError> {
         let request_uri = format!("/api/v1/documents/{document_id}",
                                   document_id = input.document_id);
 
@@ -7736,29 +8416,50 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateDocumentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>"]
     fn update_document_version(&self,
                                input: &UpdateDocumentVersionRequest)
-                               -> Result<(), UpdateDocumentVersionError> {
+                               -> RusotoFuture<(), UpdateDocumentVersionError> {
         let request_uri = format!("/api/v1/documents/{document_id}/versions/{version_id}",
                                   document_id = input.document_id,
                                   version_id = input.version_id);
@@ -7775,27 +8476,49 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentVersionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateDocumentVersionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>"]
-    fn update_folder(&self, input: &UpdateFolderRequest) -> Result<(), UpdateFolderError> {
+    fn update_folder(&self, input: &UpdateFolderRequest) -> RusotoFuture<(), UpdateFolderError> {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
@@ -7810,29 +8533,50 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
-
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-
-
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFolderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
+                                                                               let result = ();
+
+
+                                                                               result
+                                                                           }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateFolderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>"]
     fn update_user(&self,
                    input: &UpdateUserRequest)
-                   -> Result<UpdateUserResponse, UpdateUserError> {
+                   -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
@@ -7847,33 +8591,53 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         }
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdateUserResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 

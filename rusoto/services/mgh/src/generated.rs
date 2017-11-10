@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2215,109 +2217,111 @@ pub trait MigrationHub {
     fn associate_created_artifact
         (&self,
          input: &AssociateCreatedArtifactRequest)
-         -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
+         -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
 
 
     #[doc="<p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>"]
     fn associate_discovered_resource
         (&self,
          input: &AssociateDiscoveredResourceRequest)
-         -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError>;
+         -> RusotoFuture<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError>;
 
 
     #[doc="<p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>"]
     fn create_progress_update_stream
         (&self,
          input: &CreateProgressUpdateStreamRequest)
-         -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
+         -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
 
 
     #[doc="<p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously be doing the actual delete of the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw \"InvalidInputException\" if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul>"]
     fn delete_progress_update_stream
         (&self,
          input: &DeleteProgressUpdateStreamRequest)
-         -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError>;
+         -> RusotoFuture<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError>;
 
 
     #[doc="<p>Gets the migration status of an application.</p>"]
     fn describe_application_state
         (&self,
          input: &DescribeApplicationStateRequest)
-         -> Result<DescribeApplicationStateResult, DescribeApplicationStateError>;
+         -> RusotoFuture<DescribeApplicationStateResult, DescribeApplicationStateError>;
 
 
     #[doc="<p>Retrieves a list of all attributes associated with a specific migration task.</p>"]
     fn describe_migration_task
         (&self,
          input: &DescribeMigrationTaskRequest)
-         -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError>;
+         -> RusotoFuture<DescribeMigrationTaskResult, DescribeMigrationTaskError>;
 
 
     #[doc="<p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI's, EC2 instance, or RDS instance, etc.</p> </li> </ul>"]
     fn disassociate_created_artifact
         (&self,
          input: &DisassociateCreatedArtifactRequest)
-         -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
+         -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
 
 
     #[doc="<p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>"]
     fn disassociate_discovered_resource
         (&self,
          input: &DisassociateDiscoveredResourceRequest)
-         -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>;
+         -> RusotoFuture<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>;
 
 
     #[doc="<p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>"]
-    fn import_migration_task(&self,
-                             input: &ImportMigrationTaskRequest)
-                             -> Result<ImportMigrationTaskResult, ImportMigrationTaskError>;
+    fn import_migration_task
+        (&self,
+         input: &ImportMigrationTaskRequest)
+         -> RusotoFuture<ImportMigrationTaskResult, ImportMigrationTaskError>;
 
 
     #[doc="<p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul>"]
-    fn list_created_artifacts(&self,
-                              input: &ListCreatedArtifactsRequest)
-                              -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError>;
+    fn list_created_artifacts
+        (&self,
+         input: &ListCreatedArtifactsRequest)
+         -> RusotoFuture<ListCreatedArtifactsResult, ListCreatedArtifactsError>;
 
 
     #[doc="<p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>"]
     fn list_discovered_resources
         (&self,
          input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError>;
+         -> RusotoFuture<ListDiscoveredResourcesResult, ListDiscoveredResourcesError>;
 
 
     #[doc="<p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul>"]
     fn list_migration_tasks(&self,
                             input: &ListMigrationTasksRequest)
-                            -> Result<ListMigrationTasksResult, ListMigrationTasksError>;
+                            -> RusotoFuture<ListMigrationTasksResult, ListMigrationTasksError>;
 
 
     #[doc="<p>Lists progress update streams associated with the user account making this call.</p>"]
     fn list_progress_update_streams
         (&self,
          input: &ListProgressUpdateStreamsRequest)
-         -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError>;
+         -> RusotoFuture<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError>;
 
 
     #[doc="<p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>"]
     fn notify_application_state
         (&self,
          input: &NotifyApplicationStateRequest)
-         -> Result<NotifyApplicationStateResult, NotifyApplicationStateError>;
+         -> RusotoFuture<NotifyApplicationStateResult, NotifyApplicationStateError>;
 
 
     #[doc="<p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul>"]
     fn notify_migration_task_state
         (&self,
          input: &NotifyMigrationTaskStateRequest)
-         -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
+         -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
 
 
     #[doc="<p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)'s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListAssociatedResource</code>.</p> </note>"]
     fn put_resource_attributes
         (&self,
          input: &PutResourceAttributesRequest)
-         -> Result<PutResourceAttributesResult, PutResourceAttributesError>;
+         -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError>;
 }
 /// A client for the AWS Migration Hub API.
 pub struct MigrationHubClient<P, D>
@@ -2350,7 +2354,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn associate_created_artifact
         (&self,
          input: &AssociateCreatedArtifactRequest)
-         -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
+         -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2358,23 +2362,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateCreatedArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AssociateCreatedArtifactResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociateCreatedArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2382,7 +2395,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn associate_discovered_resource
         (&self,
          input: &AssociateDiscoveredResourceRequest)
-         -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
+         -> RusotoFuture<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2391,23 +2404,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateDiscoveredResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AssociateDiscoveredResourceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociateDiscoveredResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2415,7 +2437,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn create_progress_update_stream
         (&self,
          input: &CreateProgressUpdateStreamRequest)
-         -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
+         -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2423,23 +2445,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProgressUpdateStreamError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateProgressUpdateStreamResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateProgressUpdateStreamError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2447,7 +2478,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn delete_progress_update_stream
         (&self,
          input: &DeleteProgressUpdateStreamRequest)
-         -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
+         -> RusotoFuture<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2455,23 +2486,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProgressUpdateStreamError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteProgressUpdateStreamResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteProgressUpdateStreamError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2479,7 +2519,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn describe_application_state
         (&self,
          input: &DescribeApplicationStateRequest)
-         -> Result<DescribeApplicationStateResult, DescribeApplicationStateError> {
+         -> RusotoFuture<DescribeApplicationStateResult, DescribeApplicationStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2487,23 +2527,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeApplicationStateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeApplicationStateResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeApplicationStateError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2511,7 +2560,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn describe_migration_task
         (&self,
          input: &DescribeMigrationTaskRequest)
-         -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
+         -> RusotoFuture<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2519,22 +2568,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeMigrationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeMigrationTaskResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeMigrationTaskError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2542,7 +2601,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn disassociate_created_artifact
         (&self,
          input: &DisassociateCreatedArtifactRequest)
-         -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
+         -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2551,23 +2610,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateCreatedArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociateCreatedArtifactResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateCreatedArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2575,7 +2643,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn disassociate_discovered_resource
         (&self,
          input: &DisassociateDiscoveredResourceRequest)
-         -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError> {
+         -> RusotoFuture<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2584,30 +2652,40 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateDiscoveredResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociateDiscoveredResourceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateDiscoveredResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>"]
-    fn import_migration_task(&self,
-                             input: &ImportMigrationTaskRequest)
-                             -> Result<ImportMigrationTaskResult, ImportMigrationTaskError> {
+    fn import_migration_task
+        (&self,
+         input: &ImportMigrationTaskRequest)
+         -> RusotoFuture<ImportMigrationTaskResult, ImportMigrationTaskError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2615,29 +2693,40 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ImportMigrationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ImportMigrationTaskResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ImportMigrationTaskError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul>"]
-    fn list_created_artifacts(&self,
-                              input: &ListCreatedArtifactsRequest)
-                              -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
+    fn list_created_artifacts
+        (&self,
+         input: &ListCreatedArtifactsRequest)
+         -> RusotoFuture<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2645,22 +2734,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCreatedArtifactsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCreatedArtifactsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListCreatedArtifactsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListCreatedArtifactsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2668,7 +2767,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn list_discovered_resources
         (&self,
          input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
+         -> RusotoFuture<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2676,30 +2775,39 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDiscoveredResourcesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListDiscoveredResourcesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul>"]
     fn list_migration_tasks(&self,
                             input: &ListMigrationTasksRequest)
-                            -> Result<ListMigrationTasksResult, ListMigrationTasksError> {
+                            -> RusotoFuture<ListMigrationTasksResult, ListMigrationTasksError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2707,24 +2815,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListMigrationTasksResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListMigrationTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListMigrationTasksResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListMigrationTasksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2732,7 +2848,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn list_progress_update_streams
         (&self,
          input: &ListProgressUpdateStreamsRequest)
-         -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
+         -> RusotoFuture<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2740,23 +2856,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProgressUpdateStreamsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListProgressUpdateStreamsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListProgressUpdateStreamsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListProgressUpdateStreamsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2764,7 +2889,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn notify_application_state
         (&self,
          input: &NotifyApplicationStateRequest)
-         -> Result<NotifyApplicationStateResult, NotifyApplicationStateError> {
+         -> RusotoFuture<NotifyApplicationStateResult, NotifyApplicationStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2772,22 +2897,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<NotifyApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(NotifyApplicationStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<NotifyApplicationStateResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(NotifyApplicationStateError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2795,7 +2930,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn notify_migration_task_state
         (&self,
          input: &NotifyMigrationTaskStateRequest)
-         -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
+         -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2803,23 +2938,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<NotifyMigrationTaskStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(NotifyMigrationTaskStateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<NotifyMigrationTaskStateResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(NotifyMigrationTaskStateError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -2827,7 +2971,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
     fn put_resource_attributes
         (&self,
          input: &PutResourceAttributesRequest)
-         -> Result<PutResourceAttributesResult, PutResourceAttributesError> {
+         -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2835,22 +2979,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutResourceAttributesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutResourceAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutResourceAttributesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutResourceAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

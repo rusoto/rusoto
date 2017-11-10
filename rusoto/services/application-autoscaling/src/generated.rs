@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1131,50 +1133,51 @@ impl Error for RegisterScalableTargetError {
 /// Trait representing the capabilities of the Application Auto Scaling API. Application Auto Scaling clients implement this trait.
 pub trait ApplicationAutoScaling {
     #[doc="<p>Deletes the specified Application Auto Scaling scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>"]
-    fn delete_scaling_policy(&self,
-                             input: &DeleteScalingPolicyRequest)
-                             -> Result<DeleteScalingPolicyResponse, DeleteScalingPolicyError>;
+    fn delete_scaling_policy
+        (&self,
+         input: &DeleteScalingPolicyRequest)
+         -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError>;
 
 
     #[doc="<p>Deregisters a scalable target.</p> <p>Deregistering a scalable target deletes the scaling policies that are associated with it.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>.</p>"]
     fn deregister_scalable_target
         (&self,
          input: &DeregisterScalableTargetRequest)
-         -> Result<DeregisterScalableTargetResponse, DeregisterScalableTargetError>;
+         -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError>;
 
 
     #[doc="<p>Provides descriptive information about the scalable targets in the specified namespace.</p> <p>You can filter the results using the <code>ResourceIds</code> and <code>ScalableDimension</code> parameters.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. If you are no longer using a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>"]
     fn describe_scalable_targets
         (&self,
          input: &DescribeScalableTargetsRequest)
-         -> Result<DescribeScalableTargetsResponse, DescribeScalableTargetsError>;
+         -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError>;
 
 
     #[doc="<p>Provides descriptive information about the scaling activities in the specified namespace from the previous six weeks.</p> <p>You can filter the results using the <code>ResourceId</code> and <code>ScalableDimension</code> parameters.</p> <p>Scaling activities are triggered by CloudWatch alarms that are associated with scaling policies. To view the scaling policies for a service namespace, see <a>DescribeScalingPolicies</a>. To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>"]
     fn describe_scaling_activities
         (&self,
          input: &DescribeScalingActivitiesRequest)
-         -> Result<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError>;
+         -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError>;
 
 
     #[doc="<p>Provides descriptive information about the scaling policies in the specified namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>PolicyNames</code> parameters.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>"]
     fn describe_scaling_policies
         (&self,
          input: &DescribeScalingPoliciesRequest)
-         -> Result<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError>;
+         -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError>;
 
 
     #[doc="<p>Creates or updates a policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy without first registering a scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update a policy, specify its policy name and the parameters that you want to change. Any parameters that you don't specify are not changed by this update request.</p> <p>You can view the scaling policies for a service namespace using <a>DescribeScalingPolicies</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>"]
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyRequest)
-                          -> Result<PutScalingPolicyResponse, PutScalingPolicyError>;
+                          -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError>;
 
 
     #[doc="<p>Registers or updates a scalable target. A scalable target is a resource that Application Auto Scaling can scale out or scale in. After you have registered a scalable target, you can use this operation to update the minimum and maximum values for your scalable dimension.</p> <p>After you register a scalable target, you can create and apply scaling policies using <a>PutScalingPolicy</a>. You can view the scaling policies for a service namespace using <a>DescribeScalableTargets</a>. If you are no longer using a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>"]
     fn register_scalable_target
         (&self,
          input: &RegisterScalableTargetRequest)
-         -> Result<RegisterScalableTargetResponse, RegisterScalableTargetError>;
+         -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError>;
 }
 /// A client for the Application Auto Scaling API.
 pub struct ApplicationAutoScalingClient<P, D>
@@ -1204,9 +1207,10 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Deletes the specified Application Auto Scaling scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>"]
-    fn delete_scaling_policy(&self,
-                             input: &DeleteScalingPolicyRequest)
-                             -> Result<DeleteScalingPolicyResponse, DeleteScalingPolicyError> {
+    fn delete_scaling_policy
+        (&self,
+         input: &DeleteScalingPolicyRequest)
+         -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1215,22 +1219,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteScalingPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteScalingPolicyResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteScalingPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1238,7 +1252,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
     fn deregister_scalable_target
         (&self,
          input: &DeregisterScalableTargetRequest)
-         -> Result<DeregisterScalableTargetResponse, DeregisterScalableTargetError> {
+         -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1247,23 +1261,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterScalableTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterScalableTargetError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeregisterScalableTargetResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeregisterScalableTargetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1271,7 +1294,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
     fn describe_scalable_targets
         (&self,
          input: &DescribeScalableTargetsRequest)
-         -> Result<DescribeScalableTargetsResponse, DescribeScalableTargetsError> {
+         -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1280,23 +1303,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeScalableTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalableTargetsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeScalableTargetsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeScalableTargetsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1304,7 +1336,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
     fn describe_scaling_activities
         (&self,
          input: &DescribeScalingActivitiesRequest)
-         -> Result<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError> {
+         -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1313,23 +1345,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeScalingActivitiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeScalingActivitiesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1337,7 +1378,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
     fn describe_scaling_policies
         (&self,
          input: &DescribeScalingPoliciesRequest)
-         -> Result<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError> {
+         -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1346,30 +1387,39 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeScalingPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeScalingPoliciesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeScalingPoliciesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates or updates a policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy without first registering a scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update a policy, specify its policy name and the parameters that you want to change. Any parameters that you don't specify are not changed by this update request.</p> <p>You can view the scaling policies for a service namespace using <a>DescribeScalingPolicies</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>"]
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyRequest)
-                          -> Result<PutScalingPolicyResponse, PutScalingPolicyError> {
+                          -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1377,24 +1427,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutScalingPolicyResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutScalingPolicyResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -1402,7 +1460,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
     fn register_scalable_target
         (&self,
          input: &RegisterScalableTargetRequest)
-         -> Result<RegisterScalableTargetResponse, RegisterScalableTargetError> {
+         -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1411,22 +1469,32 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterScalableTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterScalableTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RegisterScalableTargetResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RegisterScalableTargetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

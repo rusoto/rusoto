@@ -15,8 +15,10 @@
 //!
 //! If you're using the service, you're probably looking for [RedshiftClient](struct.RedshiftClient.html) and [Redshift](trait.Redshift.html).
 
+extern crate futures;
 extern crate hyper;
 extern crate rusoto_core;
+extern crate tokio_core;
 extern crate xml;
 
 mod generated;

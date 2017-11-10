@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -12798,514 +12800,533 @@ impl Error for VerifyUserAttributeError {
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
 pub trait CognitoIdentityProvider {
     #[doc="<p>Adds additional user attributes to the user pool schema.</p>"]
-    fn add_custom_attributes(&self,
-                             input: &AddCustomAttributesRequest)
-                             -> Result<AddCustomAttributesResponse, AddCustomAttributesError>;
+    fn add_custom_attributes
+        (&self,
+         input: &AddCustomAttributesRequest)
+         -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError>;
 
 
     #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
     fn admin_add_user_to_group(&self,
                                input: &AdminAddUserToGroupRequest)
-                               -> Result<(), AdminAddUserToGroupError>;
+                               -> RusotoFuture<(), AdminAddUserToGroupError>;
 
 
     #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_confirm_sign_up(&self,
-                             input: &AdminConfirmSignUpRequest)
-                             -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
+    fn admin_confirm_sign_up
+        (&self,
+         input: &AdminConfirmSignUpRequest)
+         -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
 
 
     #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
     fn admin_create_user(&self,
                          input: &AdminCreateUserRequest)
-                         -> Result<AdminCreateUserResponse, AdminCreateUserError>;
+                         -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError>;
 
 
     #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_delete_user(&self,
                          input: &AdminDeleteUserRequest)
-                         -> Result<(), AdminDeleteUserError>;
+                         -> RusotoFuture<(), AdminDeleteUserError>;
 
 
     #[doc="<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_delete_user_attributes
         (&self,
          input: &AdminDeleteUserAttributesRequest)
-         -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
+         -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
 
 
     #[doc="<p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href=\"API_AdminLinkProviderForUser.html\">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>"]
     fn admin_disable_provider_for_user
         (&self,
          input: &AdminDisableProviderForUserRequest)
-         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
+         -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
 
 
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_disable_user(&self,
                           input: &AdminDisableUserRequest)
-                          -> Result<AdminDisableUserResponse, AdminDisableUserError>;
+                          -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError>;
 
 
     #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_enable_user(&self,
                          input: &AdminEnableUserRequest)
-                         -> Result<AdminEnableUserResponse, AdminEnableUserError>;
+                         -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError>;
 
 
     #[doc="<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_forget_device(&self,
                            input: &AdminForgetDeviceRequest)
-                           -> Result<(), AdminForgetDeviceError>;
+                           -> RusotoFuture<(), AdminForgetDeviceError>;
 
 
     #[doc="<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_get_device(&self,
                         input: &AdminGetDeviceRequest)
-                        -> Result<AdminGetDeviceResponse, AdminGetDeviceError>;
+                        -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError>;
 
 
     #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_get_user(&self,
                       input: &AdminGetUserRequest)
-                      -> Result<AdminGetUserResponse, AdminGetUserError>;
+                      -> RusotoFuture<AdminGetUserResponse, AdminGetUserError>;
 
 
     #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_initiate_auth(&self,
                            input: &AdminInitiateAuthRequest)
-                           -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
+                           -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError>;
 
 
     #[doc="<p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href=\"API_AdminDisableProviderForUser.html\">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>"]
     fn admin_link_provider_for_user
         (&self,
          input: &AdminLinkProviderForUserRequest)
-         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
+         -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
 
 
     #[doc="<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_list_devices(&self,
                           input: &AdminListDevicesRequest)
-                          -> Result<AdminListDevicesResponse, AdminListDevicesError>;
+                          -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError>;
 
 
     #[doc="<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>"]
     fn admin_list_groups_for_user
         (&self,
          input: &AdminListGroupsForUserRequest)
-         -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
+         -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
 
 
     #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
     fn admin_remove_user_from_group(&self,
                                     input: &AdminRemoveUserFromGroupRequest)
-                                    -> Result<(), AdminRemoveUserFromGroupError>;
+                                    -> RusotoFuture<(), AdminRemoveUserFromGroupError>;
 
 
     #[doc="<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>"]
     fn admin_reset_user_password
         (&self,
          input: &AdminResetUserPasswordRequest)
-         -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
+         -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
 
 
     #[doc="<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_respond_to_auth_challenge
         (&self,
          input: &AdminRespondToAuthChallengeRequest)
-         -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
+         -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
 
 
     #[doc="<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_set_user_settings
         (&self,
          input: &AdminSetUserSettingsRequest)
-         -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
+         -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
 
 
     #[doc="<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_update_device_status
         (&self,
          input: &AdminUpdateDeviceStatusRequest)
-         -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
+         -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
 
 
     #[doc="<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>"]
     fn admin_update_user_attributes
         (&self,
          input: &AdminUpdateUserAttributesRequest)
-         -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
+         -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
 
 
     #[doc="<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_user_global_sign_out
         (&self,
          input: &AdminUserGlobalSignOutRequest)
-         -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
+         -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
 
 
     #[doc="<p>Changes the password for a specified user in a user pool.</p>"]
     fn change_password(&self,
                        input: &ChangePasswordRequest)
-                       -> Result<ChangePasswordResponse, ChangePasswordError>;
+                       -> RusotoFuture<ChangePasswordResponse, ChangePasswordError>;
 
 
     #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
     fn confirm_device(&self,
                       input: &ConfirmDeviceRequest)
-                      -> Result<ConfirmDeviceResponse, ConfirmDeviceError>;
+                      -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError>;
 
 
     #[doc="<p>Allows a user to enter a confirmation code to reset a forgotten password.</p>"]
     fn confirm_forgot_password
         (&self,
          input: &ConfirmForgotPasswordRequest)
-         -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
+         -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
 
 
     #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
     fn confirm_sign_up(&self,
                        input: &ConfirmSignUpRequest)
-                       -> Result<ConfirmSignUpResponse, ConfirmSignUpError>;
+                       -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError>;
 
 
     #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
     fn create_group(&self,
                     input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError>;
+                    -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
 
 
     #[doc="<p>Creates an identity provider for a user pool.</p>"]
     fn create_identity_provider
         (&self,
          input: &CreateIdentityProviderRequest)
-         -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError>;
+         -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError>;
 
 
     #[doc="<p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>"]
     fn create_resource_server
         (&self,
          input: &CreateResourceServerRequest)
-         -> Result<CreateResourceServerResponse, CreateResourceServerError>;
+         -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError>;
 
 
     #[doc="<p>Creates the user import job.</p>"]
-    fn create_user_import_job(&self,
-                              input: &CreateUserImportJobRequest)
-                              -> Result<CreateUserImportJobResponse, CreateUserImportJobError>;
+    fn create_user_import_job
+        (&self,
+         input: &CreateUserImportJobRequest)
+         -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError>;
 
 
     #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
     fn create_user_pool(&self,
                         input: &CreateUserPoolRequest)
-                        -> Result<CreateUserPoolResponse, CreateUserPoolError>;
+                        -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError>;
 
 
     #[doc="<p>Creates the user pool client.</p>"]
     fn create_user_pool_client
         (&self,
          input: &CreateUserPoolClientRequest)
-         -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError>;
+         -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError>;
 
 
     #[doc="<p>Creates a new domain for a user pool.</p>"]
     fn create_user_pool_domain
         (&self,
          input: &CreateUserPoolDomainRequest)
-         -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
+         -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
 
 
     #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
-    fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError>;
+    fn delete_group(&self, input: &DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError>;
 
 
     #[doc="<p>Deletes an identity provider for a user pool.</p>"]
     fn delete_identity_provider(&self,
                                 input: &DeleteIdentityProviderRequest)
-                                -> Result<(), DeleteIdentityProviderError>;
+                                -> RusotoFuture<(), DeleteIdentityProviderError>;
 
 
     #[doc="<p>Deletes a resource server.</p>"]
     fn delete_resource_server(&self,
                               input: &DeleteResourceServerRequest)
-                              -> Result<(), DeleteResourceServerError>;
+                              -> RusotoFuture<(), DeleteResourceServerError>;
 
 
     #[doc="<p>Allows a user to delete himself or herself.</p>"]
-    fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError>;
+    fn delete_user(&self, input: &DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
 
 
     #[doc="<p>Deletes the attributes for a user.</p>"]
     fn delete_user_attributes
         (&self,
          input: &DeleteUserAttributesRequest)
-         -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError>;
+         -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError>;
 
 
     #[doc="<p>Deletes the specified Amazon Cognito user pool.</p>"]
-    fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError>;
+    fn delete_user_pool(&self,
+                        input: &DeleteUserPoolRequest)
+                        -> RusotoFuture<(), DeleteUserPoolError>;
 
 
     #[doc="<p>Allows the developer to delete the user pool client.</p>"]
     fn delete_user_pool_client(&self,
                                input: &DeleteUserPoolClientRequest)
-                               -> Result<(), DeleteUserPoolClientError>;
+                               -> RusotoFuture<(), DeleteUserPoolClientError>;
 
 
     #[doc="<p>Deletes a domain for a user pool.</p>"]
     fn delete_user_pool_domain
         (&self,
          input: &DeleteUserPoolDomainRequest)
-         -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
+         -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
 
 
     #[doc="<p>Gets information about a specific identity provider.</p>"]
     fn describe_identity_provider
         (&self,
          input: &DescribeIdentityProviderRequest)
-         -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
+         -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
 
 
     #[doc="<p>Describes a resource server.</p>"]
     fn describe_resource_server
         (&self,
          input: &DescribeResourceServerRequest)
-         -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
+         -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError>;
 
 
     #[doc="<p>Describes the user import job.</p>"]
     fn describe_user_import_job
         (&self,
          input: &DescribeUserImportJobRequest)
-         -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError>;
+         -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError>;
 
 
     #[doc="<p>Returns the configuration information and metadata of the specified user pool.</p>"]
     fn describe_user_pool(&self,
                           input: &DescribeUserPoolRequest)
-                          -> Result<DescribeUserPoolResponse, DescribeUserPoolError>;
+                          -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError>;
 
 
     #[doc="<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>"]
     fn describe_user_pool_client
         (&self,
          input: &DescribeUserPoolClientRequest)
-         -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
+         -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
 
 
     #[doc="<p>Gets information about a domain.</p>"]
     fn describe_user_pool_domain
         (&self,
          input: &DescribeUserPoolDomainRequest)
-         -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
+         -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
 
 
     #[doc="<p>Forgets the specified device.</p>"]
-    fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError>;
+    fn forget_device(&self, input: &ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError>;
 
 
     #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
     fn forgot_password(&self,
                        input: &ForgotPasswordRequest)
-                       -> Result<ForgotPasswordResponse, ForgotPasswordError>;
+                       -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError>;
 
 
     #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
     fn get_csv_header(&self,
                       input: &GetCSVHeaderRequest)
-                      -> Result<GetCSVHeaderResponse, GetCSVHeaderError>;
+                      -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError>;
 
 
     #[doc="<p>Gets the device.</p>"]
-    fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError>;
+    fn get_device(&self,
+                  input: &GetDeviceRequest)
+                  -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
 
 
     #[doc="<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
-    fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
 
 
     #[doc="<p>Gets the specified identity provider.</p>"]
     fn get_identity_provider_by_identifier
         (&self,
          input: &GetIdentityProviderByIdentifierRequest)
-         -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
+         -> RusotoFuture<GetIdentityProviderByIdentifierResponse,
+                         GetIdentityProviderByIdentifierError>;
 
 
     #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
-    fn get_ui_customization(&self,
-                            input: &GetUICustomizationRequest)
-                            -> Result<GetUICustomizationResponse, GetUICustomizationError>;
+    fn get_ui_customization
+        (&self,
+         input: &GetUICustomizationRequest)
+         -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError>;
 
 
     #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
-    fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
+    fn get_user(&self, input: &GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError>;
 
 
     #[doc="<p>Gets the user attribute verification code for the specified attribute name.</p>"]
     fn get_user_attribute_verification_code
         (&self,
          input: &GetUserAttributeVerificationCodeRequest)
-         -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
+         -> RusotoFuture<GetUserAttributeVerificationCodeResponse,
+                         GetUserAttributeVerificationCodeError>;
 
 
     #[doc="<p>Signs out users from all devices.</p>"]
     fn global_sign_out(&self,
                        input: &GlobalSignOutRequest)
-                       -> Result<GlobalSignOutResponse, GlobalSignOutError>;
+                       -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError>;
 
 
     #[doc="<p>Initiates the authentication flow.</p>"]
     fn initiate_auth(&self,
                      input: &InitiateAuthRequest)
-                     -> Result<InitiateAuthResponse, InitiateAuthError>;
+                     -> RusotoFuture<InitiateAuthResponse, InitiateAuthError>;
 
 
     #[doc="<p>Lists the devices.</p>"]
     fn list_devices(&self,
                     input: &ListDevicesRequest)
-                    -> Result<ListDevicesResponse, ListDevicesError>;
+                    -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
 
 
     #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
     fn list_groups(&self,
                    input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError>;
+                   -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
 
 
     #[doc="<p>Lists information about all identity providers for a user pool.</p>"]
     fn list_identity_providers
         (&self,
          input: &ListIdentityProvidersRequest)
-         -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError>;
+         -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError>;
 
 
     #[doc="<p>Lists the resource servers for a user pool.</p>"]
-    fn list_resource_servers(&self,
-                             input: &ListResourceServersRequest)
-                             -> Result<ListResourceServersResponse, ListResourceServersError>;
+    fn list_resource_servers
+        (&self,
+         input: &ListResourceServersRequest)
+         -> RusotoFuture<ListResourceServersResponse, ListResourceServersError>;
 
 
     #[doc="<p>Lists the user import jobs.</p>"]
-    fn list_user_import_jobs(&self,
-                             input: &ListUserImportJobsRequest)
-                             -> Result<ListUserImportJobsResponse, ListUserImportJobsError>;
+    fn list_user_import_jobs
+        (&self,
+         input: &ListUserImportJobsRequest)
+         -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError>;
 
 
     #[doc="<p>Lists the clients that have been created for the specified user pool.</p>"]
-    fn list_user_pool_clients(&self,
-                              input: &ListUserPoolClientsRequest)
-                              -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError>;
+    fn list_user_pool_clients
+        (&self,
+         input: &ListUserPoolClientsRequest)
+         -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError>;
 
 
     #[doc="<p>Lists the user pools associated with an AWS account.</p>"]
     fn list_user_pools(&self,
                        input: &ListUserPoolsRequest)
-                       -> Result<ListUserPoolsResponse, ListUserPoolsError>;
+                       -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError>;
 
 
     #[doc="<p>Lists the users in the Amazon Cognito user pool.</p>"]
-    fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError>;
+    fn list_users(&self,
+                  input: &ListUsersRequest)
+                  -> RusotoFuture<ListUsersResponse, ListUsersError>;
 
 
     #[doc="<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
     fn list_users_in_group(&self,
                            input: &ListUsersInGroupRequest)
-                           -> Result<ListUsersInGroupResponse, ListUsersInGroupError>;
+                           -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError>;
 
 
     #[doc="<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>"]
     fn resend_confirmation_code
         (&self,
          input: &ResendConfirmationCodeRequest)
-         -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
+         -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
 
 
     #[doc="<p>Responds to the authentication challenge.</p>"]
     fn respond_to_auth_challenge
         (&self,
          input: &RespondToAuthChallengeRequest)
-         -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
+         -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
 
 
     #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
-    fn set_ui_customization(&self,
-                            input: &SetUICustomizationRequest)
-                            -> Result<SetUICustomizationResponse, SetUICustomizationError>;
+    fn set_ui_customization
+        (&self,
+         input: &SetUICustomizationRequest)
+         -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError>;
 
 
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
     fn set_user_settings(&self,
                          input: &SetUserSettingsRequest)
-                         -> Result<SetUserSettingsResponse, SetUserSettingsError>;
+                         -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError>;
 
 
     #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
-    fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError>;
+    fn sign_up(&self, input: &SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError>;
 
 
     #[doc="<p>Starts the user import.</p>"]
-    fn start_user_import_job(&self,
-                             input: &StartUserImportJobRequest)
-                             -> Result<StartUserImportJobResponse, StartUserImportJobError>;
+    fn start_user_import_job
+        (&self,
+         input: &StartUserImportJobRequest)
+         -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError>;
 
 
     #[doc="<p>Stops the user import job.</p>"]
     fn stop_user_import_job(&self,
                             input: &StopUserImportJobRequest)
-                            -> Result<StopUserImportJobResponse, StopUserImportJobError>;
+                            -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError>;
 
 
     #[doc="<p>Updates the device status.</p>"]
-    fn update_device_status(&self,
-                            input: &UpdateDeviceStatusRequest)
-                            -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
+    fn update_device_status
+        (&self,
+         input: &UpdateDeviceStatusRequest)
+         -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
 
 
     #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
     fn update_group(&self,
                     input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError>;
+                    -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
 
 
     #[doc="<p>Updates identity provider information for a user pool.</p>"]
     fn update_identity_provider
         (&self,
          input: &UpdateIdentityProviderRequest)
-         -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
+         -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
 
 
     #[doc="<p>Updates the name and scopes of resource server. All other fields are read-only.</p>"]
     fn update_resource_server
         (&self,
          input: &UpdateResourceServerRequest)
-         -> Result<UpdateResourceServerResponse, UpdateResourceServerError>;
+         -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError>;
 
 
     #[doc="<p>Allows a user to update a specific attribute (one at a time).</p>"]
     fn update_user_attributes
         (&self,
          input: &UpdateUserAttributesRequest)
-         -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError>;
+         -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError>;
 
 
     #[doc="<p>Updates the specified user pool with the specified attributes.</p>"]
     fn update_user_pool(&self,
                         input: &UpdateUserPoolRequest)
-                        -> Result<UpdateUserPoolResponse, UpdateUserPoolError>;
+                        -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError>;
 
 
     #[doc="<p>Allows the developer to update the specified user pool client and password policy.</p>"]
     fn update_user_pool_client
         (&self,
          input: &UpdateUserPoolClientRequest)
-         -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
+         -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
 
     #[doc="<p>Verifies the specified user attributes in the user pool.</p>"]
-    fn verify_user_attribute(&self,
-                             input: &VerifyUserAttributeRequest)
-                             -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError>;
+    fn verify_user_attribute
+        (&self,
+         input: &VerifyUserAttributeRequest)
+         -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError>;
 }
 /// A client for the Amazon Cognito Identity Provider API.
 pub struct CognitoIdentityProviderClient<P, D>
@@ -13335,9 +13356,10 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Adds additional user attributes to the user pool schema.</p>"]
-    fn add_custom_attributes(&self,
-                             input: &AddCustomAttributesRequest)
-                             -> Result<AddCustomAttributesResponse, AddCustomAttributesError> {
+    fn add_custom_attributes
+        (&self,
+         input: &AddCustomAttributesRequest)
+         -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13346,29 +13368,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddCustomAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddCustomAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AddCustomAttributesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AddCustomAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>"]
     fn admin_add_user_to_group(&self,
                                input: &AdminAddUserToGroupRequest)
-                               -> Result<(), AdminAddUserToGroupError> {
+                               -> RusotoFuture<(), AdminAddUserToGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13377,25 +13409,41 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminAddUserToGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AdminAddUserToGroupError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>"]
-    fn admin_confirm_sign_up(&self,
-                             input: &AdminConfirmSignUpRequest)
-                             -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
+    fn admin_confirm_sign_up
+        (&self,
+         input: &AdminConfirmSignUpRequest)
+         -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13404,29 +13452,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminConfirmSignUpResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminConfirmSignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminConfirmSignUpResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminConfirmSignUpError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href=\"API_CreateUserPool.html\">CreateUserPool</a> or <a href=\"API_UpdateUserPool.html\">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>"]
     fn admin_create_user(&self,
                          input: &AdminCreateUserRequest)
-                         -> Result<AdminCreateUserResponse, AdminCreateUserError> {
+                         -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13435,31 +13493,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminCreateUserResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminCreateUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminCreateUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminCreateUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_delete_user(&self,
                          input: &AdminDeleteUserRequest)
-                         -> Result<(), AdminDeleteUserError> {
+                         -> RusotoFuture<(), AdminDeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13468,18 +13534,33 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminDeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AdminDeleteUserError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -13487,7 +13568,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_delete_user_attributes
         (&self,
          input: &AdminDeleteUserAttributesRequest)
-         -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
+         -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13496,23 +13577,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDeleteUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminDeleteUserAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminDeleteUserAttributesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminDeleteUserAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13520,7 +13610,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_disable_provider_for_user
         (&self,
          input: &AdminDisableProviderForUserRequest)
-         -> Result<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
+         -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13529,30 +13619,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDisableProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminDisableProviderForUserError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminDisableProviderForUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminDisableProviderForUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_disable_user(&self,
                           input: &AdminDisableUserRequest)
-                          -> Result<AdminDisableUserResponse, AdminDisableUserError> {
+                          -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13561,31 +13660,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminDisableUserResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminDisableUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminDisableUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminDisableUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_enable_user(&self,
                          input: &AdminEnableUserRequest)
-                         -> Result<AdminEnableUserResponse, AdminEnableUserError> {
+                         -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13594,31 +13701,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminEnableUserResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminEnableUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminEnableUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminEnableUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_forget_device(&self,
                            input: &AdminForgetDeviceRequest)
-                           -> Result<(), AdminForgetDeviceError> {
+                           -> RusotoFuture<(), AdminForgetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13627,25 +13742,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminForgetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AdminForgetDeviceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_get_device(&self,
                         input: &AdminGetDeviceRequest)
-                        -> Result<AdminGetDeviceResponse, AdminGetDeviceError> {
+                        -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13654,31 +13784,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminGetDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminGetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminGetDeviceResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminGetDeviceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>"]
     fn admin_get_user(&self,
                       input: &AdminGetUserRequest)
-                      -> Result<AdminGetUserResponse, AdminGetUserError> {
+                      -> RusotoFuture<AdminGetUserResponse, AdminGetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13687,31 +13825,51 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminGetUserResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminGetUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<AdminGetUserResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AdminGetUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_initiate_auth(&self,
                            input: &AdminInitiateAuthRequest)
-                           -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError> {
+                           -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13720,22 +13878,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminInitiateAuthResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminInitiateAuthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminInitiateAuthResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminInitiateAuthError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13743,7 +13911,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_link_provider_for_user
         (&self,
          input: &AdminLinkProviderForUserRequest)
-         -> Result<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
+         -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13752,30 +13920,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminLinkProviderForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminLinkProviderForUserError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminLinkProviderForUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminLinkProviderForUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>"]
     fn admin_list_devices(&self,
                           input: &AdminListDevicesRequest)
-                          -> Result<AdminListDevicesResponse, AdminListDevicesError> {
+                          -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13784,24 +13961,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminListDevicesResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminListDevicesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminListDevicesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13809,7 +13994,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_list_groups_for_user
         (&self,
          input: &AdminListGroupsForUserRequest)
-         -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
+         -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13818,29 +14003,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminListGroupsForUserResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminListGroupsForUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminListGroupsForUserResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminListGroupsForUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>"]
     fn admin_remove_user_from_group(&self,
                                     input: &AdminRemoveUserFromGroupRequest)
-                                    -> Result<(), AdminRemoveUserFromGroupError> {
+                                    -> RusotoFuture<(), AdminRemoveUserFromGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13849,19 +14044,27 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminRemoveUserFromGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminRemoveUserFromGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13869,7 +14072,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_reset_user_password
         (&self,
          input: &AdminResetUserPasswordRequest)
-         -> Result<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
+         -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13878,22 +14081,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminResetUserPasswordResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminResetUserPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminResetUserPasswordResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminResetUserPasswordError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13901,7 +14114,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_respond_to_auth_challenge
         (&self,
          input: &AdminRespondToAuthChallengeRequest)
-         -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
+         -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13910,23 +14123,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminRespondToAuthChallengeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminRespondToAuthChallengeError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminRespondToAuthChallengeResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminRespondToAuthChallengeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13934,7 +14156,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_set_user_settings
         (&self,
          input: &AdminSetUserSettingsRequest)
-         -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
+         -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13943,22 +14165,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminSetUserSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminSetUserSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminSetUserSettingsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminSetUserSettingsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13966,7 +14198,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_update_device_status
         (&self,
          input: &AdminUpdateDeviceStatusRequest)
-         -> Result<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
+         -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -13975,23 +14207,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUpdateDeviceStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminUpdateDeviceStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminUpdateDeviceStatusResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminUpdateDeviceStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -13999,7 +14240,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_update_user_attributes
         (&self,
          input: &AdminUpdateUserAttributesRequest)
-         -> Result<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
+         -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14008,23 +14249,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUpdateUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminUpdateUserAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminUpdateUserAttributesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminUpdateUserAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14032,7 +14282,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn admin_user_global_sign_out
         (&self,
          input: &AdminUserGlobalSignOutRequest)
-         -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
+         -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14041,29 +14291,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AdminUserGlobalSignOutResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AdminUserGlobalSignOutError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AdminUserGlobalSignOutResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AdminUserGlobalSignOutError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Changes the password for a specified user in a user pool.</p>"]
     fn change_password(&self,
                        input: &ChangePasswordRequest)
-                       -> Result<ChangePasswordResponse, ChangePasswordError> {
+                       -> RusotoFuture<ChangePasswordResponse, ChangePasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14072,31 +14332,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ChangePasswordResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ChangePasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ChangePasswordResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ChangePasswordError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>"]
     fn confirm_device(&self,
                       input: &ConfirmDeviceRequest)
-                      -> Result<ConfirmDeviceResponse, ConfirmDeviceError> {
+                      -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14105,24 +14373,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ConfirmDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ConfirmDeviceResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ConfirmDeviceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14130,7 +14406,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn confirm_forgot_password
         (&self,
          input: &ConfirmForgotPasswordRequest)
-         -> Result<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
+         -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14139,29 +14415,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmForgotPasswordResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ConfirmForgotPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ConfirmForgotPasswordResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ConfirmForgotPasswordError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Confirms registration of a user and handles the existing alias from a previous user.</p>"]
     fn confirm_sign_up(&self,
                        input: &ConfirmSignUpRequest)
-                       -> Result<ConfirmSignUpResponse, ConfirmSignUpError> {
+                       -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14170,31 +14456,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConfirmSignUpResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ConfirmSignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ConfirmSignUpResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ConfirmSignUpError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>"]
     fn create_group(&self,
                     input: &CreateGroupRequest)
-                    -> Result<CreateGroupResponse, CreateGroupError> {
+                    -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14203,24 +14497,44 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateGroupResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateGroupResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -14228,7 +14542,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn create_identity_provider
         (&self,
          input: &CreateIdentityProviderRequest)
-         -> Result<CreateIdentityProviderResponse, CreateIdentityProviderError> {
+         -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14237,22 +14551,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateIdentityProviderResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateIdentityProviderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14260,7 +14584,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn create_resource_server
         (&self,
          input: &CreateResourceServerRequest)
-         -> Result<CreateResourceServerResponse, CreateResourceServerError> {
+         -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14269,29 +14593,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateResourceServerResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateResourceServerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates the user import job.</p>"]
-    fn create_user_import_job(&self,
-                              input: &CreateUserImportJobRequest)
-                              -> Result<CreateUserImportJobResponse, CreateUserImportJobError> {
+    fn create_user_import_job
+        (&self,
+         input: &CreateUserImportJobRequest)
+         -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14300,29 +14635,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateUserImportJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateUserImportJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>"]
     fn create_user_pool(&self,
                         input: &CreateUserPoolRequest)
-                        -> Result<CreateUserPoolResponse, CreateUserPoolError> {
+                        -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14331,24 +14676,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateUserPoolResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateUserPoolError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14356,7 +14709,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn create_user_pool_client
         (&self,
          input: &CreateUserPoolClientRequest)
-         -> Result<CreateUserPoolClientResponse, CreateUserPoolClientError> {
+         -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14365,22 +14718,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateUserPoolClientResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateUserPoolClientError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14388,7 +14751,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn create_user_pool_domain
         (&self,
          input: &CreateUserPoolDomainRequest)
-         -> Result<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
+         -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14397,27 +14760,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateUserPoolDomainResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateUserPoolDomainError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>"]
-    fn delete_group(&self, input: &DeleteGroupRequest) -> Result<(), DeleteGroupError> {
+    fn delete_group(&self, input: &DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14426,25 +14799,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes an identity provider for a user pool.</p>"]
     fn delete_identity_provider(&self,
                                 input: &DeleteIdentityProviderRequest)
-                                -> Result<(), DeleteIdentityProviderError> {
+                                -> RusotoFuture<(), DeleteIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14453,25 +14840,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteIdentityProviderError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a resource server.</p>"]
     fn delete_resource_server(&self,
                               input: &DeleteResourceServerRequest)
-                              -> Result<(), DeleteResourceServerError> {
+                              -> RusotoFuture<(), DeleteResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14480,23 +14882,38 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteResourceServerError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Allows a user to delete himself or herself.</p>"]
-    fn delete_user(&self, input: &DeleteUserRequest) -> Result<(), DeleteUserError> {
+    fn delete_user(&self, input: &DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14505,18 +14922,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -14524,7 +14955,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn delete_user_attributes
         (&self,
          input: &DeleteUserAttributesRequest)
-         -> Result<DeleteUserAttributesResponse, DeleteUserAttributesError> {
+         -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14533,27 +14964,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteUserAttributesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteUserAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes the specified Amazon Cognito user pool.</p>"]
-    fn delete_user_pool(&self, input: &DeleteUserPoolRequest) -> Result<(), DeleteUserPoolError> {
+    fn delete_user_pool(&self,
+                        input: &DeleteUserPoolRequest)
+                        -> RusotoFuture<(), DeleteUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14562,25 +15005,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteUserPoolError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Allows the developer to delete the user pool client.</p>"]
     fn delete_user_pool_client(&self,
                                input: &DeleteUserPoolClientRequest)
-                               -> Result<(), DeleteUserPoolClientError> {
+                               -> RusotoFuture<(), DeleteUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14589,18 +15046,33 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteUserPoolClientError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -14608,7 +15080,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn delete_user_pool_domain
         (&self,
          input: &DeleteUserPoolDomainRequest)
-         -> Result<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
+         -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14617,22 +15089,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteUserPoolDomainResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteUserPoolDomainError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14640,7 +15122,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn describe_identity_provider
         (&self,
          input: &DescribeIdentityProviderRequest)
-         -> Result<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
+         -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14649,23 +15131,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeIdentityProviderError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeIdentityProviderResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeIdentityProviderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14673,7 +15164,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn describe_resource_server
         (&self,
          input: &DescribeResourceServerRequest)
-         -> Result<DescribeResourceServerResponse, DescribeResourceServerError> {
+         -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14682,22 +15173,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeResourceServerResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeResourceServerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14705,7 +15206,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn describe_user_import_job
         (&self,
          input: &DescribeUserImportJobRequest)
-         -> Result<DescribeUserImportJobResponse, DescribeUserImportJobError> {
+         -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14714,29 +15215,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeUserImportJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeUserImportJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns the configuration information and metadata of the specified user pool.</p>"]
     fn describe_user_pool(&self,
                           input: &DescribeUserPoolRequest)
-                          -> Result<DescribeUserPoolResponse, DescribeUserPoolError> {
+                          -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14745,24 +15256,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeUserPoolResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeUserPoolError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14770,7 +15289,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn describe_user_pool_client
         (&self,
          input: &DescribeUserPoolClientRequest)
-         -> Result<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
+         -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14779,22 +15298,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeUserPoolClientResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeUserPoolClientError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -14802,7 +15331,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn describe_user_pool_domain
         (&self,
          input: &DescribeUserPoolDomainRequest)
-         -> Result<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
+         -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14811,27 +15340,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserPoolDomainResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserPoolDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeUserPoolDomainResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeUserPoolDomainError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Forgets the specified device.</p>"]
-    fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError> {
+    fn forget_device(&self, input: &ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14840,25 +15379,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ForgetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ForgetDeviceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href=\"API_ConfirmForgotPassword.html\">ConfirmForgotPassword</a>.</p>"]
     fn forgot_password(&self,
                        input: &ForgotPasswordRequest)
-                       -> Result<ForgotPasswordResponse, ForgotPasswordError> {
+                       -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14867,31 +15420,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ForgotPasswordResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ForgotPasswordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ForgotPasswordResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ForgotPasswordError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets the header information for the .csv file to be used as input for the user import job.</p>"]
     fn get_csv_header(&self,
                       input: &GetCSVHeaderRequest)
-                      -> Result<GetCSVHeaderResponse, GetCSVHeaderError> {
+                      -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14900,29 +15461,51 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCSVHeaderResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCSVHeaderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetCSVHeaderResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetCSVHeaderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets the device.</p>"]
-    fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResponse, GetDeviceError> {
+    fn get_device(&self,
+                  input: &GetDeviceRequest)
+                  -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14931,29 +15514,49 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeviceResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetDeviceResponse>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetDeviceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets a group.</p> <p>Requires developer credentials.</p>"]
-    fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
+    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14961,24 +15564,44 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetGroupResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetGroupResponse>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -14986,7 +15609,8 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn get_identity_provider_by_identifier
         (&self,
          input: &GetIdentityProviderByIdentifierRequest)
-         -> Result<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError> {
+         -> RusotoFuture<GetIdentityProviderByIdentifierResponse,
+                         GetIdentityProviderByIdentifierError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14995,30 +15619,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetIdentityProviderByIdentifierError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetIdentityProviderByIdentifierError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>"]
-    fn get_ui_customization(&self,
-                            input: &GetUICustomizationRequest)
-                            -> Result<GetUICustomizationResponse, GetUICustomizationError> {
+    fn get_ui_customization
+        (&self,
+         input: &GetUICustomizationRequest)
+         -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15027,27 +15661,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetUICustomizationResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetUICustomizationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets the user attributes and metadata for a user.</p>"]
-    fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError> {
+    fn get_user(&self, input: &GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15055,23 +15699,44 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUserError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetUserResponse>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetUserError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -15079,7 +15744,8 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn get_user_attribute_verification_code
         (&self,
          input: &GetUserAttributeVerificationCodeRequest)
-         -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError> {
+         -> RusotoFuture<GetUserAttributeVerificationCodeResponse,
+                         GetUserAttributeVerificationCodeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15088,29 +15754,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUserAttributeVerificationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetUserAttributeVerificationCodeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Signs out users from all devices.</p>"]
     fn global_sign_out(&self,
                        input: &GlobalSignOutRequest)
-                       -> Result<GlobalSignOutResponse, GlobalSignOutError> {
+                       -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15119,31 +15795,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GlobalSignOutResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GlobalSignOutError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GlobalSignOutResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GlobalSignOutError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Initiates the authentication flow.</p>"]
     fn initiate_auth(&self,
                      input: &InitiateAuthRequest)
-                     -> Result<InitiateAuthResponse, InitiateAuthError> {
+                     -> RusotoFuture<InitiateAuthResponse, InitiateAuthError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15152,31 +15836,51 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InitiateAuthResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(InitiateAuthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<InitiateAuthResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(InitiateAuthError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists the devices.</p>"]
     fn list_devices(&self,
                     input: &ListDevicesRequest)
-                    -> Result<ListDevicesResponse, ListDevicesError> {
+                    -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15185,31 +15889,51 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDevicesResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListDevicesResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListDevicesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>"]
     fn list_groups(&self,
                    input: &ListGroupsRequest)
-                   -> Result<ListGroupsResponse, ListGroupsError> {
+                   -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15218,24 +15942,44 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListGroupsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListGroupsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -15243,7 +15987,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn list_identity_providers
         (&self,
          input: &ListIdentityProvidersRequest)
-         -> Result<ListIdentityProvidersResponse, ListIdentityProvidersError> {
+         -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15252,29 +15996,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListIdentityProvidersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListIdentityProvidersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListIdentityProvidersResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListIdentityProvidersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the resource servers for a user pool.</p>"]
-    fn list_resource_servers(&self,
-                             input: &ListResourceServersRequest)
-                             -> Result<ListResourceServersResponse, ListResourceServersError> {
+    fn list_resource_servers
+        (&self,
+         input: &ListResourceServersRequest)
+         -> RusotoFuture<ListResourceServersResponse, ListResourceServersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15283,29 +16038,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourceServersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourceServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListResourceServersResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListResourceServersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the user import jobs.</p>"]
-    fn list_user_import_jobs(&self,
-                             input: &ListUserImportJobsRequest)
-                             -> Result<ListUserImportJobsResponse, ListUserImportJobsError> {
+    fn list_user_import_jobs
+        (&self,
+         input: &ListUserImportJobsRequest)
+         -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15314,29 +16080,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserImportJobsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUserImportJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListUserImportJobsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListUserImportJobsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the clients that have been created for the specified user pool.</p>"]
-    fn list_user_pool_clients(&self,
-                              input: &ListUserPoolClientsRequest)
-                              -> Result<ListUserPoolClientsResponse, ListUserPoolClientsError> {
+    fn list_user_pool_clients
+        (&self,
+         input: &ListUserPoolClientsRequest)
+         -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15345,29 +16122,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserPoolClientsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUserPoolClientsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListUserPoolClientsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListUserPoolClientsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the user pools associated with an AWS account.</p>"]
     fn list_user_pools(&self,
                        input: &ListUserPoolsRequest)
-                       -> Result<ListUserPoolsResponse, ListUserPoolsError> {
+                       -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15376,29 +16163,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserPoolsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUserPoolsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListUserPoolsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListUserPoolsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the users in the Amazon Cognito user pool.</p>"]
-    fn list_users(&self, input: &ListUsersRequest) -> Result<ListUsersResponse, ListUsersError> {
+    fn list_users(&self,
+                  input: &ListUsersRequest)
+                  -> RusotoFuture<ListUsersResponse, ListUsersError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15407,31 +16204,51 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUsersResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUsersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListUsersResponse>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListUsersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>"]
     fn list_users_in_group(&self,
                            input: &ListUsersInGroupRequest)
-                           -> Result<ListUsersInGroupResponse, ListUsersInGroupError> {
+                           -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15440,24 +16257,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUsersInGroupResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUsersInGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListUsersInGroupResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListUsersInGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -15465,7 +16290,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn resend_confirmation_code
         (&self,
          input: &ResendConfirmationCodeRequest)
-         -> Result<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
+         -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15474,22 +16299,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ResendConfirmationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ResendConfirmationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ResendConfirmationCodeResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ResendConfirmationCodeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -15497,7 +16332,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn respond_to_auth_challenge
         (&self,
          input: &RespondToAuthChallengeRequest)
-         -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
+         -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15506,29 +16341,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RespondToAuthChallengeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RespondToAuthChallengeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RespondToAuthChallengeResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RespondToAuthChallengeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Sets the UI customization information for a user pool's built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app's pages, and the service will throw an error.</p> </note>"]
-    fn set_ui_customization(&self,
-                            input: &SetUICustomizationRequest)
-                            -> Result<SetUICustomizationResponse, SetUICustomizationError> {
+    fn set_ui_customization
+        (&self,
+         input: &SetUICustomizationRequest)
+         -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15537,29 +16383,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetUICustomizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetUICustomizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<SetUICustomizationResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(SetUICustomizationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>"]
     fn set_user_settings(&self,
                          input: &SetUserSettingsRequest)
-                         -> Result<SetUserSettingsResponse, SetUserSettingsError> {
+                         -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15568,29 +16424,37 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetUserSettingsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetUserSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<SetUserSettingsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(SetUserSettingsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>"]
-    fn sign_up(&self, input: &SignUpRequest) -> Result<SignUpResponse, SignUpError> {
+    fn sign_up(&self, input: &SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15598,30 +16462,52 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SignUpResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SignUpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<SignUpResponse>(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(SignUpError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Starts the user import.</p>"]
-    fn start_user_import_job(&self,
-                             input: &StartUserImportJobRequest)
-                             -> Result<StartUserImportJobResponse, StartUserImportJobError> {
+    fn start_user_import_job
+        (&self,
+         input: &StartUserImportJobRequest)
+         -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15630,29 +16516,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StartUserImportJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StartUserImportJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Stops the user import job.</p>"]
     fn stop_user_import_job(&self,
                             input: &StopUserImportJobRequest)
-                            -> Result<StopUserImportJobResponse, StopUserImportJobError> {
+                            -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15661,29 +16557,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopUserImportJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopUserImportJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StopUserImportJobResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StopUserImportJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates the device status.</p>"]
-    fn update_device_status(&self,
-                            input: &UpdateDeviceStatusRequest)
-                            -> Result<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
+    fn update_device_status
+        (&self,
+         input: &UpdateDeviceStatusRequest)
+         -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15692,29 +16599,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDeviceStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeviceStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateDeviceStatusResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateDeviceStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>"]
     fn update_group(&self,
                     input: &UpdateGroupRequest)
-                    -> Result<UpdateGroupResponse, UpdateGroupError> {
+                    -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15723,24 +16640,44 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateGroupResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdateGroupResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -15748,7 +16685,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn update_identity_provider
         (&self,
          input: &UpdateIdentityProviderRequest)
-         -> Result<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
+         -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15757,22 +16694,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateIdentityProviderResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateIdentityProviderError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateIdentityProviderResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateIdentityProviderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -15780,7 +16727,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn update_resource_server
         (&self,
          input: &UpdateResourceServerRequest)
-         -> Result<UpdateResourceServerResponse, UpdateResourceServerError> {
+         -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15789,22 +16736,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateResourceServerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateResourceServerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateResourceServerResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateResourceServerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -15812,7 +16769,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn update_user_attributes
         (&self,
          input: &UpdateUserAttributesRequest)
-         -> Result<UpdateUserAttributesResponse, UpdateUserAttributesError> {
+         -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15821,29 +16778,39 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateUserAttributesResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateUserAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates the specified user pool with the specified attributes.</p>"]
     fn update_user_pool(&self,
                         input: &UpdateUserPoolRequest)
-                        -> Result<UpdateUserPoolResponse, UpdateUserPoolError> {
+                        -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15852,24 +16819,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserPoolResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserPoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateUserPoolResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateUserPoolError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -15877,7 +16852,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
     fn update_user_pool_client
         (&self,
          input: &UpdateUserPoolClientRequest)
-         -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
+         -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15886,29 +16861,40 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserPoolClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserPoolClientError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateUserPoolClientResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateUserPoolClientError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Verifies the specified user attributes in the user pool.</p>"]
-    fn verify_user_attribute(&self,
-                             input: &VerifyUserAttributeRequest)
-                             -> Result<VerifyUserAttributeResponse, VerifyUserAttributeError> {
+    fn verify_user_attribute
+        (&self,
+         input: &VerifyUserAttributeRequest)
+         -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15917,22 +16903,32 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VerifyUserAttributeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(VerifyUserAttributeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<VerifyUserAttributeResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(VerifyUserAttributeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

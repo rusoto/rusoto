@@ -14,9 +14,11 @@ homepage = "https://www.rusoto.org/"
 
 [dependencies]
 base64 = "0.6"
+futures = "0.1.16"
 hex = "0.2"
-hyper = "0.10.0"
+hyper = "0.11.0"
 md5 = "0.3.2"
+tokio-core = "0.1.10"
 xml-rs = "0.7"
 
 [dependencies.rusoto_core]

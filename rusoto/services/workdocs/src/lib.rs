@@ -15,6 +15,7 @@
 //!
 //! If you're using the service, you're probably looking for [WorkdocsClient](struct.WorkdocsClient.html) and [Workdocs](trait.Workdocs.html).
 
+extern crate futures;
 extern crate hyper;
 #[macro_use]
 extern crate log;
@@ -23,6 +24,7 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate tokio_core;
 
 mod generated;
 mod custom;

@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -3062,99 +3064,104 @@ impl Error for UpdatePipelineStatusError {
 /// Trait representing the capabilities of the Amazon Elastic Transcoder API. Amazon Elastic Transcoder clients implement this trait.
 pub trait Ets {
     #[doc="<p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you're getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note>"]
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError>;
+    fn cancel_job(&self,
+                  input: &CancelJobRequest)
+                  -> RusotoFuture<CancelJobResponse, CancelJobError>;
 
 
     #[doc="<p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>"]
-    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
+    fn create_job(&self,
+                  input: &CreateJobRequest)
+                  -> RusotoFuture<CreateJobResponse, CreateJobError>;
 
 
     #[doc="<p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>"]
     fn create_pipeline(&self,
                        input: &CreatePipelineRequest)
-                       -> Result<CreatePipelineResponse, CreatePipelineError>;
+                       -> RusotoFuture<CreatePipelineResponse, CreatePipelineError>;
 
 
     #[doc="<p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>"]
     fn create_preset(&self,
                      input: &CreatePresetRequest)
-                     -> Result<CreatePresetResponse, CreatePresetError>;
+                     -> RusotoFuture<CreatePresetResponse, CreatePresetError>;
 
 
     #[doc="<p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>"]
     fn delete_pipeline(&self,
                        input: &DeletePipelineRequest)
-                       -> Result<DeletePipelineResponse, DeletePipelineError>;
+                       -> RusotoFuture<DeletePipelineResponse, DeletePipelineError>;
 
 
     #[doc="<p>The DeletePreset operation removes a preset that you've added in an AWS region.</p> <note> <p>You can't delete the default presets that are included with Elastic Transcoder.</p> </note>"]
     fn delete_preset(&self,
                      input: &DeletePresetRequest)
-                     -> Result<DeletePresetResponse, DeletePresetError>;
+                     -> RusotoFuture<DeletePresetResponse, DeletePresetError>;
 
 
     #[doc="<p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>"]
-    fn list_jobs_by_pipeline(&self,
-                             input: &ListJobsByPipelineRequest)
-                             -> Result<ListJobsByPipelineResponse, ListJobsByPipelineError>;
+    fn list_jobs_by_pipeline
+        (&self,
+         input: &ListJobsByPipelineRequest)
+         -> RusotoFuture<ListJobsByPipelineResponse, ListJobsByPipelineError>;
 
 
     #[doc="<p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>"]
     fn list_jobs_by_status(&self,
                            input: &ListJobsByStatusRequest)
-                           -> Result<ListJobsByStatusResponse, ListJobsByStatusError>;
+                           -> RusotoFuture<ListJobsByStatusResponse, ListJobsByStatusError>;
 
 
     #[doc="<p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>"]
     fn list_pipelines(&self,
                       input: &ListPipelinesRequest)
-                      -> Result<ListPipelinesResponse, ListPipelinesError>;
+                      -> RusotoFuture<ListPipelinesResponse, ListPipelinesError>;
 
 
     #[doc="<p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>"]
     fn list_presets(&self,
                     input: &ListPresetsRequest)
-                    -> Result<ListPresetsResponse, ListPresetsError>;
+                    -> RusotoFuture<ListPresetsResponse, ListPresetsError>;
 
 
     #[doc="<p>The ReadJob operation returns detailed information about a job.</p>"]
-    fn read_job(&self, input: &ReadJobRequest) -> Result<ReadJobResponse, ReadJobError>;
+    fn read_job(&self, input: &ReadJobRequest) -> RusotoFuture<ReadJobResponse, ReadJobError>;
 
 
     #[doc="<p>The ReadPipeline operation gets detailed information about a pipeline.</p>"]
     fn read_pipeline(&self,
                      input: &ReadPipelineRequest)
-                     -> Result<ReadPipelineResponse, ReadPipelineError>;
+                     -> RusotoFuture<ReadPipelineResponse, ReadPipelineError>;
 
 
     #[doc="<p>The ReadPreset operation gets detailed information about a preset.</p>"]
     fn read_preset(&self,
                    input: &ReadPresetRequest)
-                   -> Result<ReadPresetResponse, ReadPresetError>;
+                   -> RusotoFuture<ReadPresetResponse, ReadPresetError>;
 
 
     #[doc="<p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>"]
-    fn test_role(&self, input: &TestRoleRequest) -> Result<TestRoleResponse, TestRoleError>;
+    fn test_role(&self, input: &TestRoleRequest) -> RusotoFuture<TestRoleResponse, TestRoleError>;
 
 
     #[doc="<p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important>"]
     fn update_pipeline(&self,
                        input: &UpdatePipelineRequest)
-                       -> Result<UpdatePipelineResponse, UpdatePipelineError>;
+                       -> RusotoFuture<UpdatePipelineResponse, UpdatePipelineError>;
 
 
     #[doc="<p>With the UpdatePipelineNotifications operation, you can update Amazon Simple Notification Service (Amazon SNS) notifications for a pipeline.</p> <p>When you update notifications for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
     fn update_pipeline_notifications
         (&self,
          input: &UpdatePipelineNotificationsRequest)
-         -> Result<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError>;
+         -> RusotoFuture<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError>;
 
 
     #[doc="<p>The UpdatePipelineStatus operation pauses or reactivates a pipeline, so that the pipeline stops or restarts the processing of jobs.</p> <p>Changing the pipeline status is useful if you want to cancel one or more jobs. You can't cancel jobs after Elastic Transcoder has started processing them; if you pause the pipeline to which you submitted the jobs, you have more time to get the job IDs for the jobs that you want to cancel, and to send a <a>CancelJob</a> request. </p>"]
     fn update_pipeline_status
         (&self,
          input: &UpdatePipelineStatusRequest)
-         -> Result<UpdatePipelineStatusResponse, UpdatePipelineStatusError>;
+         -> RusotoFuture<UpdatePipelineStatusResponse, UpdatePipelineStatusError>;
 }
 /// A client for the Amazon Elastic Transcoder API.
 pub struct EtsClient<P, D>
@@ -3184,7 +3191,9 @@ impl<P, D> Ets for EtsClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you're getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note>"]
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
+    fn cancel_job(&self,
+                  input: &CancelJobRequest)
+                  -> RusotoFuture<CancelJobResponse, CancelJobError> {
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
@@ -3196,38 +3205,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Accepted => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Accepted => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CancelJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>"]
-    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
+    fn create_job(&self,
+                  input: &CreateJobRequest)
+                  -> RusotoFuture<CreateJobResponse, CreateJobError> {
         let request_uri = "/2012-09-25/jobs";
 
         let mut request =
@@ -3240,40 +3271,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>"]
     fn create_pipeline(&self,
                        input: &CreatePipelineRequest)
-                       -> Result<CreatePipelineResponse, CreatePipelineError> {
+                       -> RusotoFuture<CreatePipelineResponse, CreatePipelineError> {
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -3286,40 +3337,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreatePipelineResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreatePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>"]
     fn create_preset(&self,
                      input: &CreatePresetRequest)
-                     -> Result<CreatePresetResponse, CreatePresetError> {
+                     -> RusotoFuture<CreatePresetResponse, CreatePresetError> {
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -3332,40 +3403,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Created => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Created => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<CreatePresetResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreatePresetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>"]
     fn delete_pipeline(&self,
                        input: &DeletePipelineRequest)
-                       -> Result<DeletePipelineResponse, DeletePipelineError> {
+                       -> RusotoFuture<DeletePipelineResponse, DeletePipelineError> {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -3377,40 +3468,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Accepted => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Accepted => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeletePipelineResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeletePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The DeletePreset operation removes a preset that you've added in an AWS region.</p> <note> <p>You can't delete the default presets that are included with Elastic Transcoder.</p> </note>"]
     fn delete_preset(&self,
                      input: &DeletePresetRequest)
-                     -> Result<DeletePresetResponse, DeletePresetError> {
+                     -> RusotoFuture<DeletePresetResponse, DeletePresetError> {
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
@@ -3422,40 +3533,61 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Accepted => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Accepted => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<DeletePresetResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeletePresetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>"]
-    fn list_jobs_by_pipeline(&self,
-                             input: &ListJobsByPipelineRequest)
-                             -> Result<ListJobsByPipelineResponse, ListJobsByPipelineError> {
+    fn list_jobs_by_pipeline
+        (&self,
+         input: &ListJobsByPipelineRequest)
+         -> RusotoFuture<ListJobsByPipelineResponse, ListJobsByPipelineError> {
         let request_uri = format!("/2012-09-25/jobsByPipeline/{pipeline_id}",
                                   pipeline_id = input.pipeline_id);
 
@@ -3475,40 +3607,60 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ListJobsByPipelineResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>"]
     fn list_jobs_by_status(&self,
                            input: &ListJobsByStatusRequest)
-                           -> Result<ListJobsByStatusResponse, ListJobsByStatusError> {
+                           -> RusotoFuture<ListJobsByStatusResponse, ListJobsByStatusError> {
         let request_uri = format!("/2012-09-25/jobsByStatus/{status}", status = input.status);
 
         let mut request =
@@ -3527,40 +3679,60 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ListJobsByStatusResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>"]
     fn list_pipelines(&self,
                       input: &ListPipelinesRequest)
-                      -> Result<ListPipelinesResponse, ListPipelinesError> {
+                      -> RusotoFuture<ListPipelinesResponse, ListPipelinesError> {
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -3579,40 +3751,60 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ListPipelinesResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListPipelinesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>"]
     fn list_presets(&self,
                     input: &ListPresetsRequest)
-                    -> Result<ListPresetsResponse, ListPresetsError> {
+                    -> RusotoFuture<ListPresetsResponse, ListPresetsError> {
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -3631,38 +3823,58 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ListPresetsResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPresetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListPresetsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ReadJob operation returns detailed information about a job.</p>"]
-    fn read_job(&self, input: &ReadJobRequest) -> Result<ReadJobResponse, ReadJobError> {
+    fn read_job(&self, input: &ReadJobRequest) -> RusotoFuture<ReadJobResponse, ReadJobError> {
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
@@ -3674,40 +3886,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ReadJobResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ReadJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ReadJobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ReadPipeline operation gets detailed information about a pipeline.</p>"]
     fn read_pipeline(&self,
                      input: &ReadPipelineRequest)
-                     -> Result<ReadPipelineResponse, ReadPipelineError> {
+                     -> RusotoFuture<ReadPipelineResponse, ReadPipelineError> {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -3719,40 +3951,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ReadPipelineResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ReadPipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ReadPipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The ReadPreset operation gets detailed information about a preset.</p>"]
     fn read_preset(&self,
                    input: &ReadPresetRequest)
-                   -> Result<ReadPresetResponse, ReadPresetError> {
+                   -> RusotoFuture<ReadPresetResponse, ReadPresetError> {
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
@@ -3764,38 +4016,58 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<ReadPresetResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ReadPresetError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ReadPresetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>"]
-    fn test_role(&self, input: &TestRoleRequest) -> Result<TestRoleResponse, TestRoleError> {
+    fn test_role(&self, input: &TestRoleRequest) -> RusotoFuture<TestRoleResponse, TestRoleError> {
         let request_uri = "/2012-09-25/roleTests";
 
         let mut request =
@@ -3808,40 +4080,60 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<TestRoleResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestRoleError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(TestRoleError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important>"]
     fn update_pipeline(&self,
                        input: &UpdatePipelineRequest)
-                       -> Result<UpdatePipelineResponse, UpdatePipelineError> {
+                       -> RusotoFuture<UpdatePipelineResponse, UpdatePipelineError> {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -3854,33 +4146,53 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdatePipelineResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdatePipelineError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -3888,7 +4200,7 @@ impl<P, D> Ets for EtsClient<P, D>
     fn update_pipeline_notifications
         (&self,
          input: &UpdatePipelineNotificationsRequest)
-         -> Result<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError> {
+         -> RusotoFuture<UpdatePipelineNotificationsResponse, UpdatePipelineNotificationsError> {
         let request_uri = format!("/2012-09-25/pipelines/{id}/notifications", id = input.id);
 
         let mut request =
@@ -3901,35 +4213,55 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdatePipelineNotificationsResponse>(&body)
                     .unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -3937,7 +4269,7 @@ impl<P, D> Ets for EtsClient<P, D>
     fn update_pipeline_status
         (&self,
          input: &UpdatePipelineStatusRequest)
-         -> Result<UpdatePipelineStatusResponse, UpdatePipelineStatusError> {
+         -> RusotoFuture<UpdatePipelineStatusResponse, UpdatePipelineStatusError> {
         let request_uri = format!("/2012-09-25/pipelines/{id}/status", id = input.id);
 
         let mut request =
@@ -3950,33 +4282,54 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
-        match response.status {
-            StatusCode::Ok => {
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_status = response.status;
+                                                let response_headers = response.headers;
+                                                future::Either::A(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .map(move |body| {
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                let mut body = body.to_vec();
 
                 if body == b"{}" {
                     body = b"null".to_vec();
                 }
 
                 debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
+                debug!("Response status: {}", response_status);
                 let result = serde_json::from_slice::<UpdatePipelineStatusResponse>(&body).unwrap();
 
 
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+                result
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 
