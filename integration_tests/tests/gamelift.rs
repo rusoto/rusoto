@@ -12,6 +12,6 @@ fn should_list_fleets() {
     let client = GameLiftClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = ListFleetsInput::default();
 
-    let result = client.list_fleets(&request).unwrap();
+    let result = client.list_fleets(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

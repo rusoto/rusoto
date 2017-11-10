@@ -15,6 +15,6 @@ fn should_describe_applications() {
         ElasticBeanstalkClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeApplicationsMessage::default();
 
-    let result = client.describe_applications(&request).unwrap();
+    let result = client.describe_applications(&request).sync().unwrap();
     println!("{:#?}", result);
 }

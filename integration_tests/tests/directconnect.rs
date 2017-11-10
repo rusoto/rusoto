@@ -15,7 +15,7 @@ fn should_describe_connections() {
         DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeConnectionsRequest::default();
 
-    client.describe_connections(&request).unwrap();
+    client.describe_connections(&request).sync().unwrap();
 }
 
 #[test]
@@ -26,7 +26,7 @@ fn should_fail_gracefully() {
 
     let request = DescribeConnectionsRequest { connection_id: Some("invalid".to_string()) };
 
-    match client.describe_connections(&request) {
+    match client.describe_connections(&request).sync() {
         Err(DescribeConnectionsError::DirectConnectClient(msg)) => {
             assert!(msg.contains("Connection ID"))
         }
@@ -40,7 +40,7 @@ fn should_describe_locations() {
     let client =
         DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    client.describe_locations().unwrap();
+    client.describe_locations().sync().unwrap();
 }
 
 #[test]
@@ -49,5 +49,5 @@ fn should_describe_virtual_gateways() {
     let client =
         DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    client.describe_virtual_gateways().unwrap();
+    client.describe_virtual_gateways().sync().unwrap();
 }

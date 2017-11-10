@@ -5,25 +5,26 @@
 //extern crate lazy_static;
 
 use std::env;
-use std::io::Read;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
 use std::collections::HashMap;
 
+use futures::{Future, Poll, Stream};
 use hyper::Client;
+use hyper::client::{FutureResponse as HyperFutureResponse};
+use hyper::Request as HyperRequest;
 use hyper::Error as HyperError;
 use hyper::header::{Headers, UserAgent};
-use hyper::status::StatusCode;
-use hyper::method::Method;
-use hyper::client::RedirectPolicy;
-use hyper::net::HttpsConnector;
-use hyper::client::pool::Pool;
-use hyper_native_tls::NativeTlsClient;
+use hyper::StatusCode;
+use hyper::Method;
+use hyper::client::Connect;
+use hyper_tls::HttpsConnector;
 
 use log::LogLevel::Debug;
 
 use signature::SignedRequest;
+use reactor::{Reactor, ReactorFuture};
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -40,7 +41,7 @@ pub struct HttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
     /// Contents of Response
-    pub body: Box<Read>,
+    pub body: Box<Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>,
     /// Headers stored as <key(string):value(string)>
     pub headers: HashMap<String, String>,
 }
@@ -77,19 +78,61 @@ impl From<IoError> for HttpDispatchError {
 
 ///Trait for implementing HTTP Request/Response
 pub trait DispatchSignedRequest {
+    /// TODO: docs
+    type Future: Future<Item=HttpResponse, Error=HttpDispatchError> + 'static;
     /// Dispatch Request, and then return a Response
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError>;
+    fn dispatch(&self, request: SignedRequest) -> Self::Future;
 }
 
-impl DispatchSignedRequest for Client {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError> {
+/// TODO: docs
+pub struct ClientFuture(ClientFutureInner);
+
+enum ClientFutureInner {
+    Hyper(HyperFutureResponse),
+    Error(String)
+}
+
+impl Future for ClientFuture {
+    type Item = HttpResponse;
+    type Error = HttpDispatchError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        match self.0 {
+            ClientFutureInner::Error(ref message) =>
+                Err(HttpDispatchError { message: message.clone() }),
+            ClientFutureInner::Hyper(ref mut hyper_future) => {
+                Ok(hyper_future.poll()?
+                    .map(|hyper_response| {
+                        let mut headers: HashMap<String, String> = HashMap::new();
+
+                        for header in hyper_response.headers().iter() {
+                            headers.insert(header.name().to_string(), header.value_string());
+                        }
+
+                        HttpResponse {
+                            status: hyper_response.status(),
+                            body: Box::new(hyper_response.body().from_err().map(|chunk| chunk.as_ref().to_vec())),
+                            headers: headers,
+                        }
+                    }))
+            }
+        }
+    }
+}
+
+impl<C: Connect> DispatchSignedRequest for Client<C> {
+    type Future = ClientFuture;
+
+    fn dispatch(&self, request: SignedRequest) -> Self::Future {
         let hyper_method = match request.method().as_ref() {
             "POST" => Method::Post,
             "PUT" => Method::Put,
             "DELETE" => Method::Delete,
             "GET" => Method::Get,
             "HEAD" => Method::Head,
-            v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
+            v => {
+                return ClientFuture(ClientFutureInner::Error(format!("Unsupported HTTP verb {}", v)))
+            }
         };
 
         // translate the headers map to a format Hyper likes
@@ -125,30 +168,15 @@ impl DispatchSignedRequest for Client {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
-        let hyper_response = match request.payload {
-            None => {
-                try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send())
-            }
-            Some(ref payload_contents) => {
-                try!(self.request(hyper_method, &final_uri)
-                    .headers(hyper_headers)
-                    .body(payload_contents.as_slice())
-                    .send())
-            }
-        };
 
-        let mut headers: HashMap<String, String> = HashMap::new();
+        let mut hyper_request = HyperRequest::new(hyper_method, final_uri.parse().expect("error parsing uri"));
+        *hyper_request.headers_mut() = hyper_headers;
 
-        for header in hyper_response.headers.iter() {
-            headers.insert(header.name().to_string(), header.value_string());
+        if let Some(payload_contents) = request.payload {
+            hyper_request.set_body(payload_contents);
         }
 
-        Ok(HttpResponse {
-            status: hyper_response.status,
-            body: Box::new(hyper_response),
-            headers: headers,
-        })
-
+        ClientFuture(ClientFutureInner::Hyper(self.request(hyper_request)))
     }
 }
 
@@ -170,21 +198,43 @@ impl fmt::Display for TlsError {
     }
 }
 
+/// TODO: docs
+pub struct DefaultTlsClient(Reactor);
+
+impl DispatchSignedRequest for DefaultTlsClient {
+    type Future = DefaultTlsClientFuture;
+
+    fn dispatch(&self, signed_request: SignedRequest) -> Self::Future {
+        DefaultTlsClientFuture(self.0.dispatch(signed_request))
+    }
+}
+
+/// TODO: docs
+pub struct DefaultTlsClientFuture(ReactorFuture);
+
+impl Future for DefaultTlsClientFuture {
+    type Item = HttpResponse;
+    type Error = HttpDispatchError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        self.0.poll()
+    }
+}
+
 /// Helper method for creating an http client with tls.
 /// Makes a `hyper` client with `NativeTls` for HTTPS support.
-pub fn default_tls_client() -> Result<Client, TlsError> {
-    let ssl = match NativeTlsClient::new() {
-        Ok(ssl) => ssl,
-        Err(tls_error) => {
-            return Err(TlsError {
-                message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-            })
-        }
-    };
-    let connector = HttpsConnector::new(ssl);
-    let mut client = Client::with_connector(Pool::with_connector(Default::default(), connector));
-    client.set_redirect_policy(RedirectPolicy::FollowNone);
-    Ok(client)
+pub fn default_tls_client() -> Result<DefaultTlsClient, TlsError> {
+    Reactor::new(|handle| {
+        let connector = match HttpsConnector::new(4, &handle) {
+            Ok(connector) => connector,
+            Err(tls_error) => {
+                return Err(TlsError {
+                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+                })
+            }
+        };
+        Ok(Client::configure().connector(connector).build(&handle))
+    }).map(DefaultTlsClient)
 }
 
 #[cfg(test)]

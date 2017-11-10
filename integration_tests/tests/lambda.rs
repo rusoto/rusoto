@@ -13,6 +13,6 @@ fn should_list_functions() {
     let client = LambdaClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListFunctionsRequest::default();
 
-    let result = client.list_functions(&request).unwrap();
+    let result = client.list_functions(&request).sync().unwrap();
     println!("{:#?}", result);
 }

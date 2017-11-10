@@ -13,6 +13,6 @@ fn should_describe_organizations() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = OrganizationsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    let result = client.describe_organization();
+    let result = client.describe_organization().sync();
     println!("{:#?}", result);
 }

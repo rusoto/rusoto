@@ -12,6 +12,6 @@ fn should_list_portfolios() {
     let client = ServiceCatalogClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListPortfoliosInput::default();
 
-    let result = client.list_portfolios(&request).unwrap();
+    let result = client.list_portfolios(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

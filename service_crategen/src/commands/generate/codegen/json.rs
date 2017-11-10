@@ -14,7 +14,7 @@ impl GenerateProtocol for JsonGenerator {
 
             writeln!(writer,"
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}>;
+                {method_signature} -> RusotoFuture<{output_type}, {error_type}>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(service, operation),
@@ -33,26 +33,33 @@ impl GenerateProtocol for JsonGenerator {
             writeln!(writer,
                      "
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}> {{
+                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\");
                     {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
-                    request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-                    let mut response = try!(self.dispatcher.dispatch(&request));
-
-                    match response.status {{
-                        StatusCode::Ok => {{
-                            {ok_response}
+                    match self.credentials_provider.credentials() {{
+                        Err(err) => {{
+                            return RusotoFuture::new(future::err(err.into()));
+                        }},
+                        Ok(credentials) => {{
+                            request.sign_with_plus(&credentials, true);
                         }}
-                        _ => {{
-                            let mut body: Vec<u8> = Vec::new();
-                            try!(response.body.read_to_end(&mut body));
-                            Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
-                        }}
-                    }}
+                    }};
+
+                    RusotoFuture::new({{
+                        self.dispatcher.dispatch(request).from_err().and_then(|response| {{
+                            match response.status {{
+                                StatusCode::Ok => {ok_response},
+                                _ => {{
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {{
+                                        Err({error_type}::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }}))
+                                }}
+                            }}
+                        }})
+                    }})
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -146,12 +153,12 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
         format!("
             {{
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {{
+                    serde_json::from_str::<{}>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }}))
             }}",
             output_type)
     } else {
-        "Ok(())".to_owned()
+        "future::Either::A(future::ok(()))".to_owned()
     }
 }

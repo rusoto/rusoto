@@ -2,7 +2,7 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{generate_field_name, mutate_type_name, mutate_type_name_for_streaming};
+use super::{generate_field_name, mutate_type_name, mutate_constructor_name_for_streaming};
 
 pub fn generate_struct_attributes(_deserialized: bool) -> String {
     let derived = vec!["Default", "Debug", "Clone"];
@@ -41,10 +41,11 @@ fn has_streaming_payload(shape: &Shape) -> bool {
 
 pub fn generate_response_parser(service: &Service,
                                 operation: &Operation,
-                                mutable_result: bool)
+                                mutable_result: bool,
+                                parse_non_payload: &str)
                                 -> String {
     if operation.output.is_none() {
-        return "let result = ();".to_string();
+        return "future::Either::A(future::ok(::std::mem::drop(response_body)))".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
@@ -54,15 +55,15 @@ pub fn generate_response_parser(service: &Service,
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
-        None => xml_body_parser(shape_name, result_wrapper, mutable_result),
+        None => xml_body_parser(shape_name, result_wrapper, mutable_result, parse_non_payload),
         Some(ref payload_member) => {
             let payload_shape = service.get_shape(payload_member).unwrap();
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, shape_name, payload_member, has_streaming_payload(output_shape))
+                    payload_body_parser(payload_type, shape_name, payload_member, has_streaming_payload(output_shape), parse_non_payload)
                 }
-                _ => xml_body_parser(shape_name, result_wrapper, mutable_result),
+                _ => xml_body_parser(shape_name, result_wrapper, mutable_result, parse_non_payload),
             }
         }
     }
@@ -71,36 +72,55 @@ pub fn generate_response_parser(service: &Service,
 fn payload_body_parser(payload_type: ShapeType,
                        output_shape: &str,
                        payload_member: &str,
-                       streaming: bool)
+                       streaming: bool,
+                       parse_non_payload: &str)
                        -> String {
-    let unpack = if !streaming {
-        "let mut body: Vec<u8> = Vec::new();
-        try!(response.body.read_to_end(&mut body));"
-    } else {
-        ""
-    };
-
-    let response_body = match payload_type {
-        ShapeType::Blob if !streaming => "body".to_string(),
-        ShapeType::Blob if streaming => format!("{}(response.body)", mutate_type_name_for_streaming(payload_member)),
-        _ => "String::from_utf8_lossy(&body).into()".to_string(),
-    };
-
-    format!("
-        {unpack}
-
-        let mut result = {output_shape}::default();
-        result.{payload_member} = Some({response_body});
-        ",
-            unpack = unpack,
-            output_shape = output_shape,
-            payload_member = payload_member.to_snake_case(),
-            response_body = response_body)
+    match payload_type {
+        ShapeType::Blob if !streaming => {
+            format!("
+                future::Either::A(response_body.map_err(|err| err.into()).concat2().map(move |body| {{
+                    let mut result = {output_shape}::default();
+                    result.{payload_member} = Some(body.to_vec());
+                    {parse_non_payload}
+                    result
+                }}))
+                ",
+                    output_shape = output_shape,
+                    payload_member = payload_member.to_snake_case(),
+                    parse_non_payload = parse_non_payload)
+        },
+        ShapeType::Blob if streaming => {
+            format!("
+                let mut result = {output_shape}::default();
+                result.{payload_member} = Some({streaming_constructor}(response_body));
+                {parse_non_payload}
+                future::Either::A(future::ok(result))
+                ",
+                    output_shape = output_shape,
+                    payload_member = payload_member.to_snake_case(),
+                    streaming_constructor = mutate_constructor_name_for_streaming(payload_member),
+                    parse_non_payload = parse_non_payload)
+        },
+        _ => {
+            format!("
+                future::Either::A(response_body.map_err(|err| err.into()).concat2().map(move |body| {{
+                    let mut result = {output_shape}::default();
+                    result.{payload_member} = Some(String::from_utf8_lossy(body.as_ref()).into());
+                    {parse_non_payload}
+                    result
+                }}))
+                ",
+                    output_shape = output_shape,
+                    payload_member = payload_member.to_snake_case(),
+                    parse_non_payload = parse_non_payload)
+        },
+    }
 }
 
 fn xml_body_parser(output_shape: &str,
                    result_wrapper: &Option<String>,
-                   mutable_result: bool)
+                   mutable_result: bool,
+                   parse_non_payload: &str)
                    -> String {
     let let_result = if mutable_result {
         "let mut result;"
@@ -124,25 +144,29 @@ fn xml_body_parser(output_shape: &str,
     };
 
     format!("
-        {let_result}
-        let mut body: Vec<u8> = Vec::new();
-        try!(response.body.read_to_end(&mut body));
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {{
+            {let_result}
 
-        if body.is_empty() {{
-            result = {output_shape}::default();
-        }} else {{
-            let reader = EventReader::new_with_config(
-                body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            {deserialize}
-        }}",
+            if body.is_empty() {{
+                result = {output_shape}::default();
+            }} else {{
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                {deserialize}
+            }}
+
+            {parse_non_payload}
+            Ok(result)
+        }}))",
             let_result = let_result,
             output_shape = output_shape,
-            deserialize = deserialize)
+            deserialize = deserialize,
+            parse_non_payload = parse_non_payload)
 }
 
 

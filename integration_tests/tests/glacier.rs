@@ -19,6 +19,6 @@ fn should_list_vaults() {
         ..Default::default()
     };
 
-    let result = client.list_vaults(&request).unwrap();
+    let result = client.list_vaults(&request).sync().unwrap();
     println!("{:#?}", result);
 }

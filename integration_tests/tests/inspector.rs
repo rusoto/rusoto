@@ -13,5 +13,5 @@ fn should_list_assessment_runs() {
     let client = InspectorClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListAssessmentRunsRequest::default();
 
-    client.list_assessment_runs(&request).unwrap();
+    client.list_assessment_runs(&request).sync().unwrap();
 }

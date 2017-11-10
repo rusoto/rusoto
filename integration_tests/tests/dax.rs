@@ -13,5 +13,5 @@ fn should_describe_clusters() {
     let client = DynamodbAcceleratorClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeClustersRequest::default();
 
-    client.describe_clusters(&request).unwrap();
+    client.describe_clusters(&request).sync().unwrap();
 }

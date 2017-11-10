@@ -13,5 +13,5 @@ fn should_list_applications() {
     let client = CodeDeployClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListApplicationsInput::default();
 
-    client.list_applications(&request).unwrap();
+    client.list_applications(&request).sync().unwrap();
 }

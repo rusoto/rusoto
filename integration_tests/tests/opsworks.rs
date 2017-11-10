@@ -13,7 +13,7 @@ fn should_describe_stacks() {
     let client = OpsWorksClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeStacksRequest::default();
 
-    client.describe_stacks(&request).unwrap();
+    client.describe_stacks(&request).sync().unwrap();
 }
 
 #[test]
@@ -21,5 +21,5 @@ fn should_describe_my_user_profile() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = OpsWorksClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    client.describe_my_user_profile().unwrap();
+    client.describe_my_user_profile().sync().unwrap();
 }

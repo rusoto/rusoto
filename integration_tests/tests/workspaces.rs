@@ -13,5 +13,5 @@ fn should_describe_workspaces() {
     let client = WorkspacesClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeWorkspacesRequest::default();
 
-    client.describe_workspaces(&request).unwrap();
+    client.describe_workspaces(&request).sync().unwrap();
 }

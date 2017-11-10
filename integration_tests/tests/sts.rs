@@ -21,7 +21,7 @@ fn main() {
             role_arn: "bogus".to_owned(),
             role_session_name: "rusoto_test_session".to_owned(),
             ..Default::default()
-        }) {
+        }).sync() {
         Err(AssumeRoleError::Unknown(msg)) =>
             assert!(msg.contains("validation error detected: Value 'bogus' at 'roleArn' failed to satisfy constraint")),
         err =>
@@ -33,7 +33,7 @@ fn main() {
             token_code: Some("123456".to_owned()),
             serial_number: Some("123456789".to_owned()),
             ..Default::default()
-        }) {
+        }).sync() {
         Err(GetSessionTokenError::Unknown(msg)) =>
             assert!(msg.contains("Please verify your MFA serial number is valid and associated with this user.")),
         err => 

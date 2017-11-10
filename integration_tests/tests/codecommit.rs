@@ -13,5 +13,5 @@ fn should_list_repositories() {
     let client = CodeCommitClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListRepositoriesInput::default();
 
-    client.list_repositories(&request).unwrap();
+    client.list_repositories(&request).sync().unwrap();
 }

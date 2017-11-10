@@ -15,6 +15,6 @@ fn should_list_jobs() {
         ImportExportClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListJobsInput::default();
 
-    let result = client.list_jobs(&request);
+    let result = client.list_jobs(&request).sync();
     println!("{:#?}", result);
 }

@@ -14,6 +14,6 @@ fn should_describe_domains() {
         CloudSearchClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeDomainsRequest::default();
 
-    let response = client.describe_domains(&request).unwrap();
+    let response = client.describe_domains(&request).sync().unwrap();
     println!("{:#?}", response);
 }

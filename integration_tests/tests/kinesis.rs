@@ -13,5 +13,5 @@ fn should_list_streams() {
     let client = KinesisClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListStreamsInput::default();
 
-    client.list_streams(&request).unwrap();
+    client.list_streams(&request).sync().unwrap();
 }

@@ -12,6 +12,6 @@ fn should_list_identity_pool_usage() {
     let client = CognitoSyncClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListIdentityPoolUsageRequest::default();
 
-    let result = client.list_identity_pool_usage(&request).unwrap();
+    let result = client.list_identity_pool_usage(&request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -14,7 +14,7 @@ fn should_list_documents() {
     let client = SsmClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListDocumentsRequest::default();
 
-    client.list_documents(&request).unwrap();
+    client.list_documents(&request).sync().unwrap();
 }
 
 #[test]
@@ -23,7 +23,7 @@ fn should_list_commands() {
     let client = SsmClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListCommandsRequest::default();
 
-    client.list_commands(&request).unwrap();
+    client.list_commands(&request).sync().unwrap();
 }
 
 #[test]
@@ -32,5 +32,5 @@ fn should_list_command_invocations() {
     let client = SsmClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListCommandInvocationsRequest::default();
 
-    client.list_command_invocations(&request).unwrap();
+    client.list_command_invocations(&request).sync().unwrap();
 }

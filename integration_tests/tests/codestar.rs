@@ -13,6 +13,6 @@ fn should_list_projects() {
     let client = CodeStarClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListProjectsRequest::default();
 
-    let result = client.list_projects(&request).unwrap();
+    let result = client.list_projects(&request).sync().unwrap();
     println!("Result is {:?}", result);
 }

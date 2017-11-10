@@ -13,5 +13,5 @@ fn should_describe_repositories() {
     let client = EcrClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeRepositoriesRequest::default();
 
-    client.describe_repositories(&request).unwrap();
+    client.describe_repositories(&request).sync().unwrap();
 }

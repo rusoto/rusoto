@@ -29,6 +29,10 @@ impl GenerateProtocol for RestXmlGenerator {
         for (operation_name, operation) in service.operations().iter() {
             let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
                 .request_uri);
+            let parse_non_payload =
+                rest_response_parser::generate_response_headers_parser(service,
+                                                                       operation)
+                    .unwrap_or_else(|| "".to_owned());
             writeln!(writer,
                      "{documentation}
                     #[allow(unused_variables, warnings)]
@@ -41,22 +45,30 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-                        let mut response = try!(self.dispatcher.dispatch(&request));
-
-                        match response.status {{
-                            StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
-                                {parse_response_body}
-                                {parse_non_payload}
-                                Ok(result)
+                        match self.credentials_provider.credentials() {{
+                            Err(err) => {{
+                                return RusotoFuture::new(future::err(err.into()));
                             }},
-                            _ => {{
-                                let mut body: Vec<u8> = Vec::new();
-                                try!(response.body.read_to_end(&mut body));
-                                Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
+                            Ok(credentials) => {{
+                                request.sign_with_plus(&credentials, true);
                             }}
-                        }}
+                        }};
+
+                        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {{
+                            match response.status {{
+                                StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {{
+                                    let response_status = response.status;
+                                    let response_headers = response.headers;
+                                    let response_body = response.body;
+                                    {parse_response_body}
+                                }},
+                                _ => {{
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {{
+                                        Err({error_type}::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }}))
+                                }}
+                            }}
+                        }}))
                     }}
                     ",
                      documentation = generate_documentation(operation),
@@ -76,12 +88,8 @@ impl GenerateProtocol for RestXmlGenerator {
                          rest_request_generator::generate_params_loading_string(service,
                                                                                 operation)
                              .unwrap_or_else(|| "".to_string()),
-                     parse_non_payload =
-                         rest_response_parser::generate_response_headers_parser(service,
-                                                                                operation)
-                             .unwrap_or_else(|| "".to_owned()),
                      parse_response_body =
-                         xml_payload_parser::generate_response_parser(service, operation, true))?;
+                         xml_payload_parser::generate_response_parser(service, operation, true, &parse_non_payload))?;
         }
         Ok(())
     }
@@ -262,7 +270,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: &{input_type}) -> RusotoFuture<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -270,7 +278,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
         )
     } else {
         format!(
-            "fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self) -> RusotoFuture<{output_type}, {error_type}>",
             operation_name = operation_name.to_snake_case(),
             error_type = error_type_name(operation_name),
             output_type = &operation.output_shape_or("()"),

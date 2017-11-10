@@ -14,6 +14,6 @@ fn should_describe_fleets() {
     let client = AppStreamClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeFleetsRequest::default();
 
-	let result = client.describe_fleets(&request).unwrap();
+	let result = client.describe_fleets(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

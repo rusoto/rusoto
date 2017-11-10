@@ -38,19 +38,28 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     request.set_params(params);
 
-                    request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-                    let mut response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {{
-                        StatusCode::Ok => {{
-                            {parse_payload}
-                            Ok(result)
+                    match self.credentials_provider.credentials() {{
+                        Err(err) => {{
+                            return RusotoFuture::new(future::err(err.into()));
+                        }},
+                        Ok(credentials) => {{
+                            request.sign_with_plus(&credentials, true);
                         }}
-                        _ => {{
-                            let mut body: Vec<u8> = Vec::new();
-                            try!(response.body.read_to_end(&mut body));
-                            Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
+                    }};
+
+                    RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {{
+                        match response.status {{
+                            StatusCode::Ok => {{
+                                let response_body = response.body;
+                                {parse_payload}
+                            }}
+                            _ => {{
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {{
+                                    Err({error_type}::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }}))
+                            }}
                         }}
-                    }}
+                    }}))
                 }}
                 ",
                      api_version = service.api_version(),
@@ -59,7 +68,7 @@ impl GenerateProtocol for QueryGenerator {
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
-                         xml_payload_parser::generate_response_parser(service, operation, false),
+                         xml_payload_parser::generate_response_parser(service, operation, false, ""),
                      method_signature = generate_method_signature(operation_name, operation),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
@@ -379,7 +388,7 @@ fn generate_documentation(operation: &Operation) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: &{input_type}) -> RusotoFuture<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -387,7 +396,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
         )
     } else {
         format!(
-            "fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self) -> RusotoFuture<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = error_type_name(operation_name),

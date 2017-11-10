@@ -16,5 +16,5 @@ fn should_list_domains() {
     request.maximum_page_size = Some(10);
     request.registration_status = "REGISTERED".to_string();
 
-    client.list_domains(&request).unwrap();
+    client.list_domains(&request).sync().unwrap();
 }

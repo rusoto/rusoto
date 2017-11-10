@@ -63,7 +63,7 @@ fn parse_headers_list(member_name: &str, member: &Member, required: bool) -> Str
     };
 
     format!("let mut values = Vec::new();
-            for (key, value) in response.headers.iter() {{
+            for (key, value) in response_headers.iter() {{
               if key == \"{location_name}\" {{
                 values.push(value);
               }}
@@ -81,7 +81,7 @@ fn parse_headers_map(member_name: &str, member: &Member, required: bool) -> Stri
     };
 
     format!("let mut values = ::std::collections::HashMap::new();
-    for (key, value) in response.headers.iter() {{
+    for (key, value) in response_headers.iter() {{
         if key.starts_with(\"{location_name}\") {{
             values.insert(key.replace(\"{location_name}\",\"\"), value.to_owned());
         }}
@@ -98,13 +98,13 @@ fn parse_single_header(service: &Service,
                        -> String {
     let member_shape = service.get_shape(&member.shape).unwrap();
     if shape.required(member_name) {
-        format!("let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
+        format!("let value = response_headers.get(\"{location_name}\").unwrap().to_owned();
                  result.{field_name} = {primitive_parser};",
                 location_name = member.location_name.as_ref().unwrap(),
                 field_name = member_name.to_snake_case(),
                 primitive_parser = generate_header_primitive_parser(member_shape))
     } else {
-        format!("if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
+        format!("if let Some({field_name}) = response_headers.get(\"{location_name}\") {{
                     let value = {field_name}.to_owned();
                     result.{field_name} = Some({primitive_parser})
                   }};",

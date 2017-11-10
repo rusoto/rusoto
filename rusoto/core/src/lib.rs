@@ -40,8 +40,9 @@
 //!     },
 //! }
 
+extern crate futures;
 extern crate hyper;
-extern crate hyper_native_tls;
+extern crate hyper_tls;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
@@ -52,6 +53,7 @@ extern crate base64;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
 extern crate time;
+extern crate tokio_core;
 extern crate url;
 extern crate xml;
 
@@ -59,6 +61,8 @@ pub mod param;
 pub mod region;
 pub mod request;
 pub mod signature;
+mod future;
+mod reactor;
 
 #[doc(hidden)]
 pub mod serialization;
@@ -77,3 +81,4 @@ pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, Credentia
 pub use region::{ParseRegionError, Region, default_region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, default_tls_client};
 pub use signature::SignedRequest;
+pub use future::RusotoFuture;

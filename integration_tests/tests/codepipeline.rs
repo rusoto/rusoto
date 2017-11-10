@@ -14,5 +14,5 @@ fn should_list_pipelines() {
         CodePipelineClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListPipelinesInput::default();
 
-    client.list_pipelines(&request).unwrap();
+    client.list_pipelines(&request).sync().unwrap();
 }

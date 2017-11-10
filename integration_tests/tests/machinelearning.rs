@@ -16,7 +16,7 @@ fn should_describe_batch_predictions() {
         MachineLearningClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeBatchPredictionsInput::default();
 
-    client.describe_batch_predictions(&request).unwrap();
+    client.describe_batch_predictions(&request).sync().unwrap();
 }
 #[test]
 fn should_describe_data_sources() {
@@ -25,7 +25,7 @@ fn should_describe_data_sources() {
         MachineLearningClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeDataSourcesInput::default();
 
-    client.describe_data_sources(&request).unwrap();
+    client.describe_data_sources(&request).sync().unwrap();
 }
 #[test]
 fn should_describe_evaluations() {
@@ -35,5 +35,5 @@ fn should_describe_evaluations() {
 
     let request = DescribeEvaluationsInput::default();
 
-    client.describe_evaluations(&request).unwrap();
+    client.describe_evaluations(&request).sync().unwrap();
 }

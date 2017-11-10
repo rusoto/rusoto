@@ -13,6 +13,6 @@ fn should_get_rest_apis() {
     let client = BatchClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeJobDefinitionsRequest::default();
 
-    client.describe_job_definitions(&request).unwrap();
+    client.describe_job_definitions(&request).sync().unwrap();
 
 }

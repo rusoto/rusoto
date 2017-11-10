@@ -11,6 +11,6 @@ fn should_describe_clusters() {
     let client = RedshiftClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeClustersMessage::default();
 
-    let result = client.describe_clusters(&request);
+    let result = client.describe_clusters(&request).sync();
     println!("{:#?}", result);
 }
