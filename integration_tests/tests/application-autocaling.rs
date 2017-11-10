@@ -17,5 +17,5 @@ fn should_describe_scaling_policies() {
         ..Default::default()
     };
 
-    client.describe_scaling_policies(&request).unwrap();
+    client.describe_scaling_policies(&request).sync().unwrap();
 }

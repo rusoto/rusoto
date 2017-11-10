@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2293,83 +2295,83 @@ impl Error for UpdateTrailError {
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
 pub trait CloudTrail {
     #[doc="<p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>"]
-    fn add_tags(&self, input: &AddTagsRequest) -> Result<AddTagsResponse, AddTagsError>;
+    fn add_tags(&self, input: &AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError>;
 
 
     #[doc="<p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>"]
     fn create_trail(&self,
                     input: &CreateTrailRequest)
-                    -> Result<CreateTrailResponse, CreateTrailError>;
+                    -> RusotoFuture<CreateTrailResponse, CreateTrailError>;
 
 
     #[doc="<p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
     fn delete_trail(&self,
                     input: &DeleteTrailRequest)
-                    -> Result<DeleteTrailResponse, DeleteTrailError>;
+                    -> RusotoFuture<DeleteTrailResponse, DeleteTrailError>;
 
 
     #[doc="<p>Retrieves settings for the trail associated with the current region for your account.</p>"]
     fn describe_trails(&self,
                        input: &DescribeTrailsRequest)
-                       -> Result<DescribeTrailsResponse, DescribeTrailsError>;
+                       -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError>;
 
 
     #[doc="<p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
     fn get_event_selectors(&self,
                            input: &GetEventSelectorsRequest)
-                           -> Result<GetEventSelectorsResponse, GetEventSelectorsError>;
+                           -> RusotoFuture<GetEventSelectorsResponse, GetEventSelectorsError>;
 
 
     #[doc="<p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>"]
     fn get_trail_status(&self,
                         input: &GetTrailStatusRequest)
-                        -> Result<GetTrailStatusResponse, GetTrailStatusError>;
+                        -> RusotoFuture<GetTrailStatusResponse, GetTrailStatusError>;
 
 
     #[doc="<p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note>"]
     fn list_public_keys(&self,
                         input: &ListPublicKeysRequest)
-                        -> Result<ListPublicKeysResponse, ListPublicKeysError>;
+                        -> RusotoFuture<ListPublicKeysResponse, ListPublicKeysError>;
 
 
     #[doc="<p>Lists the tags for the trail in the current region.</p>"]
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
 
     #[doc="<p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important>"]
     fn lookup_events(&self,
                      input: &LookupEventsRequest)
-                     -> Result<LookupEventsResponse, LookupEventsError>;
+                     -> RusotoFuture<LookupEventsResponse, LookupEventsError>;
 
 
     #[doc="<p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
     fn put_event_selectors(&self,
                            input: &PutEventSelectorsRequest)
-                           -> Result<PutEventSelectorsResponse, PutEventSelectorsError>;
+                           -> RusotoFuture<PutEventSelectorsResponse, PutEventSelectorsError>;
 
 
     #[doc="<p>Removes the specified tags from a trail.</p>"]
     fn remove_tags(&self,
                    input: &RemoveTagsRequest)
-                   -> Result<RemoveTagsResponse, RemoveTagsError>;
+                   -> RusotoFuture<RemoveTagsResponse, RemoveTagsError>;
 
 
     #[doc="<p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
     fn start_logging(&self,
                      input: &StartLoggingRequest)
-                     -> Result<StartLoggingResponse, StartLoggingError>;
+                     -> RusotoFuture<StartLoggingResponse, StartLoggingError>;
 
 
     #[doc="<p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>"]
     fn stop_logging(&self,
                     input: &StopLoggingRequest)
-                    -> Result<StopLoggingResponse, StopLoggingError>;
+                    -> RusotoFuture<StopLoggingResponse, StopLoggingError>;
 
 
     #[doc="<p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>"]
     fn update_trail(&self,
                     input: &UpdateTrailRequest)
-                    -> Result<UpdateTrailResponse, UpdateTrailError>;
+                    -> RusotoFuture<UpdateTrailResponse, UpdateTrailError>;
 }
 /// A client for the CloudTrail API.
 pub struct CloudTrailClient<P, D>
@@ -2399,7 +2401,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>"]
-    fn add_tags(&self, input: &AddTagsRequest) -> Result<AddTagsResponse, AddTagsError> {
+    fn add_tags(&self, input: &AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2408,30 +2410,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddTagsResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<AddTagsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AddTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>"]
     fn create_trail(&self,
                     input: &CreateTrailRequest)
-                    -> Result<CreateTrailResponse, CreateTrailError> {
+                    -> RusotoFuture<CreateTrailResponse, CreateTrailError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2440,31 +2463,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTrailResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateTrailResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateTrailError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
     fn delete_trail(&self,
                     input: &DeleteTrailRequest)
-                    -> Result<DeleteTrailResponse, DeleteTrailError> {
+                    -> RusotoFuture<DeleteTrailResponse, DeleteTrailError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2473,31 +2516,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTrailResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DeleteTrailResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteTrailError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Retrieves settings for the trail associated with the current region for your account.</p>"]
     fn describe_trails(&self,
                        input: &DescribeTrailsRequest)
-                       -> Result<DescribeTrailsResponse, DescribeTrailsError> {
+                       -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2506,31 +2569,39 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTrailsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTrailsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeTrailsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeTrailsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
     fn get_event_selectors(&self,
                            input: &GetEventSelectorsRequest)
-                           -> Result<GetEventSelectorsResponse, GetEventSelectorsError> {
+                           -> RusotoFuture<GetEventSelectorsResponse, GetEventSelectorsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2538,29 +2609,39 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetEventSelectorsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetEventSelectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetEventSelectorsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetEventSelectorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>"]
     fn get_trail_status(&self,
                         input: &GetTrailStatusRequest)
-                        -> Result<GetTrailStatusResponse, GetTrailStatusError> {
+                        -> RusotoFuture<GetTrailStatusResponse, GetTrailStatusError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2569,31 +2650,39 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTrailStatusResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTrailStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetTrailStatusResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetTrailStatusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note>"]
     fn list_public_keys(&self,
                         input: &ListPublicKeysRequest)
-                        -> Result<ListPublicKeysResponse, ListPublicKeysError> {
+                        -> RusotoFuture<ListPublicKeysResponse, ListPublicKeysError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2602,29 +2691,37 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPublicKeysResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPublicKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListPublicKeysResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListPublicKeysError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the tags for the trail in the current region.</p>"]
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2633,31 +2730,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important>"]
     fn lookup_events(&self,
                      input: &LookupEventsRequest)
-                     -> Result<LookupEventsResponse, LookupEventsError> {
+                     -> RusotoFuture<LookupEventsResponse, LookupEventsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2666,31 +2783,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<LookupEventsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(LookupEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<LookupEventsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(LookupEventsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
     fn put_event_selectors(&self,
                            input: &PutEventSelectorsRequest)
-                           -> Result<PutEventSelectorsResponse, PutEventSelectorsError> {
+                           -> RusotoFuture<PutEventSelectorsResponse, PutEventSelectorsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2698,29 +2835,39 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutEventSelectorsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutEventSelectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutEventSelectorsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutEventSelectorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Removes the specified tags from a trail.</p>"]
     fn remove_tags(&self,
                    input: &RemoveTagsRequest)
-                   -> Result<RemoveTagsResponse, RemoveTagsError> {
+                   -> RusotoFuture<RemoveTagsResponse, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2729,31 +2876,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTagsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<RemoveTagsResponse>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(RemoveTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
     fn start_logging(&self,
                      input: &StartLoggingRequest)
-                     -> Result<StartLoggingResponse, StartLoggingError> {
+                     -> RusotoFuture<StartLoggingResponse, StartLoggingError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2762,31 +2929,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartLoggingResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<StartLoggingResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StartLoggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>"]
     fn stop_logging(&self,
                     input: &StopLoggingRequest)
-                    -> Result<StopLoggingResponse, StopLoggingError> {
+                    -> RusotoFuture<StopLoggingResponse, StopLoggingError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2795,31 +2982,51 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopLoggingResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopLoggingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<StopLoggingResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StopLoggingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>"]
     fn update_trail(&self,
                     input: &UpdateTrailRequest)
-                    -> Result<UpdateTrailResponse, UpdateTrailError> {
+                    -> RusotoFuture<UpdateTrailResponse, UpdateTrailError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2828,24 +3035,44 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTrailResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTrailError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdateTrailResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateTrailError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

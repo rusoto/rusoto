@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -3478,97 +3480,99 @@ impl Error for SetQueueAttributesError {
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.
 pub trait Sqs {
     #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-    fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError>;
+    fn add_permission(&self, input: &AddPermissionRequest) -> RusotoFuture<(), AddPermissionError>;
 
 
     #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
     fn change_message_visibility(&self,
                                  input: &ChangeMessageVisibilityRequest)
-                                 -> Result<(), ChangeMessageVisibilityError>;
+                                 -> RusotoFuture<(), ChangeMessageVisibilityError>;
 
 
     #[doc="<p>Changes the visibility timeout of multiple messages. This is a batch version of <code> <a>ChangeMessageVisibility</a>.</code> The result of the action on each message is reported individually in the response. You can send up to 10 <code> <a>ChangeMessageVisibility</a> </code> requests with each <code>ChangeMessageVisibilityBatch</code> action.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn change_message_visibility_batch
         (&self,
          input: &ChangeMessageVisibilityBatchRequest)
-         -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError>;
+         -> RusotoFuture<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError>;
 
 
     #[doc="<p>Creates a new standard or FIFO queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn create_queue(&self,
                     input: &CreateQueueRequest)
-                    -> Result<CreateQueueResult, CreateQueueError>;
+                    -> RusotoFuture<CreateQueueResult, CreateQueueError>;
 
 
     #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you delete it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
-    fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError>;
+    fn delete_message(&self, input: &DeleteMessageRequest) -> RusotoFuture<(), DeleteMessageError>;
 
 
     #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a>.</code> The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn delete_message_batch(&self,
                             input: &DeleteMessageBatchRequest)
-                            -> Result<DeleteMessageBatchResult, DeleteMessageBatchError>;
+                            -> RusotoFuture<DeleteMessageBatchResult, DeleteMessageBatchError>;
 
 
     #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
-    fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError>;
+    fn delete_queue(&self, input: &DeleteQueueRequest) -> RusotoFuture<(), DeleteQueueError>;
 
 
     #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>To determine whether a queue is <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO</a>, you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p> </note> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn get_queue_attributes(&self,
                             input: &GetQueueAttributesRequest)
-                            -> Result<GetQueueAttributesResult, GetQueueAttributesError>;
+                            -> RusotoFuture<GetQueueAttributesResult, GetQueueAttributesError>;
 
 
     #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
     fn get_queue_url(&self,
                      input: &GetQueueUrlRequest)
-                     -> Result<GetQueueUrlResult, GetQueueUrlError>;
+                     -> RusotoFuture<GetQueueUrlResult, GetQueueUrlError>;
 
 
     #[doc="<p>Returns a list of your queues that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p> <p>For more information about using dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
     fn list_dead_letter_source_queues
         (&self,
          input: &ListDeadLetterSourceQueuesRequest)
-         -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError>;
+         -> RusotoFuture<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError>;
 
 
     #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
-    fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError>;
+    fn list_queues(&self,
+                   input: &ListQueuesRequest)
+                   -> RusotoFuture<ListQueuesResult, ListQueuesError>;
 
 
     #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
-    fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError>;
+    fn purge_queue(&self, input: &PurgeQueueRequest) -> RusotoFuture<(), PurgeQueueError>;
 
 
     #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information about MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
     fn receive_message(&self,
                        input: &ReceiveMessageRequest)
-                       -> Result<ReceiveMessageResult, ReceiveMessageError>;
+                       -> RusotoFuture<ReceiveMessageResult, ReceiveMessageError>;
 
 
     #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
     fn remove_permission(&self,
                          input: &RemovePermissionRequest)
-                         -> Result<(), RemovePermissionError>;
+                         -> RusotoFuture<(), RemovePermissionError>;
 
 
     #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>A message can include only XML, JSON, and unformatted text. The following Unicode characters are allowed:</p> <p> <code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> | <code>#x10000</code> to <code>#x10FFFF</code> </p> <p>Any characters not included in this list will be rejected. For more information, see the <a href=\"http://www.w3.org/TR/REC-xml/#charsets\">W3C specification for characters</a>.</p> </important>"]
     fn send_message(&self,
                     input: &SendMessageRequest)
-                    -> Result<SendMessageResult, SendMessageError>;
+                    -> RusotoFuture<SendMessageResult, SendMessageError>;
 
 
     #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a>.</code> For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>A message can include only XML, JSON, and unformatted text. The following Unicode characters are allowed:</p> <p> <code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> | <code>#x10000</code> to <code>#x10FFFF</code> </p> <p>Any characters not included in this list will be rejected. For more information, see the <a href=\"http://www.w3.org/TR/REC-xml/#charsets\">W3C specification for characters</a>.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn send_message_batch(&self,
                           input: &SendMessageBatchRequest)
-                          -> Result<SendMessageBatchResult, SendMessageBatchError>;
+                          -> RusotoFuture<SendMessageBatchResult, SendMessageBatchError>;
 
 
     #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
     fn set_queue_attributes(&self,
                             input: &SetQueueAttributesRequest)
-                            -> Result<(), SetQueueAttributesError>;
+                            -> RusotoFuture<(), SetQueueAttributesError>;
 }
 /// A client for the Amazon SQS API.
 pub struct SqsClient<P, D>
@@ -3598,7 +3602,7 @@ impl<P, D> Sqs for SqsClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-    fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError> {
+    fn add_permission(&self, input: &AddPermissionRequest) -> RusotoFuture<(), AddPermissionError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3607,26 +3611,40 @@ impl<P, D> Sqs for SqsClient<P, D>
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(AddPermissionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
     fn change_message_visibility(&self,
                                  input: &ChangeMessageVisibilityRequest)
-                                 -> Result<(), ChangeMessageVisibilityError> {
+                                 -> RusotoFuture<(), ChangeMessageVisibilityError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3635,20 +3653,34 @@ impl<P, D> Sqs for SqsClient<P, D>
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -3656,7 +3688,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn change_message_visibility_batch
         (&self,
          input: &ChangeMessageVisibilityBatchRequest)
-         -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError> {
+         -> RusotoFuture<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3665,45 +3697,57 @@ impl<P, D> Sqs for SqsClient<P, D>
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ChangeMessageVisibilityBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ChangeMessageVisibilityBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Creates a new standard or FIFO queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn create_queue(&self,
                     input: &CreateQueueRequest)
-                    -> Result<CreateQueueResult, CreateQueueError> {
+                    -> RusotoFuture<CreateQueueResult, CreateQueueError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3712,14 +3756,27 @@ impl<P, D> Sqs for SqsClient<P, D>
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = CreateQueueResult::default();
@@ -3736,19 +3793,26 @@ impl<P, D> Sqs for SqsClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you delete it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
-    fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError> {
+    fn delete_message(&self, input: &DeleteMessageRequest) -> RusotoFuture<(), DeleteMessageError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3757,26 +3821,40 @@ impl<P, D> Sqs for SqsClient<P, D>
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteMessageError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a>.</code> The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn delete_message_batch(&self,
                             input: &DeleteMessageBatchRequest)
-                            -> Result<DeleteMessageBatchResult, DeleteMessageBatchError> {
+                            -> RusotoFuture<DeleteMessageBatchResult, DeleteMessageBatchError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3785,43 +3863,55 @@ impl<P, D> Sqs for SqsClient<P, D>
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteMessageBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteMessageBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
-    fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError> {
+    fn delete_queue(&self, input: &DeleteQueueRequest) -> RusotoFuture<(), DeleteQueueError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3830,26 +3920,40 @@ impl<P, D> Sqs for SqsClient<P, D>
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>To determine whether a queue is <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO</a>, you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p> </note> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn get_queue_attributes(&self,
                             input: &GetQueueAttributesRequest)
-                            -> Result<GetQueueAttributesResult, GetQueueAttributesError> {
+                            -> RusotoFuture<GetQueueAttributesResult, GetQueueAttributesError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3858,45 +3962,57 @@ impl<P, D> Sqs for SqsClient<P, D>
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = GetQueueAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = GetQueueAttributesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
     fn get_queue_url(&self,
                      input: &GetQueueUrlRequest)
-                     -> Result<GetQueueUrlResult, GetQueueUrlError> {
+                     -> RusotoFuture<GetQueueUrlResult, GetQueueUrlError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3905,14 +4021,27 @@ impl<P, D> Sqs for SqsClient<P, D>
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = GetQueueUrlResult::default();
@@ -3929,14 +4058,21 @@ impl<P, D> Sqs for SqsClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(GetQueueUrlError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -3944,7 +4080,7 @@ impl<P, D> Sqs for SqsClient<P, D>
     fn list_dead_letter_source_queues
         (&self,
          input: &ListDeadLetterSourceQueuesRequest)
-         -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError> {
+         -> RusotoFuture<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -3953,45 +4089,57 @@ impl<P, D> Sqs for SqsClient<P, D>
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListDeadLetterSourceQueuesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ListDeadLetterSourceQueuesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
-    fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError> {
+    fn list_queues(&self,
+                   input: &ListQueuesRequest)
+                   -> RusotoFuture<ListQueuesResult, ListQueuesError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4000,14 +4148,27 @@ impl<P, D> Sqs for SqsClient<P, D>
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ListQueuesResult::default();
@@ -4024,19 +4185,26 @@ impl<P, D> Sqs for SqsClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListQueuesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ListQueuesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
-    fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError> {
+    fn purge_queue(&self, input: &PurgeQueueRequest) -> RusotoFuture<(), PurgeQueueError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4045,26 +4213,40 @@ impl<P, D> Sqs for SqsClient<P, D>
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PurgeQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PurgeQueueError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information about MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
     fn receive_message(&self,
                        input: &ReceiveMessageRequest)
-                       -> Result<ReceiveMessageResult, ReceiveMessageError> {
+                       -> RusotoFuture<ReceiveMessageResult, ReceiveMessageError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4073,45 +4255,57 @@ impl<P, D> Sqs for SqsClient<P, D>
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ReceiveMessageResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ReceiveMessageResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(ReceiveMessageError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
     fn remove_permission(&self,
                          input: &RemovePermissionRequest)
-                         -> Result<(), RemovePermissionError> {
+                         -> RusotoFuture<(), RemovePermissionError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4120,26 +4314,40 @@ impl<P, D> Sqs for SqsClient<P, D>
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(RemovePermissionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>A message can include only XML, JSON, and unformatted text. The following Unicode characters are allowed:</p> <p> <code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> | <code>#x10000</code> to <code>#x10FFFF</code> </p> <p>Any characters not included in this list will be rejected. For more information, see the <a href=\"http://www.w3.org/TR/REC-xml/#charsets\">W3C specification for characters</a>.</p> </important>"]
     fn send_message(&self,
                     input: &SendMessageRequest)
-                    -> Result<SendMessageResult, SendMessageError> {
+                    -> RusotoFuture<SendMessageResult, SendMessageError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4148,14 +4356,27 @@ impl<P, D> Sqs for SqsClient<P, D>
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = SendMessageResult::default();
@@ -4172,21 +4393,28 @@ impl<P, D> Sqs for SqsClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SendMessageError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SendMessageError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a>.</code> For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>A message can include only XML, JSON, and unformatted text. The following Unicode characters are allowed:</p> <p> <code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> | <code>#x10000</code> to <code>#x10FFFF</code> </p> <p>Any characters not included in this list will be rejected. For more information, see the <a href=\"http://www.w3.org/TR/REC-xml/#charsets\">W3C specification for characters</a>.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
     fn send_message_batch(&self,
                           input: &SendMessageBatchRequest)
-                          -> Result<SendMessageBatchResult, SendMessageBatchError> {
+                          -> RusotoFuture<SendMessageBatchResult, SendMessageBatchError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4195,45 +4423,57 @@ impl<P, D> Sqs for SqsClient<P, D>
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = SendMessageBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = SendMessageBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(SendMessageBatchError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
     fn set_queue_attributes(&self,
                             input: &SetQueueAttributesRequest)
-                            -> Result<(), SetQueueAttributesError> {
+                            -> RusotoFuture<(), SetQueueAttributesError> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
         let mut params = Params::new();
 
@@ -4242,19 +4482,33 @@ impl<P, D> Sqs for SqsClient<P, D>
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 
@@ -4275,7 +4529,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteQueueRequest::default();
-        let result = client.delete_queue(&request);
+        let result = client.delete_queue(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4286,7 +4540,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AddPermissionRequest::default();
-        let result = client.add_permission(&request);
+        let result = client.add_permission(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4298,7 +4552,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ChangeMessageVisibilityBatchRequest::default();
-        let result = client.change_message_visibility_batch(&request);
+        let result = client.change_message_visibility_batch(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4310,7 +4564,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateQueueRequest::default();
-        let result = client.create_queue(&request);
+        let result = client.create_queue(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4322,7 +4576,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteMessageBatchRequest::default();
-        let result = client.delete_message_batch(&request);
+        let result = client.delete_message_batch(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4334,7 +4588,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetQueueAttributesRequest::default();
-        let result = client.get_queue_attributes(&request);
+        let result = client.get_queue_attributes(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4346,7 +4600,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetQueueUrlRequest::default();
-        let result = client.get_queue_url(&request);
+        let result = client.get_queue_url(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4358,7 +4612,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListQueuesRequest::default();
-        let result = client.list_queues(&request);
+        let result = client.list_queues(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4370,7 +4624,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ReceiveMessageRequest::default();
-        let result = client.receive_message(&request);
+        let result = client.receive_message(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4382,7 +4636,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SendMessageBatchRequest::default();
-        let result = client.send_message_batch(&request);
+        let result = client.send_message_batch(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4394,7 +4648,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SendMessageRequest::default();
-        let result = client.send_message(&request);
+        let result = client.send_message(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

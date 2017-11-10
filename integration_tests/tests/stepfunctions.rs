@@ -13,6 +13,6 @@ fn should_list_state_machines() {
     let client = StepFunctionsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListStateMachinesInput::default();
 
-    let result = client.list_state_machines(&request).unwrap();
+    let result = client.list_state_machines(&request).sync().unwrap();
     println!("{:#?}", result);
 }

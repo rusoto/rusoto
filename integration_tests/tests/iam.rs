@@ -16,7 +16,7 @@ fn get_user() {
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
     let request = GetUserRequest { ..Default::default() };
-    iam.get_user(&request).unwrap();
+    iam.get_user(&request).sync().unwrap();
 }
 
 #[test]
@@ -27,5 +27,5 @@ fn list_users() {
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
     let request = ListUsersRequest { ..Default::default() };
-    iam.list_users(&request).unwrap();
+    iam.list_users(&request).sync().unwrap();
 }

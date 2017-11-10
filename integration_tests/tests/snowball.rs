@@ -13,6 +13,6 @@ fn should_describe_addresses() {
     let client = SnowballClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeAddressesRequest::default();
 
-    let result = client.describe_addresses(&request).unwrap();
+    let result = client.describe_addresses(&request).sync().unwrap();
     println!("{:#?}", result);
 }

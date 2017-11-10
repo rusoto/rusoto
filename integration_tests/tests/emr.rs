@@ -13,7 +13,7 @@ fn should_list_clusters() {
     let client = EmrClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListClustersInput::default();
 
-    client.list_clusters(&request).unwrap();
+    client.list_clusters(&request).sync().unwrap();
 }
 
 #[test]
@@ -22,7 +22,7 @@ fn should_handle_deprecation_gracefully() {
     let client = EmrClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeJobFlowsInput::default();
 
-    match client.describe_job_flows(&request) {
+    match client.describe_job_flows(&request).sync() {
         Err(DescribeJobFlowsError::Validation(msg)) => {
             assert!(msg.contains("DescribeJobFlows API is deprecated."))
         }

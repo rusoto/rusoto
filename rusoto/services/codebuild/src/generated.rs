@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1558,61 +1560,66 @@ pub trait CodeBuild {
     #[doc="<p>Gets information about builds.</p>"]
     fn batch_get_builds(&self,
                         input: &BatchGetBuildsInput)
-                        -> Result<BatchGetBuildsOutput, BatchGetBuildsError>;
+                        -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError>;
 
 
     #[doc="<p>Gets information about build projects.</p>"]
     fn batch_get_projects(&self,
                           input: &BatchGetProjectsInput)
-                          -> Result<BatchGetProjectsOutput, BatchGetProjectsError>;
+                          -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError>;
 
 
     #[doc="<p>Creates a build project.</p>"]
     fn create_project(&self,
                       input: &CreateProjectInput)
-                      -> Result<CreateProjectOutput, CreateProjectError>;
+                      -> RusotoFuture<CreateProjectOutput, CreateProjectError>;
 
 
     #[doc="<p>Deletes a build project.</p>"]
     fn delete_project(&self,
                       input: &DeleteProjectInput)
-                      -> Result<DeleteProjectOutput, DeleteProjectError>;
+                      -> RusotoFuture<DeleteProjectOutput, DeleteProjectError>;
 
 
     #[doc="<p>Gets a list of build IDs, with each build ID representing a single build.</p>"]
-    fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError>;
+    fn list_builds(&self,
+                   input: &ListBuildsInput)
+                   -> RusotoFuture<ListBuildsOutput, ListBuildsError>;
 
 
     #[doc="<p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>"]
-    fn list_builds_for_project(&self,
-                               input: &ListBuildsForProjectInput)
-                               -> Result<ListBuildsForProjectOutput, ListBuildsForProjectError>;
+    fn list_builds_for_project
+        (&self,
+         input: &ListBuildsForProjectInput)
+         -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError>;
 
 
     #[doc="<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
     fn list_curated_environment_images
         (&self)
-         -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError>;
+         -> RusotoFuture<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError>;
 
 
     #[doc="<p>Gets a list of build project names, with each build project name representing a single build project.</p>"]
     fn list_projects(&self,
                      input: &ListProjectsInput)
-                     -> Result<ListProjectsOutput, ListProjectsError>;
+                     -> RusotoFuture<ListProjectsOutput, ListProjectsError>;
 
 
     #[doc="<p>Starts running a build.</p>"]
-    fn start_build(&self, input: &StartBuildInput) -> Result<StartBuildOutput, StartBuildError>;
+    fn start_build(&self,
+                   input: &StartBuildInput)
+                   -> RusotoFuture<StartBuildOutput, StartBuildError>;
 
 
     #[doc="<p>Attempts to stop running a build.</p>"]
-    fn stop_build(&self, input: &StopBuildInput) -> Result<StopBuildOutput, StopBuildError>;
+    fn stop_build(&self, input: &StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError>;
 
 
     #[doc="<p>Changes the settings of a build project.</p>"]
     fn update_project(&self,
                       input: &UpdateProjectInput)
-                      -> Result<UpdateProjectOutput, UpdateProjectError>;
+                      -> RusotoFuture<UpdateProjectOutput, UpdateProjectError>;
 }
 /// A client for the AWS CodeBuild API.
 pub struct CodeBuildClient<P, D>
@@ -1644,7 +1651,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
     #[doc="<p>Gets information about builds.</p>"]
     fn batch_get_builds(&self,
                         input: &BatchGetBuildsInput)
-                        -> Result<BatchGetBuildsOutput, BatchGetBuildsError> {
+                        -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1652,31 +1659,51 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetBuildsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<BatchGetBuildsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(BatchGetBuildsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets information about build projects.</p>"]
     fn batch_get_projects(&self,
                           input: &BatchGetProjectsInput)
-                          -> Result<BatchGetProjectsOutput, BatchGetProjectsError> {
+                          -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1684,31 +1711,39 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetProjectsOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<BatchGetProjectsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(BatchGetProjectsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a build project.</p>"]
     fn create_project(&self,
                       input: &CreateProjectInput)
-                      -> Result<CreateProjectOutput, CreateProjectError> {
+                      -> RusotoFuture<CreateProjectOutput, CreateProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1716,31 +1751,51 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProjectOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateProjectOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateProjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a build project.</p>"]
     fn delete_project(&self,
                       input: &DeleteProjectInput)
-                      -> Result<DeleteProjectOutput, DeleteProjectError> {
+                      -> RusotoFuture<DeleteProjectOutput, DeleteProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1748,29 +1803,51 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProjectOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DeleteProjectOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteProjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets a list of build IDs, with each build ID representing a single build.</p>"]
-    fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError> {
+    fn list_builds(&self,
+                   input: &ListBuildsInput)
+                   -> RusotoFuture<ListBuildsOutput, ListBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1778,31 +1855,52 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListBuildsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>"]
-    fn list_builds_for_project(&self,
-                               input: &ListBuildsForProjectInput)
-                               -> Result<ListBuildsForProjectOutput, ListBuildsForProjectError> {
+    fn list_builds_for_project
+        (&self,
+         input: &ListBuildsForProjectInput)
+         -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1810,29 +1908,39 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListBuildsForProjectOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBuildsForProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListBuildsForProjectOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListBuildsForProjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
     fn list_curated_environment_images
         (&self)
-         -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
+         -> RusotoFuture<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1840,30 +1948,39 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
                            "CodeBuild_20161006.ListCuratedEnvironmentImages");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCuratedEnvironmentImagesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCuratedEnvironmentImagesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListCuratedEnvironmentImagesOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListCuratedEnvironmentImagesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets a list of build project names, with each build project name representing a single build project.</p>"]
     fn list_projects(&self,
                      input: &ListProjectsInput)
-                     -> Result<ListProjectsOutput, ListProjectsError> {
+                     -> RusotoFuture<ListProjectsOutput, ListProjectsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1871,29 +1988,51 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProjectsOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListProjectsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListProjectsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Starts running a build.</p>"]
-    fn start_build(&self, input: &StartBuildInput) -> Result<StartBuildOutput, StartBuildError> {
+    fn start_build(&self,
+                   input: &StartBuildInput)
+                   -> RusotoFuture<StartBuildOutput, StartBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1901,29 +2040,49 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartBuildOutput>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<StartBuildOutput>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StartBuildError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Attempts to stop running a build.</p>"]
-    fn stop_build(&self, input: &StopBuildInput) -> Result<StopBuildOutput, StopBuildError> {
+    fn stop_build(&self, input: &StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1931,30 +2090,51 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopBuildOutput>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<StopBuildOutput>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StopBuildError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Changes the settings of a build project.</p>"]
     fn update_project(&self,
                       input: &UpdateProjectInput)
-                      -> Result<UpdateProjectOutput, UpdateProjectError> {
+                      -> RusotoFuture<UpdateProjectOutput, UpdateProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1962,24 +2142,44 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProjectOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdateProjectOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateProjectError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

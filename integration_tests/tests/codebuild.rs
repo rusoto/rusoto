@@ -12,6 +12,6 @@ fn should_list_projects() {
     let client = CodeBuildClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListProjectsInput::default();
 
-    let result = client.list_projects(&request).unwrap();
+    let result = client.list_projects(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

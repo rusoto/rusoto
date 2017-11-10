@@ -111,7 +111,7 @@ fn generate_response_parse_test(
             let mock = MockRequestDispatcher::with_status({status_code}).with_body(&mock_response);
             let client = {client_type}::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             {request_constructor}
-            let result = client.{action}({request_params});
+            let result = client.{action}({request_params}).sync();
             assert!({is_ok}result.is_ok(), \"parse error: {{:?}}\", result);
         }}",
         error_or_valid = if is_ok { "valid" } else { "error" },

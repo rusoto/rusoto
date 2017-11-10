@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -263,14 +265,14 @@ pub trait MarketplaceCommerceAnalytics {
     #[doc="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
     fn generate_data_set(&self,
                          input: &GenerateDataSetRequest)
-                         -> Result<GenerateDataSetResult, GenerateDataSetError>;
+                         -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError>;
 
 
     #[doc="Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD'T'HH-mm-ss'Z'.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
     fn start_support_data_export
         (&self,
          input: &StartSupportDataExportRequest)
-         -> Result<StartSupportDataExportResult, StartSupportDataExportError>;
+         -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError>;
 }
 /// A client for the AWS Marketplace Commerce Analytics API.
 pub struct MarketplaceCommerceAnalyticsClient<P, D>
@@ -302,7 +304,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
     #[doc="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy."]
     fn generate_data_set(&self,
                          input: &GenerateDataSetRequest)
-                         -> Result<GenerateDataSetResult, GenerateDataSetError> {
+                         -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
@@ -312,24 +314,32 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GenerateDataSetError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -337,7 +347,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
     fn start_support_data_export
         (&self,
          input: &StartSupportDataExportRequest)
-         -> Result<StartSupportDataExportResult, StartSupportDataExportError> {
+         -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
@@ -347,22 +357,32 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

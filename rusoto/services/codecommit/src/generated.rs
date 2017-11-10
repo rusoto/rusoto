@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2751,100 +2753,101 @@ impl Error for UpdateRepositoryNameError {
 /// Trait representing the capabilities of the CodeCommit API. CodeCommit clients implement this trait.
 pub trait CodeCommit {
     #[doc="<p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
-    fn batch_get_repositories(&self,
-                              input: &BatchGetRepositoriesInput)
-                              -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
+    fn batch_get_repositories
+        (&self,
+         input: &BatchGetRepositoriesInput)
+         -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
 
 
     #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p> </note>"]
-    fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError>;
+    fn create_branch(&self, input: &CreateBranchInput) -> RusotoFuture<(), CreateBranchError>;
 
 
     #[doc="<p>Creates a new, empty repository.</p>"]
     fn create_repository(&self,
                          input: &CreateRepositoryInput)
-                         -> Result<CreateRepositoryOutput, CreateRepositoryError>;
+                         -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError>;
 
 
     #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important>"]
     fn delete_repository(&self,
                          input: &DeleteRepositoryInput)
-                         -> Result<DeleteRepositoryOutput, DeleteRepositoryError>;
+                         -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError>;
 
 
     #[doc="<p>Returns the base-64 encoded content of an individual blob within a repository.</p>"]
-    fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError>;
+    fn get_blob(&self, input: &GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError>;
 
 
     #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
-    fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError>;
+    fn get_branch(&self, input: &GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError>;
 
 
     #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
-    fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError>;
+    fn get_commit(&self, input: &GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError>;
 
 
     #[doc="<p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>"]
     fn get_differences(&self,
                        input: &GetDifferencesInput)
-                       -> Result<GetDifferencesOutput, GetDifferencesError>;
+                       -> RusotoFuture<GetDifferencesOutput, GetDifferencesError>;
 
 
     #[doc="<p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     fn get_repository(&self,
                       input: &GetRepositoryInput)
-                      -> Result<GetRepositoryOutput, GetRepositoryError>;
+                      -> RusotoFuture<GetRepositoryOutput, GetRepositoryError>;
 
 
     #[doc="<p>Gets information about triggers configured for a repository.</p>"]
     fn get_repository_triggers
         (&self,
          input: &GetRepositoryTriggersInput)
-         -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
+         -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
 
 
     #[doc="<p>Gets information about one or more branches in a repository.</p>"]
     fn list_branches(&self,
                      input: &ListBranchesInput)
-                     -> Result<ListBranchesOutput, ListBranchesError>;
+                     -> RusotoFuture<ListBranchesOutput, ListBranchesError>;
 
 
     #[doc="<p>Gets information about one or more repositories.</p>"]
     fn list_repositories(&self,
                          input: &ListRepositoriesInput)
-                         -> Result<ListRepositoriesOutput, ListRepositoriesError>;
+                         -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError>;
 
 
     #[doc="<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>"]
     fn put_repository_triggers
         (&self,
          input: &PutRepositoryTriggersInput)
-         -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
+         -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
 
 
     #[doc="<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>"]
     fn test_repository_triggers
         (&self,
          input: &TestRepositoryTriggersInput)
-         -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
+         -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
 
 
     #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note>"]
     fn update_default_branch(&self,
                              input: &UpdateDefaultBranchInput)
-                             -> Result<(), UpdateDefaultBranchError>;
+                             -> RusotoFuture<(), UpdateDefaultBranchError>;
 
 
     #[doc="<p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     fn update_repository_description(&self,
                                      input: &UpdateRepositoryDescriptionInput)
-                                     -> Result<(), UpdateRepositoryDescriptionError>;
+                                     -> RusotoFuture<(), UpdateRepositoryDescriptionError>;
 
 
     #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
     fn update_repository_name(&self,
                               input: &UpdateRepositoryNameInput)
-                              -> Result<(), UpdateRepositoryNameError>;
+                              -> RusotoFuture<(), UpdateRepositoryNameError>;
 }
 /// A client for the CodeCommit API.
 pub struct CodeCommitClient<P, D>
@@ -2874,9 +2877,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
-    fn batch_get_repositories(&self,
-                              input: &BatchGetRepositoriesInput)
-                              -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
+    fn batch_get_repositories
+        (&self,
+         input: &BatchGetRepositoriesInput)
+         -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2884,27 +2888,37 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p> </note>"]
-    fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError> {
+    fn create_branch(&self, input: &CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2912,25 +2926,39 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateBranchError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a new, empty repository.</p>"]
     fn create_repository(&self,
                          input: &CreateRepositoryInput)
-                         -> Result<CreateRepositoryOutput, CreateRepositoryError> {
+                         -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2938,31 +2966,39 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateRepositoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important>"]
     fn delete_repository(&self,
                          input: &DeleteRepositoryInput)
-                         -> Result<DeleteRepositoryOutput, DeleteRepositoryError> {
+                         -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2970,29 +3006,37 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns the base-64 encoded content of an individual blob within a repository.</p>"]
-    fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError> {
+    fn get_blob(&self, input: &GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3000,28 +3044,49 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBlobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetBlobError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
-    fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError> {
+    fn get_branch(&self, input: &GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3029,28 +3094,49 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetBranchError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
-    fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError> {
+    fn get_commit(&self, input: &GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3058,30 +3144,51 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCommitError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetCommitError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>"]
     fn get_differences(&self,
                        input: &GetDifferencesInput)
-                       -> Result<GetDifferencesOutput, GetDifferencesError> {
+                       -> RusotoFuture<GetDifferencesOutput, GetDifferencesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3089,31 +3196,51 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDifferencesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetDifferencesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     fn get_repository(&self,
                       input: &GetRepositoryInput)
-                      -> Result<GetRepositoryOutput, GetRepositoryError> {
+                      -> RusotoFuture<GetRepositoryOutput, GetRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3121,24 +3248,44 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GetRepositoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -3146,7 +3293,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn get_repository_triggers
         (&self,
          input: &GetRepositoryTriggersInput)
-         -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
+         -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3154,29 +3301,39 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Gets information about one or more branches in a repository.</p>"]
     fn list_branches(&self,
                      input: &ListBranchesInput)
-                     -> Result<ListBranchesOutput, ListBranchesError> {
+                     -> RusotoFuture<ListBranchesOutput, ListBranchesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3184,31 +3341,51 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListBranchesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListBranchesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Gets information about one or more repositories.</p>"]
     fn list_repositories(&self,
                          input: &ListRepositoriesInput)
-                         -> Result<ListRepositoriesOutput, ListRepositoriesError> {
+                         -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3216,24 +3393,32 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListRepositoriesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -3241,7 +3426,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn put_repository_triggers
         (&self,
          input: &PutRepositoryTriggersInput)
-         -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
+         -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3249,22 +3434,32 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -3272,7 +3467,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn test_repository_triggers
         (&self,
          input: &TestRepositoryTriggersInput)
-         -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
+         -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3280,29 +3475,39 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note>"]
     fn update_default_branch(&self,
                              input: &UpdateDefaultBranchInput)
-                             -> Result<(), UpdateDefaultBranchError> {
+                             -> RusotoFuture<(), UpdateDefaultBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3310,25 +3515,40 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     fn update_repository_description(&self,
                                      input: &UpdateRepositoryDescriptionInput)
-                                     -> Result<(), UpdateRepositoryDescriptionError> {
+                                     -> RusotoFuture<(), UpdateRepositoryDescriptionError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3337,26 +3557,34 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix \".git\" is prohibited. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide.</p>"]
     fn update_repository_name(&self,
                               input: &UpdateRepositoryNameInput)
-                              -> Result<(), UpdateRepositoryNameError> {
+                              -> RusotoFuture<(), UpdateRepositoryNameError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3364,18 +3592,33 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

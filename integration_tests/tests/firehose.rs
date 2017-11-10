@@ -14,5 +14,5 @@ fn should_list_delivery_streams() {
         KinesisFirehoseClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListDeliveryStreamsInput::default();
 
-    client.list_delivery_streams(&request).unwrap();
+    client.list_delivery_streams(&request).sync().unwrap();
 }

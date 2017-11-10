@@ -14,5 +14,5 @@ fn should_list_rules() {
         CloudWatchEventsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListRulesRequest::default();
 
-    client.list_rules(&request).unwrap();
+    client.list_rules(&request).sync().unwrap();
 }

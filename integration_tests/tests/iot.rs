@@ -15,5 +15,5 @@ fn should_list_things() {
     let client = IotClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListThingsRequest::default();
 
-    client.list_things(&request).unwrap();
+    client.list_things(&request).sync().unwrap();
 }

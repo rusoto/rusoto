@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -8912,404 +8914,419 @@ impl Error for UpdateVolumeError {
 /// Trait representing the capabilities of the AWS OpsWorks API. AWS OpsWorks clients implement this trait.
 pub trait OpsWorks {
     #[doc="<p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn assign_instance(&self, input: &AssignInstanceRequest) -> Result<(), AssignInstanceError>;
+    fn assign_instance(&self,
+                       input: &AssignInstanceRequest)
+                       -> RusotoFuture<(), AssignInstanceError>;
 
 
     #[doc="<p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn assign_volume(&self, input: &AssignVolumeRequest) -> Result<(), AssignVolumeError>;
+    fn assign_volume(&self, input: &AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError>;
 
 
     #[doc="<p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn associate_elastic_ip(&self,
                             input: &AssociateElasticIpRequest)
-                            -> Result<(), AssociateElasticIpError>;
+                            -> RusotoFuture<(), AssociateElasticIpError>;
 
 
     #[doc="<p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html\">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html\"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn attach_elastic_load_balancer(&self,
                                     input: &AttachElasticLoadBalancerRequest)
-                                    -> Result<(), AttachElasticLoadBalancerError>;
+                                    -> RusotoFuture<(), AttachElasticLoadBalancerError>;
 
 
     #[doc="<p>Creates a clone of a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html\">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn clone_stack(&self, input: &CloneStackRequest) -> Result<CloneStackResult, CloneStackError>;
+    fn clone_stack(&self,
+                   input: &CloneStackRequest)
+                   -> RusotoFuture<CloneStackResult, CloneStackError>;
 
 
     #[doc="<p>Creates an app for a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html\">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn create_app(&self, input: &CreateAppRequest) -> Result<CreateAppResult, CreateAppError>;
+    fn create_app(&self,
+                  input: &CreateAppRequest)
+                  -> RusotoFuture<CreateAppResult, CreateAppError>;
 
 
     #[doc="<p>Runs deployment or stack commands. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html\">Deploying Apps</a> and <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html\">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_deployment(&self,
                          input: &CreateDeploymentRequest)
-                         -> Result<CreateDeploymentResult, CreateDeploymentError>;
+                         -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError>;
 
 
     #[doc="<p>Creates an instance in a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html\">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_instance(&self,
                        input: &CreateInstanceRequest)
-                       -> Result<CreateInstanceResult, CreateInstanceError>;
+                       -> RusotoFuture<CreateInstanceResult, CreateInstanceError>;
 
 
     #[doc="<p>Creates a layer. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html\">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_layer(&self,
                     input: &CreateLayerRequest)
-                    -> Result<CreateLayerResult, CreateLayerError>;
+                    -> RusotoFuture<CreateLayerResult, CreateLayerError>;
 
 
     #[doc="<p>Creates a new stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html\">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_stack(&self,
                     input: &CreateStackRequest)
-                    -> Result<CreateStackResult, CreateStackError>;
+                    -> RusotoFuture<CreateStackResult, CreateStackError>;
 
 
     #[doc="<p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_user_profile(&self,
                            input: &CreateUserProfileRequest)
-                           -> Result<CreateUserProfileResult, CreateUserProfileError>;
+                           -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError>;
 
 
     #[doc="<p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_app(&self, input: &DeleteAppRequest) -> Result<(), DeleteAppError>;
+    fn delete_app(&self, input: &DeleteAppRequest) -> RusotoFuture<(), DeleteAppError>;
 
 
     #[doc="<p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html\">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_instance(&self, input: &DeleteInstanceRequest) -> Result<(), DeleteInstanceError>;
+    fn delete_instance(&self,
+                       input: &DeleteInstanceRequest)
+                       -> RusotoFuture<(), DeleteInstanceError>;
 
 
     #[doc="<p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html\">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_layer(&self, input: &DeleteLayerRequest) -> Result<(), DeleteLayerError>;
+    fn delete_layer(&self, input: &DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError>;
 
 
     #[doc="<p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html\">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_stack(&self, input: &DeleteStackRequest) -> Result<(), DeleteStackError>;
+    fn delete_stack(&self, input: &DeleteStackRequest) -> RusotoFuture<(), DeleteStackError>;
 
 
     #[doc="<p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_user_profile(&self,
                            input: &DeleteUserProfileRequest)
-                           -> Result<(), DeleteUserProfileError>;
+                           -> RusotoFuture<(), DeleteUserProfileError>;
 
 
     #[doc="<p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete\"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>"]
     fn deregister_ecs_cluster(&self,
                               input: &DeregisterEcsClusterRequest)
-                              -> Result<(), DeregisterEcsClusterError>;
+                              -> RusotoFuture<(), DeregisterEcsClusterError>;
 
 
     #[doc="<p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_elastic_ip(&self,
                              input: &DeregisterElasticIpRequest)
-                             -> Result<(), DeregisterElasticIpError>;
+                             -> RusotoFuture<(), DeregisterElasticIpError>;
 
 
     #[doc="<p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action can not be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_instance(&self,
                            input: &DeregisterInstanceRequest)
-                           -> Result<(), DeregisterInstanceError>;
+                           -> RusotoFuture<(), DeregisterInstanceError>;
 
 
     #[doc="<p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_rds_db_instance(&self,
                                   input: &DeregisterRdsDbInstanceRequest)
-                                  -> Result<(), DeregisterRdsDbInstanceError>;
+                                  -> RusotoFuture<(), DeregisterRdsDbInstanceError>;
 
 
     #[doc="<p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_volume(&self,
                          input: &DeregisterVolumeRequest)
-                         -> Result<(), DeregisterVolumeError>;
+                         -> RusotoFuture<(), DeregisterVolumeError>;
 
 
     #[doc="<p>Describes the available AWS OpsWorks Stacks agent versions. You must specify a stack ID or a configuration manager. <code>DescribeAgentVersions</code> returns a list of available agent versions for the specified stack or configuration manager.</p>"]
     fn describe_agent_versions
         (&self,
          input: &DescribeAgentVersionsRequest)
-         -> Result<DescribeAgentVersionsResult, DescribeAgentVersionsError>;
+         -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError>;
 
 
     #[doc="<p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_apps(&self,
                      input: &DescribeAppsRequest)
-                     -> Result<DescribeAppsResult, DescribeAppsError>;
+                     -> RusotoFuture<DescribeAppsResult, DescribeAppsError>;
 
 
     #[doc="<p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_commands(&self,
                          input: &DescribeCommandsRequest)
-                         -> Result<DescribeCommandsResult, DescribeCommandsError>;
+                         -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError>;
 
 
     #[doc="<p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_deployments(&self,
-                            input: &DescribeDeploymentsRequest)
-                            -> Result<DescribeDeploymentsResult, DescribeDeploymentsError>;
+    fn describe_deployments
+        (&self,
+         input: &DescribeDeploymentsRequest)
+         -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError>;
 
 
     #[doc="<p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>"]
-    fn describe_ecs_clusters(&self,
-                             input: &DescribeEcsClustersRequest)
-                             -> Result<DescribeEcsClustersResult, DescribeEcsClustersError>;
+    fn describe_ecs_clusters
+        (&self,
+         input: &DescribeEcsClustersRequest)
+         -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError>;
 
 
     #[doc="<p>Describes <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_elastic_ips(&self,
                             input: &DescribeElasticIpsRequest)
-                            -> Result<DescribeElasticIpsResult, DescribeElasticIpsError>;
+                            -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError>;
 
 
     #[doc="<p>Describes a stack's Elastic Load Balancing instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_elastic_load_balancers
         (&self,
          input: &DescribeElasticLoadBalancersRequest)
-         -> Result<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError>;
+         -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError>;
 
 
     #[doc="<p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_instances(&self,
                           input: &DescribeInstancesRequest)
-                          -> Result<DescribeInstancesResult, DescribeInstancesError>;
+                          -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError>;
 
 
     #[doc="<p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_layers(&self,
                        input: &DescribeLayersRequest)
-                       -> Result<DescribeLayersResult, DescribeLayersError>;
+                       -> RusotoFuture<DescribeLayersResult, DescribeLayersError>;
 
 
     #[doc="<p>Describes load-based auto scaling configurations for specified layers.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_load_based_auto_scaling
         (&self,
          input: &DescribeLoadBasedAutoScalingRequest)
-         -> Result<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError>;
+         -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError>;
 
 
     #[doc="<p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_my_user_profile
         (&self)
-         -> Result<DescribeMyUserProfileResult, DescribeMyUserProfileError>;
+         -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError>;
 
 
     #[doc="<p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_permissions(&self,
-                            input: &DescribePermissionsRequest)
-                            -> Result<DescribePermissionsResult, DescribePermissionsError>;
+    fn describe_permissions
+        (&self,
+         input: &DescribePermissionsRequest)
+         -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError>;
 
 
     #[doc="<p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_raid_arrays(&self,
                             input: &DescribeRaidArraysRequest)
-                            -> Result<DescribeRaidArraysResult, DescribeRaidArraysError>;
+                            -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError>;
 
 
     #[doc="<p>Describes Amazon RDS instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>"]
     fn describe_rds_db_instances
         (&self,
          input: &DescribeRdsDbInstancesRequest)
-         -> Result<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError>;
+         -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError>;
 
 
     #[doc="<p>Describes AWS OpsWorks Stacks service errors.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>"]
     fn describe_service_errors
         (&self,
          input: &DescribeServiceErrorsRequest)
-         -> Result<DescribeServiceErrorsResult, DescribeServiceErrorsError>;
+         -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError>;
 
 
     #[doc="<p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_stack_provisioning_parameters
-        (&self,
-         input: &DescribeStackProvisioningParametersRequest)
-         -> Result<DescribeStackProvisioningParametersResult,
-                   DescribeStackProvisioningParametersError>;
+    fn describe_stack_provisioning_parameters(&self, input: &DescribeStackProvisioningParametersRequest)  -> RusotoFuture<DescribeStackProvisioningParametersResult, DescribeStackProvisioningParametersError>;
 
 
     #[doc="<p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_stack_summary(&self,
-                              input: &DescribeStackSummaryRequest)
-                              -> Result<DescribeStackSummaryResult, DescribeStackSummaryError>;
+    fn describe_stack_summary
+        (&self,
+         input: &DescribeStackSummaryRequest)
+         -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError>;
 
 
     #[doc="<p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_stacks(&self,
                        input: &DescribeStacksRequest)
-                       -> Result<DescribeStacksResult, DescribeStacksError>;
+                       -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
 
 
     #[doc="<p>Describes time-based auto scaling configurations for specified instances.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_time_based_auto_scaling
         (&self,
          input: &DescribeTimeBasedAutoScalingRequest)
-         -> Result<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError>;
+         -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError>;
 
 
     #[doc="<p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_user_profiles(&self,
-                              input: &DescribeUserProfilesRequest)
-                              -> Result<DescribeUserProfilesResult, DescribeUserProfilesError>;
+    fn describe_user_profiles
+        (&self,
+         input: &DescribeUserProfilesRequest)
+         -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError>;
 
 
     #[doc="<p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_volumes(&self,
                         input: &DescribeVolumesRequest)
-                        -> Result<DescribeVolumesResult, DescribeVolumesError>;
+                        -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError>;
 
 
     #[doc="<p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn detach_elastic_load_balancer(&self,
                                     input: &DetachElasticLoadBalancerRequest)
-                                    -> Result<(), DetachElasticLoadBalancerError>;
+                                    -> RusotoFuture<(), DetachElasticLoadBalancerError>;
 
 
     #[doc="<p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn disassociate_elastic_ip(&self,
                                input: &DisassociateElasticIpRequest)
-                               -> Result<(), DisassociateElasticIpError>;
+                               -> RusotoFuture<(), DisassociateElasticIpError>;
 
 
     #[doc="<p>Gets a generated host name for the specified layer, based on the current host name theme.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn get_hostname_suggestion
         (&self,
          input: &GetHostnameSuggestionRequest)
-         -> Result<GetHostnameSuggestionResult, GetHostnameSuggestionError>;
+         -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError>;
 
 
     #[doc="<note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p>"]
     fn grant_access(&self,
                     input: &GrantAccessRequest)
-                    -> Result<GrantAccessResult, GrantAccessError>;
+                    -> RusotoFuture<GrantAccessResult, GrantAccessError>;
 
 
     #[doc="<p>Returns a list of tags that are applied to the specified stack or layer.</p>"]
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResult, ListTagsError>;
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError>;
 
 
     #[doc="<p>Reboots a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn reboot_instance(&self, input: &RebootInstanceRequest) -> Result<(), RebootInstanceError>;
+    fn reboot_instance(&self,
+                       input: &RebootInstanceRequest)
+                       -> RusotoFuture<(), RebootInstanceError>;
 
 
     #[doc="<p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html\"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\"> Managing User Permissions</a>.</p>"]
     fn register_ecs_cluster(&self,
                             input: &RegisterEcsClusterRequest)
-                            -> Result<RegisterEcsClusterResult, RegisterEcsClusterError>;
+                            -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError>;
 
 
     #[doc="<p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_elastic_ip(&self,
                            input: &RegisterElasticIpRequest)
-                           -> Result<RegisterElasticIpResult, RegisterElasticIpError>;
+                           -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError>;
 
 
     #[doc="<p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html\"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html\"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_instance(&self,
                          input: &RegisterInstanceRequest)
-                         -> Result<RegisterInstanceResult, RegisterInstanceError>;
+                         -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError>;
 
 
     #[doc="<p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_rds_db_instance(&self,
                                 input: &RegisterRdsDbInstanceRequest)
-                                -> Result<(), RegisterRdsDbInstanceError>;
+                                -> RusotoFuture<(), RegisterRdsDbInstanceError>;
 
 
     #[doc="<p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_volume(&self,
                        input: &RegisterVolumeRequest)
-                       -> Result<RegisterVolumeResult, RegisterVolumeError>;
+                       -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError>;
 
 
     #[doc="<p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html\">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn set_load_based_auto_scaling(&self,
                                    input: &SetLoadBasedAutoScalingRequest)
-                                   -> Result<(), SetLoadBasedAutoScalingError>;
+                                   -> RusotoFuture<(), SetLoadBasedAutoScalingError>;
 
 
     #[doc="<p>Specifies a user's permissions. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html\">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn set_permission(&self, input: &SetPermissionRequest) -> Result<(), SetPermissionError>;
+    fn set_permission(&self, input: &SetPermissionRequest) -> RusotoFuture<(), SetPermissionError>;
 
 
     #[doc="<p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html\">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn set_time_based_auto_scaling(&self,
                                    input: &SetTimeBasedAutoScalingRequest)
-                                   -> Result<(), SetTimeBasedAutoScalingError>;
+                                   -> RusotoFuture<(), SetTimeBasedAutoScalingError>;
 
 
     #[doc="<p>Starts a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn start_instance(&self, input: &StartInstanceRequest) -> Result<(), StartInstanceError>;
+    fn start_instance(&self, input: &StartInstanceRequest) -> RusotoFuture<(), StartInstanceError>;
 
 
     #[doc="<p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn start_stack(&self, input: &StartStackRequest) -> Result<(), StartStackError>;
+    fn start_stack(&self, input: &StartStackRequest) -> RusotoFuture<(), StartStackError>;
 
 
     #[doc="<p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn stop_instance(&self, input: &StopInstanceRequest) -> Result<(), StopInstanceError>;
+    fn stop_instance(&self, input: &StopInstanceRequest) -> RusotoFuture<(), StopInstanceError>;
 
 
     #[doc="<p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn stop_stack(&self, input: &StopStackRequest) -> Result<(), StopStackError>;
+    fn stop_stack(&self, input: &StopStackRequest) -> RusotoFuture<(), StopStackError>;
 
 
     #[doc="<p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html\">Tags</a> in the AWS OpsWorks User Guide.</p>"]
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
 
     #[doc="<p>Unassigns a registered instance from all of it's layers. The instance remains in the stack as an unassigned instance and can be assigned to another layer, as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn unassign_instance(&self,
                          input: &UnassignInstanceRequest)
-                         -> Result<(), UnassignInstanceError>;
+                         -> RusotoFuture<(), UnassignInstanceError>;
 
 
     #[doc="<p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn unassign_volume(&self, input: &UnassignVolumeRequest) -> Result<(), UnassignVolumeError>;
+    fn unassign_volume(&self,
+                       input: &UnassignVolumeRequest)
+                       -> RusotoFuture<(), UnassignVolumeError>;
 
 
     #[doc="<p>Removes tags from a specified stack or layer.</p>"]
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
 
     #[doc="<p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_app(&self, input: &UpdateAppRequest) -> Result<(), UpdateAppError>;
+    fn update_app(&self, input: &UpdateAppRequest) -> RusotoFuture<(), UpdateAppError>;
 
 
     #[doc="<p>Updates a registered Elastic IP address's name. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_elastic_ip(&self,
                          input: &UpdateElasticIpRequest)
-                         -> Result<(), UpdateElasticIpError>;
+                         -> RusotoFuture<(), UpdateElasticIpError>;
 
 
     #[doc="<p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_instance(&self, input: &UpdateInstanceRequest) -> Result<(), UpdateInstanceError>;
+    fn update_instance(&self,
+                       input: &UpdateInstanceRequest)
+                       -> RusotoFuture<(), UpdateInstanceError>;
 
 
     #[doc="<p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_layer(&self, input: &UpdateLayerRequest) -> Result<(), UpdateLayerError>;
+    fn update_layer(&self, input: &UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError>;
 
 
     #[doc="<p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_my_user_profile(&self,
                               input: &UpdateMyUserProfileRequest)
-                              -> Result<(), UpdateMyUserProfileError>;
+                              -> RusotoFuture<(), UpdateMyUserProfileError>;
 
 
     #[doc="<p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_rds_db_instance(&self,
                               input: &UpdateRdsDbInstanceRequest)
-                              -> Result<(), UpdateRdsDbInstanceError>;
+                              -> RusotoFuture<(), UpdateRdsDbInstanceError>;
 
 
     #[doc="<p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_stack(&self, input: &UpdateStackRequest) -> Result<(), UpdateStackError>;
+    fn update_stack(&self, input: &UpdateStackRequest) -> RusotoFuture<(), UpdateStackError>;
 
 
     #[doc="<p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_user_profile(&self,
                            input: &UpdateUserProfileRequest)
-                           -> Result<(), UpdateUserProfileError>;
+                           -> RusotoFuture<(), UpdateUserProfileError>;
 
 
     #[doc="<p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_volume(&self, input: &UpdateVolumeRequest) -> Result<(), UpdateVolumeError>;
+    fn update_volume(&self, input: &UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError>;
 }
 /// A client for the AWS OpsWorks API.
 pub struct OpsWorksClient<P, D>
@@ -9339,7 +9356,9 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn assign_instance(&self, input: &AssignInstanceRequest) -> Result<(), AssignInstanceError> {
+    fn assign_instance(&self,
+                       input: &AssignInstanceRequest)
+                       -> RusotoFuture<(), AssignInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9347,23 +9366,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssignInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AssignInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn assign_volume(&self, input: &AssignVolumeRequest) -> Result<(), AssignVolumeError> {
+    fn assign_volume(&self, input: &AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9371,25 +9404,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssignVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AssignVolumeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn associate_elastic_ip(&self,
                             input: &AssociateElasticIpRequest)
-                            -> Result<(), AssociateElasticIpError> {
+                            -> RusotoFuture<(), AssociateElasticIpError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9397,25 +9444,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateElasticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AssociateElasticIpError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html\">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html\"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn attach_elastic_load_balancer(&self,
                                     input: &AttachElasticLoadBalancerRequest)
-                                    -> Result<(), AttachElasticLoadBalancerError> {
+                                    -> RusotoFuture<(), AttachElasticLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9424,24 +9486,34 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AttachElasticLoadBalancerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a clone of a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html\">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn clone_stack(&self, input: &CloneStackRequest) -> Result<CloneStackResult, CloneStackError> {
+    fn clone_stack(&self,
+                   input: &CloneStackRequest)
+                   -> RusotoFuture<CloneStackResult, CloneStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9449,29 +9521,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CloneStackResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CloneStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CloneStackResult>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CloneStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates an app for a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html\">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn create_app(&self, input: &CreateAppRequest) -> Result<CreateAppResult, CreateAppError> {
+    fn create_app(&self,
+                  input: &CreateAppRequest)
+                  -> RusotoFuture<CreateAppResult, CreateAppError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9479,30 +9573,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAppResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAppError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateAppResult>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateAppError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Runs deployment or stack commands. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html\">Deploying Apps</a> and <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html\">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_deployment(&self,
                          input: &CreateDeploymentRequest)
-                         -> Result<CreateDeploymentResult, CreateDeploymentError> {
+                         -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9510,31 +9625,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDeploymentResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateDeploymentResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateDeploymentError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates an instance in a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html\">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_instance(&self,
                        input: &CreateInstanceRequest)
-                       -> Result<CreateInstanceResult, CreateInstanceError> {
+                       -> RusotoFuture<CreateInstanceResult, CreateInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9542,31 +9665,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateInstanceResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateInstanceResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a layer. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html\">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_layer(&self,
                     input: &CreateLayerRequest)
-                    -> Result<CreateLayerResult, CreateLayerError> {
+                    -> RusotoFuture<CreateLayerResult, CreateLayerError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9574,31 +9717,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateLayerResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLayerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateLayerResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateLayerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a new stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html\">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_stack(&self,
                     input: &CreateStackRequest)
-                    -> Result<CreateStackResult, CreateStackError> {
+                    -> RusotoFuture<CreateStackResult, CreateStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9606,31 +9769,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_user_profile(&self,
                            input: &CreateUserProfileRequest)
-                           -> Result<CreateUserProfileResult, CreateUserProfileError> {
+                           -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9638,29 +9821,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateUserProfileError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_app(&self, input: &DeleteAppRequest) -> Result<(), DeleteAppError> {
+    fn delete_app(&self, input: &DeleteAppRequest) -> RusotoFuture<(), DeleteAppError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9668,23 +9859,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAppError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteAppError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html\">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_instance(&self, input: &DeleteInstanceRequest) -> Result<(), DeleteInstanceError> {
+    fn delete_instance(&self,
+                       input: &DeleteInstanceRequest)
+                       -> RusotoFuture<(), DeleteInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9692,23 +9899,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html\">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_layer(&self, input: &DeleteLayerRequest) -> Result<(), DeleteLayerError> {
+    fn delete_layer(&self, input: &DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9716,23 +9937,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLayerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteLayerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html\">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn delete_stack(&self, input: &DeleteStackRequest) -> Result<(), DeleteStackError> {
+    fn delete_stack(&self, input: &DeleteStackRequest) -> RusotoFuture<(), DeleteStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9740,25 +9975,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_user_profile(&self,
                            input: &DeleteUserProfileRequest)
-                           -> Result<(), DeleteUserProfileError> {
+                           -> RusotoFuture<(), DeleteUserProfileError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9766,25 +10015,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete\"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>"]
     fn deregister_ecs_cluster(&self,
                               input: &DeregisterEcsClusterRequest)
-                              -> Result<(), DeregisterEcsClusterError> {
+                              -> RusotoFuture<(), DeregisterEcsClusterError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9792,25 +10056,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterEcsClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeregisterEcsClusterError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_elastic_ip(&self,
                              input: &DeregisterElasticIpRequest)
-                             -> Result<(), DeregisterElasticIpError> {
+                             -> RusotoFuture<(), DeregisterElasticIpError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9818,25 +10097,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterElasticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeregisterElasticIpError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action can not be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_instance(&self,
                            input: &DeregisterInstanceRequest)
-                           -> Result<(), DeregisterInstanceError> {
+                           -> RusotoFuture<(), DeregisterInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9844,25 +10138,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeregisterInstanceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_rds_db_instance(&self,
                                   input: &DeregisterRdsDbInstanceRequest)
-                                  -> Result<(), DeregisterRdsDbInstanceError> {
+                                  -> RusotoFuture<(), DeregisterRdsDbInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9870,26 +10179,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeregisterRdsDbInstanceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn deregister_volume(&self,
                          input: &DeregisterVolumeRequest)
-                         -> Result<(), DeregisterVolumeError> {
+                         -> RusotoFuture<(), DeregisterVolumeError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9897,18 +10220,33 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeregisterVolumeError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -9916,7 +10254,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_agent_versions
         (&self,
          input: &DescribeAgentVersionsRequest)
-         -> Result<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
+         -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9924,29 +10262,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAgentVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAgentVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeAgentVersionsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeAgentVersionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_apps(&self,
                      input: &DescribeAppsRequest)
-                     -> Result<DescribeAppsResult, DescribeAppsError> {
+                     -> RusotoFuture<DescribeAppsResult, DescribeAppsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9954,31 +10302,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAppsResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAppsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DescribeAppsResult>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DescribeAppsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_commands(&self,
                          input: &DescribeCommandsRequest)
-                         -> Result<DescribeCommandsResult, DescribeCommandsError> {
+                         -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9986,31 +10354,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeCommandsResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeCommandsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeCommandsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeCommandsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_deployments(&self,
-                            input: &DescribeDeploymentsRequest)
-                            -> Result<DescribeDeploymentsResult, DescribeDeploymentsError> {
+    fn describe_deployments
+        (&self,
+         input: &DescribeDeploymentsRequest)
+         -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10018,29 +10395,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDeploymentsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDeploymentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeDeploymentsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeDeploymentsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>"]
-    fn describe_ecs_clusters(&self,
-                             input: &DescribeEcsClustersRequest)
-                             -> Result<DescribeEcsClustersResult, DescribeEcsClustersError> {
+    fn describe_ecs_clusters
+        (&self,
+         input: &DescribeEcsClustersRequest)
+         -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10048,29 +10436,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEcsClustersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEcsClustersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeEcsClustersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeEcsClustersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_elastic_ips(&self,
                             input: &DescribeElasticIpsRequest)
-                            -> Result<DescribeElasticIpsResult, DescribeElasticIpsError> {
+                            -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10078,24 +10476,32 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeElasticIpsResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeElasticIpsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeElasticIpsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeElasticIpsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -10103,7 +10509,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_elastic_load_balancers
         (&self,
          input: &DescribeElasticLoadBalancersRequest)
-         -> Result<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
+         -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10112,30 +10518,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeElasticLoadBalancersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeElasticLoadBalancersError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeElasticLoadBalancersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeElasticLoadBalancersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_instances(&self,
                           input: &DescribeInstancesRequest)
-                          -> Result<DescribeInstancesResult, DescribeInstancesError> {
+                          -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10143,31 +10558,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstancesResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeInstancesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_layers(&self,
                        input: &DescribeLayersRequest)
-                       -> Result<DescribeLayersResult, DescribeLayersError> {
+                       -> RusotoFuture<DescribeLayersResult, DescribeLayersError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10175,24 +10598,44 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLayersResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLayersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DescribeLayersResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DescribeLayersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -10200,7 +10643,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_load_based_auto_scaling
         (&self,
          input: &DescribeLoadBasedAutoScalingRequest)
-         -> Result<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
+         -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10209,59 +10652,79 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_my_user_profile
         (&self)
-         -> Result<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
+         -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeMyUserProfile");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMyUserProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeMyUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeMyUserProfileResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeMyUserProfileError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_permissions(&self,
-                            input: &DescribePermissionsRequest)
-                            -> Result<DescribePermissionsResult, DescribePermissionsError> {
+    fn describe_permissions
+        (&self,
+         input: &DescribePermissionsRequest)
+         -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10269,29 +10732,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePermissionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribePermissionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribePermissionsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribePermissionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_raid_arrays(&self,
                             input: &DescribeRaidArraysRequest)
-                            -> Result<DescribeRaidArraysResult, DescribeRaidArraysError> {
+                            -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10299,24 +10772,32 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRaidArraysResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRaidArraysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeRaidArraysResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeRaidArraysError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -10324,7 +10805,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_rds_db_instances
         (&self,
          input: &DescribeRdsDbInstancesRequest)
-         -> Result<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
+         -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10332,22 +10813,32 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRdsDbInstancesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRdsDbInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeRdsDbInstancesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeRdsDbInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -10355,7 +10846,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_service_errors
         (&self,
          input: &DescribeServiceErrorsRequest)
-         -> Result<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
+         -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10363,31 +10854,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeServiceErrorsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeServiceErrorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeServiceErrorsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeServiceErrorsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_stack_provisioning_parameters
-        (&self,
-         input: &DescribeStackProvisioningParametersRequest)
-         -> Result<DescribeStackProvisioningParametersResult,
-                   DescribeStackProvisioningParametersError> {
+fn describe_stack_provisioning_parameters(&self, input: &DescribeStackProvisioningParametersRequest)  -> RusotoFuture<DescribeStackProvisioningParametersResult, DescribeStackProvisioningParametersError>{
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10396,29 +10893,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeStackProvisioningParametersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeStackProvisioningParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeStackProvisioningParametersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeStackProvisioningParametersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_stack_summary(&self,
-                              input: &DescribeStackSummaryRequest)
-                              -> Result<DescribeStackSummaryResult, DescribeStackSummaryError> {
+    fn describe_stack_summary
+        (&self,
+         input: &DescribeStackSummaryRequest)
+         -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10426,29 +10934,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeStackSummaryResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeStackSummaryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeStackSummaryResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeStackSummaryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_stacks(&self,
                        input: &DescribeStacksRequest)
-                       -> Result<DescribeStacksResult, DescribeStacksError> {
+                       -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10456,24 +10974,44 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DescribeStacksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -10481,7 +11019,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_time_based_auto_scaling
         (&self,
          input: &DescribeTimeBasedAutoScalingRequest)
-         -> Result<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
+         -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10490,30 +11028,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn describe_user_profiles(&self,
-                              input: &DescribeUserProfilesRequest)
-                              -> Result<DescribeUserProfilesResult, DescribeUserProfilesError> {
+    fn describe_user_profiles
+        (&self,
+         input: &DescribeUserProfilesRequest)
+         -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10521,29 +11069,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserProfilesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserProfilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeUserProfilesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeUserProfilesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn describe_volumes(&self,
                         input: &DescribeVolumesRequest)
-                        -> Result<DescribeVolumesResult, DescribeVolumesError> {
+                        -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10551,31 +11109,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeVolumesResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeVolumesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeVolumesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn detach_elastic_load_balancer(&self,
                                     input: &DetachElasticLoadBalancerRequest)
-                                    -> Result<(), DetachElasticLoadBalancerError> {
+                                    -> RusotoFuture<(), DetachElasticLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10584,26 +11150,34 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DetachElasticLoadBalancerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn disassociate_elastic_ip(&self,
                                input: &DisassociateElasticIpRequest)
-                               -> Result<(), DisassociateElasticIpError> {
+                               -> RusotoFuture<(), DisassociateElasticIpError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10611,18 +11185,33 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateElasticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DisassociateElasticIpError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -10630,7 +11219,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn get_hostname_suggestion
         (&self,
          input: &GetHostnameSuggestionRequest)
-         -> Result<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
+         -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10638,29 +11227,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetHostnameSuggestionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetHostnameSuggestionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetHostnameSuggestionResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetHostnameSuggestionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p>"]
     fn grant_access(&self,
                     input: &GrantAccessRequest)
-                    -> Result<GrantAccessResult, GrantAccessError> {
+                    -> RusotoFuture<GrantAccessResult, GrantAccessError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10668,29 +11267,49 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GrantAccessResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GrantAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<GrantAccessResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(GrantAccessError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Returns a list of tags that are applied to the specified stack or layer.</p>"]
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResult, ListTagsError> {
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10698,28 +11317,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListTagsResult>(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Reboots a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn reboot_instance(&self, input: &RebootInstanceRequest) -> Result<(), RebootInstanceError> {
+    fn reboot_instance(&self,
+                       input: &RebootInstanceRequest)
+                       -> RusotoFuture<(), RebootInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10727,25 +11369,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RebootInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(RebootInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html\"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\"> Managing User Permissions</a>.</p>"]
     fn register_ecs_cluster(&self,
                             input: &RegisterEcsClusterRequest)
-                            -> Result<RegisterEcsClusterResult, RegisterEcsClusterError> {
+                            -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10753,31 +11409,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterEcsClusterResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterEcsClusterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RegisterEcsClusterResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RegisterEcsClusterError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_elastic_ip(&self,
                            input: &RegisterElasticIpRequest)
-                           -> Result<RegisterElasticIpResult, RegisterElasticIpError> {
+                           -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10785,31 +11449,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterElasticIpResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterElasticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RegisterElasticIpResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RegisterElasticIpError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html\"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html\"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_instance(&self,
                          input: &RegisterInstanceRequest)
-                         -> Result<RegisterInstanceResult, RegisterInstanceError> {
+                         -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10817,31 +11489,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterInstanceResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RegisterInstanceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RegisterInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_rds_db_instance(&self,
                                 input: &RegisterRdsDbInstanceRequest)
-                                -> Result<(), RegisterRdsDbInstanceError> {
+                                -> RusotoFuture<(), RegisterRdsDbInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10849,25 +11529,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(RegisterRdsDbInstanceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn register_volume(&self,
                        input: &RegisterVolumeRequest)
-                       -> Result<RegisterVolumeResult, RegisterVolumeError> {
+                       -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10875,31 +11570,51 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterVolumeResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<RegisterVolumeResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(RegisterVolumeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html\">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn set_load_based_auto_scaling(&self,
                                    input: &SetLoadBasedAutoScalingRequest)
-                                   -> Result<(), SetLoadBasedAutoScalingError> {
+                                   -> RusotoFuture<(), SetLoadBasedAutoScalingError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10907,24 +11622,38 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(SetLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Specifies a user's permissions. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html\">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn set_permission(&self, input: &SetPermissionRequest) -> Result<(), SetPermissionError> {
+    fn set_permission(&self, input: &SetPermissionRequest) -> RusotoFuture<(), SetPermissionError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10932,25 +11661,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetPermissionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(SetPermissionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html\">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn set_time_based_auto_scaling(&self,
                                    input: &SetTimeBasedAutoScalingRequest)
-                                   -> Result<(), SetTimeBasedAutoScalingError> {
+                                   -> RusotoFuture<(), SetTimeBasedAutoScalingError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10958,24 +11701,38 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(SetTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Starts a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn start_instance(&self, input: &StartInstanceRequest) -> Result<(), StartInstanceError> {
+    fn start_instance(&self, input: &StartInstanceRequest) -> RusotoFuture<(), StartInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10983,23 +11740,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StartInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn start_stack(&self, input: &StartStackRequest) -> Result<(), StartStackError> {
+    fn start_stack(&self, input: &StartStackRequest) -> RusotoFuture<(), StartStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11007,23 +11778,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StartStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn stop_instance(&self, input: &StopInstanceRequest) -> Result<(), StopInstanceError> {
+    fn stop_instance(&self, input: &StopInstanceRequest) -> RusotoFuture<(), StopInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11031,23 +11816,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StopInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn stop_stack(&self, input: &StopStackRequest) -> Result<(), StopStackError> {
+    fn stop_stack(&self, input: &StopStackRequest) -> RusotoFuture<(), StopStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11055,23 +11854,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(StopStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html\">Tags</a> in the AWS OpsWorks User Guide.</p>"]
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11079,25 +11892,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(TagResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Unassigns a registered instance from all of it's layers. The instance remains in the stack as an unassigned instance and can be assigned to another layer, as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn unassign_instance(&self,
                          input: &UnassignInstanceRequest)
-                         -> Result<(), UnassignInstanceError> {
+                         -> RusotoFuture<(), UnassignInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11105,23 +11932,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UnassignInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UnassignInstanceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                         .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn unassign_volume(&self, input: &UnassignVolumeRequest) -> Result<(), UnassignVolumeError> {
+    fn unassign_volume(&self,
+                       input: &UnassignVolumeRequest)
+                       -> RusotoFuture<(), UnassignVolumeError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11129,23 +11973,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UnassignVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UnassignVolumeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Removes tags from a specified stack or layer.</p>"]
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11153,23 +12011,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_app(&self, input: &UpdateAppRequest) -> Result<(), UpdateAppError> {
+    fn update_app(&self, input: &UpdateAppRequest) -> RusotoFuture<(), UpdateAppError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11177,25 +12049,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAppError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateAppError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a registered Elastic IP address's name. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_elastic_ip(&self,
                          input: &UpdateElasticIpRequest)
-                         -> Result<(), UpdateElasticIpError> {
+                         -> RusotoFuture<(), UpdateElasticIpError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11203,23 +12089,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateElasticIpError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateElasticIpError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                        .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_instance(&self, input: &UpdateInstanceRequest) -> Result<(), UpdateInstanceError> {
+    fn update_instance(&self,
+                       input: &UpdateInstanceRequest)
+                       -> RusotoFuture<(), UpdateInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11227,23 +12130,37 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateInstanceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_layer(&self, input: &UpdateLayerRequest) -> Result<(), UpdateLayerError> {
+    fn update_layer(&self, input: &UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11251,25 +12168,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateLayerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateLayerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_my_user_profile(&self,
                               input: &UpdateMyUserProfileRequest)
-                              -> Result<(), UpdateMyUserProfileError> {
+                              -> RusotoFuture<(), UpdateMyUserProfileError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11277,25 +12208,40 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateMyUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateMyUserProfileError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_rds_db_instance(&self,
                               input: &UpdateRdsDbInstanceRequest)
-                              -> Result<(), UpdateRdsDbInstanceError> {
+                              -> RusotoFuture<(), UpdateRdsDbInstanceError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11303,23 +12249,38 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRdsDbInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateRdsDbInstanceError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_stack(&self, input: &UpdateStackRequest) -> Result<(), UpdateStackError> {
+    fn update_stack(&self, input: &UpdateStackRequest) -> RusotoFuture<(), UpdateStackError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11327,25 +12288,39 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateStackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateStackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_user_profile(&self,
                            input: &UpdateUserProfileRequest)
-                           -> Result<(), UpdateUserProfileError> {
+                           -> RusotoFuture<(), UpdateUserProfileError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11353,23 +12328,38 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
-    fn update_volume(&self, input: &UpdateVolumeRequest) -> Result<(), UpdateVolumeError> {
+    fn update_volume(&self, input: &UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError> {
         let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -11377,18 +12367,32 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateVolumeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-        }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => future::Either::A(future::ok(())),
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateVolumeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

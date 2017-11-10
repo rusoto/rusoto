@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5420,243 +5422,256 @@ pub trait DirectoryService {
     #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn add_ip_routes(&self,
                      input: &AddIpRoutesRequest)
-                     -> Result<AddIpRoutesResult, AddIpRoutesError>;
+                     -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError>;
 
 
     #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
+                            -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError>;
 
 
     #[doc="<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>"]
     fn cancel_schema_extension
         (&self,
          input: &CancelSchemaExtensionRequest)
-         -> Result<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
+         -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
 
 
     #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn connect_directory(&self,
                          input: &ConnectDirectoryRequest)
-                         -> Result<ConnectDirectoryResult, ConnectDirectoryError>;
+                         -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError>;
 
 
     #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
     fn create_alias(&self,
                     input: &CreateAliasRequest)
-                    -> Result<CreateAliasResult, CreateAliasError>;
+                    -> RusotoFuture<CreateAliasResult, CreateAliasError>;
 
 
     #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
     fn create_computer(&self,
                        input: &CreateComputerRequest)
-                       -> Result<CreateComputerResult, CreateComputerError>;
+                       -> RusotoFuture<CreateComputerResult, CreateComputerError>;
 
 
     #[doc="<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>"]
     fn create_conditional_forwarder
         (&self,
          input: &CreateConditionalForwarderRequest)
-         -> Result<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
+         -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
 
 
     #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn create_directory(&self,
                         input: &CreateDirectoryRequest)
-                        -> Result<CreateDirectoryResult, CreateDirectoryError>;
+                        -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError>;
 
 
     #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn create_microsoft_ad(&self,
                            input: &CreateMicrosoftADRequest)
-                           -> Result<CreateMicrosoftADResult, CreateMicrosoftADError>;
+                           -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError>;
 
 
     #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
     fn create_snapshot(&self,
                        input: &CreateSnapshotRequest)
-                       -> Result<CreateSnapshotResult, CreateSnapshotError>;
+                       -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
 
 
     #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn create_trust(&self,
                     input: &CreateTrustRequest)
-                    -> Result<CreateTrustResult, CreateTrustError>;
+                    -> RusotoFuture<CreateTrustResult, CreateTrustError>;
 
 
     #[doc="<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>"]
     fn delete_conditional_forwarder
         (&self,
          input: &DeleteConditionalForwarderRequest)
-         -> Result<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
+         -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
 
 
     #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn delete_directory(&self,
                         input: &DeleteDirectoryRequest)
-                        -> Result<DeleteDirectoryResult, DeleteDirectoryError>;
+                        -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError>;
 
 
     #[doc="<p>Deletes a directory snapshot.</p>"]
     fn delete_snapshot(&self,
                        input: &DeleteSnapshotRequest)
-                       -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
+                       -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
 
 
     #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn delete_trust(&self,
                     input: &DeleteTrustRequest)
-                    -> Result<DeleteTrustResult, DeleteTrustError>;
+                    -> RusotoFuture<DeleteTrustResult, DeleteTrustError>;
 
 
     #[doc="<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
-    fn deregister_event_topic(&self,
-                              input: &DeregisterEventTopicRequest)
-                              -> Result<DeregisterEventTopicResult, DeregisterEventTopicError>;
+    fn deregister_event_topic
+        (&self,
+         input: &DeregisterEventTopicRequest)
+         -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError>;
 
 
     #[doc="<p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>"]
     fn describe_conditional_forwarders
         (&self,
          input: &DescribeConditionalForwardersRequest)
-         -> Result<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
+         -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
 
 
     #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-    fn describe_directories(&self,
-                            input: &DescribeDirectoriesRequest)
-                            -> Result<DescribeDirectoriesResult, DescribeDirectoriesError>;
+    fn describe_directories
+        (&self,
+         input: &DescribeDirectoriesRequest)
+         -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError>;
 
 
     #[doc="<p>Provides information about any domain controllers in your directory.</p>"]
     fn describe_domain_controllers
         (&self,
          input: &DescribeDomainControllersRequest)
-         -> Result<DescribeDomainControllersResult, DescribeDomainControllersError>;
+         -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError>;
 
 
     #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
-    fn describe_event_topics(&self,
-                             input: &DescribeEventTopicsRequest)
-                             -> Result<DescribeEventTopicsResult, DescribeEventTopicsError>;
+    fn describe_event_topics
+        (&self,
+         input: &DescribeEventTopicsRequest)
+         -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError>;
 
 
     #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
     fn describe_snapshots(&self,
                           input: &DescribeSnapshotsRequest)
-                          -> Result<DescribeSnapshotsResult, DescribeSnapshotsError>;
+                          -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError>;
 
 
     #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
     fn describe_trusts(&self,
                        input: &DescribeTrustsRequest)
-                       -> Result<DescribeTrustsResult, DescribeTrustsError>;
+                       -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError>;
 
 
     #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
     fn disable_radius(&self,
                       input: &DisableRadiusRequest)
-                      -> Result<DisableRadiusResult, DisableRadiusError>;
+                      -> RusotoFuture<DisableRadiusResult, DisableRadiusError>;
 
 
     #[doc="<p>Disables single-sign on for a directory.</p>"]
-    fn disable_sso(&self, input: &DisableSsoRequest) -> Result<DisableSsoResult, DisableSsoError>;
+    fn disable_sso(&self,
+                   input: &DisableSsoRequest)
+                   -> RusotoFuture<DisableSsoResult, DisableSsoError>;
 
 
     #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
     fn enable_radius(&self,
                      input: &EnableRadiusRequest)
-                     -> Result<EnableRadiusResult, EnableRadiusError>;
+                     -> RusotoFuture<EnableRadiusResult, EnableRadiusError>;
 
 
     #[doc="<p>Enables single sign-on for a directory.</p>"]
-    fn enable_sso(&self, input: &EnableSsoRequest) -> Result<EnableSsoResult, EnableSsoError>;
+    fn enable_sso(&self,
+                  input: &EnableSsoRequest)
+                  -> RusotoFuture<EnableSsoResult, EnableSsoError>;
 
 
     #[doc="<p>Obtains directory limit information for the current region.</p>"]
-    fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
+    fn get_directory_limits(&self)
+                            -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
 
 
     #[doc="<p>Obtains the manual snapshot limits for a directory.</p>"]
     fn get_snapshot_limits(&self,
                            input: &GetSnapshotLimitsRequest)
-                           -> Result<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
+                           -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
 
 
     #[doc="<p>Lists the address blocks that you have added to a directory.</p>"]
     fn list_ip_routes(&self,
                       input: &ListIpRoutesRequest)
-                      -> Result<ListIpRoutesResult, ListIpRoutesError>;
+                      -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError>;
 
 
     #[doc="<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
-    fn list_schema_extensions(&self,
-                              input: &ListSchemaExtensionsRequest)
-                              -> Result<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
+    fn list_schema_extensions
+        (&self,
+         input: &ListSchemaExtensionsRequest)
+         -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
 
 
     #[doc="<p>Lists all tags on a directory.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
+    fn list_tags_for_resource
+        (&self,
+         input: &ListTagsForResourceRequest)
+         -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
 
 
     #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
     fn register_event_topic(&self,
                             input: &RegisterEventTopicRequest)
-                            -> Result<RegisterEventTopicResult, RegisterEventTopicError>;
+                            -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError>;
 
 
     #[doc="<p>Removes IP address blocks from a directory.</p>"]
     fn remove_ip_routes(&self,
                         input: &RemoveIpRoutesRequest)
-                        -> Result<RemoveIpRoutesResult, RemoveIpRoutesError>;
+                        -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError>;
 
 
     #[doc="<p>Removes tags from a directory.</p>"]
     fn remove_tags_from_resource
         (&self,
          input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
+         -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
 
     #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
-    fn restore_from_snapshot(&self,
-                             input: &RestoreFromSnapshotRequest)
-                             -> Result<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
+    fn restore_from_snapshot
+        (&self,
+         input: &RestoreFromSnapshotRequest)
+         -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
 
 
     #[doc="<p>Applies a schema extension to a Microsoft AD directory.</p>"]
-    fn start_schema_extension(&self,
-                              input: &StartSchemaExtensionRequest)
-                              -> Result<StartSchemaExtensionResult, StartSchemaExtensionError>;
+    fn start_schema_extension
+        (&self,
+         input: &StartSchemaExtensionRequest)
+         -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError>;
 
 
     #[doc="<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>"]
     fn update_conditional_forwarder
         (&self,
          input: &UpdateConditionalForwarderRequest)
-         -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
+         -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
 
 
     #[doc="<p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>"]
     fn update_number_of_domain_controllers
         (&self,
          input: &UpdateNumberOfDomainControllersRequest)
-         -> Result<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
+         -> RusotoFuture<UpdateNumberOfDomainControllersResult,
+                         UpdateNumberOfDomainControllersError>;
 
 
     #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
     fn update_radius(&self,
                      input: &UpdateRadiusRequest)
-                     -> Result<UpdateRadiusResult, UpdateRadiusError>;
+                     -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError>;
 
 
     #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn verify_trust(&self,
                     input: &VerifyTrustRequest)
-                    -> Result<VerifyTrustResult, VerifyTrustError>;
+                    -> RusotoFuture<VerifyTrustResult, VerifyTrustError>;
 }
 /// A client for the Directory Service API.
 pub struct DirectoryServiceClient<P, D>
@@ -5688,7 +5703,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn add_ip_routes(&self,
                      input: &AddIpRoutesRequest)
-                     -> Result<AddIpRoutesResult, AddIpRoutesError> {
+                     -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5696,31 +5711,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(AddIpRoutesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
+                            -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5729,24 +5764,32 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -5754,7 +5797,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn cancel_schema_extension
         (&self,
          input: &CancelSchemaExtensionRequest)
-         -> Result<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
+         -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5763,29 +5806,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CancelSchemaExtensionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn connect_directory(&self,
                          input: &ConnectDirectoryRequest)
-                         -> Result<ConnectDirectoryResult, ConnectDirectoryError> {
+                         -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5793,31 +5846,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ConnectDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ConnectDirectoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
     fn create_alias(&self,
                     input: &CreateAliasRequest)
-                    -> Result<CreateAliasResult, CreateAliasError> {
+                    -> RusotoFuture<CreateAliasResult, CreateAliasError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5825,31 +5886,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateAliasError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
     fn create_computer(&self,
                        input: &CreateComputerRequest)
-                       -> Result<CreateComputerResult, CreateComputerError> {
+                       -> RusotoFuture<CreateComputerResult, CreateComputerError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5857,24 +5938,44 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateComputerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateComputerError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -5882,7 +5983,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn create_conditional_forwarder
         (&self,
          input: &CreateConditionalForwarderRequest)
-         -> Result<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
+         -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5891,30 +5992,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn create_directory(&self,
                         input: &CreateDirectoryRequest)
-                        -> Result<CreateDirectoryResult, CreateDirectoryError> {
+                        -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5922,31 +6032,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateDirectoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn create_microsoft_ad(&self,
                            input: &CreateMicrosoftADRequest)
-                           -> Result<CreateMicrosoftADResult, CreateMicrosoftADError> {
+                           -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5955,31 +6073,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateMicrosoftADError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
     fn create_snapshot(&self,
                        input: &CreateSnapshotRequest)
-                       -> Result<CreateSnapshotResult, CreateSnapshotError> {
+                       -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5987,31 +6113,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn create_trust(&self,
                     input: &CreateTrustRequest)
-                    -> Result<CreateTrustResult, CreateTrustError> {
+                    -> RusotoFuture<CreateTrustResult, CreateTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6019,24 +6165,44 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateTrustError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -6044,7 +6210,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn delete_conditional_forwarder
         (&self,
          input: &DeleteConditionalForwarderRequest)
-         -> Result<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
+         -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6053,30 +6219,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
     fn delete_directory(&self,
                         input: &DeleteDirectoryRequest)
-                        -> Result<DeleteDirectoryResult, DeleteDirectoryError> {
+                        -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6084,31 +6259,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDirectoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteDirectoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes a directory snapshot.</p>"]
     fn delete_snapshot(&self,
                        input: &DeleteSnapshotRequest)
-                       -> Result<DeleteSnapshotResult, DeleteSnapshotError> {
+                       -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6116,31 +6299,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteSnapshotError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn delete_trust(&self,
                     input: &DeleteTrustRequest)
-                    -> Result<DeleteTrustResult, DeleteTrustError> {
+                    -> RusotoFuture<DeleteTrustResult, DeleteTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6148,31 +6351,52 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteTrustError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
-    fn deregister_event_topic(&self,
-                              input: &DeregisterEventTopicRequest)
-                              -> Result<DeregisterEventTopicResult, DeregisterEventTopicError> {
+    fn deregister_event_topic
+        (&self,
+         input: &DeregisterEventTopicRequest)
+         -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6181,22 +6405,32 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeregisterEventTopicError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6204,7 +6438,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn describe_conditional_forwarders
         (&self,
          input: &DescribeConditionalForwardersRequest)
-         -> Result<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
+         -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6213,30 +6447,40 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
-    fn describe_directories(&self,
-                            input: &DescribeDirectoriesRequest)
-                            -> Result<DescribeDirectoriesResult, DescribeDirectoriesError> {
+    fn describe_directories
+        (&self,
+         input: &DescribeDirectoriesRequest)
+         -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6245,22 +6489,32 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeDirectoriesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6268,7 +6522,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn describe_domain_controllers
         (&self,
          input: &DescribeDomainControllersRequest)
-         -> Result<DescribeDomainControllersResult, DescribeDomainControllersError> {
+         -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6277,30 +6531,40 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDomainControllersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDomainControllersError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeDomainControllersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeDomainControllersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
-    fn describe_event_topics(&self,
-                             input: &DescribeEventTopicsRequest)
-                             -> Result<DescribeEventTopicsResult, DescribeEventTopicsError> {
+    fn describe_event_topics
+        (&self,
+         input: &DescribeEventTopicsRequest)
+         -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6309,29 +6573,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeEventTopicsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
     fn describe_snapshots(&self,
                           input: &DescribeSnapshotsRequest)
-                          -> Result<DescribeSnapshotsResult, DescribeSnapshotsError> {
+                          -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6340,31 +6614,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeSnapshotsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
     fn describe_trusts(&self,
                        input: &DescribeTrustsRequest)
-                       -> Result<DescribeTrustsResult, DescribeTrustsError> {
+                       -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6372,31 +6654,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTrustsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DescribeTrustsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
     fn disable_radius(&self,
                       input: &DisableRadiusRequest)
-                      -> Result<DisableRadiusResult, DisableRadiusError> {
+                      -> RusotoFuture<DisableRadiusResult, DisableRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6404,29 +6706,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DisableRadiusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Disables single-sign on for a directory.</p>"]
-    fn disable_sso(&self, input: &DisableSsoRequest) -> Result<DisableSsoResult, DisableSsoError> {
+    fn disable_sso(&self,
+                   input: &DisableSsoRequest)
+                   -> RusotoFuture<DisableSsoResult, DisableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6434,31 +6758,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableSsoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DisableSsoError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
     fn enable_radius(&self,
                      input: &EnableRadiusRequest)
-                     -> Result<EnableRadiusResult, EnableRadiusError> {
+                     -> RusotoFuture<EnableRadiusResult, EnableRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6466,29 +6810,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(EnableRadiusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Enables single sign-on for a directory.</p>"]
-    fn enable_sso(&self, input: &EnableSsoRequest) -> Result<EnableSsoResult, EnableSsoError> {
+    fn enable_sso(&self,
+                  input: &EnableSsoRequest)
+                  -> RusotoFuture<EnableSsoResult, EnableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6496,28 +6862,50 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableSsoError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(EnableSsoError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Obtains directory limit information for the current region.</p>"]
-    fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
+    fn get_directory_limits(&self)
+                            -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6525,31 +6913,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
                            "DirectoryService_20150416.GetDirectoryLimits");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetDirectoryLimitsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Obtains the manual snapshot limits for a directory.</p>"]
     fn get_snapshot_limits(&self,
                            input: &GetSnapshotLimitsRequest)
-                           -> Result<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
+                           -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6558,31 +6954,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(GetSnapshotLimitsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the address blocks that you have added to a directory.</p>"]
     fn list_ip_routes(&self,
                       input: &ListIpRoutesRequest)
-                      -> Result<ListIpRoutesResult, ListIpRoutesError> {
+                      -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6590,31 +6994,52 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListIpRoutesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
-    fn list_schema_extensions(&self,
-                              input: &ListSchemaExtensionsRequest)
-                              -> Result<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
+    fn list_schema_extensions
+        (&self,
+         input: &ListSchemaExtensionsRequest)
+         -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6623,29 +7048,40 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListSchemaExtensionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists all tags on a directory.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+    fn list_tags_for_resource
+        (&self,
+         input: &ListTagsForResourceRequest)
+         -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6654,29 +7090,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
     fn register_event_topic(&self,
                             input: &RegisterEventTopicRequest)
-                            -> Result<RegisterEventTopicResult, RegisterEventTopicError> {
+                            -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6685,31 +7131,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterEventTopicError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RegisterEventTopicError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Removes IP address blocks from a directory.</p>"]
     fn remove_ip_routes(&self,
                         input: &RemoveIpRoutesRequest)
-                        -> Result<RemoveIpRoutesResult, RemoveIpRoutesError> {
+                        -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6717,24 +7171,44 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(RemoveIpRoutesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -6742,7 +7216,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn remove_tags_from_resource
         (&self,
          input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+         -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6751,29 +7225,40 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
-    fn restore_from_snapshot(&self,
-                             input: &RestoreFromSnapshotRequest)
-                             -> Result<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
+    fn restore_from_snapshot
+        (&self,
+         input: &RestoreFromSnapshotRequest)
+         -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6782,29 +7267,40 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RestoreFromSnapshotError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Applies a schema extension to a Microsoft AD directory.</p>"]
-    fn start_schema_extension(&self,
-                              input: &StartSchemaExtensionRequest)
-                              -> Result<StartSchemaExtensionResult, StartSchemaExtensionError> {
+    fn start_schema_extension
+        (&self,
+         input: &StartSchemaExtensionRequest)
+         -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6813,22 +7309,32 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(StartSchemaExtensionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6836,7 +7342,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn update_conditional_forwarder
         (&self,
          input: &UpdateConditionalForwarderRequest)
-         -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
+         -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6845,23 +7351,32 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6869,7 +7384,8 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
     fn update_number_of_domain_controllers
         (&self,
          input: &UpdateNumberOfDomainControllersRequest)
-         -> Result<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError> {
+         -> RusotoFuture<UpdateNumberOfDomainControllersResult,
+                         UpdateNumberOfDomainControllersError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6878,30 +7394,39 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateNumberOfDomainControllersResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateNumberOfDomainControllersError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateNumberOfDomainControllersResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateNumberOfDomainControllersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
     fn update_radius(&self,
                      input: &UpdateRadiusRequest)
-                     -> Result<UpdateRadiusResult, UpdateRadiusError> {
+                     -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6909,31 +7434,51 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRadiusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(body.as_ref())
+                                                               .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateRadiusError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
     fn verify_trust(&self,
                     input: &VerifyTrustRequest)
-                    -> Result<VerifyTrustResult, VerifyTrustError> {
+                    -> RusotoFuture<VerifyTrustResult, VerifyTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6941,24 +7486,44 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(VerifyTrustError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(VerifyTrustError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 }
 

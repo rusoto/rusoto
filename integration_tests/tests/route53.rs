@@ -13,5 +13,5 @@ fn should_list_hosted_zones() {
         Route53Client::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListHostedZonesRequest::default();
 
-    client.list_hosted_zones(&request).unwrap();
+    client.list_hosted_zones(&request).sync().unwrap();
 }

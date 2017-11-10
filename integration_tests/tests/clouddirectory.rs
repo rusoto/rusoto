@@ -14,6 +14,6 @@ fn should_list_directories() {
                                            Region::UsEast1);
     let request = ListDirectoriesRequest::default();
 
-    let result = client.list_directories(&request).unwrap();
+    let result = client.list_directories(&request).sync().unwrap();
     println!("{:#?}", result);
 }

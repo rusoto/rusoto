@@ -14,6 +14,6 @@ fn should_describe_load_balancers() {
     let client = ElbClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeLoadBalancersInput::default();
 
-    let result = client.describe_load_balancers(&request);
+    let result = client.describe_load_balancers(&request).sync();
     println!("{:#?}", result);
 }

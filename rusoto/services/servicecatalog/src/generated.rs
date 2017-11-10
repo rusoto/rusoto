@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -6478,333 +6480,338 @@ impl Error for UpdateTagOptionError {
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 pub trait ServiceCatalog {
     #[doc="<p>Accepts an offer to share a portfolio.</p>"]
-    fn accept_portfolio_share(&self,
-                              input: &AcceptPortfolioShareInput)
-                              -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
+    fn accept_portfolio_share
+        (&self,
+         input: &AcceptPortfolioShareInput)
+         -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
 
 
     #[doc="<p>Associates the specified principal ARN with the specified portfolio.</p>"]
     fn associate_principal_with_portfolio
         (&self,
          input: &AssociatePrincipalWithPortfolioInput)
-         -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
+         -> RusotoFuture<AssociatePrincipalWithPortfolioOutput,
+                         AssociatePrincipalWithPortfolioError>;
 
 
     #[doc="<p>Associates a product with a portfolio.</p>"]
     fn associate_product_with_portfolio
         (&self,
          input: &AssociateProductWithPortfolioInput)
-         -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
+         -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
 
     #[doc="<p>Associate a TagOption identifier with a resource identifier.</p>"]
     fn associate_tag_option_with_resource
         (&self,
          input: &AssociateTagOptionWithResourceInput)
-         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
+         -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
 
     #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
     fn create_constraint(&self,
                          input: &CreateConstraintInput)
-                         -> Result<CreateConstraintOutput, CreateConstraintError>;
+                         -> RusotoFuture<CreateConstraintOutput, CreateConstraintError>;
 
 
     #[doc="<p>Creates a new portfolio.</p>"]
     fn create_portfolio(&self,
                         input: &CreatePortfolioInput)
-                        -> Result<CreatePortfolioOutput, CreatePortfolioError>;
+                        -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError>;
 
 
     #[doc="<p>Creates a new portfolio share.</p>"]
-    fn create_portfolio_share(&self,
-                              input: &CreatePortfolioShareInput)
-                              -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError>;
+    fn create_portfolio_share
+        (&self,
+         input: &CreatePortfolioShareInput)
+         -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError>;
 
 
     #[doc="<p>Creates a new product.</p>"]
     fn create_product(&self,
                       input: &CreateProductInput)
-                      -> Result<CreateProductOutput, CreateProductError>;
+                      -> RusotoFuture<CreateProductOutput, CreateProductError>;
 
 
     #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
     fn create_provisioning_artifact
         (&self,
          input: &CreateProvisioningArtifactInput)
-         -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
+         -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
 
     #[doc="<p>Create a new TagOption.</p>"]
     fn create_tag_option(&self,
                          input: &CreateTagOptionInput)
-                         -> Result<CreateTagOptionOutput, CreateTagOptionError>;
+                         -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError>;
 
 
     #[doc="<p>Deletes the specified constraint.</p>"]
     fn delete_constraint(&self,
                          input: &DeleteConstraintInput)
-                         -> Result<DeleteConstraintOutput, DeleteConstraintError>;
+                         -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError>;
 
 
     #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
     fn delete_portfolio(&self,
                         input: &DeletePortfolioInput)
-                        -> Result<DeletePortfolioOutput, DeletePortfolioError>;
+                        -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError>;
 
 
     #[doc="<p>Deletes the specified portfolio share.</p>"]
-    fn delete_portfolio_share(&self,
-                              input: &DeletePortfolioShareInput)
-                              -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
+    fn delete_portfolio_share
+        (&self,
+         input: &DeletePortfolioShareInput)
+         -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
 
     #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
     fn delete_product(&self,
                       input: &DeleteProductInput)
-                      -> Result<DeleteProductOutput, DeleteProductError>;
+                      -> RusotoFuture<DeleteProductOutput, DeleteProductError>;
 
 
     #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
     fn delete_provisioning_artifact
         (&self,
          input: &DeleteProvisioningArtifactInput)
-         -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
+         -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
 
 
     #[doc="<p>Retrieves detailed information for a specified constraint.</p>"]
     fn describe_constraint(&self,
                            input: &DescribeConstraintInput)
-                           -> Result<DescribeConstraintOutput, DescribeConstraintError>;
+                           -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError>;
 
 
     #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
     fn describe_portfolio(&self,
                           input: &DescribePortfolioInput)
-                          -> Result<DescribePortfolioOutput, DescribePortfolioError>;
+                          -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError>;
 
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
     fn describe_product(&self,
                         input: &DescribeProductInput)
-                        -> Result<DescribeProductOutput, DescribeProductError>;
+                        -> RusotoFuture<DescribeProductOutput, DescribeProductError>;
 
 
     #[doc="<p>Retrieves information about a specified product, run with administrator access.</p>"]
     fn describe_product_as_admin
         (&self,
          input: &DescribeProductAsAdminInput)
-         -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
+         -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
 
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
-    fn describe_product_view(&self,
-                             input: &DescribeProductViewInput)
-                             -> Result<DescribeProductViewOutput, DescribeProductViewError>;
+    fn describe_product_view
+        (&self,
+         input: &DescribeProductViewInput)
+         -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError>;
 
 
     #[doc="<p>Retrieve detailed information about the provisioned product.</p>"]
     fn describe_provisioned_product
         (&self,
          input: &DescribeProvisionedProductInput)
-         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
+         -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
 
     #[doc="<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
     fn describe_provisioning_artifact
         (&self,
          input: &DescribeProvisioningArtifactInput)
-         -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
+         -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
 
     #[doc="<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> \". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value \"<code>sc-tagoption-conflict-portfolioId-productId</code>\".</p>"]
     fn describe_provisioning_parameters
         (&self,
          input: &DescribeProvisioningParametersInput)
-         -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
+         -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
 
     #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
     fn describe_record(&self,
                        input: &DescribeRecordInput)
-                       -> Result<DescribeRecordOutput, DescribeRecordError>;
+                       -> RusotoFuture<DescribeRecordOutput, DescribeRecordError>;
 
 
     #[doc="<p>Describes a TagOption.</p>"]
     fn describe_tag_option(&self,
                            input: &DescribeTagOptionInput)
-                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError>;
+                           -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError>;
 
 
     #[doc="<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
-    fn disassociate_principal_from_portfolio
-        (&self,
-         input: &DisassociatePrincipalFromPortfolioInput)
-         -> Result<DisassociatePrincipalFromPortfolioOutput,
-                   DisassociatePrincipalFromPortfolioError>;
+    fn disassociate_principal_from_portfolio(&self, input: &DisassociatePrincipalFromPortfolioInput)  -> RusotoFuture<DisassociatePrincipalFromPortfolioOutput, DisassociatePrincipalFromPortfolioError>;
 
 
     #[doc="<p>Disassociates the specified product from the specified portfolio. </p>"]
     fn disassociate_product_from_portfolio
         (&self,
          input: &DisassociateProductFromPortfolioInput)
-         -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
+         -> RusotoFuture<DisassociateProductFromPortfolioOutput,
+                         DisassociateProductFromPortfolioError>;
 
 
     #[doc="<p>Disassociates a TagOption from a resource.</p>"]
     fn disassociate_tag_option_from_resource
         (&self,
          input: &DisassociateTagOptionFromResourceInput)
-         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
+         -> RusotoFuture<DisassociateTagOptionFromResourceOutput,
+                         DisassociateTagOptionFromResourceError>;
 
 
     #[doc="<p>Lists details of all portfolios for which sharing was accepted by this account.</p>"]
     fn list_accepted_portfolio_shares
         (&self,
          input: &ListAcceptedPortfolioSharesInput)
-         -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
+         -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
 
 
     #[doc="<p>Retrieves detailed constraint information for the specified portfolio and product.</p>"]
     fn list_constraints_for_portfolio
         (&self,
          input: &ListConstraintsForPortfolioInput)
-         -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
+         -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
 
 
     #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
     fn list_launch_paths(&self,
                          input: &ListLaunchPathsInput)
-                         -> Result<ListLaunchPathsOutput, ListLaunchPathsError>;
+                         -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError>;
 
 
     #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
-    fn list_portfolio_access(&self,
-                             input: &ListPortfolioAccessInput)
-                             -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError>;
+    fn list_portfolio_access
+        (&self,
+         input: &ListPortfolioAccessInput)
+         -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError>;
 
 
     #[doc="<p>Lists all portfolios in the catalog.</p>"]
     fn list_portfolios(&self,
                        input: &ListPortfoliosInput)
-                       -> Result<ListPortfoliosOutput, ListPortfoliosError>;
+                       -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError>;
 
 
     #[doc="<p>Lists all portfolios that the specified product is associated with.</p>"]
     fn list_portfolios_for_product
         (&self,
          input: &ListPortfoliosForProductInput)
-         -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
+         -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
 
 
     #[doc="<p>Lists all principal ARNs associated with the specified portfolio.</p>"]
     fn list_principals_for_portfolio
         (&self,
          input: &ListPrincipalsForPortfolioInput)
-         -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
+         -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
 
     #[doc="<p>Lists all provisioning artifacts associated with the specified product.</p>"]
     fn list_provisioning_artifacts
         (&self,
          input: &ListProvisioningArtifactsInput)
-         -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
+         -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
 
     #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
     fn list_record_history(&self,
                            input: &ListRecordHistoryInput)
-                           -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
+                           -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError>;
 
 
     #[doc="<p>Lists resources associated with a TagOption.</p>"]
     fn list_resources_for_tag_option
         (&self,
          input: &ListResourcesForTagOptionInput)
-         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
+         -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
 
 
     #[doc="<p>Lists detailed TagOptions information.</p>"]
     fn list_tag_options(&self,
                         input: &ListTagOptionsInput)
-                        -> Result<ListTagOptionsOutput, ListTagOptionsError>;
+                        -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError>;
 
 
     #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
-                         -> Result<ProvisionProductOutput, ProvisionProductError>;
+                         -> RusotoFuture<ProvisionProductOutput, ProvisionProductError>;
 
 
     #[doc="<p>Rejects an offer to share a portfolio.</p>"]
-    fn reject_portfolio_share(&self,
-                              input: &RejectPortfolioShareInput)
-                              -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError>;
+    fn reject_portfolio_share
+        (&self,
+         input: &RejectPortfolioShareInput)
+         -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
 
     #[doc="<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>"]
     fn scan_provisioned_products
         (&self,
          input: &ScanProvisionedProductsInput)
-         -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
+         -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
 
 
     #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
     fn search_products(&self,
                        input: &SearchProductsInput)
-                       -> Result<SearchProductsOutput, SearchProductsError>;
+                       -> RusotoFuture<SearchProductsOutput, SearchProductsError>;
 
 
     #[doc="<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>"]
     fn search_products_as_admin
         (&self,
          input: &SearchProductsAsAdminInput)
-         -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
+         -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
 
 
     #[doc="<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
     fn terminate_provisioned_product
         (&self,
          input: &TerminateProvisionedProductInput)
-         -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
+         -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
 
 
     #[doc="<p>Updates an existing constraint.</p>"]
     fn update_constraint(&self,
                          input: &UpdateConstraintInput)
-                         -> Result<UpdateConstraintOutput, UpdateConstraintError>;
+                         -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError>;
 
 
     #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
     fn update_portfolio(&self,
                         input: &UpdatePortfolioInput)
-                        -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
+                        -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError>;
 
 
     #[doc="<p>Updates an existing product.</p>"]
     fn update_product(&self,
                       input: &UpdateProductInput)
-                      -> Result<UpdateProductOutput, UpdateProductError>;
+                      -> RusotoFuture<UpdateProductOutput, UpdateProductError>;
 
 
     #[doc="<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
     fn update_provisioned_product
         (&self,
          input: &UpdateProvisionedProductInput)
-         -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
+         -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
 
     #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
     fn update_provisioning_artifact
         (&self,
          input: &UpdateProvisioningArtifactInput)
-         -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
+         -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
 
 
     #[doc="<p>Updates an existing TagOption.</p>"]
     fn update_tag_option(&self,
                          input: &UpdateTagOptionInput)
-                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError>;
+                         -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError>;
 }
 /// A client for the AWS Service Catalog API.
 pub struct ServiceCatalogClient<P, D>
@@ -6834,9 +6841,10 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Accepts an offer to share a portfolio.</p>"]
-    fn accept_portfolio_share(&self,
-                              input: &AcceptPortfolioShareInput)
-                              -> Result<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
+    fn accept_portfolio_share
+        (&self,
+         input: &AcceptPortfolioShareInput)
+         -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6845,22 +6853,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AcceptPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AcceptPortfolioShareError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6868,7 +6886,8 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn associate_principal_with_portfolio
         (&self,
          input: &AssociatePrincipalWithPortfolioInput)
-         -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError> {
+         -> RusotoFuture<AssociatePrincipalWithPortfolioOutput,
+                         AssociatePrincipalWithPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6877,23 +6896,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociatePrincipalWithPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociatePrincipalWithPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6901,7 +6929,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn associate_product_with_portfolio
         (&self,
          input: &AssociateProductWithPortfolioInput)
-         -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
+         -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6910,23 +6938,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociateProductWithPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -6934,7 +6971,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn associate_tag_option_with_resource
         (&self,
          input: &AssociateTagOptionWithResourceInput)
-         -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError> {
+         -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6943,30 +6980,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateTagOptionWithResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateTagOptionWithResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<AssociateTagOptionWithResourceOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(AssociateTagOptionWithResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
     fn create_constraint(&self,
                          input: &CreateConstraintInput)
-                         -> Result<CreateConstraintOutput, CreateConstraintError> {
+                         -> RusotoFuture<CreateConstraintOutput, CreateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6975,31 +7021,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateConstraintError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new portfolio.</p>"]
     fn create_portfolio(&self,
                         input: &CreatePortfolioInput)
-                        -> Result<CreatePortfolioOutput, CreatePortfolioError> {
+                        -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7008,31 +7062,40 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreatePortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new portfolio share.</p>"]
-    fn create_portfolio_share(&self,
-                              input: &CreatePortfolioShareInput)
-                              -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError> {
+    fn create_portfolio_share
+        (&self,
+         input: &CreatePortfolioShareInput)
+         -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7041,29 +7104,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreatePortfolioShareError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Creates a new product.</p>"]
     fn create_product(&self,
                       input: &CreateProductInput)
-                      -> Result<CreateProductOutput, CreateProductError> {
+                      -> RusotoFuture<CreateProductOutput, CreateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7071,24 +7144,44 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(CreateProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -7096,7 +7189,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn create_provisioning_artifact
         (&self,
          input: &CreateProvisioningArtifactInput)
-         -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
+         -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7105,30 +7198,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateProvisioningArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Create a new TagOption.</p>"]
     fn create_tag_option(&self,
                          input: &CreateTagOptionInput)
-                         -> Result<CreateTagOptionOutput, CreateTagOptionError> {
+                         -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7137,31 +7239,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateTagOptionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateTagOptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes the specified constraint.</p>"]
     fn delete_constraint(&self,
                          input: &DeleteConstraintInput)
-                         -> Result<DeleteConstraintOutput, DeleteConstraintError> {
+                         -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7170,31 +7280,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteConstraintError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
     fn delete_portfolio(&self,
                         input: &DeletePortfolioInput)
-                        -> Result<DeletePortfolioOutput, DeletePortfolioError> {
+                        -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7203,31 +7321,40 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeletePortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes the specified portfolio share.</p>"]
-    fn delete_portfolio_share(&self,
-                              input: &DeletePortfolioShareInput)
-                              -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError> {
+    fn delete_portfolio_share
+        (&self,
+         input: &DeletePortfolioShareInput)
+         -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7236,29 +7363,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeletePortfolioShareError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
     fn delete_product(&self,
                       input: &DeleteProductInput)
-                      -> Result<DeleteProductOutput, DeleteProductError> {
+                      -> RusotoFuture<DeleteProductOutput, DeleteProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7266,24 +7403,44 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DeleteProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -7291,7 +7448,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn delete_provisioning_artifact
         (&self,
          input: &DeleteProvisioningArtifactInput)
-         -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
+         -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7300,30 +7457,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteProvisioningArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Retrieves detailed information for a specified constraint.</p>"]
     fn describe_constraint(&self,
                            input: &DescribeConstraintInput)
-                           -> Result<DescribeConstraintOutput, DescribeConstraintError> {
+                           -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7332,31 +7498,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeConstraintError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>"]
     fn describe_portfolio(&self,
                           input: &DescribePortfolioInput)
-                          -> Result<DescribePortfolioOutput, DescribePortfolioError> {
+                          -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7365,31 +7539,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribePortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>"]
     fn describe_product(&self,
                         input: &DescribeProductInput)
-                        -> Result<DescribeProductOutput, DescribeProductError> {
+                        -> RusotoFuture<DescribeProductOutput, DescribeProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7398,24 +7580,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7423,7 +7613,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn describe_product_as_admin
         (&self,
          input: &DescribeProductAsAdminInput)
-         -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
+         -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7432,29 +7622,40 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProductAsAdminError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>"]
-    fn describe_product_view(&self,
-                             input: &DescribeProductViewInput)
-                             -> Result<DescribeProductViewOutput, DescribeProductViewError> {
+    fn describe_product_view
+        (&self,
+         input: &DescribeProductViewInput)
+         -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7463,22 +7664,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProductViewError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProductViewError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7486,7 +7697,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn describe_provisioned_product
         (&self,
          input: &DescribeProvisionedProductInput)
-         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
+         -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7495,23 +7706,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7519,7 +7739,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn describe_provisioning_artifact
         (&self,
          input: &DescribeProvisioningArtifactInput)
-         -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
+         -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7528,23 +7748,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProvisioningArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7552,7 +7781,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn describe_provisioning_parameters
         (&self,
          input: &DescribeProvisioningParametersInput)
-         -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError> {
+         -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7561,30 +7790,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProvisioningParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProvisioningParametersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>"]
     fn describe_record(&self,
                        input: &DescribeRecordInput)
-                       -> Result<DescribeRecordOutput, DescribeRecordError> {
+                       -> RusotoFuture<DescribeRecordOutput, DescribeRecordError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7592,31 +7830,51 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRecordError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(DescribeRecordError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Describes a TagOption.</p>"]
     fn describe_tag_option(&self,
                            input: &DescribeTagOptionInput)
-                           -> Result<DescribeTagOptionOutput, DescribeTagOptionError> {
+                           -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7625,33 +7883,37 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeTagOptionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeTagOptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>"]
-    fn disassociate_principal_from_portfolio
-        (&self,
-         input: &DisassociatePrincipalFromPortfolioInput)
-         -> Result<DisassociatePrincipalFromPortfolioOutput,
-                   DisassociatePrincipalFromPortfolioError> {
+fn disassociate_principal_from_portfolio(&self, input: &DisassociatePrincipalFromPortfolioInput)  -> RusotoFuture<DisassociatePrincipalFromPortfolioOutput, DisassociatePrincipalFromPortfolioError>{
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7660,22 +7922,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociatePrincipalFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociatePrincipalFromPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7683,7 +7955,8 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn disassociate_product_from_portfolio
         (&self,
          input: &DisassociateProductFromPortfolioInput)
-         -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError> {
+         -> RusotoFuture<DisassociateProductFromPortfolioOutput,
+                         DisassociateProductFromPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7692,22 +7965,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateProductFromPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7715,7 +7998,8 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn disassociate_tag_option_from_resource
         (&self,
          input: &DisassociateTagOptionFromResourceInput)
-         -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError> {
+         -> RusotoFuture<DisassociateTagOptionFromResourceOutput,
+                         DisassociateTagOptionFromResourceError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7724,22 +8008,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateTagOptionFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DisassociateTagOptionFromResourceError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7747,7 +8041,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_accepted_portfolio_shares
         (&self,
          input: &ListAcceptedPortfolioSharesInput)
-         -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
+         -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7756,23 +8050,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAcceptedPortfolioSharesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListAcceptedPortfolioSharesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7780,7 +8083,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_constraints_for_portfolio
         (&self,
          input: &ListConstraintsForPortfolioInput)
-         -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
+         -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7789,30 +8092,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListConstraintsForPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListConstraintsForPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>"]
     fn list_launch_paths(&self,
                          input: &ListLaunchPathsInput)
-                         -> Result<ListLaunchPathsOutput, ListLaunchPathsError> {
+                         -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7821,31 +8133,40 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLaunchPathsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListLaunchPathsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>"]
-    fn list_portfolio_access(&self,
-                             input: &ListPortfolioAccessInput)
-                             -> Result<ListPortfolioAccessOutput, ListPortfolioAccessError> {
+    fn list_portfolio_access
+        (&self,
+         input: &ListPortfolioAccessInput)
+         -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7854,29 +8175,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPortfolioAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListPortfolioAccessError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists all portfolios in the catalog.</p>"]
     fn list_portfolios(&self,
                        input: &ListPortfoliosInput)
-                       -> Result<ListPortfoliosOutput, ListPortfoliosError> {
+                       -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7884,24 +8215,44 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPortfoliosError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListPortfoliosError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -7909,7 +8260,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_portfolios_for_product
         (&self,
          input: &ListPortfoliosForProductInput)
-         -> Result<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
+         -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7918,23 +8269,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPortfoliosForProductError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListPortfoliosForProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7942,7 +8302,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_principals_for_portfolio
         (&self,
          input: &ListPrincipalsForPortfolioInput)
-         -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
+         -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7951,23 +8311,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalsForPortfolioError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListPrincipalsForPortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -7975,7 +8344,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_provisioning_artifacts
         (&self,
          input: &ListProvisioningArtifactsInput)
-         -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
+         -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7984,30 +8353,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListProvisioningArtifactsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListProvisioningArtifactsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>"]
     fn list_record_history(&self,
                            input: &ListRecordHistoryInput)
-                           -> Result<ListRecordHistoryOutput, ListRecordHistoryError> {
+                           -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8016,24 +8394,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListRecordHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListRecordHistoryError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -8041,7 +8427,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn list_resources_for_tag_option
         (&self,
          input: &ListResourcesForTagOptionInput)
-         -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
+         -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8050,30 +8436,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourcesForTagOptionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourcesForTagOptionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListResourcesForTagOptionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListResourcesForTagOptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists detailed TagOptions information.</p>"]
     fn list_tag_options(&self,
                         input: &ListTagOptionsInput)
-                        -> Result<ListTagOptionsOutput, ListTagOptionsError> {
+                        -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8081,31 +8476,51 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagOptionsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagOptionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListTagOptionsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListTagOptionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
-                         -> Result<ProvisionProductOutput, ProvisionProductError> {
+                         -> RusotoFuture<ProvisionProductOutput, ProvisionProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8114,31 +8529,40 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ProvisionProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ProvisionProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Rejects an offer to share a portfolio.</p>"]
-    fn reject_portfolio_share(&self,
-                              input: &RejectPortfolioShareInput)
-                              -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError> {
+    fn reject_portfolio_share
+        (&self,
+         input: &RejectPortfolioShareInput)
+         -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8147,22 +8571,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RejectPortfolioShareError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(RejectPortfolioShareError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -8170,7 +8604,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn scan_provisioned_products
         (&self,
          input: &ScanProvisionedProductsInput)
-         -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
+         -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8179,30 +8613,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ScanProvisionedProductsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ScanProvisionedProductsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>"]
     fn search_products(&self,
                        input: &SearchProductsInput)
-                       -> Result<SearchProductsOutput, SearchProductsError> {
+                       -> RusotoFuture<SearchProductsOutput, SearchProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8210,24 +8653,44 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SearchProductsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                 .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(SearchProductsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -8235,7 +8698,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn search_products_as_admin
         (&self,
          input: &SearchProductsAsAdminInput)
-         -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
+         -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8244,22 +8707,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SearchProductsAsAdminError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(SearchProductsAsAdminError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -8267,7 +8740,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn terminate_provisioned_product
         (&self,
          input: &TerminateProvisionedProductInput)
-         -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
+         -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8276,30 +8749,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TerminateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(TerminateProvisionedProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates an existing constraint.</p>"]
     fn update_constraint(&self,
                          input: &UpdateConstraintInput)
-                         -> Result<UpdateConstraintOutput, UpdateConstraintError> {
+                         -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8308,31 +8790,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateConstraintError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateConstraintError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
     fn update_portfolio(&self,
                         input: &UpdatePortfolioInput)
-                        -> Result<UpdatePortfolioOutput, UpdatePortfolioError> {
+                        -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8341,31 +8831,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdatePortfolioError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdatePortfolioError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates an existing product.</p>"]
     fn update_product(&self,
                       input: &UpdateProductInput)
-                      -> Result<UpdateProductOutput, UpdateProductError> {
+                      -> RusotoFuture<UpdateProductOutput, UpdateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8373,24 +8871,44 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateProductError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(UpdateProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
@@ -8398,7 +8916,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn update_provisioned_product
         (&self,
          input: &UpdateProvisionedProductInput)
-         -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
+         -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8407,23 +8925,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateProvisionedProductError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateProvisionedProductError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
@@ -8431,7 +8958,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     fn update_provisioning_artifact
         (&self,
          input: &UpdateProvisioningArtifactInput)
-         -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
+         -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8440,30 +8967,39 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateProvisioningArtifactError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Updates an existing TagOption.</p>"]
     fn update_tag_option(&self,
                          input: &UpdateTagOptionInput)
-                         -> Result<UpdateTagOptionOutput, UpdateTagOptionError> {
+                         -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8472,24 +9008,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTagOptionOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTagOptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<UpdateTagOptionOutput>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(UpdateTagOptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

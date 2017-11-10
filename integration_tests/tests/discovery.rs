@@ -20,7 +20,7 @@ fn should_describe_tags() {
     let client = DiscoveryClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    match client.describe_tags(&request) {
+    match client.describe_tags(&request).sync() {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
     }
@@ -36,7 +36,7 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    match client.list_configurations(&request) {
+    match client.list_configurations(&request).sync() {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
     }

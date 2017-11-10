@@ -14,5 +14,5 @@ fn should_list_gateways() {
         StorageGatewayClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListGatewaysInput::default();
 
-    client.list_gateways(&request).unwrap();
+    client.list_gateways(&request).sync().unwrap();
 }

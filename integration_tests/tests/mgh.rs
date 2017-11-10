@@ -12,6 +12,6 @@ fn should_list_migration_tasks() {
     let client = MigrationHubClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = ListMigrationTasksRequest::default();
 
-    let result = client.list_migration_tasks(&request).unwrap();
+    let result = client.list_migration_tasks(&request).sync().unwrap();
     println!("Results: {:?}", result);
 }

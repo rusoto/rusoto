@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1175,50 +1177,53 @@ pub trait Shield {
     #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
     fn create_protection(&self,
                          input: &CreateProtectionRequest)
-                         -> Result<CreateProtectionResponse, CreateProtectionError>;
+                         -> RusotoFuture<CreateProtectionResponse, CreateProtectionError>;
 
 
     #[doc="<p>Activates AWS Shield Advanced for an account.</p>"]
-    fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError>;
+    fn create_subscription(&self)
+                           -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError>;
 
 
     #[doc="<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
     fn delete_protection(&self,
                          input: &DeleteProtectionRequest)
-                         -> Result<DeleteProtectionResponse, DeleteProtectionError>;
+                         -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError>;
 
 
     #[doc="<p>Removes AWS Shield Advanced from an account.</p>"]
-    fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError>;
+    fn delete_subscription(&self)
+                           -> RusotoFuture<DeleteSubscriptionResponse, DeleteSubscriptionError>;
 
 
     #[doc="<p>Describes the details of a DDoS attack. </p>"]
     fn describe_attack(&self,
                        input: &DescribeAttackRequest)
-                       -> Result<DescribeAttackResponse, DescribeAttackError>;
+                       -> RusotoFuture<DescribeAttackResponse, DescribeAttackError>;
 
 
     #[doc="<p>Lists the details of a <a>Protection</a> object.</p>"]
     fn describe_protection(&self,
                            input: &DescribeProtectionRequest)
-                           -> Result<DescribeProtectionResponse, DescribeProtectionError>;
+                           -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError>;
 
 
     #[doc="<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
-    fn describe_subscription(&self)
-                             -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError>;
+    fn describe_subscription
+        (&self)
+         -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError>;
 
 
     #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
     fn list_attacks(&self,
                     input: &ListAttacksRequest)
-                    -> Result<ListAttacksResponse, ListAttacksError>;
+                    -> RusotoFuture<ListAttacksResponse, ListAttacksError>;
 
 
     #[doc="<p>Lists all <a>Protection</a> objects for the account.</p>"]
     fn list_protections(&self,
                         input: &ListProtectionsRequest)
-                        -> Result<ListProtectionsResponse, ListProtectionsError>;
+                        -> RusotoFuture<ListProtectionsResponse, ListProtectionsError>;
 }
 /// A client for the AWS Shield API.
 pub struct ShieldClient<P, D>
@@ -1250,7 +1255,7 @@ impl<P, D> Shield for ShieldClient<P, D>
     #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
     fn create_protection(&self,
                          input: &CreateProtectionRequest)
-                         -> Result<CreateProtectionResponse, CreateProtectionError> {
+                         -> RusotoFuture<CreateProtectionResponse, CreateProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1258,58 +1263,77 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProtectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateProtectionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateProtectionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Activates AWS Shield Advanced for an account.</p>"]
-    fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError> {
+    fn create_subscription(&self)
+                           -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.CreateSubscription");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<CreateSubscriptionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(CreateSubscriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
     fn delete_protection(&self,
                          input: &DeleteProtectionRequest)
-                         -> Result<DeleteProtectionResponse, DeleteProtectionError> {
+                         -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1317,58 +1341,77 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProtectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteProtectionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteProtectionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Removes AWS Shield Advanced from an account.</p>"]
-    fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError> {
+    fn delete_subscription(&self)
+                           -> RusotoFuture<DeleteSubscriptionResponse, DeleteSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DeleteSubscription");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DeleteSubscriptionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DeleteSubscriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Describes the details of a DDoS attack. </p>"]
     fn describe_attack(&self,
                        input: &DescribeAttackRequest)
-                       -> Result<DescribeAttackResponse, DescribeAttackError> {
+                       -> RusotoFuture<DescribeAttackResponse, DescribeAttackError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1376,31 +1419,39 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAttackResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAttackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeAttackResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeAttackError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Lists the details of a <a>Protection</a> object.</p>"]
     fn describe_protection(&self,
                            input: &DescribeProtectionRequest)
-                           -> Result<DescribeProtectionResponse, DescribeProtectionError> {
+                           -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1408,57 +1459,78 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProtectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeProtectionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeProtectionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
-    fn describe_subscription(&self)
-                             -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError> {
+    fn describe_subscription
+        (&self)
+         -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeSubscription");
         request.set_payload(Some(b"{}".to_vec()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<DescribeSubscriptionResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(DescribeSubscriptionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 
 
     #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
     fn list_attacks(&self,
                     input: &ListAttacksRequest)
-                    -> Result<ListAttacksResponse, ListAttacksError> {
+                    -> RusotoFuture<ListAttacksResponse, ListAttacksError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1466,31 +1538,51 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAttacksResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAttacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+                              self.dispatcher
+                                  .dispatch(request)
+                                  .from_err()
+                                  .and_then(|response| match response.status {
+                                                StatusCode::Ok => {
+                                                    future::Either::A(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .map_err(|err| {
+                                                                                       err.into()
+                                                                                   })
+                                                                          .map(|body| {
+                serde_json::from_str::<ListAttacksResponse>(String::from_utf8_lossy(body.as_ref())
+                                                                .as_ref())
+                        .unwrap()
+            }))
+                                                }
+                                                _ => {
+                                                    future::Either::B(response
+                                                                          .body
+                                                                          .concat2()
+                                                                          .from_err()
+                                                                          .and_then(|body| {
+                Err(ListAttacksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+            }))
+                                                }
+                                            })
+                          })
     }
 
 
     #[doc="<p>Lists all <a>Protection</a> objects for the account.</p>"]
     fn list_protections(&self,
                         input: &ListProtectionsRequest)
-                        -> Result<ListProtectionsResponse, ListProtectionsError> {
+                        -> RusotoFuture<ListProtectionsResponse, ListProtectionsError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1498,24 +1590,32 @@ impl<P, D> Shield for ShieldClient<P, D>
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProtectionsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListProtectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new({
+            self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                            match response.status {
+                                StatusCode::Ok => 
+            {
+                future::Either::A(response.body.concat2().map_err(|err| err.into()).map(|body| {
+                    serde_json::from_str::<ListProtectionsResponse>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                }))
+            },
+                                _ => {
+                                    future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                        Err(ListProtectionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                    }))
+                                }
+                            }
+                        })
+        })
     }
 }
 

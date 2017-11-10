@@ -15,7 +15,7 @@ fn should_describe_trusts() {
         DirectoryServiceClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeTrustsRequest::default();
 
-    client.describe_trusts(&request).unwrap();
+    client.describe_trusts(&request).sync().unwrap();
 }
 
 #[test]
@@ -25,5 +25,5 @@ fn should_describe_directories() {
         DirectoryServiceClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeDirectoriesRequest::default();
 
-    client.describe_directories(&request).unwrap();
+    client.describe_directories(&request).sync().unwrap();
 }

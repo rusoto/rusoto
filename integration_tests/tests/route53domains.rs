@@ -14,5 +14,5 @@ fn should_list_operations() {
         Route53DomainsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListOperationsRequest::default();
 
-    client.list_operations(&request).unwrap();
+    client.list_operations(&request).sync().unwrap();
 }

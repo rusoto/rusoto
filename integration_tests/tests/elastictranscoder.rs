@@ -1,7 +1,6 @@
 #![cfg(all(feature = "elastictranscoder", feature = "s3"))]
 
 extern crate env_logger;
-extern crate hyper;
 #[macro_use]
 extern crate log;
 extern crate rand;
@@ -12,12 +11,12 @@ extern crate rusoto_s3;
 use std::clone::Clone;
 use std::ops::{Deref, DerefMut};
 
-use hyper::Client;
 use rand::Rng;
 use rusoto_core::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto_elastictranscoder::{Ets, EtsClient};
 use rusoto_s3::{S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
 use rusoto_core::default_tls_client;
+use rusoto_core::request::DefaultTlsClient;
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
 const AWS_ETS_WEB_PRESET_NAME: &'static str = "System preset: Web";
@@ -29,9 +28,9 @@ struct TestEtsClient<P>
     credentials_provider: P,
     region: Region,
 
-    client: EtsClient<P, Client>,
+    client: EtsClient<P, DefaultTlsClient>,
 
-    s3_client: Option<S3Client<P, Client>>,
+    s3_client: Option<S3Client<P, DefaultTlsClient>>,
     input_bucket: Option<String>,
     output_bucket: Option<String>,
 }
@@ -65,7 +64,7 @@ impl<P> TestEtsClient<P>
         let result = self.s3_client
             .as_ref()
             .unwrap()
-            .create_bucket(&create_bucket_req);
+            .create_bucket(&create_bucket_req).sync();
 
         let mut location = result.unwrap()
             .location
@@ -80,7 +79,7 @@ impl<P> TestEtsClient<P>
 
 impl<P> Deref for TestEtsClient<P>
     where P: ProvideAwsCredentials {
-    type Target = EtsClient<P, Client>;
+    type Target = EtsClient<P, DefaultTlsClient>;
     fn deref(&self) -> &Self::Target {
         &self.client
     }
@@ -88,7 +87,7 @@ impl<P> Deref for TestEtsClient<P>
 
 impl<P> DerefMut for TestEtsClient<P>
     where P: ProvideAwsCredentials {
-    fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient<P, Client> {
+    fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient<P, DefaultTlsClient> {
         &mut self.client
     }
 }
@@ -102,7 +101,7 @@ impl<P> Drop for TestEtsClient<P>
                 let delete_bucket_req =
                     DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-                match s3_client.delete_bucket(&delete_bucket_req) {
+                match s3_client.delete_bucket(&delete_bucket_req).sync() {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
@@ -112,7 +111,7 @@ impl<P> Drop for TestEtsClient<P>
                 let delete_bucket_req =
                     DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-                match s3_client.delete_bucket(&delete_bucket_req) {
+                match s3_client.delete_bucket(&delete_bucket_req).sync() {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
@@ -160,7 +159,7 @@ fn create_pipeline_without_arn() {
         output_bucket: client.output_bucket.as_ref().cloned(),
         ..CreatePipelineRequest::default()
     };
-    let response = client.create_pipeline(&request);
+    let response = client.create_pipeline(&request).sync();
 
     response.unwrap();
 }
@@ -191,7 +190,7 @@ fn create_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = client.create_preset(&request);
+    let response = client.create_preset(&request).sync();
 
     assert!(response.is_ok());
 
@@ -214,7 +213,7 @@ fn create_preset() {
     // Cleanup
 
     let request = DeletePresetRequest { id: id };
-    client.delete_preset(&request).ok();
+    client.delete_preset(&request).sync().ok();
 }
 
 #[test]
@@ -243,12 +242,12 @@ fn delete_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = client.create_preset(&request).unwrap();
+    let response = client.create_preset(&request).sync().unwrap();
     let preset = response.preset.unwrap();
     let id = preset.id.unwrap();
 
     let request = DeletePresetRequest { id: id.clone() };
-    let response = client.delete_preset(&request);
+    let response = client.delete_preset(&request).sync();
 
     assert!(response.is_ok());
     info!("Deleted preset with id: {:?}", &id);
@@ -265,7 +264,7 @@ fn list_jobs_by_status() {
     let status = "Submitted".to_owned();
     let request =
         ListJobsByStatusRequest { status: status.clone(), ..ListJobsByStatusRequest::default() };
-    let response = client.list_jobs_by_status(&request);
+    let response = client.list_jobs_by_status(&request).sync();
 
     assert!(response.is_ok());
 
@@ -285,7 +284,7 @@ fn list_pipelines() {
     let client = create_client();
 
     let request = ListPipelinesRequest::default();
-    let response = client.list_pipelines(&request);
+    let response = client.list_pipelines(&request).sync();
 
     assert!(response.is_ok());
 
@@ -303,7 +302,7 @@ fn list_presets() {
     let client = create_client();
 
     let request = ListPresetsRequest::default();
-    let response = client.list_presets(&request);
+    let response = client.list_presets(&request).sync();
 
     assert!(response.is_ok());
 
@@ -338,7 +337,7 @@ fn read_preset() {
     let client = create_client();
 
     let request = ReadPresetRequest { id: AWS_ETS_WEB_PRESET_ID.to_owned() };
-    let response = client.read_preset(&request);
+    let response = client.read_preset(&request).sync();
 
     assert!(response.is_ok());
 

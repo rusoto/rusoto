@@ -114,15 +114,17 @@ fn generate<P, E>(writer: &mut FileWriter,
         // =================================================================
 
         #[allow(warnings)]
-        use hyper::Client;
-        use hyper::status::StatusCode;
+        use futures::future;
+        #[allow(unused_imports)]
+        use futures::{{Future, Poll, Stream as FuturesStream}};
+        use hyper::StatusCode;
         use rusoto_core::request::DispatchSignedRequest;
         use rusoto_core::region;
+        use rusoto_core::RusotoFuture;
 
         use std::fmt;
         use std::error::Error;
         use std::io;
-        use std::io::Read;
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
@@ -222,7 +224,7 @@ pub fn get_rust_type(service: &Service,
     } else {
         mutate_type_name_for_streaming(shape_name)
     }
-                     }
+}
 
 fn has_streaming_member(name: &str, shape: &Shape) -> bool {
     shape.shape_type == ShapeType::Structure &&
@@ -272,6 +274,10 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
     format!("Streaming{}", type_name)
 }
 
+pub fn mutate_constructor_name_for_streaming(type_name: &str) -> String {
+    format!("Streaming{}", type_name)
+}
+
 fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
     where P: GenerateProtocol
 {
@@ -313,7 +319,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
         if is_streaming_shape(service, name) {
             // Add a second type for streaming blobs, which are the only streaming type we can have
             writeln!(writer,
-                     "pub struct {streaming_name}(Box<Read>);
+                     "pub struct {streaming_name}(Box<FuturesStream<Item=Vec<u8>, Error=HttpDispatchError> + Send>);
 
                      impl fmt::Debug for {streaming_name} {{
                          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
@@ -321,23 +327,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                          }}
                      }}
 
-                     impl ::std::ops::Deref for {streaming_name} {{
-                         type Target = Box<Read>;
+                     impl FuturesStream for {streaming_name} {{
+                         type Item = Vec<u8>;
+                         type Error = HttpDispatchError;
 
-                         fn deref(&self) -> &Box<Read> {{
-                             &self.0
-                         }}
-                     }}
-
-                     impl ::std::ops::DerefMut for {streaming_name} {{
-                         fn deref_mut(&mut self) -> &mut Box<Read> {{
-                             &mut self.0
-                         }}
-                     }}
-
-                     impl ::std::io::Read for {streaming_name} {{
-                         fn read(&mut self, buf: &mut [u8]) -> ::std::io::Result<usize> {{
-                             self.0.read(buf)
+                         fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {{
+                             self.0.poll()
                          }}
                      }}",
                      name = type_name,

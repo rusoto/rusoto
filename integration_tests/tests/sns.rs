@@ -13,6 +13,6 @@ fn should_list_topics() {
     let client = SnsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListTopicsInput::default();
 
-    let result = client.list_topics(&request).unwrap();
+    let result = client.list_topics(&request).sync().unwrap();
     println!("{:#?}", result);
 }

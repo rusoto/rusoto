@@ -24,8 +24,8 @@ appveyor = { repository = "rusoto/rusoto", branch = "master" }
 rustc_version = "0.2.1"
 
 [dependencies]
-hyper = "0.10.0"
-hyper-native-tls = "0.2.1"
+hyper = "0.11.0"
+hyper-tls = "0.1.2"
 lazy_static = "0.2.1"
 log = "0.3.6"
 ring = "0.12"
@@ -33,8 +33,10 @@ base64 = "0.6"
 hex = "0.2"
 serde = "1.0.2"
 time = "0.1.35"
+tokio-core = "0.1.10"
 url = "1.2.0"
 xml-rs = "0.7"
+futures = "0.1.16"
 
 [dependencies.rusoto_credential]
 path = "../credential"

@@ -13,5 +13,5 @@ fn should_list_keys() {
     let client = KmsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListKeysRequest::default();
 
-    client.list_keys(&request).unwrap();
+    client.list_keys(&request).sync().unwrap();
 }

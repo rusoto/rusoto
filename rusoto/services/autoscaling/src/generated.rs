@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -11891,317 +11893,325 @@ impl Error for UpdateAutoScalingGroupError {
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 pub trait Autoscaling {
     #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError>;
+    fn attach_instances(&self,
+                        input: &AttachInstancesQuery)
+                        -> RusotoFuture<(), AttachInstancesError>;
 
 
     #[doc="<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn attach_load_balancer_target_groups
         (&self,
          input: &AttachLoadBalancerTargetGroupsType)
-         -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
+         -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType,
+                         AttachLoadBalancerTargetGroupsError>;
 
 
     #[doc="<p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn attach_load_balancers(&self,
-                             input: &AttachLoadBalancersType)
-                             -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError>;
+    fn attach_load_balancers
+        (&self,
+         input: &AttachLoadBalancersType)
+         -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError>;
 
 
     #[doc="<p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn complete_lifecycle_action
         (&self,
          input: &CompleteLifecycleActionType)
-         -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
+         -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
 
 
     #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_auto_scaling_group(&self,
                                  input: &CreateAutoScalingGroupType)
-                                 -> Result<(), CreateAutoScalingGroupError>;
+                                 -> RusotoFuture<(), CreateAutoScalingGroupError>;
 
 
     #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_launch_configuration(&self,
                                    input: &CreateLaunchConfigurationType)
-                                   -> Result<(), CreateLaunchConfigurationError>;
+                                   -> RusotoFuture<(), CreateLaunchConfigurationError>;
 
 
     #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_or_update_tags(&self,
                              input: &CreateOrUpdateTagsType)
-                             -> Result<(), CreateOrUpdateTagsError>;
+                             -> RusotoFuture<(), CreateOrUpdateTagsError>;
 
 
     #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
     fn delete_auto_scaling_group(&self,
                                  input: &DeleteAutoScalingGroupType)
-                                 -> Result<(), DeleteAutoScalingGroupError>;
+                                 -> RusotoFuture<(), DeleteAutoScalingGroupError>;
 
 
     #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
     fn delete_launch_configuration(&self,
                                    input: &LaunchConfigurationNameType)
-                                   -> Result<(), DeleteLaunchConfigurationError>;
+                                   -> RusotoFuture<(), DeleteLaunchConfigurationError>;
 
 
     #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
-    fn delete_lifecycle_hook(&self,
-                             input: &DeleteLifecycleHookType)
-                             -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
+    fn delete_lifecycle_hook
+        (&self,
+         input: &DeleteLifecycleHookType)
+         -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
 
 
     #[doc="<p>Deletes the specified notification.</p>"]
-    fn delete_notification_configuration(&self,
-                                         input: &DeleteNotificationConfigurationType)
-                                         -> Result<(), DeleteNotificationConfigurationError>;
+    fn delete_notification_configuration
+        (&self,
+         input: &DeleteNotificationConfigurationType)
+         -> RusotoFuture<(), DeleteNotificationConfigurationError>;
 
 
     #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
-    fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError>;
+    fn delete_policy(&self, input: &DeletePolicyType) -> RusotoFuture<(), DeletePolicyError>;
 
 
     #[doc="<p>Deletes the specified scheduled action.</p>"]
     fn delete_scheduled_action(&self,
                                input: &DeleteScheduledActionType)
-                               -> Result<(), DeleteScheduledActionError>;
+                               -> RusotoFuture<(), DeleteScheduledActionError>;
 
 
     #[doc="<p>Deletes the specified tags.</p>"]
-    fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError>;
+    fn delete_tags(&self, input: &DeleteTagsType) -> RusotoFuture<(), DeleteTagsError>;
 
 
     #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn describe_account_limits
         (&self)
-         -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
+         -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
 
 
     #[doc="<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
     fn describe_adjustment_types
         (&self)
-         -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
+         -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
 
 
     #[doc="<p>Describes one or more Auto Scaling groups.</p>"]
     fn describe_auto_scaling_groups
         (&self,
          input: &AutoScalingGroupNamesType)
-         -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
+         -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
 
 
     #[doc="<p>Describes one or more Auto Scaling instances.</p>"]
     fn describe_auto_scaling_instances
         (&self,
          input: &DescribeAutoScalingInstancesType)
-         -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
+         -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
 
 
     #[doc="<p>Describes the notification types that are supported by Auto Scaling.</p>"]
-    fn describe_auto_scaling_notification_types
-        (&self)
-         -> Result<DescribeAutoScalingNotificationTypesAnswer,
-                   DescribeAutoScalingNotificationTypesError>;
+    fn describe_auto_scaling_notification_types(&self) -> RusotoFuture<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError>;
 
 
     #[doc="<p>Describes one or more launch configurations.</p>"]
     fn describe_launch_configurations
         (&self,
          input: &LaunchConfigurationNamesType)
-         -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
+         -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
 
 
     #[doc="<p>Describes the available types of lifecycle hooks.</p>"]
     fn describe_lifecycle_hook_types
         (&self)
-         -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
+         -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
 
 
     #[doc="<p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>"]
     fn describe_lifecycle_hooks
         (&self,
          input: &DescribeLifecycleHooksType)
-         -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
+         -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
 
 
     #[doc="<p>Describes the target groups for the specified Auto Scaling group.</p>"]
     fn describe_load_balancer_target_groups
         (&self,
          input: &DescribeLoadBalancerTargetGroupsRequest)
-         -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
+         -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse,
+                         DescribeLoadBalancerTargetGroupsError>;
 
 
     #[doc="<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>"]
     fn describe_load_balancers
         (&self,
          input: &DescribeLoadBalancersRequest)
-         -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
+         -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
 
 
     #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
     fn describe_metric_collection_types
         (&self)
-         -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
+         -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
 
 
     #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
-    fn describe_notification_configurations
-        (&self,
-         input: &DescribeNotificationConfigurationsType)
-         -> Result<DescribeNotificationConfigurationsAnswer,
-                   DescribeNotificationConfigurationsError>;
+    fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> RusotoFuture<DescribeNotificationConfigurationsAnswer, DescribeNotificationConfigurationsError>;
 
 
     #[doc="<p>Describes the policies for the specified Auto Scaling group.</p>"]
     fn describe_policies(&self,
                          input: &DescribePoliciesType)
-                         -> Result<PoliciesType, DescribePoliciesError>;
+                         -> RusotoFuture<PoliciesType, DescribePoliciesError>;
 
 
     #[doc="<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
-    fn describe_scaling_activities(&self,
-                                   input: &DescribeScalingActivitiesType)
-                                   -> Result<ActivitiesType, DescribeScalingActivitiesError>;
+    fn describe_scaling_activities
+        (&self,
+         input: &DescribeScalingActivitiesType)
+         -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError>;
 
 
     #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
     fn describe_scaling_process_types
         (&self)
-         -> Result<ProcessesType, DescribeScalingProcessTypesError>;
+         -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError>;
 
 
     #[doc="<p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>"]
     fn describe_scheduled_actions
         (&self,
          input: &DescribeScheduledActionsType)
-         -> Result<ScheduledActionsType, DescribeScheduledActionsError>;
+         -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError>;
 
 
     #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
-    fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError>;
+    fn describe_tags(&self, input: &DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError>;
 
 
     #[doc="<p>Describes the termination policies supported by Auto Scaling.</p>"]
     fn describe_termination_policy_types
         (&self)
-         -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
+         -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
 
 
     #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn detach_instances(&self,
                         input: &DetachInstancesQuery)
-                        -> Result<DetachInstancesAnswer, DetachInstancesError>;
+                        -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError>;
 
 
     #[doc="<p>Detaches one or more target groups from the specified Auto Scaling group.</p>"]
     fn detach_load_balancer_target_groups
         (&self,
          input: &DetachLoadBalancerTargetGroupsType)
-         -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
+         -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType,
+                         DetachLoadBalancerTargetGroupsError>;
 
 
     #[doc="<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
-    fn detach_load_balancers(&self,
-                             input: &DetachLoadBalancersType)
-                             -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError>;
+    fn detach_load_balancers
+        (&self,
+         input: &DetachLoadBalancersType)
+         -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError>;
 
 
     #[doc="<p>Disables group metrics for the specified Auto Scaling group.</p>"]
     fn disable_metrics_collection(&self,
                                   input: &DisableMetricsCollectionQuery)
-                                  -> Result<(), DisableMetricsCollectionError>;
+                                  -> RusotoFuture<(), DisableMetricsCollectionError>;
 
 
     #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn enable_metrics_collection(&self,
                                  input: &EnableMetricsCollectionQuery)
-                                 -> Result<(), EnableMetricsCollectionError>;
+                                 -> RusotoFuture<(), EnableMetricsCollectionError>;
 
 
     #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn enter_standby(&self,
                      input: &EnterStandbyQuery)
-                     -> Result<EnterStandbyAnswer, EnterStandbyError>;
+                     -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError>;
 
 
     #[doc="<p>Executes the specified policy.</p>"]
-    fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError>;
+    fn execute_policy(&self, input: &ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError>;
 
 
     #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn exit_standby(&self,
                     input: &ExitStandbyQuery)
-                    -> Result<ExitStandbyAnswer, ExitStandbyError>;
+                    -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError>;
 
 
     #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn put_lifecycle_hook(&self,
                           input: &PutLifecycleHookType)
-                          -> Result<PutLifecycleHookAnswer, PutLifecycleHookError>;
+                          -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError>;
 
 
     #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn put_notification_configuration(&self,
                                       input: &PutNotificationConfigurationType)
-                                      -> Result<(), PutNotificationConfigurationError>;
+                                      -> RusotoFuture<(), PutNotificationConfigurationError>;
 
 
     #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyType)
-                          -> Result<PolicyARNType, PutScalingPolicyError>;
+                          -> RusotoFuture<PolicyARNType, PutScalingPolicyError>;
 
 
     #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn put_scheduled_update_group_action(&self,
-                                         input: &PutScheduledUpdateGroupActionType)
-                                         -> Result<(), PutScheduledUpdateGroupActionError>;
+    fn put_scheduled_update_group_action
+        (&self,
+         input: &PutScheduledUpdateGroupActionType)
+         -> RusotoFuture<(), PutScheduledUpdateGroupActionError>;
 
 
     #[doc="<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn record_lifecycle_action_heartbeat
         (&self,
          input: &RecordLifecycleActionHeartbeatType)
-         -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
+         -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
 
 
     #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError>;
+    fn resume_processes(&self,
+                        input: &ScalingProcessQuery)
+                        -> RusotoFuture<(), ResumeProcessesError>;
 
 
     #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn set_desired_capacity(&self,
                             input: &SetDesiredCapacityType)
-                            -> Result<(), SetDesiredCapacityError>;
+                            -> RusotoFuture<(), SetDesiredCapacityError>;
 
 
     #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn set_instance_health(&self,
                            input: &SetInstanceHealthQuery)
-                           -> Result<(), SetInstanceHealthError>;
+                           -> RusotoFuture<(), SetInstanceHealthError>;
 
 
     #[doc="<p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection\">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn set_instance_protection
         (&self,
          input: &SetInstanceProtectionQuery)
-         -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
+         -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
 
 
     #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError>;
+    fn suspend_processes(&self,
+                         input: &ScalingProcessQuery)
+                         -> RusotoFuture<(), SuspendProcessesError>;
 
 
     #[doc="<p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>"]
     fn terminate_instance_in_auto_scaling_group
         (&self,
          input: &TerminateInstanceInAutoScalingGroupType)
-         -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError>;
+         -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError>;
 
 
     #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
     fn update_auto_scaling_group(&self,
                                  input: &UpdateAutoScalingGroupType)
-                                 -> Result<(), UpdateAutoScalingGroupError>;
+                                 -> RusotoFuture<(), UpdateAutoScalingGroupError>;
 }
 /// A client for the Auto Scaling API.
 pub struct AutoscalingClient<P, D>
@@ -12231,7 +12241,9 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
           D: DispatchSignedRequest
 {
     #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError> {
+    fn attach_instances(&self,
+                        input: &AttachInstancesQuery)
+                        -> RusotoFuture<(), AttachInstancesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12240,19 +12252,33 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(AttachInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -12260,7 +12286,8 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn attach_load_balancer_target_groups
         (&self,
          input: &AttachLoadBalancerTargetGroupsType)
-         -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError> {
+         -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType,
+                         AttachLoadBalancerTargetGroupsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12269,45 +12296,58 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = AttachLoadBalancerTargetGroupsResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("AttachLoadBalancerTargetGroupsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = AttachLoadBalancerTargetGroupsResultType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("AttachLoadBalancerTargetGroupsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(AttachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn attach_load_balancers(&self,
-                             input: &AttachLoadBalancersType)
-                             -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError> {
+    fn attach_load_balancers
+        (&self,
+         input: &AttachLoadBalancersType)
+         -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12316,39 +12356,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = AttachLoadBalancersResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(AttachLoadBalancersResultTypeDeserializer::deserialize("AttachLoadBalancersResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = AttachLoadBalancersResultType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(AttachLoadBalancersResultTypeDeserializer::deserialize("AttachLoadBalancersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(AttachLoadBalancersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -12356,7 +12407,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn complete_lifecycle_action
         (&self,
          input: &CompleteLifecycleActionType)
-         -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
+         -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12365,47 +12416,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CompleteLifecycleActionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CompleteLifecycleActionAnswerDeserializer::deserialize("CompleteLifecycleActionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = CompleteLifecycleActionAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(CompleteLifecycleActionAnswerDeserializer::deserialize("CompleteLifecycleActionResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(CompleteLifecycleActionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_auto_scaling_group(&self,
                                  input: &CreateAutoScalingGroupType)
-                                 -> Result<(), CreateAutoScalingGroupError> {
+                                 -> RusotoFuture<(), CreateAutoScalingGroupError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12414,26 +12475,41 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateAutoScalingGroupError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_launch_configuration(&self,
                                    input: &CreateLaunchConfigurationType)
-                                   -> Result<(), CreateLaunchConfigurationError> {
+                                   -> RusotoFuture<(), CreateLaunchConfigurationError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12442,27 +12518,41 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateLaunchConfigurationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn create_or_update_tags(&self,
                              input: &CreateOrUpdateTagsType)
-                             -> Result<(), CreateOrUpdateTagsError> {
+                             -> RusotoFuture<(), CreateOrUpdateTagsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12471,26 +12561,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(CreateOrUpdateTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
     fn delete_auto_scaling_group(&self,
                                  input: &DeleteAutoScalingGroupType)
-                                 -> Result<(), DeleteAutoScalingGroupError> {
+                                 -> RusotoFuture<(), DeleteAutoScalingGroupError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12499,26 +12603,41 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteAutoScalingGroupError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
     fn delete_launch_configuration(&self,
                                    input: &LaunchConfigurationNameType)
-                                   -> Result<(), DeleteLaunchConfigurationError> {
+                                   -> RusotoFuture<(), DeleteLaunchConfigurationError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12527,27 +12646,42 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteLaunchConfigurationError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                              .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
-    fn delete_lifecycle_hook(&self,
-                             input: &DeleteLifecycleHookType)
-                             -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
+    fn delete_lifecycle_hook
+        (&self,
+         input: &DeleteLifecycleHookType)
+         -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12556,45 +12690,58 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteLifecycleHookAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteLifecycleHookAnswerDeserializer::deserialize("DeleteLifecycleHookResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteLifecycleHookAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteLifecycleHookAnswerDeserializer::deserialize("DeleteLifecycleHookResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteLifecycleHookError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Deletes the specified notification.</p>"]
-    fn delete_notification_configuration(&self,
-                                         input: &DeleteNotificationConfigurationType)
-                                         -> Result<(), DeleteNotificationConfigurationError> {
+    fn delete_notification_configuration
+        (&self,
+         input: &DeleteNotificationConfigurationType)
+         -> RusotoFuture<(), DeleteNotificationConfigurationError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12603,25 +12750,33 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                future::Either::A(future::ok(::std::mem::drop(response_body)))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteNotificationConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
-    fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError> {
+    fn delete_policy(&self, input: &DeletePolicyType) -> RusotoFuture<(), DeletePolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12630,26 +12785,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeletePolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified scheduled action.</p>"]
     fn delete_scheduled_action(&self,
                                input: &DeleteScheduledActionType)
-                               -> Result<(), DeleteScheduledActionError> {
+                               -> RusotoFuture<(), DeleteScheduledActionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12658,24 +12827,39 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteScheduledActionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                          .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Deletes the specified tags.</p>"]
-    fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError> {
+    fn delete_tags(&self, input: &DeleteTagsType) -> RusotoFuture<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12684,26 +12868,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DeleteTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn describe_account_limits
         (&self)
-         -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
+         -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12712,45 +12910,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeAccountLimitsAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccountLimitsAnswerDeserializer::deserialize("DescribeAccountLimitsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeAccountLimitsAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeAccountLimitsAnswerDeserializer::deserialize("DescribeAccountLimitsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
     fn describe_adjustment_types
         (&self)
-         -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
+         -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12759,40 +12969,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeAdjustmentTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeAdjustmentTypesAnswerDeserializer::deserialize("DescribeAdjustmentTypesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeAdjustmentTypesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeAdjustmentTypesAnswerDeserializer::deserialize("DescribeAdjustmentTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAdjustmentTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -12800,7 +13020,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_auto_scaling_groups
         (&self,
          input: &AutoScalingGroupNamesType)
-         -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
+         -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12809,39 +13029,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = AutoScalingGroupsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AutoScalingGroupsTypeDeserializer::deserialize("DescribeAutoScalingGroupsResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = AutoScalingGroupsType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(AutoScalingGroupsTypeDeserializer::deserialize("DescribeAutoScalingGroupsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAutoScalingGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -12849,7 +13080,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_auto_scaling_instances
         (&self,
          input: &DescribeAutoScalingInstancesType)
-         -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
+         -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12858,47 +13089,55 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = AutoScalingInstancesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AutoScalingInstancesTypeDeserializer::deserialize("DescribeAutoScalingInstancesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = AutoScalingInstancesType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(AutoScalingInstancesTypeDeserializer::deserialize("DescribeAutoScalingInstancesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAutoScalingInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the notification types that are supported by Auto Scaling.</p>"]
-    fn describe_auto_scaling_notification_types
-        (&self)
-         -> Result<DescribeAutoScalingNotificationTypesAnswer,
-                   DescribeAutoScalingNotificationTypesError> {
+fn describe_auto_scaling_notification_types(&self) -> RusotoFuture<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError>{
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12907,37 +13146,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeAutoScalingNotificationTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize("DescribeAutoScalingNotificationTypesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeAutoScalingNotificationTypesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize("DescribeAutoScalingNotificationTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAutoScalingNotificationTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -12945,7 +13197,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_launch_configurations
         (&self,
          input: &LaunchConfigurationNamesType)
-         -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
+         -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12954,46 +13206,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = LaunchConfigurationsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(LaunchConfigurationsTypeDeserializer::deserialize("DescribeLaunchConfigurationsResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = LaunchConfigurationsType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(LaunchConfigurationsTypeDeserializer::deserialize("DescribeLaunchConfigurationsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeLaunchConfigurationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the available types of lifecycle hooks.</p>"]
     fn describe_lifecycle_hook_types
         (&self)
-         -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
+         -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13002,40 +13265,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeLifecycleHookTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeLifecycleHookTypesAnswerDeserializer::deserialize("DescribeLifecycleHookTypesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeLifecycleHookTypesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeLifecycleHookTypesAnswerDeserializer::deserialize("DescribeLifecycleHookTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeLifecycleHookTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -13043,7 +13316,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_lifecycle_hooks
         (&self,
          input: &DescribeLifecycleHooksType)
-         -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
+         -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13052,39 +13325,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeLifecycleHooksAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeLifecycleHooksAnswerDeserializer::deserialize("DescribeLifecycleHooksResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeLifecycleHooksAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeLifecycleHooksAnswerDeserializer::deserialize("DescribeLifecycleHooksResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeLifecycleHooksError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -13092,7 +13376,8 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_load_balancer_target_groups
         (&self,
          input: &DescribeLoadBalancerTargetGroupsRequest)
-         -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError> {
+         -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse,
+                         DescribeLoadBalancerTargetGroupsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13101,37 +13386,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeLoadBalancerTargetGroupsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize("DescribeLoadBalancerTargetGroupsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeLoadBalancerTargetGroupsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize("DescribeLoadBalancerTargetGroupsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -13139,7 +13437,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_load_balancers
         (&self,
          input: &DescribeLoadBalancersRequest)
-         -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
+         -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13148,46 +13446,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeLoadBalancersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeLoadBalancersResponseDeserializer::deserialize("DescribeLoadBalancersResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeLoadBalancersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeLoadBalancersResponseDeserializer::deserialize("DescribeLoadBalancersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
     fn describe_metric_collection_types
         (&self)
-         -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
+         -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13196,47 +13505,55 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeMetricCollectionTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeMetricCollectionTypesAnswerDeserializer::deserialize("DescribeMetricCollectionTypesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeMetricCollectionTypesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeMetricCollectionTypesAnswerDeserializer::deserialize("DescribeMetricCollectionTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeMetricCollectionTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
-    fn describe_notification_configurations
-        (&self,
-         input: &DescribeNotificationConfigurationsType)
-         -> Result<DescribeNotificationConfigurationsAnswer,
-                   DescribeNotificationConfigurationsError> {
+fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> RusotoFuture<DescribeNotificationConfigurationsAnswer, DescribeNotificationConfigurationsError>{
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13245,44 +13562,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeNotificationConfigurationsAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeNotificationConfigurationsAnswerDeserializer::deserialize("DescribeNotificationConfigurationsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeNotificationConfigurationsAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeNotificationConfigurationsAnswerDeserializer::deserialize("DescribeNotificationConfigurationsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeNotificationConfigurationsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the policies for the specified Auto Scaling group.</p>"]
     fn describe_policies(&self,
                          input: &DescribePoliciesType)
-                         -> Result<PoliciesType, DescribePoliciesError> {
+                         -> RusotoFuture<PoliciesType, DescribePoliciesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13291,14 +13621,27 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = PoliciesType::default();
@@ -13315,21 +13658,29 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribePoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribePoliciesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
-    fn describe_scaling_activities(&self,
-                                   input: &DescribeScalingActivitiesType)
-                                   -> Result<ActivitiesType, DescribeScalingActivitiesError> {
+    fn describe_scaling_activities
+        (&self,
+         input: &DescribeScalingActivitiesType)
+         -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13338,46 +13689,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ActivitiesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult",
-                                                                          &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ActivitiesType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeScalingActivitiesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
     fn describe_scaling_process_types
         (&self)
-         -> Result<ProcessesType, DescribeScalingProcessTypesError> {
+         -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13386,39 +13748,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ProcessesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ProcessesType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeScalingProcessTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -13426,7 +13799,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_scheduled_actions
         (&self,
          input: &DescribeScheduledActionsType)
-         -> Result<ScheduledActionsType, DescribeScheduledActionsError> {
+         -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13435,44 +13808,55 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ScheduledActionsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ScheduledActionsTypeDeserializer::deserialize("DescribeScheduledActionsResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ScheduledActionsType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ScheduledActionsTypeDeserializer::deserialize("DescribeScheduledActionsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeScheduledActionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
-    fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError> {
+    fn describe_tags(&self, input: &DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13481,14 +13865,27 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = TagsType::default();
@@ -13505,21 +13902,28 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Describes the termination policies supported by Auto Scaling.</p>"]
     fn describe_termination_policy_types
         (&self)
-         -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError> {
+         -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13528,45 +13932,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeTerminationPolicyTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeTerminationPolicyTypesAnswerDeserializer::deserialize("DescribeTerminationPolicyTypesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeTerminationPolicyTypesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeTerminationPolicyTypesAnswerDeserializer::deserialize("DescribeTerminationPolicyTypesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeTerminationPolicyTypesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn detach_instances(&self,
                         input: &DetachInstancesQuery)
-                        -> Result<DetachInstancesAnswer, DetachInstancesError> {
+                        -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13575,38 +13991,50 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DetachInstancesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DetachInstancesAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DetachInstancesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -13614,7 +14042,8 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn detach_load_balancer_target_groups
         (&self,
          input: &DetachLoadBalancerTargetGroupsType)
-         -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError> {
+         -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType,
+                         DetachLoadBalancerTargetGroupsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13623,45 +14052,58 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DetachLoadBalancerTargetGroupsResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("DetachLoadBalancerTargetGroupsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DetachLoadBalancerTargetGroupsResultType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize("DetachLoadBalancerTargetGroupsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DetachLoadBalancerTargetGroupsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
-    fn detach_load_balancers(&self,
-                             input: &DetachLoadBalancersType)
-                             -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError> {
+    fn detach_load_balancers
+        (&self,
+         input: &DetachLoadBalancersType)
+         -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13670,46 +14112,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DetachLoadBalancersResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DetachLoadBalancersResultTypeDeserializer::deserialize("DetachLoadBalancersResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DetachLoadBalancersResultType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DetachLoadBalancersResultTypeDeserializer::deserialize("DetachLoadBalancersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DetachLoadBalancersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Disables group metrics for the specified Auto Scaling group.</p>"]
     fn disable_metrics_collection(&self,
                                   input: &DisableMetricsCollectionQuery)
-                                  -> Result<(), DisableMetricsCollectionError> {
+                                  -> RusotoFuture<(), DisableMetricsCollectionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13718,27 +14171,41 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(DisableMetricsCollectionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                             .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn enable_metrics_collection(&self,
                                  input: &EnableMetricsCollectionQuery)
-                                 -> Result<(), EnableMetricsCollectionError> {
+                                 -> RusotoFuture<(), EnableMetricsCollectionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13747,27 +14214,41 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(EnableMetricsCollectionError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                            .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn enter_standby(&self,
                      input: &EnterStandbyQuery)
-                     -> Result<EnterStandbyAnswer, EnterStandbyError> {
+                     -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13776,14 +14257,27 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = EnterStandbyAnswer::default();
@@ -13800,19 +14294,26 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnterStandbyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(EnterStandbyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Executes the specified policy.</p>"]
-    fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError> {
+    fn execute_policy(&self, input: &ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13821,26 +14322,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ExecutePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ExecutePolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn exit_standby(&self,
                     input: &ExitStandbyQuery)
-                    -> Result<ExitStandbyAnswer, ExitStandbyError> {
+                    -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13849,14 +14364,27 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = ExitStandbyAnswer::default();
@@ -13873,21 +14401,28 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ExitStandbyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ExitStandbyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn put_lifecycle_hook(&self,
                           input: &PutLifecycleHookType)
-                          -> Result<PutLifecycleHookAnswer, PutLifecycleHookError> {
+                          -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13896,45 +14431,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = PutLifecycleHookAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(PutLifecycleHookAnswerDeserializer::deserialize("PutLifecycleHookResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutLifecycleHookError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = PutLifecycleHookAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(PutLifecycleHookAnswerDeserializer::deserialize("PutLifecycleHookResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(PutLifecycleHookError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn put_notification_configuration(&self,
                                       input: &PutNotificationConfigurationType)
-                                      -> Result<(), PutNotificationConfigurationError> {
+                                      -> RusotoFuture<(), PutNotificationConfigurationError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13943,27 +14490,35 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                future::Either::A(future::ok(::std::mem::drop(response_body)))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(PutNotificationConfigurationError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyType)
-                          -> Result<PolicyARNType, PutScalingPolicyError> {
+                          -> RusotoFuture<PolicyARNType, PutScalingPolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -13972,14 +14527,27 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
+            }
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
+            }
+        };
 
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+                                                let response_body = response.body;
+
+                                                future::Either::A(response_body
+                                                                      .from_err()
+                                                                      .concat2()
+                                                                      .and_then(move |body| {
                 let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
 
                 if body.is_empty() {
                     result = PolicyARNType::default();
@@ -13996,21 +14564,29 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
-        }
+            }))
+                                            }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn put_scheduled_update_group_action(&self,
-                                         input: &PutScheduledUpdateGroupActionType)
-                                         -> Result<(), PutScheduledUpdateGroupActionError> {
+    fn put_scheduled_update_group_action
+        (&self,
+         input: &PutScheduledUpdateGroupActionType)
+         -> RusotoFuture<(), PutScheduledUpdateGroupActionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14019,20 +14595,28 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                future::Either::A(future::ok(::std::mem::drop(response_body)))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(PutScheduledUpdateGroupActionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -14040,7 +14624,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn record_lifecycle_action_heartbeat
         (&self,
          input: &RecordLifecycleActionHeartbeatType)
-         -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError> {
+         -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14049,43 +14633,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = RecordLifecycleActionHeartbeatAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize("RecordLifecycleActionHeartbeatResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = RecordLifecycleActionHeartbeatAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize("RecordLifecycleActionHeartbeatResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(RecordLifecycleActionHeartbeatError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError> {
+    fn resume_processes(&self,
+                        input: &ScalingProcessQuery)
+                        -> RusotoFuture<(), ResumeProcessesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14094,26 +14692,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ResumeProcessesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(ResumeProcessesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn set_desired_capacity(&self,
                             input: &SetDesiredCapacityType)
-                            -> Result<(), SetDesiredCapacityError> {
+                            -> RusotoFuture<(), SetDesiredCapacityError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14122,26 +14734,40 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SetDesiredCapacityError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
     #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn set_instance_health(&self,
                            input: &SetInstanceHealthQuery)
-                           -> Result<(), SetInstanceHealthError> {
+                           -> RusotoFuture<(), SetInstanceHealthError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14150,19 +14776,33 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetInstanceHealthError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SetInstanceHealthError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -14170,7 +14810,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn set_instance_protection
         (&self,
          input: &SetInstanceProtectionQuery)
-         -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
+         -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14179,43 +14819,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = SetInstanceProtectionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetInstanceProtectionAnswerDeserializer::deserialize("SetInstanceProtectionResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = SetInstanceProtectionAnswer::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(SetInstanceProtectionAnswerDeserializer::deserialize("SetInstanceProtectionResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(SetInstanceProtectionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError> {
+    fn suspend_processes(&self,
+                         input: &ScalingProcessQuery)
+                         -> RusotoFuture<(), SuspendProcessesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14224,19 +14878,33 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SuspendProcessesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(SuspendProcessesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+        }))
+                                            }
+                                        }))
     }
 
 
@@ -14244,7 +14912,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn terminate_instance_in_auto_scaling_group
         (&self,
          input: &TerminateInstanceInAutoScalingGroupType)
-         -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError> {
+         -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14253,45 +14921,57 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ActivityType::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ActivityTypeDeserializer::deserialize("TerminateInstanceInAutoScalingGroupResult",
-                                                                        &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ActivityType::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ActivityTypeDeserializer::deserialize("TerminateInstanceInAutoScalingGroupResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(TerminateInstanceInAutoScalingGroupError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
     fn update_auto_scaling_group(&self,
                                  input: &UpdateAutoScalingGroupType)
-                                 -> Result<(), UpdateAutoScalingGroupError> {
+                                 -> RusotoFuture<(), UpdateAutoScalingGroupError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -14300,19 +14980,34 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
+        };
+
+        RusotoFuture::new(self.dispatcher
+                              .dispatch(request)
+                              .from_err()
+                              .and_then(|response| match response.status {
+                                            StatusCode::Ok => {
+            let response_body = response.body;
+            future::Either::A(future::ok(::std::mem::drop(response_body)))
         }
+                                            _ => {
+                                                future::Either::B(response
+                                                                      .body
+                                                                      .concat2()
+                                                                      .from_err()
+                                                                      .and_then(|body| {
+            Err(UpdateAutoScalingGroupError::from_body(String::from_utf8_lossy(body.as_ref())
+                                                           .as_ref()))
+        }))
+                                            }
+                                        }))
     }
 }
 
@@ -14333,7 +15028,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeletePolicyType::default();
-        let result = client.delete_policy(&request);
+        let result = client.delete_policy(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14344,7 +15039,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_adjustment_types();
+        let result = client.describe_adjustment_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14356,7 +15051,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AutoScalingGroupNamesType::default();
-        let result = client.describe_auto_scaling_groups(&request);
+        let result = client.describe_auto_scaling_groups(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14368,7 +15063,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAutoScalingInstancesType::default();
-        let result = client.describe_auto_scaling_instances(&request);
+        let result = client.describe_auto_scaling_instances(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14380,7 +15075,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_auto_scaling_notification_types();
+        let result = client.describe_auto_scaling_notification_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14392,7 +15087,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = LaunchConfigurationNamesType::default();
-        let result = client.describe_launch_configurations(&request);
+        let result = client.describe_launch_configurations(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14404,7 +15099,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_metric_collection_types();
+        let result = client.describe_metric_collection_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14416,7 +15111,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeNotificationConfigurationsType::default();
-        let result = client.describe_notification_configurations(&request);
+        let result = client.describe_notification_configurations(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14428,7 +15123,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribePoliciesType::default();
-        let result = client.describe_policies(&request);
+        let result = client.describe_policies(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14440,7 +15135,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeScalingActivitiesType::default();
-        let result = client.describe_scaling_activities(&request);
+        let result = client.describe_scaling_activities(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14452,7 +15147,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_scaling_process_types();
+        let result = client.describe_scaling_process_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14464,7 +15159,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeScheduledActionsType::default();
-        let result = client.describe_scheduled_actions(&request);
+        let result = client.describe_scheduled_actions(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14476,7 +15171,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeTagsType::default();
-        let result = client.describe_tags(&request);
+        let result = client.describe_tags(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14488,7 +15183,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_termination_policy_types();
+        let result = client.describe_termination_policy_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

@@ -12,6 +12,6 @@ fn should_get_databases() {
     let client = GlueClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
     let request = GetDatabasesRequest::default();
 
-    let result = client.get_databases(&request).unwrap();
+    let result = client.get_databases(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

@@ -30,6 +30,6 @@ fn should_put_metric_data() {
         metric_data: metric_data,
     };
 
-    let response = client.put_metric_data(&request).unwrap();
+    let response = client.put_metric_data(&request).sync().unwrap();
     println!("{:#?}", response);
 }

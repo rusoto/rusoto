@@ -12,6 +12,6 @@ fn should_list_collections() {
     let client = RekognitionClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListCollectionsRequest::default();
 
-    let result = client.list_collections(&request).unwrap();
+    let result = client.list_collections(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

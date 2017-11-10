@@ -14,5 +14,5 @@ fn should_describe_log_groups() {
         CloudWatchLogsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeLogGroupsRequest::default();
 
-    client.describe_log_groups(&request).unwrap();
+    client.describe_log_groups(&request).sync().unwrap();
 }

@@ -13,6 +13,6 @@ fn should_list_rules() {
     let client = WAFRegionalClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListRulesRequest::default();
 
-    let result = client.list_rules(&request).unwrap();
+    let result = client.list_rules(&request).sync().unwrap();
     println!("{:#?}", result);
 }

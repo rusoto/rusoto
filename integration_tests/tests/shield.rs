@@ -11,6 +11,6 @@ fn should_list_attacks() {
     let client = ShieldClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListAttacksRequest::default();
 
-    let result = client.list_attacks(&request).unwrap();
+    let result = client.list_attacks(&request).sync().unwrap();
     println!("{:#?}", result);
 }

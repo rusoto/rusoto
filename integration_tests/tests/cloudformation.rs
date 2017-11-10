@@ -14,7 +14,7 @@ fn should_list_stacks() {
                                            Region::UsEast1);
     let request = ListStacksInput::default();
 
-    let result = client.list_stacks(&request).unwrap();
+    let result = client.list_stacks(&request).sync().unwrap();
     println!("{:#?}", result);
 }
 
@@ -27,6 +27,6 @@ fn should_list_stacks_with_status_filter() {
     let filters = vec!["CREATE_COMPLETE".to_owned()];
     let request = ListStacksInput { stack_status_filter: Some(filters), ..Default::default() };
 
-    let result = client.list_stacks(&request).unwrap();
+    let result = client.list_stacks(&request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -12,15 +12,17 @@
 // =================================================================
 
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+#[allow(unused_imports)]
+use futures::{Future, Poll, Stream as FuturesStream};
+use hyper::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::RusotoFuture;
 
 use std::fmt;
 use std::error::Error;
 use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -7379,152 +7381,154 @@ pub trait CloudSearch {
     #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn build_suggesters(&self,
                         input: &BuildSuggestersRequest)
-                        -> Result<BuildSuggestersResponse, BuildSuggestersError>;
+                        -> RusotoFuture<BuildSuggestersResponse, BuildSuggestersError>;
 
 
     #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn create_domain(&self,
                      input: &CreateDomainRequest)
-                     -> Result<CreateDomainResponse, CreateDomainError>;
+                     -> RusotoFuture<CreateDomainResponse, CreateDomainError>;
 
 
     #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn define_analysis_scheme
         (&self,
          input: &DefineAnalysisSchemeRequest)
-         -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
+         -> RusotoFuture<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
 
 
     #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn define_expression(&self,
                          input: &DefineExpressionRequest)
-                         -> Result<DefineExpressionResponse, DefineExpressionError>;
+                         -> RusotoFuture<DefineExpressionResponse, DefineExpressionError>;
 
 
     #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn define_index_field(&self,
                           input: &DefineIndexFieldRequest)
-                          -> Result<DefineIndexFieldResponse, DefineIndexFieldError>;
+                          -> RusotoFuture<DefineIndexFieldResponse, DefineIndexFieldError>;
 
 
     #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn define_suggester(&self,
                         input: &DefineSuggesterRequest)
-                        -> Result<DefineSuggesterResponse, DefineSuggesterError>;
+                        -> RusotoFuture<DefineSuggesterResponse, DefineSuggesterError>;
 
 
     #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn delete_analysis_scheme
         (&self,
          input: &DeleteAnalysisSchemeRequest)
-         -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
+         -> RusotoFuture<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
 
 
     #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn delete_domain(&self,
                      input: &DeleteDomainRequest)
-                     -> Result<DeleteDomainResponse, DeleteDomainError>;
+                     -> RusotoFuture<DeleteDomainResponse, DeleteDomainError>;
 
 
     #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_expression(&self,
                          input: &DeleteExpressionRequest)
-                         -> Result<DeleteExpressionResponse, DeleteExpressionError>;
+                         -> RusotoFuture<DeleteExpressionResponse, DeleteExpressionError>;
 
 
     #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_index_field(&self,
                           input: &DeleteIndexFieldRequest)
-                          -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError>;
+                          -> RusotoFuture<DeleteIndexFieldResponse, DeleteIndexFieldError>;
 
 
     #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_suggester(&self,
                         input: &DeleteSuggesterRequest)
-                        -> Result<DeleteSuggesterResponse, DeleteSuggesterError>;
+                        -> RusotoFuture<DeleteSuggesterResponse, DeleteSuggesterError>;
 
 
     #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_analysis_schemes
         (&self,
          input: &DescribeAnalysisSchemesRequest)
-         -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
+         -> RusotoFuture<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
 
 
     #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_availability_options
         (&self,
          input: &DescribeAvailabilityOptionsRequest)
-         -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
+         -> RusotoFuture<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
 
 
     #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_domains(&self,
                         input: &DescribeDomainsRequest)
-                        -> Result<DescribeDomainsResponse, DescribeDomainsError>;
+                        -> RusotoFuture<DescribeDomainsResponse, DescribeDomainsError>;
 
 
     #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_expressions(&self,
-                            input: &DescribeExpressionsRequest)
-                            -> Result<DescribeExpressionsResponse, DescribeExpressionsError>;
+    fn describe_expressions
+        (&self,
+         input: &DescribeExpressionsRequest)
+         -> RusotoFuture<DescribeExpressionsResponse, DescribeExpressionsError>;
 
 
     #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_index_fields(&self,
-                             input: &DescribeIndexFieldsRequest)
-                             -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
+    fn describe_index_fields
+        (&self,
+         input: &DescribeIndexFieldsRequest)
+         -> RusotoFuture<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
 
 
     #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_scaling_parameters
         (&self,
          input: &DescribeScalingParametersRequest)
-         -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError>;
+         -> RusotoFuture<DescribeScalingParametersResponse, DescribeScalingParametersError>;
 
 
     #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_service_access_policies
         (&self,
          input: &DescribeServiceAccessPoliciesRequest)
-         -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
+         -> RusotoFuture<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
 
 
     #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_suggesters(&self,
                            input: &DescribeSuggestersRequest)
-                           -> Result<DescribeSuggestersResponse, DescribeSuggestersError>;
+                           -> RusotoFuture<DescribeSuggestersResponse, DescribeSuggestersError>;
 
 
     #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
     fn index_documents(&self,
                        input: &IndexDocumentsRequest)
-                       -> Result<IndexDocumentsResponse, IndexDocumentsError>;
+                       -> RusotoFuture<IndexDocumentsResponse, IndexDocumentsError>;
 
 
     #[doc="<p>Lists all search domains owned by an account.</p>"]
-    fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError>;
+    fn list_domain_names(&self) -> RusotoFuture<ListDomainNamesResponse, ListDomainNamesError>;
 
 
     #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn update_availability_options
         (&self,
          input: &UpdateAvailabilityOptionsRequest)
-         -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
+         -> RusotoFuture<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
 
 
     #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn update_scaling_parameters
         (&self,
          input: &UpdateScalingParametersRequest)
-         -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError>;
+         -> RusotoFuture<UpdateScalingParametersResponse, UpdateScalingParametersError>;
 
 
     #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
     fn update_service_access_policies
         (&self,
          input: &UpdateServiceAccessPoliciesRequest)
-         -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
+         -> RusotoFuture<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
 }
 /// A client for the Amazon CloudSearch API.
 pub struct CloudSearchClient<P, D>
@@ -7556,7 +7560,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn build_suggesters(&self,
                         input: &BuildSuggestersRequest)
-                        -> Result<BuildSuggestersResponse, BuildSuggestersError> {
+                        -> RusotoFuture<BuildSuggestersResponse, BuildSuggestersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7565,45 +7569,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = BuildSuggestersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BuildSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = BuildSuggestersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(BuildSuggestersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn create_domain(&self,
                      input: &CreateDomainRequest)
-                     -> Result<CreateDomainResponse, CreateDomainError> {
+                     -> RusotoFuture<CreateDomainResponse, CreateDomainError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7612,38 +7628,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = CreateDomainResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDomainResponseDeserializer::deserialize("CreateDomainResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = CreateDomainResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(CreateDomainResponseDeserializer::deserialize("CreateDomainResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(CreateDomainError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -7651,7 +7679,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn define_analysis_scheme
         (&self,
          input: &DefineAnalysisSchemeRequest)
-         -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
+         -> RusotoFuture<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7660,46 +7688,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DefineAnalysisSchemeResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DefineAnalysisSchemeResponseDeserializer::deserialize("DefineAnalysisSchemeResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DefineAnalysisSchemeResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DefineAnalysisSchemeResponseDeserializer::deserialize("DefineAnalysisSchemeResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn define_expression(&self,
                          input: &DefineExpressionRequest)
-                         -> Result<DefineExpressionResponse, DefineExpressionError> {
+                         -> RusotoFuture<DefineExpressionResponse, DefineExpressionError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7708,45 +7747,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DefineExpressionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DefineExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DefineExpressionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DefineExpressionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn define_index_field(&self,
                           input: &DefineIndexFieldRequest)
-                          -> Result<DefineIndexFieldResponse, DefineIndexFieldError> {
+                          -> RusotoFuture<DefineIndexFieldResponse, DefineIndexFieldError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7755,45 +7806,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DefineIndexFieldResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DefineIndexFieldResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn define_suggester(&self,
                         input: &DefineSuggesterRequest)
-                        -> Result<DefineSuggesterResponse, DefineSuggesterError> {
+                        -> RusotoFuture<DefineSuggesterResponse, DefineSuggesterError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7802,38 +7865,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DefineSuggesterResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DefineSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DefineSuggesterResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DefineSuggesterError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -7841,7 +7916,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn delete_analysis_scheme
         (&self,
          input: &DeleteAnalysisSchemeRequest)
-         -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
+         -> RusotoFuture<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7850,46 +7925,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteAnalysisSchemeResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteAnalysisSchemeResponseDeserializer::deserialize("DeleteAnalysisSchemeResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteAnalysisSchemeResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteAnalysisSchemeResponseDeserializer::deserialize("DeleteAnalysisSchemeResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
     fn delete_domain(&self,
                      input: &DeleteDomainRequest)
-                     -> Result<DeleteDomainResponse, DeleteDomainError> {
+                     -> RusotoFuture<DeleteDomainResponse, DeleteDomainError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7898,45 +7984,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteDomainResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteDomainResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteDomainError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_expression(&self,
                          input: &DeleteExpressionRequest)
-                         -> Result<DeleteExpressionResponse, DeleteExpressionError> {
+                         -> RusotoFuture<DeleteExpressionResponse, DeleteExpressionError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7945,45 +8043,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteExpressionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteExpressionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteExpressionError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_index_field(&self,
                           input: &DeleteIndexFieldRequest)
-                          -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError> {
+                          -> RusotoFuture<DeleteIndexFieldResponse, DeleteIndexFieldError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7992,45 +8102,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteIndexFieldResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteIndexFieldResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn delete_suggester(&self,
                         input: &DeleteSuggesterRequest)
-                        -> Result<DeleteSuggesterResponse, DeleteSuggesterError> {
+                        -> RusotoFuture<DeleteSuggesterResponse, DeleteSuggesterError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8039,38 +8161,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DeleteSuggesterResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DeleteSuggesterResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8078,7 +8212,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_analysis_schemes
         (&self,
          input: &DescribeAnalysisSchemesRequest)
-         -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
+         -> RusotoFuture<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8087,40 +8221,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeAnalysisSchemesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeAnalysisSchemesResponseDeserializer::deserialize("DescribeAnalysisSchemesResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeAnalysisSchemesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeAnalysisSchemesResponseDeserializer::deserialize("DescribeAnalysisSchemesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8128,7 +8272,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_availability_options
         (&self,
          input: &DescribeAvailabilityOptionsRequest)
-         -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
+         -> RusotoFuture<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8137,45 +8281,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeAvailabilityOptionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAvailabilityOptionsResponseDeserializer::deserialize("DescribeAvailabilityOptionsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeAvailabilityOptionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeAvailabilityOptionsResponseDeserializer::deserialize("DescribeAvailabilityOptionsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_domains(&self,
                         input: &DescribeDomainsRequest)
-                        -> Result<DescribeDomainsResponse, DescribeDomainsError> {
+                        -> RusotoFuture<DescribeDomainsResponse, DescribeDomainsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8184,45 +8340,58 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeDomainsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeDomainsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeDomainsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_expressions(&self,
-                            input: &DescribeExpressionsRequest)
-                            -> Result<DescribeExpressionsResponse, DescribeExpressionsError> {
+    fn describe_expressions
+        (&self,
+         input: &DescribeExpressionsRequest)
+         -> RusotoFuture<DescribeExpressionsResponse, DescribeExpressionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8231,45 +8400,58 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeExpressionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeExpressionsResponseDeserializer::deserialize("DescribeExpressionsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeExpressionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeExpressionsResponseDeserializer::deserialize("DescribeExpressionsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_index_fields(&self,
-                             input: &DescribeIndexFieldsRequest)
-                             -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
+    fn describe_index_fields
+        (&self,
+         input: &DescribeIndexFieldsRequest)
+         -> RusotoFuture<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8278,38 +8460,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeIndexFieldsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeIndexFieldsResponseDeserializer::deserialize("DescribeIndexFieldsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeIndexFieldsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeIndexFieldsResponseDeserializer::deserialize("DescribeIndexFieldsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8317,7 +8511,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_scaling_parameters
         (&self,
          input: &DescribeScalingParametersRequest)
-         -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError> {
+         -> RusotoFuture<DescribeScalingParametersResponse, DescribeScalingParametersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8326,38 +8520,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeScalingParametersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeScalingParametersResponseDeserializer::deserialize("DescribeScalingParametersResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeScalingParametersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeScalingParametersResponseDeserializer::deserialize("DescribeScalingParametersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8365,7 +8571,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn describe_service_access_policies
         (&self,
          input: &DescribeServiceAccessPoliciesRequest)
-         -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
+         -> RusotoFuture<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8374,45 +8580,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeServiceAccessPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeServiceAccessPoliciesResponseDeserializer::deserialize("DescribeServiceAccessPoliciesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeServiceAccessPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeServiceAccessPoliciesResponseDeserializer::deserialize("DescribeServiceAccessPoliciesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
     fn describe_suggesters(&self,
                            input: &DescribeSuggestersRequest)
-                           -> Result<DescribeSuggestersResponse, DescribeSuggestersError> {
+                           -> RusotoFuture<DescribeSuggestersResponse, DescribeSuggestersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8421,45 +8639,57 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = DescribeSuggestersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeSuggestersResponseDeserializer::deserialize("DescribeSuggestersResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = DescribeSuggestersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(DescribeSuggestersResponseDeserializer::deserialize("DescribeSuggestersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
     fn index_documents(&self,
                        input: &IndexDocumentsRequest)
-                       -> Result<IndexDocumentsResponse, IndexDocumentsError> {
+                       -> RusotoFuture<IndexDocumentsResponse, IndexDocumentsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8468,43 +8698,55 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = IndexDocumentsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(IndexDocumentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = IndexDocumentsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(IndexDocumentsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
     #[doc="<p>Lists all search domains owned by an account.</p>"]
-    fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError> {
+    fn list_domain_names(&self) -> RusotoFuture<ListDomainNamesResponse, ListDomainNamesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8513,38 +8755,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = ListDomainNamesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDomainNamesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = ListDomainNamesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(ListDomainNamesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8552,7 +8806,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn update_availability_options
         (&self,
          input: &UpdateAvailabilityOptionsRequest)
-         -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
+         -> RusotoFuture<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8561,38 +8815,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateAvailabilityOptionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateAvailabilityOptionsResponseDeserializer::deserialize("UpdateAvailabilityOptionsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = UpdateAvailabilityOptionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(UpdateAvailabilityOptionsResponseDeserializer::deserialize("UpdateAvailabilityOptionsResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8600,7 +8866,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn update_scaling_parameters
         (&self,
          input: &UpdateScalingParametersRequest)
-         -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError> {
+         -> RusotoFuture<UpdateScalingParametersResponse, UpdateScalingParametersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8609,40 +8875,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateScalingParametersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(UpdateScalingParametersResponseDeserializer::deserialize("UpdateScalingParametersResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = UpdateScalingParametersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(UpdateScalingParametersResponseDeserializer::deserialize("UpdateScalingParametersResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 
 
@@ -8650,7 +8926,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
     fn update_service_access_policies
         (&self,
          input: &UpdateServiceAccessPoliciesRequest)
-         -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
+         -> RusotoFuture<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8659,38 +8935,50 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                if body.is_empty() {
-                    result = UpdateServiceAccessPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateServiceAccessPoliciesResponseDeserializer::deserialize("UpdateServiceAccessPoliciesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+        match self.credentials_provider.credentials() {
+            Err(err) => {
+                return RusotoFuture::new(future::err(err.into()));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+            Ok(credentials) => {
+                request.sign_with_plus(&credentials, true);
             }
-        }
+        };
+
+        RusotoFuture::new(self.dispatcher.dispatch(request).from_err().and_then(|response| {
+                        match response.status {
+                            StatusCode::Ok => {
+                                let response_body = response.body;
+                                
+        future::Either::A(response_body.from_err().concat2().and_then(move |body| {
+            let result;
+
+            if body.is_empty() {
+                result = UpdateServiceAccessPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    body.as_slice(),
+                    ParserConfig::new().trim_whitespace(true)
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!(UpdateServiceAccessPoliciesResponseDeserializer::deserialize("UpdateServiceAccessPoliciesResult", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));
+            }
+
+            
+            Ok(result)
+        }))
+                            }
+                            _ => {
+                                future::Either::B(response.body.concat2().from_err().and_then(|body| {
+                                    Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(body.as_ref()).as_ref()))
+                                }))
+                            }
+                        }
+                    }))
     }
 }
 

@@ -15,7 +15,7 @@ fn initiate_multipart_upload_happy_path() {
         bucket: "example-bucket".to_owned(),
         key: "example-object".to_owned(),
         ..Default::default()
-    });
+    }).sync();
 
     match result {
         Err(_) => panic!("Couldn't parse initiate_multipart_upload"),
@@ -39,7 +39,7 @@ fn complete_multipart_upload_happy_path() {
         key: "example-object".to_owned(),
         upload_id: "VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA".to_owned(),
         ..Default::default()
-    });
+    }).sync();
 
     match result {
         Err(_) => panic!("Couldn't parse s3_complete_multipart_upload"),
@@ -60,7 +60,7 @@ fn list_multipart_upload_happy_path() {
     let result = client.list_multipart_uploads(&ListMultipartUploadsRequest {
         bucket: "example-bucket".to_owned(),
         ..Default::default()
-    });
+    }).sync();
 
     match result {
         Err(_) => panic!("Couldn't parse s3_list_multipart_uploads.xml"),
@@ -144,7 +144,7 @@ fn list_multipart_upload_parts_happy_path() {
     req.key = "testfile.zip".to_owned();
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_parts(&req).unwrap();
+    let result = client.list_parts(&req).sync().unwrap();
     assert_eq!(result.bucket, sstr("rusoto1440826511"));
     assert_eq!(result.upload_id,
                 sstr("PeePB_uORK5f2AURP_SWcQ4NO1P1oqnGNNNFK3nhFfzMeksdvG7x7nFfH1qk7a3HSossNYB7t8QhcN1Fg6ax7AXbwvAKIZ9DilB4tUcpM7qyUEgkszN4iDmMvSaImGFK"));
@@ -200,7 +200,7 @@ fn list_multipart_uploads_no_uploads() {
     req.bucket = "test-bucket".to_owned();
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_multipart_uploads(&req).unwrap();
+    let result = client.list_multipart_uploads(&req).sync().unwrap();
 
     assert_eq!(result.bucket, sstr("rusoto1440826568"));
     assert!(result.uploads.is_none());
@@ -238,7 +238,7 @@ fn should_parse_sample_list_buckets_response() {
         });
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_buckets().unwrap();
+    let result = client.list_buckets().sync().unwrap();
 
     let owner = result.owner.unwrap();
     assert_eq!(owner.display_name, Some("webfile".to_string()));
@@ -262,7 +262,7 @@ fn should_parse_headers() {
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
     let request = HeadObjectRequest::default();
-    let result = client.head_object(&request).unwrap();
+    let result = client.head_object(&request).sync().unwrap();
 
     assert_eq!(result.expiration, Some("foo".to_string()));
     assert_eq!(result.restore, Some("bar".to_string()));
@@ -304,7 +304,7 @@ fn should_serialize_complicated_request() {
         });
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _ = client.get_object(&request).unwrap();
+    let _ = client.get_object(&request).sync().unwrap();
 }
 
 #[test]
@@ -315,7 +315,7 @@ fn should_parse_location_constraint() {
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.get_bucket_location(&GetBucketLocationRequest {
         bucket: "example-bucket".to_owned()
-    });
+    }).sync();
 
     match result {
         Err(_) => panic!("Couldn't parse get_bucket_location"),
