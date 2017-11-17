@@ -157,8 +157,8 @@ impl SignedRequest {
 
     /// Add a value to the array of headers for the specified key.
     /// Headers are kept sorted by key name for use at signing (BTreeMap)
-    pub fn add_header(&mut self, key: &str, value: &str) {
-        let key_lower = key.to_ascii_lowercase().to_string();
+    pub fn add_header<K: ToString>(&mut self, key: K, value: &str) {
+        let key_lower = key.to_string().to_ascii_lowercase();
         let value_vec = value.as_bytes().to_vec();
 
         match self.headers.entry(key_lower) {

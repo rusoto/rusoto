@@ -37,6 +37,31 @@ pub fn generate_headers(service: &Service, operation: &Operation) -> Option<Stri
                                      location_name = member.location_name.as_ref().unwrap(),
                                      field_name = generate_field_name(member_name)))
                     }
+                },
+                "headers" => {
+                    if shape.required(member_name) {
+                        Some(format!("for (header_name, header_value) in input.{field_name}.iter() {{
+                                              let header = format!(\"{location_name}{{}}\", header_name);
+                                              request.add_header(header,
+                                                                 header_value);
+                                          }}
+                                      ",
+                                     location_name = member.location_name.as_ref().unwrap(),
+                                     field_name = generate_field_name(member_name)))
+                    } else {
+                        Some(format!("
+                        if let Some(ref {field_name}) = 
+                                      input.{field_name} {{
+                                          for (header_name, header_value) in {field_name}.iter() {{
+                                              let header = format!(\"{location_name}{{}}\", header_name);
+                                              request.add_header(header,
+                                                                 header_value);
+                                          }}
+
+                        }}",
+                                     location_name = member.location_name.as_ref().unwrap(),
+                                     field_name = generate_field_name(member_name)))
+                    }
                 }
                 _ => None,
             }
