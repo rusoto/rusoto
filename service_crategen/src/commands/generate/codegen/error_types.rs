@@ -37,7 +37,7 @@ pub trait GenerateErrorTypes {
                            error_documentation: &BTreeMap<&String, &String>)
                            -> IoResult {
         writeln!(writer,
-                 "/// Errors returned by {operation}
+                 "/// Errors returned by `{operation}`
                 #[derive(Debug, PartialEq)]
                 pub enum {type_name} {{
                     {error_types}
@@ -132,13 +132,11 @@ pub trait GenerateErrorTypes {
             }
         }
 
-        type_matchers.push(format!("{error_type}::Validation(ref cause) => cause",
+        type_matchers.push(format!("{error_type}::Validation(ref cause) | {error_type}::Unknown(ref cause) => cause",
                                    error_type = error_type));
         type_matchers.push(format!("{error_type}::Credentials(ref err) => err.description()",
                                    error_type = error_type));
         type_matchers.push(format!("{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()", error_type = error_type));
-        type_matchers.push(format!("{error_type}::Unknown(ref cause) => cause",
-                                   error_type = error_type));
         Some(type_matchers.join(",\n"))
     }
 

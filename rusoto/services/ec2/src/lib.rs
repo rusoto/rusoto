@@ -15,6 +15,10 @@
 //!
 //! If you're using the service, you're probably looking for [Ec2Client](struct.Ec2Client.html) and [Ec2](trait.Ec2.html).
 
+// These need to be part of the generated code:
+#![cfg_attr(feature="clippy", feature(plugin))]
+#![cfg_attr(feature="clippy", plugin(clippy))]
+
 extern crate hyper;
 extern crate rusoto_core;
 extern crate xml;

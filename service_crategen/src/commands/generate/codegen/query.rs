@@ -43,7 +43,6 @@ impl GenerateProtocol for QueryGenerator {
                     match response.status {{
                         StatusCode::Ok => {{
                             {parse_payload}
-                            Ok(result)
                         }}
                         _ => {{
                             let mut body: Vec<u8> = Vec::new();
@@ -131,7 +130,7 @@ impl GenerateProtocol for QueryGenerator {
 pub fn generate_method_input_serialization(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "{input_type}Serializer::serialize(&mut params, \"\", &input);",
+            "{input_type}Serializer::serialize(&mut params, \"\", input);",
             input_type = operation.input.as_ref().unwrap().shape,
         )
     } else {

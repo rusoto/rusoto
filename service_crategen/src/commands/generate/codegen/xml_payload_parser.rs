@@ -13,7 +13,7 @@ pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Serv
     format!("struct {name}Deserializer;
             impl {name}Deserializer {{
                 #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T)
                 -> Result<{ty}, XmlParseError> {{
                     {deserializer_body}
                 }}
@@ -44,7 +44,7 @@ pub fn generate_response_parser(service: &Service,
                                 mutable_result: bool)
                                 -> String {
     if operation.output.is_none() {
-        return "let result = ();".to_string();
+        return "Ok(())".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
@@ -91,6 +91,7 @@ fn payload_body_parser(payload_type: ShapeType,
 
         let mut result = {output_shape}::default();
         result.{payload_member} = Some({response_body});
+        Ok(result)
         ",
             unpack = unpack,
             output_shape = output_shape,
@@ -139,7 +140,8 @@ fn xml_body_parser(output_shape: &str,
             let _start_document = stack.next();
             let actual_tag_name = try!(peek_at_name(&mut stack));
             {deserialize}
-        }}",
+        }}
+        Ok(result)",
             let_result = let_result,
             output_shape = output_shape,
             deserialize = deserialize)
