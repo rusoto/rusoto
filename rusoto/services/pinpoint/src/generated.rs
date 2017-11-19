@@ -8035,7 +8035,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8069,7 +8069,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn create_campaign(&self,
                        input: &CreateCampaignRequest)
                        -> Result<CreateCampaignResponse, CreateCampaignError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("POST", "mobiletargeting", &self.region, &request_uri);
@@ -8081,7 +8081,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8115,7 +8115,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn create_import_job(&self,
                          input: &CreateImportJobRequest)
                          -> Result<CreateImportJobResponse, CreateImportJobError> {
-        let request_uri = format!("/v1/apps/{application-id}/jobs/import",
+        let request_uri = format!("/v1/apps/{application_id}/jobs/import",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("POST", "mobiletargeting", &self.region, &request_uri);
@@ -8127,7 +8127,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8161,7 +8161,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn create_segment(&self,
                       input: &CreateSegmentRequest)
                       -> Result<CreateSegmentResponse, CreateSegmentError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments",
+        let request_uri = format!("/v1/apps/{application_id}/segments",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("POST", "mobiletargeting", &self.region, &request_uri);
@@ -8173,7 +8173,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8207,7 +8207,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_apns_channel(&self,
                            input: &DeleteApnsChannelRequest)
                            -> Result<DeleteApnsChannelResponse, DeleteApnsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8219,7 +8219,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8254,7 +8254,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &DeleteApnsSandboxChannelRequest)
          -> Result<DeleteApnsSandboxChannelResponse, DeleteApnsSandboxChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns_sandbox",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns_sandbox",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8266,7 +8266,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8300,7 +8300,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
     #[doc="Deletes an app."]
     fn delete_app(&self, input: &DeleteAppRequest) -> Result<DeleteAppResponse, DeleteAppError> {
-        let request_uri = format!("/v1/apps/{application-id}",
+        let request_uri = format!("/v1/apps/{application_id}",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8312,7 +8312,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8346,7 +8346,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_campaign(&self,
                        input: &DeleteCampaignRequest)
                        -> Result<DeleteCampaignResponse, DeleteCampaignError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id);
 
@@ -8359,7 +8359,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8393,7 +8393,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_email_channel(&self,
                             input: &DeleteEmailChannelRequest)
                             -> Result<DeleteEmailChannelResponse, DeleteEmailChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/email",
+        let request_uri = format!("/v1/apps/{application_id}/channels/email",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8405,7 +8405,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8439,7 +8439,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_event_stream(&self,
                            input: &DeleteEventStreamRequest)
                            -> Result<DeleteEventStreamResponse, DeleteEventStreamError> {
-        let request_uri = format!("/v1/apps/{application-id}/eventstream",
+        let request_uri = format!("/v1/apps/{application_id}/eventstream",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8451,7 +8451,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8485,7 +8485,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_gcm_channel(&self,
                           input: &DeleteGcmChannelRequest)
                           -> Result<DeleteGcmChannelResponse, DeleteGcmChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/gcm",
+        let request_uri = format!("/v1/apps/{application_id}/channels/gcm",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8497,7 +8497,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8531,7 +8531,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_segment(&self,
                       input: &DeleteSegmentRequest)
                       -> Result<DeleteSegmentResponse, DeleteSegmentError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id);
 
@@ -8544,7 +8544,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8578,7 +8578,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn delete_sms_channel(&self,
                           input: &DeleteSmsChannelRequest)
                           -> Result<DeleteSmsChannelResponse, DeleteSmsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/sms",
+        let request_uri = format!("/v1/apps/{application_id}/channels/sms",
                                   application_id = input.application_id);
 
         let mut request =
@@ -8590,7 +8590,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8624,7 +8624,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_apns_channel(&self,
                         input: &GetApnsChannelRequest)
                         -> Result<GetApnsChannelResponse, GetApnsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -8635,7 +8635,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8670,7 +8670,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &GetApnsSandboxChannelRequest)
          -> Result<GetApnsSandboxChannelResponse, GetApnsSandboxChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns_sandbox",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns_sandbox",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -8681,7 +8681,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8714,7 +8714,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
     #[doc="Returns information about an app."]
     fn get_app(&self, input: &GetAppRequest) -> Result<GetAppResponse, GetAppError> {
-        let request_uri = format!("/v1/apps/{application-id}",
+        let request_uri = format!("/v1/apps/{application_id}",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -8725,7 +8725,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8760,7 +8760,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &GetApplicationSettingsRequest)
          -> Result<GetApplicationSettingsResponse, GetApplicationSettingsError> {
-        let request_uri = format!("/v1/apps/{application-id}/settings",
+        let request_uri = format!("/v1/apps/{application_id}/settings",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -8771,7 +8771,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8821,7 +8821,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8855,7 +8855,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_campaign(&self,
                     input: &GetCampaignRequest)
                     -> Result<GetCampaignResponse, GetCampaignError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id);
 
@@ -8867,7 +8867,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8902,7 +8902,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &GetCampaignActivitiesRequest)
          -> Result<GetCampaignActivitiesResponse, GetCampaignActivitiesError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}/activities",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}/activities",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id);
 
@@ -8921,7 +8921,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -8956,7 +8956,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_campaign_version(&self,
                             input: &GetCampaignVersionRequest)
                             -> Result<GetCampaignVersionResponse, GetCampaignVersionError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}/versions/{version}",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}/versions/{version}",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id,
                                   version = input.version);
@@ -8969,7 +8969,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9003,7 +9003,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_campaign_versions(&self,
                              input: &GetCampaignVersionsRequest)
                              -> Result<GetCampaignVersionsResponse, GetCampaignVersionsError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}/versions",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}/versions",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id);
 
@@ -9022,7 +9022,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9056,7 +9056,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_campaigns(&self,
                      input: &GetCampaignsRequest)
                      -> Result<GetCampaignsResponse, GetCampaignsError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9074,7 +9074,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9108,7 +9108,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_email_channel(&self,
                          input: &GetEmailChannelRequest)
                          -> Result<GetEmailChannelResponse, GetEmailChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/email",
+        let request_uri = format!("/v1/apps/{application_id}/channels/email",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9119,7 +9119,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9153,7 +9153,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_endpoint(&self,
                     input: &GetEndpointRequest)
                     -> Result<GetEndpointResponse, GetEndpointError> {
-        let request_uri = format!("/v1/apps/{application-id}/endpoints/{endpoint-id}",
+        let request_uri = format!("/v1/apps/{application_id}/endpoints/{endpoint_id}",
                                   application_id = input.application_id,
                                   endpoint_id = input.endpoint_id);
 
@@ -9165,7 +9165,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9199,7 +9199,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_event_stream(&self,
                         input: &GetEventStreamRequest)
                         -> Result<GetEventStreamResponse, GetEventStreamError> {
-        let request_uri = format!("/v1/apps/{application-id}/eventstream",
+        let request_uri = format!("/v1/apps/{application_id}/eventstream",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9210,7 +9210,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9244,7 +9244,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_gcm_channel(&self,
                        input: &GetGcmChannelRequest)
                        -> Result<GetGcmChannelResponse, GetGcmChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/gcm",
+        let request_uri = format!("/v1/apps/{application_id}/channels/gcm",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9255,7 +9255,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9289,7 +9289,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_import_job(&self,
                       input: &GetImportJobRequest)
                       -> Result<GetImportJobResponse, GetImportJobError> {
-        let request_uri = format!("/v1/apps/{application-id}/jobs/import/{job-id}",
+        let request_uri = format!("/v1/apps/{application_id}/jobs/import/{job_id}",
                                   application_id = input.application_id,
                                   job_id = input.job_id);
 
@@ -9301,7 +9301,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9335,7 +9335,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_import_jobs(&self,
                        input: &GetImportJobsRequest)
                        -> Result<GetImportJobsResponse, GetImportJobsError> {
-        let request_uri = format!("/v1/apps/{application-id}/jobs/import",
+        let request_uri = format!("/v1/apps/{application_id}/jobs/import",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9353,7 +9353,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9387,7 +9387,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_segment(&self,
                    input: &GetSegmentRequest)
                    -> Result<GetSegmentResponse, GetSegmentError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id);
 
@@ -9399,7 +9399,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9434,7 +9434,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &GetSegmentImportJobsRequest)
          -> Result<GetSegmentImportJobsResponse, GetSegmentImportJobsError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}/jobs/import",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}/jobs/import",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id);
 
@@ -9453,7 +9453,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9487,7 +9487,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_segment_version(&self,
                            input: &GetSegmentVersionRequest)
                            -> Result<GetSegmentVersionResponse, GetSegmentVersionError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}/versions/{version}",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}/versions/{version}",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id,
                                   version = input.version);
@@ -9500,7 +9500,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9534,7 +9534,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_segment_versions(&self,
                             input: &GetSegmentVersionsRequest)
                             -> Result<GetSegmentVersionsResponse, GetSegmentVersionsError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}/versions",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}/versions",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id);
 
@@ -9553,7 +9553,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9587,7 +9587,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_segments(&self,
                     input: &GetSegmentsRequest)
                     -> Result<GetSegmentsResponse, GetSegmentsError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments",
+        let request_uri = format!("/v1/apps/{application_id}/segments",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9605,7 +9605,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9639,7 +9639,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn get_sms_channel(&self,
                        input: &GetSmsChannelRequest)
                        -> Result<GetSmsChannelResponse, GetSmsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/sms",
+        let request_uri = format!("/v1/apps/{application_id}/channels/sms",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("GET", "mobiletargeting", &self.region, &request_uri);
@@ -9650,7 +9650,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9684,7 +9684,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn put_event_stream(&self,
                         input: &PutEventStreamRequest)
                         -> Result<PutEventStreamResponse, PutEventStreamError> {
-        let request_uri = format!("/v1/apps/{application-id}/eventstream",
+        let request_uri = format!("/v1/apps/{application_id}/eventstream",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("POST", "mobiletargeting", &self.region, &request_uri);
@@ -9696,7 +9696,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9730,7 +9730,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn send_messages(&self,
                      input: &SendMessagesRequest)
                      -> Result<SendMessagesResponse, SendMessagesError> {
-        let request_uri = format!("/v1/apps/{application-id}/messages",
+        let request_uri = format!("/v1/apps/{application_id}/messages",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("POST", "mobiletargeting", &self.region, &request_uri);
@@ -9742,7 +9742,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9776,7 +9776,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_apns_channel(&self,
                            input: &UpdateApnsChannelRequest)
                            -> Result<UpdateApnsChannelResponse, UpdateApnsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -9788,7 +9788,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9823,7 +9823,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &UpdateApnsSandboxChannelRequest)
          -> Result<UpdateApnsSandboxChannelResponse, UpdateApnsSandboxChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/apns_sandbox",
+        let request_uri = format!("/v1/apps/{application_id}/channels/apns_sandbox",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -9835,7 +9835,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9872,7 +9872,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &UpdateApplicationSettingsRequest)
          -> Result<UpdateApplicationSettingsResponse, UpdateApplicationSettingsError> {
-        let request_uri = format!("/v1/apps/{application-id}/settings",
+        let request_uri = format!("/v1/apps/{application_id}/settings",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -9884,7 +9884,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9920,7 +9920,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_campaign(&self,
                        input: &UpdateCampaignRequest)
                        -> Result<UpdateCampaignResponse, UpdateCampaignError> {
-        let request_uri = format!("/v1/apps/{application-id}/campaigns/{campaign-id}",
+        let request_uri = format!("/v1/apps/{application_id}/campaigns/{campaign_id}",
                                   application_id = input.application_id,
                                   campaign_id = input.campaign_id);
 
@@ -9933,7 +9933,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -9967,7 +9967,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_email_channel(&self,
                             input: &UpdateEmailChannelRequest)
                             -> Result<UpdateEmailChannelResponse, UpdateEmailChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/email",
+        let request_uri = format!("/v1/apps/{application_id}/channels/email",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -9979,7 +9979,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10013,7 +10013,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_endpoint(&self,
                        input: &UpdateEndpointRequest)
                        -> Result<UpdateEndpointResponse, UpdateEndpointError> {
-        let request_uri = format!("/v1/apps/{application-id}/endpoints/{endpoint-id}",
+        let request_uri = format!("/v1/apps/{application_id}/endpoints/{endpoint_id}",
                                   application_id = input.application_id,
                                   endpoint_id = input.endpoint_id);
 
@@ -10026,7 +10026,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10061,7 +10061,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
         (&self,
          input: &UpdateEndpointsBatchRequest)
          -> Result<UpdateEndpointsBatchResponse, UpdateEndpointsBatchError> {
-        let request_uri = format!("/v1/apps/{application-id}/endpoints",
+        let request_uri = format!("/v1/apps/{application_id}/endpoints",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -10073,7 +10073,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10107,7 +10107,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_gcm_channel(&self,
                           input: &UpdateGcmChannelRequest)
                           -> Result<UpdateGcmChannelResponse, UpdateGcmChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/gcm",
+        let request_uri = format!("/v1/apps/{application_id}/channels/gcm",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -10119,7 +10119,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10153,7 +10153,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_segment(&self,
                       input: &UpdateSegmentRequest)
                       -> Result<UpdateSegmentResponse, UpdateSegmentError> {
-        let request_uri = format!("/v1/apps/{application-id}/segments/{segment-id}",
+        let request_uri = format!("/v1/apps/{application_id}/segments/{segment_id}",
                                   application_id = input.application_id,
                                   segment_id = input.segment_id);
 
@@ -10166,7 +10166,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
@@ -10200,7 +10200,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
     fn update_sms_channel(&self,
                           input: &UpdateSmsChannelRequest)
                           -> Result<UpdateSmsChannelResponse, UpdateSmsChannelError> {
-        let request_uri = format!("/v1/apps/{application-id}/channels/sms",
+        let request_uri = format!("/v1/apps/{application_id}/channels/sms",
                                   application_id = input.application_id);
 
         let mut request = SignedRequest::new("PUT", "mobiletargeting", &self.region, &request_uri);
@@ -10212,7 +10212,7 @@ impl<P, D> Pinpoint for PinpointClient<P, D>
 
 
 
-        request.sign(&self.credentials_provider.credentials()?);
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
