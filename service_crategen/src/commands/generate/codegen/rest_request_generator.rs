@@ -1,7 +1,7 @@
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
 use inflector::Inflector;
-use regex::{Captures, Regex};
+use regex::Regex;
 use super::generate_field_name;
 
 // Add request headers for any shape members marked as headers
@@ -154,12 +154,29 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
 
 fn generate_snake_case_uri(request_uri: &str) -> String {
     lazy_static! {
-        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{\w+\-\w+\}").unwrap();
+        static ref URI_ARGS_SNAKE_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
+        static ref URI_ARGS_DASH_TO_UNDERSCORE_REGEX: Regex = Regex::new(r"\{\w+\-\w+\}").unwrap();
     }
     let mut snake: String = request_uri.to_string().clone();
-    for caps in URI_ARGS_REGEX.captures_iter(request_uri) {
-        snake = snake.replace(caps.get(0).unwrap().as_str(), &caps.get(0).unwrap().as_str().replace("-", "_"));
+    // convert foo_Bar to foo_bar
+    for caps in URI_ARGS_SNAKE_REGEX.captures_iter(request_uri) {
+        let to_find = caps.get(0).expect("nothing captured").as_str();
+        // this silliness is because {fooBar} gets converted to {foo_bar_} and sometimes {_foo_bar}.
+        let replacement = Inflector::to_snake_case(caps.get(0).unwrap().as_str())
+            .replace("_}", "}")
+            .replace("{_", "{");
+        snake = snake.replace(to_find, &replacement);
     }
+
+    // convert foo-bar to foo_bar
+    let temp_snake = snake.clone();
+    for caps in URI_ARGS_DASH_TO_UNDERSCORE_REGEX.captures_iter(&temp_snake) {
+        // need to snake case the captures as well
+        let to_find = caps.get(0).unwrap().as_str();
+        let replacement = caps.get(0).unwrap().as_str().replace("-", "_");
+        snake = snake.replace(to_find, &replacement);
+    }
+
     snake
 }
 
@@ -275,6 +292,16 @@ mod tests {
 
         let two_items_uri = "/v1/ap-ps/{application-id}/endpoints/{endpoint-id}";
         assert_eq!("/v1/ap-ps/{application_id}/endpoints/{endpoint_id}", generate_snake_case_uri(&two_items_uri));
+
+        // existing behavior
+        let snake_case = "{usageplanId}";
+        assert_eq!("{usageplan_id}", generate_snake_case_uri(&snake_case));
+
+        let lower_snake_case = "{api_Key}";
+        assert_eq!("{api_key}", generate_snake_case_uri(&lower_snake_case));
+
+        let no_touching_non_params = "/2017-03-25/distributionsByWebACLId/{WebACLId}";
+        assert_eq!("/2017-03-25/distributionsByWebACLId/{web_acl_id}", generate_snake_case_uri(&no_touching_non_params));
     }
 
 }
