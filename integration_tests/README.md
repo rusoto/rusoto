@@ -10,6 +10,6 @@ Also, if tests fail they can leave items in your AWS account, such as S3 buckets
 
 In this directory, `integration_tests`, you can run all tests with `cargo test --features all`.
 
-Specific tests can be run using their feature flags.  To run the S3 tests: `cargo test --features s3`.
+Specific service tests can be run using their feature flags.  To run the S3 tests: `cargo test --features s3`.
 
-To run multiple tests, add the feature flags: `cargo test --features "ecs ec2"`.
+To run multiple service tests, add the feature flags: `cargo test --features "ecs ec2"`.
