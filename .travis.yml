@@ -16,10 +16,8 @@ cache: cargo
 cache:
   directories:
     - $HOME/.cargo
-<<<<<<< HEAD
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
-=======
 
 env:
   global:
@@ -38,7 +36,6 @@ install:
          brew update && brew install awscli && aws s3 cp s3://rusotobinaries/sccache-osx /usr/local/bin/sccache && chmod +x /usr/local/bin/sccache
          ;;
      esac
->>>>>>> [wip] enable SCCache for builds
 script:
   - |
       echo "Generating service crates..." &&
