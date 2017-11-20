@@ -7,6 +7,7 @@ extern crate env_logger;
 extern crate log;
 
 use hyper::Client;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Read, BufReader};
 use time::get_time;
@@ -37,6 +38,7 @@ fn test_all_the_things() {
     let utf8_filename = format!("test[über]file@{}", get_time().sec);
     let binary_filename = format!("test_file_b{}", get_time().sec);
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
+    let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
 
     // get a list of list_buckets
     test_list_buckets(&client);
@@ -95,9 +97,24 @@ fn test_all_the_things() {
                                   &another_filename,
                                   &"tests/sample-data/no_credentials");
 
+    // metadata tests
+    let mut metadata = HashMap::<String, String>::new();
+    metadata.insert("rusoto-metadata-some".to_string(), "some-test-value".to_string());
+    metadata.insert("rusoto-metadata-none".to_string(), "".to_string());
+    
+    test_put_object_with_metadata(&client,
+                                  &test_bucket,
+                                  &metadata_filename,
+                                  &"tests/sample-data/no_credentials",
+                                  &metadata);
+    
+    test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+
     // list items with paging
     list_items_in_bucket_paged(&client, &test_bucket);
 
+    test_delete_object(&client, &test_bucket, &metadata_filename);
     test_delete_object(&client, &test_bucket, &binary_filename);
     test_delete_object(&client, &test_bucket, &another_filename);
 
@@ -361,4 +378,56 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
 
     let result = client.put_bucket_cors(&req).expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
+}
+
+fn test_put_object_with_metadata(client: &TestClient,
+                                 bucket: &str,
+                                 dest_filename: &str,
+                                 local_filename: &str,
+                                 metadata: &HashMap<String,String>) {
+    
+    let mut f = File::open(local_filename).unwrap();
+    let mut contents: Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            let req = PutObjectRequest {
+                bucket: bucket.to_owned(),
+                key: dest_filename.to_owned(),
+                body: Some(contents),
+                metadata: Some(metadata.clone()),
+                ..Default::default()
+            };
+            let result = client.put_object(&req);
+            println!("{:#?}", result);
+        }
+    }
+}
+
+fn test_head_object_with_metadata(client: &TestClient, bucket: &str, filename: &str, metadata: &HashMap<String,String>) {
+    let head_req = HeadObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    let result = client.head_object(&head_req).expect("Couldn't HEAD object");
+    println!("{:#?}", result);
+
+    let head_metadata = result.metadata.as_ref().expect("No metadata available");
+    assert_eq!(metadata, head_metadata);
+}
+
+fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &str, metadata: &HashMap<String,String>) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    let result = client.get_object(&get_req).expect("Couldn't GET object");
+    println!("get object result: {:#?}", result);
+
+    let head_metadata = result.metadata.as_ref().expect("No metadata available");
+    assert_eq!(metadata, head_metadata);
 }
