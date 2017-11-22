@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Added Lex runtime
+
 ## [0.29.0] - 2017-11-02
 
 - Added CHANGELOG
