@@ -4,6 +4,8 @@
 (Please put an entry here in each PR)
 
 - Added ResourceGroupsTaggingApi
+- Added Lex runtime
+- Added Lex Models service
 
 ## [0.29.0] - 2017-11-02
 

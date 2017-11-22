@@ -259,9 +259,17 @@ path = "../rusoto/services/kms"
 optional = true
 path = "../rusoto/services/lambda"
 
+[dependencies.rusoto_lex_models]
+optional = true
+path = "../rusoto/services/lex-models"
+
 [dependencies.rusoto_lightsail]
 optional = true
 path = "../rusoto/services/lightsail"
+
+[dependencies.rusoto_lex_runtime]
+optional = true
+path = "../rusoto/services/lex-runtime"
 
 [dependencies.rusoto_logs]
 optional = true
@@ -475,7 +483,9 @@ all = [
 		"kinesisanalytics",
 	   	"kms",
 	   	"lambda",
+		"lex-models",
 		"lightsail",
+		"lex-runtime",
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
@@ -573,6 +583,8 @@ kinesisanalytics = ["rusoto_kinesisanalytics"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
 lightsail = ["rusoto_lightsail"]
+lex-models = ["rusoto_lex_models"]
+lex-runtime = ["rusoto_lex_runtime"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
