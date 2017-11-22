@@ -79,6 +79,7 @@ members = [
     "rusoto/services/rds",
     "rusoto/services/redshift",
     "rusoto/services/rekognition",
+    "rusoto/services/resourcegroupstaggingapi",
     "rusoto/services/route53",
     "rusoto/services/route53domains",
     "rusoto/services/s3",

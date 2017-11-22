@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Added ResourceGroupsTaggingApi
 - Added Lex runtime
 - Added Lex Models service
 
