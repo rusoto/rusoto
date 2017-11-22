@@ -14,6 +14,7 @@ members = [
     "rusoto/services/cloudformation",
     "rusoto/services/cloudfront",
     "rusoto/services/cloudhsm",
+    "rusoto/services/cloudhsmv2",
     "rusoto/services/cloudsearch",
     "rusoto/services/cloudsearchdomain",
     "rusoto/services/cloudtrail",
