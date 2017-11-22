@@ -18862,6 +18862,14 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
         }
 
+        if let Some(ref metadata) = input.metadata {
+            for (header_name, header_value) in metadata.iter() {
+                let header = format!("x-amz-meta-{}", header_name);
+                request.add_header(header, header_value);
+            }
+
+        }
+
         if let Some(ref metadata_directive) = input.metadata_directive {
             request.add_header("x-amz-metadata-directive", &metadata_directive.to_string());
         }
@@ -19134,6 +19142,14 @@ impl<P, D> S3 for S3Client<P, D>
 
         if let Some(ref grant_write_acp) = input.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
+        }
+
+        if let Some(ref metadata) = input.metadata {
+            for (header_name, header_value) in metadata.iter() {
+                let header = format!("x-amz-meta-{}", header_name);
+                request.add_header(header, header_value);
+            }
+
         }
 
         if let Some(ref request_payer) = input.request_payer {
@@ -22772,6 +22788,14 @@ impl<P, D> S3 for S3Client<P, D>
 
         if let Some(ref grant_write_acp) = input.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
+        }
+
+        if let Some(ref metadata) = input.metadata {
+            for (header_name, header_value) in metadata.iter() {
+                let header = format!("x-amz-meta-{}", header_name);
+                request.add_header(header, header_value);
+            }
+
         }
 
         if let Some(ref request_payer) = input.request_payer {
