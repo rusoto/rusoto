@@ -365,6 +365,18 @@
     "protocolVersion": "2015-03-31",
     "baseTypeName": "Lambda"
   },
+  "lex-models": {
+    "version": "0.29.0",
+    "coreVersion": "0.29.0",
+    "protocolVersion": "2017-04-19",
+    "baseTypeName": "LexModels"
+  },
+  "lex-runtime": {
+    "version": "0.29.0",
+    "coreVersion": "0.29.0",
+    "protocolVersion": "2016-11-28",
+    "baseTypeName": "LexRuntime"
+  },
   "lightsail": {
     "version": "0.29.0",
     "coreVersion": "0.29.0",
@@ -454,6 +466,12 @@
     "coreVersion": "0.29.0",
     "protocolVersion": "2016-06-27",
     "baseTypeName": "Rekognition"
+  },
+  "resourcegroupstaggingapi": {
+    "version": "0.29.0",
+    "coreVersion": "0.29.0",
+    "protocolVersion": "2017-01-26",
+    "baseTypeName": "ResourceGroupsTaggingApi"
   },
   "route53": {
     "version": "0.29.0",

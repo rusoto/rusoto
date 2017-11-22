@@ -263,9 +263,17 @@ path = "../rusoto/services/kms"
 optional = true
 path = "../rusoto/services/lambda"
 
+[dependencies.rusoto_lex_models]
+optional = true
+path = "../rusoto/services/lex-models"
+
 [dependencies.rusoto_lightsail]
 optional = true
 path = "../rusoto/services/lightsail"
+
+[dependencies.rusoto_lex_runtime]
+optional = true
+path = "../rusoto/services/lex-runtime"
 
 [dependencies.rusoto_logs]
 optional = true
@@ -314,6 +322,10 @@ path = "../rusoto/services/redshift"
 [dependencies.rusoto_rekognition]
 optional = true
 path = "../rusoto/services/rekognition"
+
+[dependencies.rusoto_resourcegroupstaggingapi]
+optional = true
+path = "../rusoto/services/resourcegroupstaggingapi"
 
 [dependencies.rusoto_rds]
 optional = true
@@ -476,7 +488,9 @@ all = [
 		"kinesisanalytics",
 	   	"kms",
 	   	"lambda",
+		"lex-models",
 		"lightsail",
+		"lex-runtime",
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
@@ -489,6 +503,7 @@ all = [
 		"polly",
 	   	"redshift",
 		"rekognition",
+		"resourcegroupstaggingapi",
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
@@ -574,6 +589,8 @@ kinesisanalytics = ["rusoto_kinesisanalytics"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
 lightsail = ["rusoto_lightsail"]
+lex-models = ["rusoto_lex_models"]
+lex-runtime = ["rusoto_lex_runtime"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
@@ -586,6 +603,7 @@ organizations = ["rusoto_organizations"]
 polly = ["rusoto_polly"]
 redshift = ["rusoto_redshift"]
 rekognition = ["rusoto_rekognition"]
+resourcegroupstaggingapi = ["rusoto_resourcegroupstaggingapi"]
 rds = ["rusoto_rds"]
 route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]

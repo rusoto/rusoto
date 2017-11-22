@@ -1,0 +1,32 @@
+
+// =================================================================
+//
+//                           * WARNING *
+//
+//                    This file is generated!
+//
+//  Changes made to this file will be overwritten. If changes are
+//  required to the generated code, the service_crategen project
+//  must be updated to generate the changes.
+//
+// =================================================================
+
+//! <p>Amazon Lex provides both build and runtime endpoints. Each endpoint provides a set of operations (API). Your conversational bot uses the runtime API to understand user utterances (user input text or voice). For example, suppose a user says "I want pizza", your bot sends this input to Amazon Lex using the runtime API. Amazon Lex recognizes that the user request is for the OrderPizza intent (one of the intents defined in the bot). Then Amazon Lex engages in user conversation on behalf of the bot to elicit required information (slot values, such as pizza size and crust type), and then performs fulfillment activity (that you configured when you created the bot). You use the build-time API to create and manage your Amazon Lex bot. For a list of build-time operations, see the build-time API, . </p>
+//!
+//! If you're using the service, you're probably looking for [LexRuntimeClient](struct.LexRuntimeClient.html) and [LexRuntime](trait.LexRuntime.html).
+
+extern crate hyper;
+#[macro_use]
+extern crate log;
+extern crate rusoto_core;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
+
+mod generated;
+mod custom;
+
+pub use generated::*;
+pub use custom::*;
+            
