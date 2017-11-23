@@ -71,6 +71,12 @@
     "protocolVersion": "2014-05-30",
     "baseTypeName": "CloudHsm"
   },
+  "cloudhsmv2": {
+    "version": "0.29.0",
+    "coreVersion": "0.29.0",
+    "protocolVersion": "2017-04-28",
+    "baseTypeName": "CloudHsmv2"
+  },
   "cloudsearch": {
     "version": "0.29.0",
     "coreVersion": "0.29.0",
