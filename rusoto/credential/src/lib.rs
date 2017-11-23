@@ -1,6 +1,5 @@
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
-#![cfg_attr(not(feature = "unstable"), deny(warnings))]
 #![deny(missing_docs)]
 
 //! Types for loading and managing AWS access credentials for API requests.
