@@ -7,6 +7,9 @@
 - Added ResourceGroupsTaggingApi
 - Added Lex runtime
 - Added Lex Models service
+- S3 StreamingBody now implements Read trait
+- Added Budgets service
+- Send metadata fields to S3
 
 ## [0.29.0] - 2017-11-02
 
