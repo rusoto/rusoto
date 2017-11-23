@@ -311,6 +311,10 @@ path = "../rusoto/services/opsworkscm"
 optional = true
 path = "../rusoto/services/organizations"
 
+[dependencies.rusoto_pinpoint]
+optional = true
+path = "../rusoto/services/pinpoint"
+
 [dependencies.rusoto_polly]
 optional = true
 path = "../rusoto/services/polly"
@@ -500,6 +504,7 @@ all = [
 	   	"opsworks",
 		"opsworkscm",
         "organizations",
+		"pinpoint",
 		"polly",
 	   	"redshift",
 		"rekognition",
@@ -600,6 +605,7 @@ mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]
 organizations = ["rusoto_organizations"]
+pinpoint = ["rusoto_pinpoint"]
 polly = ["rusoto_polly"]
 redshift = ["rusoto_redshift"]
 rekognition = ["rusoto_rekognition"]

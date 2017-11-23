@@ -443,6 +443,12 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "Organizations"
   },
+  "pinpoint": {
+    "version": "0.29.0",
+    "coreVersion": "0.29.0",
+    "protocolVersion": "2016-12-01",
+    "baseTypeName": "Pinpoint"
+  },
   "polly": {
     "version": "0.29.0",
     "coreVersion": "0.29.0",
