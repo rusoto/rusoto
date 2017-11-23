@@ -23,7 +23,7 @@ To use `rusoto_iot` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_iot = "0.29.0"
+rusoto_iot = "0.30.0"
 ```
 
 ## Contributing

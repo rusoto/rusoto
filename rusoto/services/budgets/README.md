@@ -23,7 +23,7 @@ To use `rusoto_budgets` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_budgets = "0.29.0"
+rusoto_budgets = "0.30.0"
 ```
 
 ## Contributing

@@ -23,7 +23,7 @@ To use `rusoto_importexport` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_importexport = "0.29.0"
+rusoto_importexport = "0.30.0"
 ```
 
 ## Contributing

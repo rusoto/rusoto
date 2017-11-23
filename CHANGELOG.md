@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+## [0.30.0] - 2017-11-22
+
 - Added CloudHSMv2
 - Added ResourceGroupsTaggingApi
 - Added Lex runtime

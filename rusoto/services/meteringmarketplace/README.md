@@ -23,7 +23,7 @@ To use `rusoto_meteringmarketplace` in your application, add it as a dependency 
 
 ```toml
 [dependencies]
-rusoto_meteringmarketplace = "0.29.0"
+rusoto_meteringmarketplace = "0.30.0"
 ```
 
 ## Contributing
