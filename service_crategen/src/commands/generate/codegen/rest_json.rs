@@ -313,15 +313,20 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
     let output_shape = &service.get_shape(shape_name)
         .expect("Shape missing from service definition");
 
-    let mutable_result = output_shape.members
-        .as_ref()
-        .unwrap()
-        .iter()
-        .any(|(_, member)| member.location.is_some());
-
+    // mutable result if a location is specified or the output shape contains "payload".
+    // A workaround for iot_data.
+    let mutable_result = output_shape_populates_body(output_shape);
+    let required_output_names = match output_shape.required {
+        Some(ref requireds) => requireds.clone(),
+        None => Vec::new(),
+    };
     match output_shape.payload {
         None => json_body_parser(shape_name, mutable_result),
         Some(ref payload_member_name) => {
+            let mut required = false;
+            if required_output_names.contains(payload_member_name) {
+                required = true;
+            }
             let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name]
                 .shape;
             let payload_shape = &service.get_shape(payload_member_shape)
@@ -333,11 +338,26 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
                                         shape_name,
                                         payload_member_name,
                                         mutable_result,
-                                        payload_shape)
+                                        required)
                 }
                 _ => json_body_parser(shape_name, mutable_result),
             }
         }
+    }
+}
+
+/// Determine if the output shape needs to modify the response body.
+fn output_shape_populates_body(output_shape: &Shape) -> bool {
+    // mutable result if a location is specified or the output shape contains "payload".
+    let mutable_result = output_shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
+        .any(|(_, member)| member.location.is_some());
+
+    match output_shape.members {
+        Some(ref members) => mutable_result || members.contains_key("payload"),
+        None => mutable_result,
     }
 }
 
@@ -347,12 +367,12 @@ fn payload_body_parser(payload_type: ShapeType,
                        output_shape: &str,
                        payload_member: &str,
                        mutable_result: bool,
-                       payload_shape: &Shape)
+                       required: bool)
                        -> String {
 
     // if the payload is required don't wrap in an Option:
     let response_body: String;
-    if payload_shape.required(output_shape) {
+    if required {
         response_body = match payload_type {
             ShapeType::Blob => "body".to_string(),
             _ => "String::from_utf8_lossy(body).into_owned()".to_string(),
@@ -362,6 +382,13 @@ fn payload_body_parser(payload_type: ShapeType,
             ShapeType::Blob => "Some(body)".to_string(),
             _ => "Some(String::from_utf8_lossy(body).into_owned())".to_string(),
         };
+    }
+
+    // Catch scenarios where the output shape doesn't have a location set,
+    // but we know it needs to be mutable 'cause it's in the payload.
+    let mut mutable = mutable_result;
+    if required {
+        mutable = true;
     }
 
     format!("
@@ -375,7 +402,7 @@ fn payload_body_parser(payload_type: ShapeType,
             output_shape = output_shape,
             payload_member = payload_member.to_snake_case(),
             response_body = response_body,
-            mutable = if mutable_result { "mut" } else { "" })
+            mutable = if mutable { "mut" } else { "" })
 }
 
 /// Parse the http response body as a JSON object with serde, and use that

@@ -634,12 +634,12 @@ impl<P, D> IotData for IotDataClient<P, D>
         match response.status {
             StatusCode::Ok => {
 
-                let result = DeleteThingShadowResponse::default();
+                let mut result = DeleteThingShadowResponse::default();
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
-                result.payload = Some(body);
+                result.payload = body;
 
 
 
@@ -674,7 +674,7 @@ impl<P, D> IotData for IotDataClient<P, D>
         match response.status {
             StatusCode::Ok => {
 
-                let result = GetThingShadowResponse::default();
+                let mut result = GetThingShadowResponse::default();
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -755,7 +755,7 @@ impl<P, D> IotData for IotDataClient<P, D>
         match response.status {
             StatusCode::Ok => {
 
-                let result = UpdateThingShadowResponse::default();
+                let mut result = UpdateThingShadowResponse::default();
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
