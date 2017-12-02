@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Added IoT Data service
+
 ## [0.30.0] - 2017-12-02
 
 - Added CloudHSMv2
