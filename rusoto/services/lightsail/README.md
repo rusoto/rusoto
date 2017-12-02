@@ -23,7 +23,7 @@ To use `rusoto_lightsail` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_lightsail = "0.29.0"
+rusoto_lightsail = "0.30.0"
 ```
 
 ## Contributing

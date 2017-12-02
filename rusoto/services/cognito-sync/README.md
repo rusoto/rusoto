@@ -23,7 +23,7 @@ To use `rusoto_cognito_sync` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_cognito_sync = "0.29.0"
+rusoto_cognito_sync = "0.30.0"
 ```
 
 ## Contributing

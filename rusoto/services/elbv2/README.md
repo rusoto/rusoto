@@ -23,7 +23,7 @@ To use `rusoto_elbv2` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_elbv2 = "0.29.0"
+rusoto_elbv2 = "0.30.0"
 ```
 
 ## Contributing
