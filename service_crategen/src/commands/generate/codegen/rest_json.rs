@@ -332,7 +332,8 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
                     payload_body_parser(payload_type,
                                         shape_name,
                                         payload_member_name,
-                                        mutable_result)
+                                        mutable_result,
+                                        payload_shape)
                 }
                 _ => json_body_parser(shape_name, mutable_result),
             }
@@ -345,13 +346,23 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 fn payload_body_parser(payload_type: ShapeType,
                        output_shape: &str,
                        payload_member: &str,
-                       mutable_result: bool)
+                       mutable_result: bool,
+                       payload_shape: &Shape)
                        -> String {
 
-    let response_body = match payload_type {
-        ShapeType::Blob => "Some(body)",
-        _ => "Some(String::from_utf8_lossy(body).into_owned())",
-    };
+    // if the payload is required don't wrap in an Option:
+    let response_body: String;
+    if payload_shape.required(output_shape) {
+        response_body = match payload_type {
+            ShapeType::Blob => "body".to_string(),
+            _ => "String::from_utf8_lossy(body).into_owned()".to_string(),
+        };
+    } else {
+        response_body = match payload_type {
+            ShapeType::Blob => "Some(body)".to_string(),
+            _ => "Some(String::from_utf8_lossy(body).into_owned())".to_string(),
+        };
+    }
 
     format!("
         let {mutable} result = {output_shape}::default();

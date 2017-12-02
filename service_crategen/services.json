@@ -342,8 +342,8 @@
     "baseTypeName": "Iot"
   },
   "iot-data": {
-    "version": "0.28.0",
-    "coreVersion": "0.28.0",
+    "version": "0.30.0",
+    "coreVersion": "0.30.0",
     "protocolVersion": "2015-05-28",
     "baseTypeName": "IotData"
   },
