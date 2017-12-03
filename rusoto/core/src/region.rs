@@ -16,49 +16,49 @@ use serde::{de, Serialize, Serializer, Deserialize, Deserializer};
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Region {
-    /// Region that covers North-East part of America
+    /// Region that covers the North-Eastern part of Asia Pacific
     ApNortheast1,
 
-    /// Region that covers North-East America
+    /// Region that covers the North-Eastern part of Asia Pacific
     ApNortheast2,
 
-    /// Region that covers South America
+    /// Region that covers the Southern part of Asia Pacific
     ApSouth1,
 
-    /// Region that covers South-East America
+    /// Region that covers the South-Eastern part of Asia Pacific
     ApSoutheast1,
 
-    /// Region that covers South-East America
+    /// Region that covers the South-Eastern part of Asia Pacific
     ApSoutheast2,
 
-    /// Region that covers Central America
+    /// Region that covers Canada
     CaCentral1,
 
     /// Region that covers Central Europe
     EuCentral1,
 
-    /// Region that covers West Europe
+    /// Region that covers Western Europe
     EuWest1,
 
-    /// Region that covers West Europe
+    /// Region that covers Western Europe
     EuWest2,
 
-    /// Region that covers South-East Europe
+    /// Region that covers South America
     SaEast1,
 
-    /// Region that covers East part of America
+    /// Region that covers the Eastern part of the United States
     UsEast1,
 
-    /// Region that covers East part of America
+    /// Region that covers the Eastern part of the United States
     UsEast2,
 
-    /// Region that covers West part of America
+    /// Region that covers the Western part of the United States
     UsWest1,
 
-    /// Region that covers North-East part of America
+    /// Region that covers the Western part of the United States
     UsWest2,
 
-    /// Region that covers North Canada
+    /// Region that covers China
     CnNorth1,
 
     /// Specifies a custom region, such as a local Ceph target
