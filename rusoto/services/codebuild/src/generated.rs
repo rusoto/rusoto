@@ -11,23 +11,127 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactNamespace {
+    BuildId,
+    None,
+}
+
+impl Into<String> for ArtifactNamespace {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactNamespace {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactNamespace::BuildId => "BUILD_ID",
+            ArtifactNamespace::None => "NONE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactNamespace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILD_ID" => Ok(ArtifactNamespace::BuildId),
+            "NONE" => Ok(ArtifactNamespace::None),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactPackaging {
+    None,
+    Zip,
+}
+
+impl Into<String> for ArtifactPackaging {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactPackaging {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactPackaging::None => "NONE",
+            ArtifactPackaging::Zip => "ZIP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactPackaging {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NONE" => Ok(ArtifactPackaging::None),
+            "ZIP" => Ok(ArtifactPackaging::Zip),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactsType {
+    Codepipeline,
+    NoArtifacts,
+    S3,
+}
+
+impl Into<String> for ArtifactsType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactsType {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactsType::Codepipeline => "CODEPIPELINE",
+            ArtifactsType::NoArtifacts => "NO_ARTIFACTS",
+            ArtifactsType::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CODEPIPELINE" => Ok(ArtifactsType::Codepipeline),
+            "NO_ARTIFACTS" => Ok(ArtifactsType::NoArtifacts),
+            "S3" => Ok(ArtifactsType::S3),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetBuildsInput {
     #[doc="<p>The IDs of the builds.</p>"]
@@ -181,6 +285,103 @@ pub struct BuildPhase {
     pub start_time: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BuildPhaseType {
+    Build,
+    Completed,
+    DownloadSource,
+    Finalizing,
+    Install,
+    PostBuild,
+    PreBuild,
+    Provisioning,
+    Submitted,
+    UploadArtifacts,
+}
+
+impl Into<String> for BuildPhaseType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BuildPhaseType {
+    fn into(self) -> &'static str {
+        match self {
+            BuildPhaseType::Build => "BUILD",
+            BuildPhaseType::Completed => "COMPLETED",
+            BuildPhaseType::DownloadSource => "DOWNLOAD_SOURCE",
+            BuildPhaseType::Finalizing => "FINALIZING",
+            BuildPhaseType::Install => "INSTALL",
+            BuildPhaseType::PostBuild => "POST_BUILD",
+            BuildPhaseType::PreBuild => "PRE_BUILD",
+            BuildPhaseType::Provisioning => "PROVISIONING",
+            BuildPhaseType::Submitted => "SUBMITTED",
+            BuildPhaseType::UploadArtifacts => "UPLOAD_ARTIFACTS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BuildPhaseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILD" => Ok(BuildPhaseType::Build),
+            "COMPLETED" => Ok(BuildPhaseType::Completed),
+            "DOWNLOAD_SOURCE" => Ok(BuildPhaseType::DownloadSource),
+            "FINALIZING" => Ok(BuildPhaseType::Finalizing),
+            "INSTALL" => Ok(BuildPhaseType::Install),
+            "POST_BUILD" => Ok(BuildPhaseType::PostBuild),
+            "PRE_BUILD" => Ok(BuildPhaseType::PreBuild),
+            "PROVISIONING" => Ok(BuildPhaseType::Provisioning),
+            "SUBMITTED" => Ok(BuildPhaseType::Submitted),
+            "UPLOAD_ARTIFACTS" => Ok(BuildPhaseType::UploadArtifacts),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComputeType {
+    BuildGeneral1Large,
+    BuildGeneral1Medium,
+    BuildGeneral1Small,
+}
+
+impl Into<String> for ComputeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComputeType {
+    fn into(self) -> &'static str {
+        match self {
+            ComputeType::BuildGeneral1Large => "BUILD_GENERAL1_LARGE",
+            ComputeType::BuildGeneral1Medium => "BUILD_GENERAL1_MEDIUM",
+            ComputeType::BuildGeneral1Small => "BUILD_GENERAL1_SMALL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILD_GENERAL1_LARGE" => Ok(ComputeType::BuildGeneral1Large),
+            "BUILD_GENERAL1_MEDIUM" => Ok(ComputeType::BuildGeneral1Medium),
+            "BUILD_GENERAL1_SMALL" => Ok(ComputeType::BuildGeneral1Small),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateProjectInput {
     #[doc="<p>Information about the build output artifacts for the build project.</p>"]
@@ -274,6 +475,38 @@ pub struct EnvironmentPlatform {
     pub platform: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EnvironmentType {
+    LinuxContainer,
+}
+
+impl Into<String> for EnvironmentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EnvironmentType {
+    fn into(self) -> &'static str {
+        match self {
+            EnvironmentType::LinuxContainer => "LINUX_CONTAINER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LINUX_CONTAINER" => Ok(EnvironmentType::LinuxContainer),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about an environment variable for a build project or a build.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentVariable {
@@ -283,6 +516,62 @@ pub struct EnvironmentVariable {
     #[doc="<p>The value of the environment variable.</p> <important> <p>We strongly discourage using environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. Environment variables can be displayed in plain text using tools such as the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI).</p> </important>"]
     #[serde(rename="value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LanguageType {
+    Android,
+    Base,
+    Docker,
+    Dotnet,
+    Golang,
+    Java,
+    NodeJs,
+    Python,
+    Ruby,
+}
+
+impl Into<String> for LanguageType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LanguageType {
+    fn into(self) -> &'static str {
+        match self {
+            LanguageType::Android => "ANDROID",
+            LanguageType::Base => "BASE",
+            LanguageType::Docker => "DOCKER",
+            LanguageType::Dotnet => "DOTNET",
+            LanguageType::Golang => "GOLANG",
+            LanguageType::Java => "JAVA",
+            LanguageType::NodeJs => "NODE_JS",
+            LanguageType::Python => "PYTHON",
+            LanguageType::Ruby => "RUBY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANDROID" => Ok(LanguageType::Android),
+            "BASE" => Ok(LanguageType::Base),
+            "DOCKER" => Ok(LanguageType::Docker),
+            "DOTNET" => Ok(LanguageType::Dotnet),
+            "GOLANG" => Ok(LanguageType::Golang),
+            "JAVA" => Ok(LanguageType::Java),
+            "NODE_JS" => Ok(LanguageType::NodeJs),
+            "PYTHON" => Ok(LanguageType::Python),
+            "RUBY" => Ok(LanguageType::Ruby),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -405,6 +694,44 @@ pub struct PhaseContext {
     pub status_code: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlatformType {
+    AmazonLinux,
+    Debian,
+    Ubuntu,
+}
+
+impl Into<String> for PlatformType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlatformType {
+    fn into(self) -> &'static str {
+        match self {
+            PlatformType::AmazonLinux => "AMAZON_LINUX",
+            PlatformType::Debian => "DEBIAN",
+            PlatformType::Ubuntu => "UBUNTU",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AMAZON_LINUX" => Ok(PlatformType::AmazonLinux),
+            "DEBIAN" => Ok(PlatformType::Debian),
+            "UBUNTU" => Ok(PlatformType::Ubuntu),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about a build project.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Project {
@@ -508,6 +835,44 @@ pub struct ProjectEnvironment {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProjectSortByType {
+    CreatedTime,
+    LastModifiedTime,
+    Name,
+}
+
+impl Into<String> for ProjectSortByType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProjectSortByType {
+    fn into(self) -> &'static str {
+        match self {
+            ProjectSortByType::CreatedTime => "CREATED_TIME",
+            ProjectSortByType::LastModifiedTime => "LAST_MODIFIED_TIME",
+            ProjectSortByType::Name => "NAME",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectSortByType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATED_TIME" => Ok(ProjectSortByType::CreatedTime),
+            "LAST_MODIFIED_TIME" => Ok(ProjectSortByType::LastModifiedTime),
+            "NAME" => Ok(ProjectSortByType::Name),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the build input source code for the build project.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProjectSource {
@@ -528,6 +893,41 @@ pub struct ProjectSource {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortOrderType {
+    Ascending,
+    Descending,
+}
+
+impl Into<String> for SortOrderType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortOrderType {
+    fn into(self) -> &'static str {
+        match self {
+            SortOrderType::Ascending => "ASCENDING",
+            SortOrderType::Descending => "DESCENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASCENDING" => Ok(SortOrderType::Ascending),
+            "DESCENDING" => Ok(SortOrderType::Descending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>GITHUB</code>).</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SourceAuth {
@@ -538,6 +938,82 @@ pub struct SourceAuth {
     #[doc="<p>The authorization type to use. The only valid value is <code>OAUTH</code>, which represents the OAuth authorization type.</p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceAuthType {
+    Oauth,
+}
+
+impl Into<String> for SourceAuthType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceAuthType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceAuthType::Oauth => "OAUTH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceAuthType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OAUTH" => Ok(SourceAuthType::Oauth),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    Bitbucket,
+    Codecommit,
+    Codepipeline,
+    Github,
+    S3,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::Bitbucket => "BITBUCKET",
+            SourceType::Codecommit => "CODECOMMIT",
+            SourceType::Codepipeline => "CODEPIPELINE",
+            SourceType::Github => "GITHUB",
+            SourceType::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BITBUCKET" => Ok(SourceType::Bitbucket),
+            "CODECOMMIT" => Ok(SourceType::Codecommit),
+            "CODEPIPELINE" => Ok(SourceType::Codepipeline),
+            "GITHUB" => Ok(SourceType::Github),
+            "S3" => Ok(SourceType::S3),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -573,6 +1049,53 @@ pub struct StartBuildOutput {
     #[serde(rename="build")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub build: Option<Build>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusType {
+    Failed,
+    Fault,
+    InProgress,
+    Stopped,
+    Succeeded,
+    TimedOut,
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusType {
+    fn into(self) -> &'static str {
+        match self {
+            StatusType::Failed => "FAILED",
+            StatusType::Fault => "FAULT",
+            StatusType::InProgress => "IN_PROGRESS",
+            StatusType::Stopped => "STOPPED",
+            StatusType::Succeeded => "SUCCEEDED",
+            StatusType::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(StatusType::Failed),
+            "FAULT" => Ok(StatusType::Fault),
+            "IN_PROGRESS" => Ok(StatusType::InProgress),
+            "STOPPED" => Ok(StatusType::Stopped),
+            "SUCCEEDED" => Ok(StatusType::Succeeded),
+            "TIMED_OUT" => Ok(StatusType::TimedOut),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1657,7 +2180,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetBuildsOutput>(String::from_utf8_lossy(&body)
@@ -1689,7 +2212,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetProjectsOutput>(String::from_utf8_lossy(&body)
@@ -1721,7 +2244,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateProjectOutput>(String::from_utf8_lossy(&body)
@@ -1753,7 +2276,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteProjectOutput>(String::from_utf8_lossy(&body)
@@ -1783,7 +2306,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
@@ -1815,7 +2338,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListBuildsForProjectOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1845,7 +2368,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListCuratedEnvironmentImagesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1876,7 +2399,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListProjectsOutput>(String::from_utf8_lossy(&body)
@@ -1906,7 +2429,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartBuildOutput>(String::from_utf8_lossy(&body)
@@ -1936,7 +2459,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopBuildOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -1967,7 +2490,7 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateProjectOutput>(String::from_utf8_lossy(&body)

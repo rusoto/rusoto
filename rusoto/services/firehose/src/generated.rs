@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -56,6 +52,47 @@ pub struct CloudWatchLoggingOptions {
     #[serde(rename="LogStreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CompressionFormat {
+    Gzip,
+    Snappy,
+    Uncompressed,
+    Zip,
+}
+
+impl Into<String> for CompressionFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CompressionFormat {
+    fn into(self) -> &'static str {
+        match self {
+            CompressionFormat::Gzip => "GZIP",
+            CompressionFormat::Snappy => "Snappy",
+            CompressionFormat::Uncompressed => "UNCOMPRESSED",
+            CompressionFormat::Zip => "ZIP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GZIP" => Ok(CompressionFormat::Gzip),
+            "Snappy" => Ok(CompressionFormat::Snappy),
+            "UNCOMPRESSED" => Ok(CompressionFormat::Uncompressed),
+            "ZIP" => Ok(CompressionFormat::Zip),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a <code>COPY</code> command for Amazon Redshift.</p>"]
@@ -155,6 +192,79 @@ pub struct DeliveryStreamDescription {
     #[doc="<p>Each time the destination is updated for a delivery stream, the version ID is changed, and the current version ID is required when updating the destination. This is so that the service knows it is applying the changes to the correct version of the delivery stream.</p>"]
     #[serde(rename="VersionId")]
     pub version_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeliveryStreamStatus {
+    Active,
+    Creating,
+    Deleting,
+}
+
+impl Into<String> for DeliveryStreamStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeliveryStreamStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DeliveryStreamStatus::Active => "ACTIVE",
+            DeliveryStreamStatus::Creating => "CREATING",
+            DeliveryStreamStatus::Deleting => "DELETING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(DeliveryStreamStatus::Active),
+            "CREATING" => Ok(DeliveryStreamStatus::Creating),
+            "DELETING" => Ok(DeliveryStreamStatus::Deleting),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeliveryStreamType {
+    DirectPut,
+    KinesisStreamAsSource,
+}
+
+impl Into<String> for DeliveryStreamType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeliveryStreamType {
+    fn into(self) -> &'static str {
+        match self {
+            DeliveryStreamType::DirectPut => "DirectPut",
+            DeliveryStreamType::KinesisStreamAsSource => "KinesisStreamAsSource",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DirectPut" => Ok(DeliveryStreamType::DirectPut),
+            "KinesisStreamAsSource" => Ok(DeliveryStreamType::KinesisStreamAsSource),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -354,6 +464,50 @@ pub struct ElasticsearchDestinationUpdate {
     pub type_name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ElasticsearchIndexRotationPeriod {
+    NoRotation,
+    OneDay,
+    OneHour,
+    OneMonth,
+    OneWeek,
+}
+
+impl Into<String> for ElasticsearchIndexRotationPeriod {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ElasticsearchIndexRotationPeriod {
+    fn into(self) -> &'static str {
+        match self {
+            ElasticsearchIndexRotationPeriod::NoRotation => "NoRotation",
+            ElasticsearchIndexRotationPeriod::OneDay => "OneDay",
+            ElasticsearchIndexRotationPeriod::OneHour => "OneHour",
+            ElasticsearchIndexRotationPeriod::OneMonth => "OneMonth",
+            ElasticsearchIndexRotationPeriod::OneWeek => "OneWeek",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ElasticsearchIndexRotationPeriod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NoRotation" => Ok(ElasticsearchIndexRotationPeriod::NoRotation),
+            "OneDay" => Ok(ElasticsearchIndexRotationPeriod::OneDay),
+            "OneHour" => Ok(ElasticsearchIndexRotationPeriod::OneHour),
+            "OneMonth" => Ok(ElasticsearchIndexRotationPeriod::OneMonth),
+            "OneWeek" => Ok(ElasticsearchIndexRotationPeriod::OneWeek),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Configures retry behavior in case Kinesis Firehose is unable to deliver documents to Amazon ES.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchRetryOptions {
@@ -361,6 +515,41 @@ pub struct ElasticsearchRetryOptions {
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub duration_in_seconds: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ElasticsearchS3BackupMode {
+    AllDocuments,
+    FailedDocumentsOnly,
+}
+
+impl Into<String> for ElasticsearchS3BackupMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ElasticsearchS3BackupMode {
+    fn into(self) -> &'static str {
+        match self {
+            ElasticsearchS3BackupMode::AllDocuments => "AllDocuments",
+            ElasticsearchS3BackupMode::FailedDocumentsOnly => "FailedDocumentsOnly",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ElasticsearchS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AllDocuments" => Ok(ElasticsearchS3BackupMode::AllDocuments),
+            "FailedDocumentsOnly" => Ok(ElasticsearchS3BackupMode::FailedDocumentsOnly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes the encryption for a destination in Amazon S3.</p>"]
@@ -582,6 +771,38 @@ pub struct ListDeliveryStreamsOutput {
     pub has_more_delivery_streams: bool,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NoEncryptionConfig {
+    NoEncryption,
+}
+
+impl Into<String> for NoEncryptionConfig {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NoEncryptionConfig {
+    fn into(self) -> &'static str {
+        match self {
+            NoEncryptionConfig::NoEncryption => "NoEncryption",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NoEncryptionConfig {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NoEncryption" => Ok(NoEncryptionConfig::NoEncryption),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes a data processing configuration.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProcessingConfiguration {
@@ -616,6 +837,73 @@ pub struct ProcessorParameter {
     #[doc="<p>The parameter value.</p>"]
     #[serde(rename="ParameterValue")]
     pub parameter_value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProcessorParameterName {
+    LambdaArn,
+    NumberOfRetries,
+}
+
+impl Into<String> for ProcessorParameterName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProcessorParameterName {
+    fn into(self) -> &'static str {
+        match self {
+            ProcessorParameterName::LambdaArn => "LambdaArn",
+            ProcessorParameterName::NumberOfRetries => "NumberOfRetries",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessorParameterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LambdaArn" => Ok(ProcessorParameterName::LambdaArn),
+            "NumberOfRetries" => Ok(ProcessorParameterName::NumberOfRetries),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProcessorType {
+    Lambda,
+}
+
+impl Into<String> for ProcessorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProcessorType {
+    fn into(self) -> &'static str {
+        match self {
+            ProcessorType::Lambda => "Lambda",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Lambda" => Ok(ProcessorType::Lambda),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -824,6 +1112,76 @@ pub struct RedshiftRetryOptions {
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub duration_in_seconds: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RedshiftS3BackupMode {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for RedshiftS3BackupMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RedshiftS3BackupMode {
+    fn into(self) -> &'static str {
+        match self {
+            RedshiftS3BackupMode::Disabled => "Disabled",
+            RedshiftS3BackupMode::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedshiftS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(RedshiftS3BackupMode::Disabled),
+            "Enabled" => Ok(RedshiftS3BackupMode::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum S3BackupMode {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for S3BackupMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for S3BackupMode {
+    fn into(self) -> &'static str {
+        match self {
+            S3BackupMode::Disabled => "Disabled",
+            S3BackupMode::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(S3BackupMode::Disabled),
+            "Enabled" => Ok(S3BackupMode::Enabled),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon S3.</p>"]
@@ -1764,7 +2122,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1794,7 +2152,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1825,7 +2183,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDeliveryStreamOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1855,7 +2213,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetKinesisStreamOutput>(String::from_utf8_lossy(&body)
@@ -1887,7 +2245,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDeliveryStreamsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1915,7 +2273,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -1946,7 +2304,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutRecordBatchOutput>(String::from_utf8_lossy(&body)
@@ -1978,7 +2336,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDestinationOutput>(String::from_utf8_lossy(&body)

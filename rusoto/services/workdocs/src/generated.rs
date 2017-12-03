@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -97,6 +93,136 @@ pub struct Activity {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActivityType {
+    DocumentAnnotationAdded,
+    DocumentAnnotationDeleted,
+    DocumentCheckedIn,
+    DocumentCheckedOut,
+    DocumentCommentAdded,
+    DocumentCommentDeleted,
+    DocumentMoved,
+    DocumentRecycled,
+    DocumentRenamed,
+    DocumentRestored,
+    DocumentReverted,
+    DocumentShareableLinkCreated,
+    DocumentShareableLinkPermissionChanged,
+    DocumentShareableLinkRemoved,
+    DocumentShared,
+    DocumentSharePermissionChanged,
+    DocumentUnshared,
+    DocumentVersionDeleted,
+    DocumentVersionUploaded,
+    FolderCreated,
+    FolderDeleted,
+    FolderMoved,
+    FolderRecycled,
+    FolderRenamed,
+    FolderRestored,
+    FolderShareableLinkCreated,
+    FolderShareableLinkPermissionChanged,
+    FolderShareableLinkRemoved,
+    FolderShared,
+    FolderSharePermissionChanged,
+    FolderUnshared,
+}
+
+impl Into<String> for ActivityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActivityType {
+    fn into(self) -> &'static str {
+        match self {
+            ActivityType::DocumentAnnotationAdded => "DOCUMENT_ANNOTATION_ADDED",
+            ActivityType::DocumentAnnotationDeleted => "DOCUMENT_ANNOTATION_DELETED",
+            ActivityType::DocumentCheckedIn => "DOCUMENT_CHECKED_IN",
+            ActivityType::DocumentCheckedOut => "DOCUMENT_CHECKED_OUT",
+            ActivityType::DocumentCommentAdded => "DOCUMENT_COMMENT_ADDED",
+            ActivityType::DocumentCommentDeleted => "DOCUMENT_COMMENT_DELETED",
+            ActivityType::DocumentMoved => "DOCUMENT_MOVED",
+            ActivityType::DocumentRecycled => "DOCUMENT_RECYCLED",
+            ActivityType::DocumentRenamed => "DOCUMENT_RENAMED",
+            ActivityType::DocumentRestored => "DOCUMENT_RESTORED",
+            ActivityType::DocumentReverted => "DOCUMENT_REVERTED",
+            ActivityType::DocumentShareableLinkCreated => "DOCUMENT_SHAREABLE_LINK_CREATED",
+            ActivityType::DocumentShareableLinkPermissionChanged => {
+                "DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED"
+            }
+            ActivityType::DocumentShareableLinkRemoved => "DOCUMENT_SHAREABLE_LINK_REMOVED",
+            ActivityType::DocumentShared => "DOCUMENT_SHARED",
+            ActivityType::DocumentSharePermissionChanged => "DOCUMENT_SHARE_PERMISSION_CHANGED",
+            ActivityType::DocumentUnshared => "DOCUMENT_UNSHARED",
+            ActivityType::DocumentVersionDeleted => "DOCUMENT_VERSION_DELETED",
+            ActivityType::DocumentVersionUploaded => "DOCUMENT_VERSION_UPLOADED",
+            ActivityType::FolderCreated => "FOLDER_CREATED",
+            ActivityType::FolderDeleted => "FOLDER_DELETED",
+            ActivityType::FolderMoved => "FOLDER_MOVED",
+            ActivityType::FolderRecycled => "FOLDER_RECYCLED",
+            ActivityType::FolderRenamed => "FOLDER_RENAMED",
+            ActivityType::FolderRestored => "FOLDER_RESTORED",
+            ActivityType::FolderShareableLinkCreated => "FOLDER_SHAREABLE_LINK_CREATED",
+            ActivityType::FolderShareableLinkPermissionChanged => {
+                "FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED"
+            }
+            ActivityType::FolderShareableLinkRemoved => "FOLDER_SHAREABLE_LINK_REMOVED",
+            ActivityType::FolderShared => "FOLDER_SHARED",
+            ActivityType::FolderSharePermissionChanged => "FOLDER_SHARE_PERMISSION_CHANGED",
+            ActivityType::FolderUnshared => "FOLDER_UNSHARED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActivityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DOCUMENT_ANNOTATION_ADDED" => Ok(ActivityType::DocumentAnnotationAdded),
+            "DOCUMENT_ANNOTATION_DELETED" => Ok(ActivityType::DocumentAnnotationDeleted),
+            "DOCUMENT_CHECKED_IN" => Ok(ActivityType::DocumentCheckedIn),
+            "DOCUMENT_CHECKED_OUT" => Ok(ActivityType::DocumentCheckedOut),
+            "DOCUMENT_COMMENT_ADDED" => Ok(ActivityType::DocumentCommentAdded),
+            "DOCUMENT_COMMENT_DELETED" => Ok(ActivityType::DocumentCommentDeleted),
+            "DOCUMENT_MOVED" => Ok(ActivityType::DocumentMoved),
+            "DOCUMENT_RECYCLED" => Ok(ActivityType::DocumentRecycled),
+            "DOCUMENT_RENAMED" => Ok(ActivityType::DocumentRenamed),
+            "DOCUMENT_RESTORED" => Ok(ActivityType::DocumentRestored),
+            "DOCUMENT_REVERTED" => Ok(ActivityType::DocumentReverted),
+            "DOCUMENT_SHAREABLE_LINK_CREATED" => Ok(ActivityType::DocumentShareableLinkCreated),
+            "DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                Ok(ActivityType::DocumentShareableLinkPermissionChanged)
+            }
+            "DOCUMENT_SHAREABLE_LINK_REMOVED" => Ok(ActivityType::DocumentShareableLinkRemoved),
+            "DOCUMENT_SHARED" => Ok(ActivityType::DocumentShared),
+            "DOCUMENT_SHARE_PERMISSION_CHANGED" => Ok(ActivityType::DocumentSharePermissionChanged),
+            "DOCUMENT_UNSHARED" => Ok(ActivityType::DocumentUnshared),
+            "DOCUMENT_VERSION_DELETED" => Ok(ActivityType::DocumentVersionDeleted),
+            "DOCUMENT_VERSION_UPLOADED" => Ok(ActivityType::DocumentVersionUploaded),
+            "FOLDER_CREATED" => Ok(ActivityType::FolderCreated),
+            "FOLDER_DELETED" => Ok(ActivityType::FolderDeleted),
+            "FOLDER_MOVED" => Ok(ActivityType::FolderMoved),
+            "FOLDER_RECYCLED" => Ok(ActivityType::FolderRecycled),
+            "FOLDER_RENAMED" => Ok(ActivityType::FolderRenamed),
+            "FOLDER_RESTORED" => Ok(ActivityType::FolderRestored),
+            "FOLDER_SHAREABLE_LINK_CREATED" => Ok(ActivityType::FolderShareableLinkCreated),
+            "FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                Ok(ActivityType::FolderShareableLinkPermissionChanged)
+            }
+            "FOLDER_SHAREABLE_LINK_REMOVED" => Ok(ActivityType::FolderShareableLinkRemoved),
+            "FOLDER_SHARED" => Ok(ActivityType::FolderShared),
+            "FOLDER_SHARE_PERMISSION_CHANGED" => Ok(ActivityType::FolderSharePermissionChanged),
+            "FOLDER_UNSHARED" => Ok(ActivityType::FolderUnshared),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -182,6 +308,79 @@ pub struct CommentMetadata {
     #[serde(rename="RecipientId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub recipient_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommentStatusType {
+    Deleted,
+    Draft,
+    Published,
+}
+
+impl Into<String> for CommentStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommentStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            CommentStatusType::Deleted => "DELETED",
+            CommentStatusType::Draft => "DRAFT",
+            CommentStatusType::Published => "PUBLISHED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETED" => Ok(CommentStatusType::Deleted),
+            "DRAFT" => Ok(CommentStatusType::Draft),
+            "PUBLISHED" => Ok(CommentStatusType::Published),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommentVisibilityType {
+    Private,
+    Public,
+}
+
+impl Into<String> for CommentVisibilityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommentVisibilityType {
+    fn into(self) -> &'static str {
+        match self {
+            CommentVisibilityType::Private => "PRIVATE",
+            CommentVisibilityType::Public => "PUBLIC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommentVisibilityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PRIVATE" => Ok(CommentVisibilityType::Private),
+            "PUBLIC" => Ok(CommentVisibilityType::Public),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -834,6 +1033,114 @@ pub struct DocumentMetadata {
     pub resource_state: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentSourceType {
+    Original,
+    WithComments,
+}
+
+impl Into<String> for DocumentSourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentSourceType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentSourceType::Original => "ORIGINAL",
+            DocumentSourceType::WithComments => "WITH_COMMENTS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ORIGINAL" => Ok(DocumentSourceType::Original),
+            "WITH_COMMENTS" => Ok(DocumentSourceType::WithComments),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentStatusType {
+    Active,
+    Initialized,
+}
+
+impl Into<String> for DocumentStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentStatusType::Active => "ACTIVE",
+            DocumentStatusType::Initialized => "INITIALIZED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(DocumentStatusType::Active),
+            "INITIALIZED" => Ok(DocumentStatusType::Initialized),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentThumbnailType {
+    Large,
+    Small,
+    SmallHq,
+}
+
+impl Into<String> for DocumentThumbnailType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentThumbnailType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentThumbnailType::Large => "LARGE",
+            DocumentThumbnailType::Small => "SMALL",
+            DocumentThumbnailType::SmallHq => "SMALL_HQ",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentThumbnailType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LARGE" => Ok(DocumentThumbnailType::Large),
+            "SMALL" => Ok(DocumentThumbnailType::Small),
+            "SMALL_HQ" => Ok(DocumentThumbnailType::SmallHq),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes a version of a document.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentVersionMetadata {
@@ -889,6 +1196,76 @@ pub struct DocumentVersionMetadata {
     #[serde(rename="Thumbnail")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub thumbnail: Option<::std::collections::HashMap<String, String>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentVersionStatus {
+    Active,
+}
+
+impl Into<String> for DocumentVersionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentVersionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentVersionStatus::Active => "ACTIVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(DocumentVersionStatus::Active),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FolderContentType {
+    All,
+    Document,
+    Folder,
+}
+
+impl Into<String> for FolderContentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FolderContentType {
+    fn into(self) -> &'static str {
+        match self {
+            FolderContentType::All => "ALL",
+            FolderContentType::Document => "DOCUMENT",
+            FolderContentType::Folder => "FOLDER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FolderContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(FolderContentType::All),
+            "DOCUMENT" => Ok(FolderContentType::Document),
+            "FOLDER" => Ok(FolderContentType::Folder),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a folder.</p>"]
@@ -1165,6 +1542,103 @@ pub struct InitiateDocumentVersionUploadResponse {
     pub upload_metadata: Option<UploadMetadata>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LocaleType {
+    De,
+    Default,
+    En,
+    Es,
+    Fr,
+    Ja,
+    Ko,
+    PtBR,
+    Ru,
+    ZhCN,
+    ZhTW,
+}
+
+impl Into<String> for LocaleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LocaleType {
+    fn into(self) -> &'static str {
+        match self {
+            LocaleType::De => "de",
+            LocaleType::Default => "default",
+            LocaleType::En => "en",
+            LocaleType::Es => "es",
+            LocaleType::Fr => "fr",
+            LocaleType::Ja => "ja",
+            LocaleType::Ko => "ko",
+            LocaleType::PtBR => "pt_BR",
+            LocaleType::Ru => "ru",
+            LocaleType::ZhCN => "zh_CN",
+            LocaleType::ZhTW => "zh_TW",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LocaleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "de" => Ok(LocaleType::De),
+            "default" => Ok(LocaleType::Default),
+            "en" => Ok(LocaleType::En),
+            "es" => Ok(LocaleType::Es),
+            "fr" => Ok(LocaleType::Fr),
+            "ja" => Ok(LocaleType::Ja),
+            "ko" => Ok(LocaleType::Ko),
+            "pt_BR" => Ok(LocaleType::PtBR),
+            "ru" => Ok(LocaleType::Ru),
+            "zh_CN" => Ok(LocaleType::ZhCN),
+            "zh_TW" => Ok(LocaleType::ZhTW),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrderType {
+    Ascending,
+    Descending,
+}
+
+impl Into<String> for OrderType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrderType {
+    fn into(self) -> &'static str {
+        match self {
+            OrderType::Ascending => "ASCENDING",
+            OrderType::Descending => "DESCENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASCENDING" => Ok(OrderType::Ascending),
+            "DESCENDING" => Ok(OrderType::Descending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the users and/or user groups.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Participants {
@@ -1206,6 +1680,50 @@ pub struct Principal {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PrincipalType {
+    Anonymous,
+    Group,
+    Invite,
+    Organization,
+    User,
+}
+
+impl Into<String> for PrincipalType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PrincipalType {
+    fn into(self) -> &'static str {
+        match self {
+            PrincipalType::Anonymous => "ANONYMOUS",
+            PrincipalType::Group => "GROUP",
+            PrincipalType::Invite => "INVITE",
+            PrincipalType::Organization => "ORGANIZATION",
+            PrincipalType::User => "USER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PrincipalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANONYMOUS" => Ok(PrincipalType::Anonymous),
+            "GROUP" => Ok(PrincipalType::Group),
+            "INVITE" => Ok(PrincipalType::Invite),
+            "ORGANIZATION" => Ok(PrincipalType::Organization),
+            "USER" => Ok(PrincipalType::User),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1292,6 +1810,193 @@ pub struct ResourcePathComponent {
     pub name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceSortType {
+    Date,
+    Name,
+}
+
+impl Into<String> for ResourceSortType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceSortType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceSortType::Date => "DATE",
+            ResourceSortType::Name => "NAME",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceSortType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DATE" => Ok(ResourceSortType::Date),
+            "NAME" => Ok(ResourceSortType::Name),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceStateType {
+    Active,
+    Recycled,
+    Recycling,
+    Restoring,
+}
+
+impl Into<String> for ResourceStateType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceStateType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceStateType::Active => "ACTIVE",
+            ResourceStateType::Recycled => "RECYCLED",
+            ResourceStateType::Recycling => "RECYCLING",
+            ResourceStateType::Restoring => "RESTORING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceStateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ResourceStateType::Active),
+            "RECYCLED" => Ok(ResourceStateType::Recycled),
+            "RECYCLING" => Ok(ResourceStateType::Recycling),
+            "RESTORING" => Ok(ResourceStateType::Restoring),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    Document,
+    Folder,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::Document => "DOCUMENT",
+            ResourceType::Folder => "FOLDER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DOCUMENT" => Ok(ResourceType::Document),
+            "FOLDER" => Ok(ResourceType::Folder),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RolePermissionType {
+    Direct,
+    Inherited,
+}
+
+impl Into<String> for RolePermissionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RolePermissionType {
+    fn into(self) -> &'static str {
+        match self {
+            RolePermissionType::Direct => "DIRECT",
+            RolePermissionType::Inherited => "INHERITED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RolePermissionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DIRECT" => Ok(RolePermissionType::Direct),
+            "INHERITED" => Ok(RolePermissionType::Inherited),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RoleType {
+    Contributor,
+    Coowner,
+    Owner,
+    Viewer,
+}
+
+impl Into<String> for RoleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RoleType {
+    fn into(self) -> &'static str {
+        match self {
+            RoleType::Contributor => "CONTRIBUTOR",
+            RoleType::Coowner => "COOWNER",
+            RoleType::Owner => "OWNER",
+            RoleType::Viewer => "VIEWER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONTRIBUTOR" => Ok(RoleType::Contributor),
+            "COOWNER" => Ok(RoleType::Coowner),
+            "OWNER" => Ok(RoleType::Owner),
+            "VIEWER" => Ok(RoleType::Viewer),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the recipient type and ID, if available.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SharePrincipal {
@@ -1331,6 +2036,41 @@ pub struct ShareResult {
     pub status_message: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ShareStatusType {
+    Failure,
+    Success,
+}
+
+impl Into<String> for ShareStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ShareStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            ShareStatusType::Failure => "FAILURE",
+            ShareStatusType::Success => "SUCCESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShareStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILURE" => Ok(ShareStatusType::Failure),
+            "SUCCESS" => Ok(ShareStatusType::Success),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the storage for a user.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StorageRuleType {
@@ -1342,6 +2082,41 @@ pub struct StorageRuleType {
     #[serde(rename="StorageType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub storage_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StorageType {
+    Quota,
+    Unlimited,
+}
+
+impl Into<String> for StorageType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StorageType {
+    fn into(self) -> &'static str {
+        match self {
+            StorageType::Quota => "QUOTA",
+            StorageType::Unlimited => "UNLIMITED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "QUOTA" => Ok(StorageType::Quota),
+            "UNLIMITED" => Ok(StorageType::Unlimited),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a subscription.</p>"]
@@ -1359,6 +2134,70 @@ pub struct Subscription {
     #[serde(rename="SubscriptionId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubscriptionProtocolType {
+    Https,
+}
+
+impl Into<String> for SubscriptionProtocolType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubscriptionProtocolType {
+    fn into(self) -> &'static str {
+        match self {
+            SubscriptionProtocolType::Https => "HTTPS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionProtocolType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HTTPS" => Ok(SubscriptionProtocolType::Https),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubscriptionType {
+    All,
+}
+
+impl Into<String> for SubscriptionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubscriptionType {
+    fn into(self) -> &'static str {
+        match self {
+            SubscriptionType::All => "ALL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(SubscriptionType::All),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1546,6 +2385,41 @@ pub struct User {
     pub username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserFilterType {
+    ActivePending,
+    All,
+}
+
+impl Into<String> for UserFilterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserFilterType {
+    fn into(self) -> &'static str {
+        match self {
+            UserFilterType::ActivePending => "ACTIVE_PENDING",
+            UserFilterType::All => "ALL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE_PENDING" => Ok(UserFilterType::ActivePending),
+            "ALL" => Ok(UserFilterType::All),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the metadata of the user.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UserMetadata {
@@ -1571,6 +2445,88 @@ pub struct UserMetadata {
     pub username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserSortType {
+    FullName,
+    StorageLimit,
+    StorageUsed,
+    UserName,
+    UserStatus,
+}
+
+impl Into<String> for UserSortType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserSortType {
+    fn into(self) -> &'static str {
+        match self {
+            UserSortType::FullName => "FULL_NAME",
+            UserSortType::StorageLimit => "STORAGE_LIMIT",
+            UserSortType::StorageUsed => "STORAGE_USED",
+            UserSortType::UserName => "USER_NAME",
+            UserSortType::UserStatus => "USER_STATUS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserSortType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FULL_NAME" => Ok(UserSortType::FullName),
+            "STORAGE_LIMIT" => Ok(UserSortType::StorageLimit),
+            "STORAGE_USED" => Ok(UserSortType::StorageUsed),
+            "USER_NAME" => Ok(UserSortType::UserName),
+            "USER_STATUS" => Ok(UserSortType::UserStatus),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserStatusType {
+    Active,
+    Inactive,
+    Pending,
+}
+
+impl Into<String> for UserStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            UserStatusType::Active => "ACTIVE",
+            UserStatusType::Inactive => "INACTIVE",
+            UserStatusType::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(UserStatusType::Active),
+            "INACTIVE" => Ok(UserStatusType::Inactive),
+            "PENDING" => Ok(UserStatusType::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the storage for a user.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UserStorageMetadata {
@@ -1582,6 +2538,41 @@ pub struct UserStorageMetadata {
     #[serde(rename="StorageUtilizedInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub storage_utilized_in_bytes: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserType {
+    Admin,
+    User,
+}
+
+impl Into<String> for UserType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserType {
+    fn into(self) -> &'static str {
+        match self {
+            UserType::Admin => "ADMIN",
+            UserType::User => "USER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADMIN" => Ok(UserType::Admin),
+            "USER" => Ok(UserType::User),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by AbortDocumentVersionUpload
@@ -5995,7 +6986,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6033,7 +7024,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6083,7 +7074,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6134,7 +7125,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6188,7 +7179,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6236,7 +7227,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6285,7 +7276,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6332,7 +7323,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6383,7 +7374,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6429,7 +7420,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6466,7 +7457,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6516,7 +7507,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6562,7 +7553,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6596,7 +7587,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6633,7 +7624,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6679,7 +7670,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6725,7 +7716,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -6760,7 +7751,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -6815,7 +7806,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6871,7 +7862,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6933,7 +7924,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7003,7 +7994,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7058,7 +8049,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7116,7 +8107,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7169,7 +8160,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7244,7 +8235,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7288,7 +8279,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7340,7 +8331,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7398,7 +8389,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7454,7 +8445,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7503,7 +8494,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7561,7 +8552,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7610,7 +8601,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7660,7 +8651,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -7703,7 +8694,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -7740,7 +8731,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -7779,7 +8770,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -7814,7 +8805,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -7851,7 +8842,7 @@ impl<P, D> Workdocs for WorkdocsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

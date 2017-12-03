@@ -302,7 +302,7 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
         ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Blob => "try!(characters(stack)).into_bytes()",
-        ShapeType::Boolean => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Boolean => "try!(characters(stack)).parse::<bool>().unwrap()",
         _ => panic!("Unknown primitive shape type"),
     };
 

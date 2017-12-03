@@ -11,23 +11,57 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApplicationStatus {
+    Completed,
+    InProgress,
+    NotStarted,
+}
+
+impl Into<String> for ApplicationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApplicationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ApplicationStatus::Completed => "COMPLETED",
+            ApplicationStatus::InProgress => "IN_PROGRESS",
+            ApplicationStatus::NotStarted => "NOT_STARTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETED" => Ok(ApplicationStatus::Completed),
+            "IN_PROGRESS" => Ok(ApplicationStatus::InProgress),
+            "NOT_STARTED" => Ok(ApplicationStatus::NotStarted),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateCreatedArtifactRequest {
     #[doc="<p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>"]
@@ -461,6 +495,109 @@ pub struct ResourceAttribute {
     #[doc="<p>Value of the resource type.</p>"]
     #[serde(rename="Value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceAttributeType {
+    BiosId,
+    Fqdn,
+    Ipv4Address,
+    Ipv6Address,
+    Label,
+    MacAddress,
+    MotherboardSerialNumber,
+    VmManagedObjectReference,
+    VmManagerId,
+    VmName,
+    VmPath,
+}
+
+impl Into<String> for ResourceAttributeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceAttributeType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceAttributeType::BiosId => "BIOS_ID",
+            ResourceAttributeType::Fqdn => "FQDN",
+            ResourceAttributeType::Ipv4Address => "IPV4_ADDRESS",
+            ResourceAttributeType::Ipv6Address => "IPV6_ADDRESS",
+            ResourceAttributeType::Label => "LABEL",
+            ResourceAttributeType::MacAddress => "MAC_ADDRESS",
+            ResourceAttributeType::MotherboardSerialNumber => "MOTHERBOARD_SERIAL_NUMBER",
+            ResourceAttributeType::VmManagedObjectReference => "VM_MANAGED_OBJECT_REFERENCE",
+            ResourceAttributeType::VmManagerId => "VM_MANAGER_ID",
+            ResourceAttributeType::VmName => "VM_NAME",
+            ResourceAttributeType::VmPath => "VM_PATH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BIOS_ID" => Ok(ResourceAttributeType::BiosId),
+            "FQDN" => Ok(ResourceAttributeType::Fqdn),
+            "IPV4_ADDRESS" => Ok(ResourceAttributeType::Ipv4Address),
+            "IPV6_ADDRESS" => Ok(ResourceAttributeType::Ipv6Address),
+            "LABEL" => Ok(ResourceAttributeType::Label),
+            "MAC_ADDRESS" => Ok(ResourceAttributeType::MacAddress),
+            "MOTHERBOARD_SERIAL_NUMBER" => Ok(ResourceAttributeType::MotherboardSerialNumber),
+            "VM_MANAGED_OBJECT_REFERENCE" => Ok(ResourceAttributeType::VmManagedObjectReference),
+            "VM_MANAGER_ID" => Ok(ResourceAttributeType::VmManagerId),
+            "VM_NAME" => Ok(ResourceAttributeType::VmName),
+            "VM_PATH" => Ok(ResourceAttributeType::VmPath),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Status {
+    Completed,
+    Failed,
+    InProgress,
+    NotStarted,
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Status {
+    fn into(self) -> &'static str {
+        match self {
+            Status::Completed => "COMPLETED",
+            Status::Failed => "FAILED",
+            Status::InProgress => "IN_PROGRESS",
+            Status::NotStarted => "NOT_STARTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETED" => Ok(Status::Completed),
+            "FAILED" => Ok(Status::Failed),
+            "IN_PROGRESS" => Ok(Status::InProgress),
+            "NOT_STARTED" => Ok(Status::NotStarted),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Task object encapsulating task information.</p>"]
@@ -2363,7 +2500,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2396,7 +2533,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2428,7 +2565,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2460,7 +2597,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2492,7 +2629,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2524,7 +2661,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2556,7 +2693,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2589,7 +2726,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2620,7 +2757,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ImportMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2650,7 +2787,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListCreatedArtifactsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2681,7 +2818,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDiscoveredResourcesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2712,7 +2849,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListMigrationTasksResult>(String::from_utf8_lossy(&body)
@@ -2745,7 +2882,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListProgressUpdateStreamsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2777,7 +2914,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<NotifyApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2808,7 +2945,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<NotifyMigrationTaskStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2840,7 +2977,7 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutResourceAttributesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())

@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -103,6 +99,53 @@ pub struct AgentNetworkInfo {
     pub mac_address: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AgentStatus {
+    Blacklisted,
+    Healthy,
+    Running,
+    Shutdown,
+    Unhealthy,
+    Unknown,
+}
+
+impl Into<String> for AgentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AgentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AgentStatus::Blacklisted => "BLACKLISTED",
+            AgentStatus::Healthy => "HEALTHY",
+            AgentStatus::Running => "RUNNING",
+            AgentStatus::Shutdown => "SHUTDOWN",
+            AgentStatus::Unhealthy => "UNHEALTHY",
+            AgentStatus::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BLACKLISTED" => Ok(AgentStatus::Blacklisted),
+            "HEALTHY" => Ok(AgentStatus::Healthy),
+            "RUNNING" => Ok(AgentStatus::Running),
+            "SHUTDOWN" => Ok(AgentStatus::Shutdown),
+            "UNHEALTHY" => Ok(AgentStatus::Unhealthy),
+            "UNKNOWN" => Ok(AgentStatus::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateConfigurationItemsToApplicationRequest {
     #[doc="<p>The configuration ID of an application with which items are to be associated.</p>"]
@@ -115,6 +158,47 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssociateConfigurationItemsToApplicationResponse;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigurationItemType {
+    Application,
+    Connection,
+    Process,
+    Server,
+}
+
+impl Into<String> for ConfigurationItemType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigurationItemType {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigurationItemType::Application => "APPLICATION",
+            ConfigurationItemType::Connection => "CONNECTION",
+            ConfigurationItemType::Process => "PROCESS",
+            ConfigurationItemType::Server => "SERVER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationItemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPLICATION" => Ok(ConfigurationItemType::Application),
+            "CONNECTION" => Ok(ConfigurationItemType::Connection),
+            "PROCESS" => Ok(ConfigurationItemType::Process),
+            "SERVER" => Ok(ConfigurationItemType::Server),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -405,6 +489,41 @@ pub struct ExportConfigurationsResponse {
     pub export_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExportDataFormat {
+    Csv,
+    Graphml,
+}
+
+impl Into<String> for ExportDataFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExportDataFormat {
+    fn into(self) -> &'static str {
+        match self {
+            ExportDataFormat::Csv => "CSV",
+            ExportDataFormat::Graphml => "GRAPHML",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CSV" => Ok(ExportDataFormat::Csv),
+            "GRAPHML" => Ok(ExportDataFormat::Graphml),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html\">StartExportTask</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExportFilter {
@@ -450,6 +569,44 @@ pub struct ExportInfo {
     #[doc="<p>A status message provided for API callers.</p>"]
     #[serde(rename="statusMessage")]
     pub status_message: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExportStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+}
+
+impl Into<String> for ExportStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExportStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ExportStatus::Failed => "FAILED",
+            ExportStatus::InProgress => "IN_PROGRESS",
+            ExportStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(ExportStatus::Failed),
+            "IN_PROGRESS" => Ok(ExportStatus::InProgress),
+            "SUCCEEDED" => Ok(ExportStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html\">Querying Discovered Configuration Items</a>. </p>"]
@@ -602,6 +759,41 @@ pub struct OrderByElement {
     #[serde(rename="sortOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub sort_order: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrderString {
+    Asc,
+    Desc,
+}
+
+impl Into<String> for OrderString {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrderString {
+    fn into(self) -> &'static str {
+        match self {
+            OrderString::Asc => "ASC",
+            OrderString::Desc => "DESC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderString {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASC" => Ok(OrderString::Asc),
+            "DESC" => Ok(OrderString::Desc),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2723,7 +2915,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateConfigurationItemsToApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2754,7 +2946,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2784,7 +2976,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTagsResponse>(String::from_utf8_lossy(&body)
@@ -2817,7 +3009,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteApplicationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2847,7 +3039,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteTagsResponse>(String::from_utf8_lossy(&body)
@@ -2880,7 +3072,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAgentsResponse>(String::from_utf8_lossy(&body)
@@ -2914,7 +3106,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2946,7 +3138,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeExportConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2978,7 +3170,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3009,7 +3201,7 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&body)
@@ -3039,7 +3231,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateConfigurationItemsFromApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3068,7 +3260,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ExportConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3097,7 +3289,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDiscoverySummaryResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3128,7 +3320,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3159,7 +3351,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListServerNeighborsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3191,7 +3383,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartDataCollectionByAgentIdsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3223,7 +3415,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartExportTaskResponse>(String::from_utf8_lossy(&body)
@@ -3257,7 +3449,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopDataCollectionByAgentIdsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3289,7 +3481,7 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())

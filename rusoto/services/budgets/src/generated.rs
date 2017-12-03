@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -51,6 +47,44 @@ pub struct Budget {
     pub time_unit: String,
 }
 
+#[doc="The type of a budget. It should be COST, USAGE, or RI_UTILIZATION."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BudgetType {
+    Cost,
+    RiUtilization,
+    Usage,
+}
+
+impl Into<String> for BudgetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BudgetType {
+    fn into(self) -> &'static str {
+        match self {
+            BudgetType::Cost => "COST",
+            BudgetType::RiUtilization => "RI_UTILIZATION",
+            BudgetType::Usage => "USAGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BudgetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COST" => Ok(BudgetType::Cost),
+            "RI_UTILIZATION" => Ok(BudgetType::RiUtilization),
+            "USAGE" => Ok(BudgetType::Usage),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="A structure holds the actual and forecasted spend for a budget."]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CalculatedSpend {
@@ -59,6 +93,44 @@ pub struct CalculatedSpend {
     #[serde(rename="ForecastedSpend")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub forecasted_spend: Option<Spend>,
+}
+
+#[doc="The comparison operator of a notification. Currently we support less than, equal to and greater than."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    EqualTo,
+    GreaterThan,
+    LessThan,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::EqualTo => "EQUAL_TO",
+            ComparisonOperator::GreaterThan => "GREATER_THAN",
+            ComparisonOperator::LessThan => "LESS_THAN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EQUAL_TO" => Ok(ComparisonOperator::EqualTo),
+            "GREATER_THAN" => Ok(ComparisonOperator::GreaterThan),
+            "LESS_THAN" => Ok(ComparisonOperator::LessThan),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="This includes the options for getting the cost of a budget."]
@@ -273,6 +345,41 @@ pub struct Notification {
     pub threshold: f64,
 }
 
+#[doc="The type of a notification. It should be ACTUAL or FORECASTED."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotificationType {
+    Actual,
+    Forecasted,
+}
+
+impl Into<String> for NotificationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotificationType {
+    fn into(self) -> &'static str {
+        match self {
+            NotificationType::Actual => "ACTUAL",
+            NotificationType::Forecasted => "FORECASTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTUAL" => Ok(NotificationType::Actual),
+            "FORECASTED" => Ok(NotificationType::Forecasted),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="A structure to relate notification and a list of subscribers who belong to the notification."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct NotificationWithSubscribers {
@@ -300,6 +407,41 @@ pub struct Subscriber {
     pub subscription_type: String,
 }
 
+#[doc="The subscription type of the subscriber. It can be SMS or EMAIL."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubscriptionType {
+    Email,
+    Sns,
+}
+
+impl Into<String> for SubscriptionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubscriptionType {
+    fn into(self) -> &'static str {
+        match self {
+            SubscriptionType::Email => "EMAIL",
+            SubscriptionType::Sns => "SNS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EMAIL" => Ok(SubscriptionType::Email),
+            "SNS" => Ok(SubscriptionType::Sns),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="A time period indicated the start date and end date of a budget."]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TimePeriod {
@@ -307,6 +449,47 @@ pub struct TimePeriod {
     pub end: f64,
     #[serde(rename="Start")]
     pub start: f64,
+}
+
+#[doc="The time unit of the budget. e.g. MONTHLY, QUARTERLY, etc."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TimeUnit {
+    Annually,
+    Daily,
+    Monthly,
+    Quarterly,
+}
+
+impl Into<String> for TimeUnit {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TimeUnit {
+    fn into(self) -> &'static str {
+        match self {
+            TimeUnit::Annually => "ANNUALLY",
+            TimeUnit::Daily => "DAILY",
+            TimeUnit::Monthly => "MONTHLY",
+            TimeUnit::Quarterly => "QUARTERLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANNUALLY" => Ok(TimeUnit::Annually),
+            "DAILY" => Ok(TimeUnit::Daily),
+            "MONTHLY" => Ok(TimeUnit::Monthly),
+            "QUARTERLY" => Ok(TimeUnit::Quarterly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="Request of UpdateBudget"]
@@ -1721,7 +1904,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateBudgetResponse>(String::from_utf8_lossy(&body)
@@ -1753,7 +1936,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateNotificationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1783,7 +1966,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateSubscriberResponse>(String::from_utf8_lossy(&body)
@@ -1815,7 +1998,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteBudgetResponse>(String::from_utf8_lossy(&body)
@@ -1847,7 +2030,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteNotificationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1877,7 +2060,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteSubscriberResponse>(String::from_utf8_lossy(&body)
@@ -1909,7 +2092,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeBudgetResponse>(String::from_utf8_lossy(&body)
@@ -1941,7 +2124,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeBudgetsResponse>(String::from_utf8_lossy(&body)
@@ -1975,7 +2158,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeNotificationsForBudgetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2009,7 +2192,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSubscribersForNotificationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2039,7 +2222,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateBudgetResponse>(String::from_utf8_lossy(&body)
@@ -2071,7 +2254,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateNotificationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2101,7 +2284,7 @@ impl<P, D> Budgets for BudgetsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateSubscriberResponse>(String::from_utf8_lossy(&body)

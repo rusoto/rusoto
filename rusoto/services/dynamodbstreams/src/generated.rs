@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -178,6 +174,41 @@ pub struct KeySchemaElement {
     pub key_type: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum KeyType {
+    Hash,
+    Range,
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for KeyType {
+    fn into(self) -> &'static str {
+        match self {
+            KeyType::Hash => "HASH",
+            KeyType::Range => "RANGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HASH" => Ok(KeyType::Hash),
+            "RANGE" => Ok(KeyType::Range),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of a <code>ListStreams</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListStreamsInput {
@@ -206,6 +237,44 @@ pub struct ListStreamsOutput {
     #[serde(rename="Streams")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub streams: Option<Vec<Stream>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationType {
+    Insert,
+    Modify,
+    Remove,
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationType {
+    fn into(self) -> &'static str {
+        match self {
+            OperationType::Insert => "INSERT",
+            OperationType::Modify => "MODIFY",
+            OperationType::Remove => "REMOVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INSERT" => Ok(OperationType::Insert),
+            "MODIFY" => Ok(OperationType::Modify),
+            "REMOVE" => Ok(OperationType::Remove),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A description of a unique event within a stream.</p>"]
@@ -269,6 +338,47 @@ pub struct Shard {
     #[serde(rename="ShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub shard_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ShardIteratorType {
+    AfterSequenceNumber,
+    AtSequenceNumber,
+    Latest,
+    TrimHorizon,
+}
+
+impl Into<String> for ShardIteratorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ShardIteratorType {
+    fn into(self) -> &'static str {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => "AFTER_SEQUENCE_NUMBER",
+            ShardIteratorType::AtSequenceNumber => "AT_SEQUENCE_NUMBER",
+            ShardIteratorType::Latest => "LATEST",
+            ShardIteratorType::TrimHorizon => "TRIM_HORIZON",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShardIteratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AFTER_SEQUENCE_NUMBER" => Ok(ShardIteratorType::AfterSequenceNumber),
+            "AT_SEQUENCE_NUMBER" => Ok(ShardIteratorType::AtSequenceNumber),
+            "LATEST" => Ok(ShardIteratorType::Latest),
+            "TRIM_HORIZON" => Ok(ShardIteratorType::TrimHorizon),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents all of the data describing a particular stream.</p>"]
@@ -360,6 +470,88 @@ pub struct StreamRecord {
     #[serde(rename="StreamViewType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stream_view_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StreamStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+}
+
+impl Into<String> for StreamStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StreamStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StreamStatus::Disabled => "DISABLED",
+            StreamStatus::Disabling => "DISABLING",
+            StreamStatus::Enabled => "ENABLED",
+            StreamStatus::Enabling => "ENABLING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLED" => Ok(StreamStatus::Disabled),
+            "DISABLING" => Ok(StreamStatus::Disabling),
+            "ENABLED" => Ok(StreamStatus::Enabled),
+            "ENABLING" => Ok(StreamStatus::Enabling),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StreamViewType {
+    KeysOnly,
+    NewAndOldImages,
+    NewImage,
+    OldImage,
+}
+
+impl Into<String> for StreamViewType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StreamViewType {
+    fn into(self) -> &'static str {
+        match self {
+            StreamViewType::KeysOnly => "KEYS_ONLY",
+            StreamViewType::NewAndOldImages => "NEW_AND_OLD_IMAGES",
+            StreamViewType::NewImage => "NEW_IMAGE",
+            StreamViewType::OldImage => "OLD_IMAGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamViewType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEYS_ONLY" => Ok(StreamViewType::KeysOnly),
+            "NEW_AND_OLD_IMAGES" => Ok(StreamViewType::NewAndOldImages),
+            "NEW_IMAGE" => Ok(StreamViewType::NewImage),
+            "OLD_IMAGE" => Ok(StreamViewType::OldImage),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by DescribeStream
@@ -790,7 +982,7 @@ impl<P, D> DynamoDbStreams for DynamoDbStreamsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&body)
@@ -820,7 +1012,7 @@ impl<P, D> DynamoDbStreams for DynamoDbStreamsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&body)
@@ -852,7 +1044,7 @@ impl<P, D> DynamoDbStreams for DynamoDbStreamsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&body)
@@ -884,7 +1076,7 @@ impl<P, D> DynamoDbStreams for DynamoDbStreamsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&body)

@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -280,6 +276,41 @@ pub struct SubResourceSummary {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubResourceType {
+    Ip,
+    Url,
+}
+
+impl Into<String> for SubResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SubResourceType::Ip => "IP",
+            SubResourceType::Url => "URL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IP" => Ok(SubResourceType::Ip),
+            "URL" => Ok(SubResourceType::Url),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about the AWS Shield Advanced subscription for an account.</p>"]
@@ -1263,7 +1294,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateProtectionResponse>(String::from_utf8_lossy(&body)
@@ -1292,7 +1323,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1322,7 +1353,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteProtectionResponse>(String::from_utf8_lossy(&body)
@@ -1351,7 +1382,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1381,7 +1412,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAttackResponse>(String::from_utf8_lossy(&body)
@@ -1413,7 +1444,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProtectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1441,7 +1472,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1471,7 +1502,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAttacksResponse>(String::from_utf8_lossy(&body)
@@ -1503,7 +1534,7 @@ impl<P, D> Shield for ShieldClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListProtectionsResponse>(String::from_utf8_lossy(&body)

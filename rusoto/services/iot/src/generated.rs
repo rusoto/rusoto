@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -137,6 +133,41 @@ pub struct AttributePayload {
     pub merge: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoRegistrationStatus {
+    Disable,
+    Enable,
+}
+
+impl Into<String> for AutoRegistrationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoRegistrationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AutoRegistrationStatus::Disable => "DISABLE",
+            AutoRegistrationStatus::Enable => "ENABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoRegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLE" => Ok(AutoRegistrationStatus::Disable),
+            "ENABLE" => Ok(AutoRegistrationStatus::Enable),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A CA certificate.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CACertificate {
@@ -191,12 +222,100 @@ pub struct CACertificateDescription {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CACertificateStatus {
+    Active,
+    Inactive,
+}
+
+impl Into<String> for CACertificateStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CACertificateStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CACertificateStatus::Active => "ACTIVE",
+            CACertificateStatus::Inactive => "INACTIVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CACertificateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(CACertificateStatus::Active),
+            "INACTIVE" => Ok(CACertificateStatus::Inactive),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The input for the CancelCertificateTransfer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CancelCertificateTransferRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
     pub certificate_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CannedAccessControlList {
+    AuthenticatedRead,
+    AwsExecRead,
+    BucketOwnerFullControl,
+    BucketOwnerRead,
+    LogDeliveryWrite,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+}
+
+impl Into<String> for CannedAccessControlList {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CannedAccessControlList {
+    fn into(self) -> &'static str {
+        match self {
+            CannedAccessControlList::AuthenticatedRead => "authenticated-read",
+            CannedAccessControlList::AwsExecRead => "aws-exec-read",
+            CannedAccessControlList::BucketOwnerFullControl => "bucket-owner-full-control",
+            CannedAccessControlList::BucketOwnerRead => "bucket-owner-read",
+            CannedAccessControlList::LogDeliveryWrite => "log-delivery-write",
+            CannedAccessControlList::Private => "private",
+            CannedAccessControlList::PublicRead => "public-read",
+            CannedAccessControlList::PublicReadWrite => "public-read-write",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CannedAccessControlList {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "authenticated-read" => Ok(CannedAccessControlList::AuthenticatedRead),
+            "aws-exec-read" => Ok(CannedAccessControlList::AwsExecRead),
+            "bucket-owner-full-control" => Ok(CannedAccessControlList::BucketOwnerFullControl),
+            "bucket-owner-read" => Ok(CannedAccessControlList::BucketOwnerRead),
+            "log-delivery-write" => Ok(CannedAccessControlList::LogDeliveryWrite),
+            "private" => Ok(CannedAccessControlList::Private),
+            "public-read" => Ok(CannedAccessControlList::PublicRead),
+            "public-read-write" => Ok(CannedAccessControlList::PublicReadWrite),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a certificate.</p>"]
@@ -263,6 +382,53 @@ pub struct CertificateDescription {
     #[serde(rename="transferData")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_data: Option<TransferData>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CertificateStatus {
+    Active,
+    Inactive,
+    PendingActivation,
+    PendingTransfer,
+    RegisterInactive,
+    Revoked,
+}
+
+impl Into<String> for CertificateStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CertificateStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CertificateStatus::Active => "ACTIVE",
+            CertificateStatus::Inactive => "INACTIVE",
+            CertificateStatus::PendingActivation => "PENDING_ACTIVATION",
+            CertificateStatus::PendingTransfer => "PENDING_TRANSFER",
+            CertificateStatus::RegisterInactive => "REGISTER_INACTIVE",
+            CertificateStatus::Revoked => "REVOKED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(CertificateStatus::Active),
+            "INACTIVE" => Ok(CertificateStatus::Inactive),
+            "PENDING_ACTIVATION" => Ok(CertificateStatus::PendingActivation),
+            "PENDING_TRANSFER" => Ok(CertificateStatus::PendingTransfer),
+            "REGISTER_INACTIVE" => Ok(CertificateStatus::RegisterInactive),
+            "REVOKED" => Ok(CertificateStatus::Revoked),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes an action that updates a CloudWatch alarm.</p>"]
@@ -788,6 +954,41 @@ pub struct DynamoDBv2Action {
     #[serde(rename="roleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DynamoKeyType {
+    Number,
+    String,
+}
+
+impl Into<String> for DynamoKeyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DynamoKeyType {
+    fn into(self) -> &'static str {
+        match self {
+            DynamoKeyType::Number => "NUMBER",
+            DynamoKeyType::String => "STRING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DynamoKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NUMBER" => Ok(DynamoKeyType::Number),
+            "STRING" => Ok(DynamoKeyType::String),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>"]
@@ -1369,6 +1570,50 @@ pub struct ListTopicRulesResponse {
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LogLevel {
+    Debug,
+    Disabled,
+    Error,
+    Info,
+    Warn,
+}
+
+impl Into<String> for LogLevel {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LogLevel {
+    fn into(self) -> &'static str {
+        match self {
+            LogLevel::Debug => "DEBUG",
+            LogLevel::Disabled => "DISABLED",
+            LogLevel::Error => "ERROR",
+            LogLevel::Info => "INFO",
+            LogLevel::Warn => "WARN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEBUG" => Ok(LogLevel::Debug),
+            "DISABLED" => Ok(LogLevel::Disabled),
+            "ERROR" => Ok(LogLevel::Error),
+            "INFO" => Ok(LogLevel::Info),
+            "WARN" => Ok(LogLevel::Warn),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the logging options payload.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct LoggingOptionsPayload {
@@ -1379,6 +1624,41 @@ pub struct LoggingOptionsPayload {
     #[doc="<p>The ARN of the IAM role that grants access.</p>"]
     #[serde(rename="roleArn")]
     pub role_arn: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MessageFormat {
+    Json,
+    Raw,
+}
+
+impl Into<String> for MessageFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MessageFormat {
+    fn into(self) -> &'static str {
+        match self {
+            MessageFormat::Json => "JSON",
+            MessageFormat::Raw => "RAW",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "JSON" => Ok(MessageFormat::Json),
+            "RAW" => Ok(MessageFormat::Raw),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A certificate that has been transfered but not yet accepted.</p>"]
@@ -8459,7 +8739,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -8494,7 +8774,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -8529,7 +8809,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8574,7 +8854,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -8614,7 +8894,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8665,7 +8945,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8712,7 +8992,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8762,7 +9042,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8807,7 +9087,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8853,7 +9133,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8898,7 +9178,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -8932,7 +9212,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8977,7 +9257,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9008,7 +9288,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9043,7 +9323,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9076,7 +9356,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9125,7 +9405,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9170,7 +9450,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9214,7 +9494,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9249,7 +9529,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9295,7 +9575,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9341,7 +9621,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9383,7 +9663,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9427,7 +9707,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9472,7 +9752,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9517,7 +9797,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9552,7 +9832,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9596,7 +9876,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9629,7 +9909,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -9660,7 +9940,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9702,7 +9982,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9748,7 +10028,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9791,7 +10071,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9835,7 +10115,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9889,7 +10169,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9943,7 +10223,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9999,7 +10279,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10054,7 +10334,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10110,7 +10390,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10165,7 +10445,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10210,7 +10490,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10265,7 +10545,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10317,7 +10597,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10362,7 +10642,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10416,7 +10696,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10476,7 +10756,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10533,7 +10813,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10586,7 +10866,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10632,7 +10912,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10678,7 +10958,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10713,7 +10993,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10748,7 +11028,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10783,7 +11063,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10820,7 +11100,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10872,7 +11152,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10908,7 +11188,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -10942,7 +11222,7 @@ impl<P, D> Iot for IotClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

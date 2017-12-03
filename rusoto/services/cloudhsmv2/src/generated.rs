@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -46,6 +42,76 @@ pub struct Backup {
     #[serde(rename="CreateTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub create_timestamp: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BackupPolicy {
+    Default,
+}
+
+impl Into<String> for BackupPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BackupPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            BackupPolicy::Default => "DEFAULT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEFAULT" => Ok(BackupPolicy::Default),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BackupState {
+    CreateInProgress,
+    Deleted,
+    Ready,
+}
+
+impl Into<String> for BackupState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BackupState {
+    fn into(self) -> &'static str {
+        match self {
+            BackupState::CreateInProgress => "CREATE_IN_PROGRESS",
+            BackupState::Deleted => "DELETED",
+            BackupState::Ready => "READY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATE_IN_PROGRESS" => Ok(BackupState::CreateInProgress),
+            "DELETED" => Ok(BackupState::Deleted),
+            "READY" => Ok(BackupState::Ready),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains one or more certificates or a certificate signing request (CSR).</p>"]
@@ -128,6 +194,62 @@ pub struct Cluster {
     #[serde(rename="VpcId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ClusterState {
+    Active,
+    CreateInProgress,
+    Degraded,
+    Deleted,
+    DeleteInProgress,
+    Initialized,
+    InitializeInProgress,
+    Uninitialized,
+    UpdateInProgress,
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ClusterState {
+    fn into(self) -> &'static str {
+        match self {
+            ClusterState::Active => "ACTIVE",
+            ClusterState::CreateInProgress => "CREATE_IN_PROGRESS",
+            ClusterState::Degraded => "DEGRADED",
+            ClusterState::Deleted => "DELETED",
+            ClusterState::DeleteInProgress => "DELETE_IN_PROGRESS",
+            ClusterState::Initialized => "INITIALIZED",
+            ClusterState::InitializeInProgress => "INITIALIZE_IN_PROGRESS",
+            ClusterState::Uninitialized => "UNINITIALIZED",
+            ClusterState::UpdateInProgress => "UPDATE_IN_PROGRESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ClusterState::Active),
+            "CREATE_IN_PROGRESS" => Ok(ClusterState::CreateInProgress),
+            "DEGRADED" => Ok(ClusterState::Degraded),
+            "DELETED" => Ok(ClusterState::Deleted),
+            "DELETE_IN_PROGRESS" => Ok(ClusterState::DeleteInProgress),
+            "INITIALIZED" => Ok(ClusterState::Initialized),
+            "INITIALIZE_IN_PROGRESS" => Ok(ClusterState::InitializeInProgress),
+            "UNINITIALIZED" => Ok(ClusterState::Uninitialized),
+            "UPDATE_IN_PROGRESS" => Ok(ClusterState::UpdateInProgress),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -306,6 +428,50 @@ pub struct Hsm {
     #[serde(rename="SubnetId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HsmState {
+    Active,
+    CreateInProgress,
+    Degraded,
+    Deleted,
+    DeleteInProgress,
+}
+
+impl Into<String> for HsmState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HsmState {
+    fn into(self) -> &'static str {
+        match self {
+            HsmState::Active => "ACTIVE",
+            HsmState::CreateInProgress => "CREATE_IN_PROGRESS",
+            HsmState::Degraded => "DEGRADED",
+            HsmState::Deleted => "DELETED",
+            HsmState::DeleteInProgress => "DELETE_IN_PROGRESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HsmState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(HsmState::Active),
+            "CREATE_IN_PROGRESS" => Ok(HsmState::CreateInProgress),
+            "DEGRADED" => Ok(HsmState::Degraded),
+            "DELETED" => Ok(HsmState::Deleted),
+            "DELETE_IN_PROGRESS" => Ok(HsmState::DeleteInProgress),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1512,7 +1678,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&body)
@@ -1542,7 +1708,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&body)
@@ -1574,7 +1740,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&body)
@@ -1604,7 +1770,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&body)
@@ -1636,7 +1802,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeBackupsResponse>(String::from_utf8_lossy(&body)
@@ -1668,7 +1834,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&body)
@@ -1700,7 +1866,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<InitializeClusterResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1728,7 +1894,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
@@ -1760,7 +1926,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
@@ -1792,7 +1958,7 @@ impl<P, D> CloudHsmv2 for CloudHsmv2Client<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)

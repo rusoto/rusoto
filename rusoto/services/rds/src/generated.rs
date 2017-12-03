@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -316,6 +312,41 @@ impl AddTagsToResourceMessageSerializer {
                    &obj.resource_name.replace("+", "%2B"));
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApplyMethod {
+    Immediate,
+    PendingReboot,
+}
+
+impl Into<String> for ApplyMethod {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApplyMethod {
+    fn into(self) -> &'static str {
+        match self {
+            ApplyMethod::Immediate => "immediate",
+            ApplyMethod::PendingReboot => "pending-reboot",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplyMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "immediate" => Ok(ApplyMethod::Immediate),
+            "pending-reboot" => Ok(ApplyMethod::PendingReboot),
+            _ => Err(()),
+        }
     }
 }
 
@@ -710,7 +741,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -724,7 +755,7 @@ impl BooleanOptionalDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -15250,6 +15281,53 @@ impl SourceRegionMessageDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    DbCluster,
+    DbClusterSnapshot,
+    DbInstance,
+    DbParameterGroup,
+    DbSecurityGroup,
+    DbSnapshot,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::DbCluster => "db-cluster",
+            SourceType::DbClusterSnapshot => "db-cluster-snapshot",
+            SourceType::DbInstance => "db-instance",
+            SourceType::DbParameterGroup => "db-parameter-group",
+            SourceType::DbSecurityGroup => "db-security-group",
+            SourceType::DbSnapshot => "db-snapshot",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "db-cluster" => Ok(SourceType::DbCluster),
+            "db-cluster-snapshot" => Ok(SourceType::DbClusterSnapshot),
+            "db-instance" => Ok(SourceType::DbInstance),
+            "db-parameter-group" => Ok(SourceType::DbParameterGroup),
+            "db-security-group" => Ok(SourceType::DbSecurityGroup),
+            "db-snapshot" => Ok(SourceType::DbSnapshot),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -24250,7 +24328,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -24279,7 +24357,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24325,7 +24403,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -24354,7 +24432,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24402,7 +24480,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24450,7 +24528,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24498,7 +24576,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24545,7 +24623,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24592,7 +24670,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24639,7 +24717,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24686,7 +24764,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24734,7 +24812,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24782,7 +24860,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24831,7 +24909,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24879,7 +24957,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24927,7 +25005,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -24976,7 +25054,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25023,7 +25101,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25070,7 +25148,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25118,7 +25196,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25167,7 +25245,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25214,7 +25292,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25261,7 +25339,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25291,7 +25369,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25340,7 +25418,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25387,7 +25465,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25415,7 +25493,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25443,7 +25521,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25490,7 +25568,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25519,7 +25597,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25568,7 +25646,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -25597,7 +25675,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25645,7 +25723,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25693,7 +25771,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25742,7 +25820,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25793,7 +25871,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25840,7 +25918,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25888,7 +25966,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25936,7 +26014,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -25984,7 +26062,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26031,7 +26109,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26079,7 +26157,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26127,7 +26205,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26175,7 +26253,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26224,7 +26302,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26271,7 +26349,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26318,7 +26396,7 @@ impl<P, D> Rds for RdsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26363,7 +26441,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26410,7 +26488,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26458,7 +26536,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26507,7 +26585,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26555,7 +26633,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26603,7 +26681,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26651,7 +26729,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26699,7 +26777,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26746,7 +26824,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26795,7 +26873,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26844,7 +26922,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26890,7 +26968,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26938,7 +27016,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -26987,7 +27065,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27034,7 +27112,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27081,7 +27159,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27129,7 +27207,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27177,7 +27255,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27223,7 +27301,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27271,7 +27349,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27318,7 +27396,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27366,7 +27444,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27415,7 +27493,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27463,7 +27541,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27512,7 +27590,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27559,7 +27637,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27607,7 +27685,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27656,7 +27734,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27702,7 +27780,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27749,7 +27827,7 @@ fn describe_engine_default_cluster_parameters(&self, input: &DescribeEngineDefau
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -27776,7 +27854,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27822,7 +27900,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -27851,7 +27929,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27899,7 +27977,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27947,7 +28025,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -27996,7 +28074,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28044,7 +28122,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28092,7 +28170,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28140,7 +28218,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28188,7 +28266,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28235,7 +28313,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -28282,7 +28360,7 @@ fn remove_source_identifier_from_subscription(&self, input: &RemoveSourceIdentif
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

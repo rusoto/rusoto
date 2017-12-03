@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -279,7 +275,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1457,6 +1453,60 @@ impl MessageSystemAttributeMapDeserializer {
         Ok(obj)
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MessageSystemAttributeName {
+    ApproximateFirstReceiveTimestamp,
+    ApproximateReceiveCount,
+    MessageDeduplicationId,
+    MessageGroupId,
+    SenderId,
+    SentTimestamp,
+    SequenceNumber,
+}
+
+impl Into<String> for MessageSystemAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MessageSystemAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            MessageSystemAttributeName::ApproximateFirstReceiveTimestamp => {
+                "ApproximateFirstReceiveTimestamp"
+            }
+            MessageSystemAttributeName::ApproximateReceiveCount => "ApproximateReceiveCount",
+            MessageSystemAttributeName::MessageDeduplicationId => "MessageDeduplicationId",
+            MessageSystemAttributeName::MessageGroupId => "MessageGroupId",
+            MessageSystemAttributeName::SenderId => "SenderId",
+            MessageSystemAttributeName::SentTimestamp => "SentTimestamp",
+            MessageSystemAttributeName::SequenceNumber => "SequenceNumber",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageSystemAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ApproximateFirstReceiveTimestamp" => {
+                Ok(MessageSystemAttributeName::ApproximateFirstReceiveTimestamp)
+            }
+            "ApproximateReceiveCount" => Ok(MessageSystemAttributeName::ApproximateReceiveCount),
+            "MessageDeduplicationId" => Ok(MessageSystemAttributeName::MessageDeduplicationId),
+            "MessageGroupId" => Ok(MessageSystemAttributeName::MessageGroupId),
+            "SenderId" => Ok(MessageSystemAttributeName::SenderId),
+            "SentTimestamp" => Ok(MessageSystemAttributeName::SentTimestamp),
+            "SequenceNumber" => Ok(MessageSystemAttributeName::SequenceNumber),
+            _ => Err(()),
+        }
+    }
+}
+
 struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
     #[allow(unused_variables)]
@@ -1526,6 +1576,99 @@ impl QueueAttributeMapSerializer {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "Name"), &key);
             params.put(&key, &value);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QueueAttributeName {
+    All,
+    ApproximateNumberOfMessages,
+    ApproximateNumberOfMessagesDelayed,
+    ApproximateNumberOfMessagesNotVisible,
+    ContentBasedDeduplication,
+    CreatedTimestamp,
+    DelaySeconds,
+    FifoQueue,
+    KmsDataKeyReusePeriodSeconds,
+    KmsMasterKeyId,
+    LastModifiedTimestamp,
+    MaximumMessageSize,
+    MessageRetentionPeriod,
+    Policy,
+    QueueArn,
+    ReceiveMessageWaitTimeSeconds,
+    RedrivePolicy,
+    VisibilityTimeout,
+}
+
+impl Into<String> for QueueAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QueueAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            QueueAttributeName::All => "All",
+            QueueAttributeName::ApproximateNumberOfMessages => "ApproximateNumberOfMessages",
+            QueueAttributeName::ApproximateNumberOfMessagesDelayed => {
+                "ApproximateNumberOfMessagesDelayed"
+            }
+            QueueAttributeName::ApproximateNumberOfMessagesNotVisible => {
+                "ApproximateNumberOfMessagesNotVisible"
+            }
+            QueueAttributeName::ContentBasedDeduplication => "ContentBasedDeduplication",
+            QueueAttributeName::CreatedTimestamp => "CreatedTimestamp",
+            QueueAttributeName::DelaySeconds => "DelaySeconds",
+            QueueAttributeName::FifoQueue => "FifoQueue",
+            QueueAttributeName::KmsDataKeyReusePeriodSeconds => "KmsDataKeyReusePeriodSeconds",
+            QueueAttributeName::KmsMasterKeyId => "KmsMasterKeyId",
+            QueueAttributeName::LastModifiedTimestamp => "LastModifiedTimestamp",
+            QueueAttributeName::MaximumMessageSize => "MaximumMessageSize",
+            QueueAttributeName::MessageRetentionPeriod => "MessageRetentionPeriod",
+            QueueAttributeName::Policy => "Policy",
+            QueueAttributeName::QueueArn => "QueueArn",
+            QueueAttributeName::ReceiveMessageWaitTimeSeconds => "ReceiveMessageWaitTimeSeconds",
+            QueueAttributeName::RedrivePolicy => "RedrivePolicy",
+            QueueAttributeName::VisibilityTimeout => "VisibilityTimeout",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueueAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(QueueAttributeName::All),
+            "ApproximateNumberOfMessages" => Ok(QueueAttributeName::ApproximateNumberOfMessages),
+            "ApproximateNumberOfMessagesDelayed" => {
+                Ok(QueueAttributeName::ApproximateNumberOfMessagesDelayed)
+            }
+            "ApproximateNumberOfMessagesNotVisible" => {
+                Ok(QueueAttributeName::ApproximateNumberOfMessagesNotVisible)
+            }
+            "ContentBasedDeduplication" => Ok(QueueAttributeName::ContentBasedDeduplication),
+            "CreatedTimestamp" => Ok(QueueAttributeName::CreatedTimestamp),
+            "DelaySeconds" => Ok(QueueAttributeName::DelaySeconds),
+            "FifoQueue" => Ok(QueueAttributeName::FifoQueue),
+            "KmsDataKeyReusePeriodSeconds" => Ok(QueueAttributeName::KmsDataKeyReusePeriodSeconds),
+            "KmsMasterKeyId" => Ok(QueueAttributeName::KmsMasterKeyId),
+            "LastModifiedTimestamp" => Ok(QueueAttributeName::LastModifiedTimestamp),
+            "MaximumMessageSize" => Ok(QueueAttributeName::MaximumMessageSize),
+            "MessageRetentionPeriod" => Ok(QueueAttributeName::MessageRetentionPeriod),
+            "Policy" => Ok(QueueAttributeName::Policy),
+            "QueueArn" => Ok(QueueAttributeName::QueueArn),
+            "ReceiveMessageWaitTimeSeconds" => {
+                Ok(QueueAttributeName::ReceiveMessageWaitTimeSeconds)
+            }
+            "RedrivePolicy" => Ok(QueueAttributeName::RedrivePolicy),
+            "VisibilityTimeout" => Ok(QueueAttributeName::VisibilityTimeout),
+            _ => Err(()),
         }
     }
 }
@@ -3610,7 +3753,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3638,7 +3781,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3668,7 +3811,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -3715,7 +3858,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -3760,7 +3903,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3788,7 +3931,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -3833,7 +3976,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -3861,7 +4004,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -3908,7 +4051,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -3956,7 +4099,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -4003,7 +4146,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -4048,7 +4191,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -4076,7 +4219,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -4123,7 +4266,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -4151,7 +4294,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -4198,7 +4341,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -4245,7 +4388,7 @@ impl<P, D> Sqs for SqsClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }

@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -71,6 +67,158 @@ pub struct AttemptDetail {
     #[serde(rename="stoppedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stopped_at: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CEState {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for CEState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CEState {
+    fn into(self) -> &'static str {
+        match self {
+            CEState::Disabled => "DISABLED",
+            CEState::Enabled => "ENABLED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLED" => Ok(CEState::Disabled),
+            "ENABLED" => Ok(CEState::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CEStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Invalid,
+    Updating,
+    Valid,
+}
+
+impl Into<String> for CEStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CEStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CEStatus::Creating => "CREATING",
+            CEStatus::Deleted => "DELETED",
+            CEStatus::Deleting => "DELETING",
+            CEStatus::Invalid => "INVALID",
+            CEStatus::Updating => "UPDATING",
+            CEStatus::Valid => "VALID",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATING" => Ok(CEStatus::Creating),
+            "DELETED" => Ok(CEStatus::Deleted),
+            "DELETING" => Ok(CEStatus::Deleting),
+            "INVALID" => Ok(CEStatus::Invalid),
+            "UPDATING" => Ok(CEStatus::Updating),
+            "VALID" => Ok(CEStatus::Valid),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CEType {
+    Managed,
+    Unmanaged,
+}
+
+impl Into<String> for CEType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CEType {
+    fn into(self) -> &'static str {
+        match self {
+            CEType::Managed => "MANAGED",
+            CEType::Unmanaged => "UNMANAGED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "MANAGED" => Ok(CEType::Managed),
+            "UNMANAGED" => Ok(CEType::Unmanaged),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CRType {
+    Ec2,
+    Spot,
+}
+
+impl Into<String> for CRType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CRType {
+    fn into(self) -> &'static str {
+        match self {
+            CRType::Ec2 => "EC2",
+            CRType::Spot => "SPOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CRType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EC2" => Ok(CRType::Ec2),
+            "SPOT" => Ok(CRType::Spot),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -551,6 +699,88 @@ pub struct Host {
     pub source_path: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JQState {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for JQState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JQState {
+    fn into(self) -> &'static str {
+        match self {
+            JQState::Disabled => "DISABLED",
+            JQState::Enabled => "ENABLED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JQState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLED" => Ok(JQState::Disabled),
+            "ENABLED" => Ok(JQState::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JQStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Invalid,
+    Updating,
+    Valid,
+}
+
+impl Into<String> for JQStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JQStatus {
+    fn into(self) -> &'static str {
+        match self {
+            JQStatus::Creating => "CREATING",
+            JQStatus::Deleted => "DELETED",
+            JQStatus::Deleting => "DELETING",
+            JQStatus::Invalid => "INVALID",
+            JQStatus::Updating => "UPDATING",
+            JQStatus::Valid => "VALID",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JQStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATING" => Ok(JQStatus::Creating),
+            "DELETED" => Ok(JQStatus::Deleted),
+            "DELETING" => Ok(JQStatus::Deleting),
+            "INVALID" => Ok(JQStatus::Invalid),
+            "UPDATING" => Ok(JQStatus::Updating),
+            "VALID" => Ok(JQStatus::Valid),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An object representing an AWS Batch job definition.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobDefinition {
@@ -582,6 +812,38 @@ pub struct JobDefinition {
     #[doc="<p>The type of job definition.</p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobDefinitionType {
+    Container,
+}
+
+impl Into<String> for JobDefinitionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobDefinitionType {
+    fn into(self) -> &'static str {
+        match self {
+            JobDefinitionType::Container => "container",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobDefinitionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "container" => Ok(JobDefinitionType::Container),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An object representing an AWS Batch job dependency.</p>"]
@@ -674,6 +936,56 @@ pub struct JobQueueDetail {
     #[serde(rename="statusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status_reason: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobStatus {
+    Failed,
+    Pending,
+    Runnable,
+    Running,
+    Starting,
+    Submitted,
+    Succeeded,
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobStatus {
+    fn into(self) -> &'static str {
+        match self {
+            JobStatus::Failed => "FAILED",
+            JobStatus::Pending => "PENDING",
+            JobStatus::Runnable => "RUNNABLE",
+            JobStatus::Running => "RUNNING",
+            JobStatus::Starting => "STARTING",
+            JobStatus::Submitted => "SUBMITTED",
+            JobStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(JobStatus::Failed),
+            "PENDING" => Ok(JobStatus::Pending),
+            "RUNNABLE" => Ok(JobStatus::Runnable),
+            "RUNNING" => Ok(JobStatus::Running),
+            "STARTING" => Ok(JobStatus::Starting),
+            "SUBMITTED" => Ok(JobStatus::Submitted),
+            "SUCCEEDED" => Ok(JobStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An object representing summary details of a job.</p>"]
@@ -2412,7 +2724,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2458,7 +2770,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2505,7 +2817,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2551,7 +2863,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2598,7 +2910,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2644,7 +2956,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2692,7 +3004,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2740,7 +3052,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2786,7 +3098,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2831,7 +3143,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2874,7 +3186,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2920,7 +3232,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2964,7 +3276,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3009,7 +3321,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3055,7 +3367,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3102,7 +3414,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

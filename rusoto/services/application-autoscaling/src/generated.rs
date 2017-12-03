@@ -11,23 +11,57 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AdjustmentType {
+    ChangeInCapacity,
+    ExactCapacity,
+    PercentChangeInCapacity,
+}
+
+impl Into<String> for AdjustmentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AdjustmentType {
+    fn into(self) -> &'static str {
+        match self {
+            AdjustmentType::ChangeInCapacity => "ChangeInCapacity",
+            AdjustmentType::ExactCapacity => "ExactCapacity",
+            AdjustmentType::PercentChangeInCapacity => "PercentChangeInCapacity",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdjustmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ChangeInCapacity" => Ok(AdjustmentType::ChangeInCapacity),
+            "ExactCapacity" => Ok(AdjustmentType::ExactCapacity),
+            "PercentChangeInCapacity" => Ok(AdjustmentType::PercentChangeInCapacity),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a CloudWatch alarm associated with a scaling policy.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Alarm {
@@ -205,6 +239,44 @@ pub struct DescribeScalingPoliciesResponse {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricAggregationType {
+    Average,
+    Maximum,
+    Minimum,
+}
+
+impl Into<String> for MetricAggregationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricAggregationType {
+    fn into(self) -> &'static str {
+        match self {
+            MetricAggregationType::Average => "Average",
+            MetricAggregationType::Maximum => "Maximum",
+            MetricAggregationType::Minimum => "Minimum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricAggregationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(MetricAggregationType::Average),
+            "Maximum" => Ok(MetricAggregationType::Maximum),
+            "Minimum" => Ok(MetricAggregationType::Minimum),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the dimension of a metric.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricDimension {
@@ -214,6 +286,120 @@ pub struct MetricDimension {
     #[doc="<p>The value of the dimension.</p>"]
     #[serde(rename="Value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricStatistic {
+    fn into(self) -> &'static str {
+        match self {
+            MetricStatistic::Average => "Average",
+            MetricStatistic::Maximum => "Maximum",
+            MetricStatistic::Minimum => "Minimum",
+            MetricStatistic::SampleCount => "SampleCount",
+            MetricStatistic::Sum => "Sum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(MetricStatistic::Average),
+            "Maximum" => Ok(MetricStatistic::Maximum),
+            "Minimum" => Ok(MetricStatistic::Minimum),
+            "SampleCount" => Ok(MetricStatistic::SampleCount),
+            "Sum" => Ok(MetricStatistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricType {
+    DynamoDBReadCapacityUtilization,
+    DynamoDBWriteCapacityUtilization,
+}
+
+impl Into<String> for MetricType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricType {
+    fn into(self) -> &'static str {
+        match self {
+            MetricType::DynamoDBReadCapacityUtilization => "DynamoDBReadCapacityUtilization",
+            MetricType::DynamoDBWriteCapacityUtilization => "DynamoDBWriteCapacityUtilization",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DynamoDBReadCapacityUtilization" => Ok(MetricType::DynamoDBReadCapacityUtilization),
+            "DynamoDBWriteCapacityUtilization" => Ok(MetricType::DynamoDBWriteCapacityUtilization),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicyType {
+    StepScaling,
+    TargetTrackingScaling,
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicyType {
+    fn into(self) -> &'static str {
+        match self {
+            PolicyType::StepScaling => "StepScaling",
+            PolicyType::TargetTrackingScaling => "TargetTrackingScaling",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "StepScaling" => Ok(PolicyType::StepScaling),
+            "TargetTrackingScaling" => Ok(PolicyType::TargetTrackingScaling),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Configures a predefined metric for a target tracking policy.</p>"]
@@ -296,6 +482,81 @@ pub struct RegisterScalableTargetRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RegisterScalableTargetResponse;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalableDimension {
+    AppstreamFleetDesiredCapacity,
+    DynamodbIndexReadCapacityUnits,
+    DynamodbIndexWriteCapacityUnits,
+    DynamodbTableReadCapacityUnits,
+    DynamodbTableWriteCapacityUnits,
+    Ec2SpotFleetRequestTargetCapacity,
+    EcsServiceDesiredCount,
+    ElasticmapreduceInstancegroupInstanceCount,
+}
+
+impl Into<String> for ScalableDimension {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalableDimension {
+    fn into(self) -> &'static str {
+        match self {
+            ScalableDimension::AppstreamFleetDesiredCapacity => "appstream:fleet:DesiredCapacity",
+            ScalableDimension::DynamodbIndexReadCapacityUnits => "dynamodb:index:ReadCapacityUnits",
+            ScalableDimension::DynamodbIndexWriteCapacityUnits => {
+                "dynamodb:index:WriteCapacityUnits"
+            }
+            ScalableDimension::DynamodbTableReadCapacityUnits => "dynamodb:table:ReadCapacityUnits",
+            ScalableDimension::DynamodbTableWriteCapacityUnits => {
+                "dynamodb:table:WriteCapacityUnits"
+            }
+            ScalableDimension::Ec2SpotFleetRequestTargetCapacity => {
+                "ec2:spot-fleet-request:TargetCapacity"
+            }
+            ScalableDimension::EcsServiceDesiredCount => "ecs:service:DesiredCount",
+            ScalableDimension::ElasticmapreduceInstancegroupInstanceCount => {
+                "elasticmapreduce:instancegroup:InstanceCount"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalableDimension {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "appstream:fleet:DesiredCapacity" => {
+                Ok(ScalableDimension::AppstreamFleetDesiredCapacity)
+            }
+            "dynamodb:index:ReadCapacityUnits" => {
+                Ok(ScalableDimension::DynamodbIndexReadCapacityUnits)
+            }
+            "dynamodb:index:WriteCapacityUnits" => {
+                Ok(ScalableDimension::DynamodbIndexWriteCapacityUnits)
+            }
+            "dynamodb:table:ReadCapacityUnits" => {
+                Ok(ScalableDimension::DynamodbTableReadCapacityUnits)
+            }
+            "dynamodb:table:WriteCapacityUnits" => {
+                Ok(ScalableDimension::DynamodbTableWriteCapacityUnits)
+            }
+            "ec2:spot-fleet-request:TargetCapacity" => {
+                Ok(ScalableDimension::Ec2SpotFleetRequestTargetCapacity)
+            }
+            "ecs:service:DesiredCount" => Ok(ScalableDimension::EcsServiceDesiredCount),
+            "elasticmapreduce:instancegroup:InstanceCount" => {
+                Ok(ScalableDimension::ElasticmapreduceInstancegroupInstanceCount)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a scalable target.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ScalableTarget {
@@ -363,6 +624,53 @@ pub struct ScalingActivity {
     pub status_message: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalingActivityStatusCode {
+    Failed,
+    InProgress,
+    Overridden,
+    Pending,
+    Successful,
+    Unfulfilled,
+}
+
+impl Into<String> for ScalingActivityStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalingActivityStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            ScalingActivityStatusCode::Failed => "Failed",
+            ScalingActivityStatusCode::InProgress => "InProgress",
+            ScalingActivityStatusCode::Overridden => "Overridden",
+            ScalingActivityStatusCode::Pending => "Pending",
+            ScalingActivityStatusCode::Successful => "Successful",
+            ScalingActivityStatusCode::Unfulfilled => "Unfulfilled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingActivityStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(ScalingActivityStatusCode::Failed),
+            "InProgress" => Ok(ScalingActivityStatusCode::InProgress),
+            "Overridden" => Ok(ScalingActivityStatusCode::Overridden),
+            "Pending" => Ok(ScalingActivityStatusCode::Pending),
+            "Successful" => Ok(ScalingActivityStatusCode::Successful),
+            "Unfulfilled" => Ok(ScalingActivityStatusCode::Unfulfilled),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a scaling policy.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ScalingPolicy {
@@ -400,6 +708,50 @@ pub struct ScalingPolicy {
     #[serde(skip_serializing_if="Option::is_none")]
     pub target_tracking_scaling_policy_configuration:
         Option<TargetTrackingScalingPolicyConfiguration>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ServiceNamespace {
+    Appstream,
+    Dynamodb,
+    Ec2,
+    Ecs,
+    Elasticmapreduce,
+}
+
+impl Into<String> for ServiceNamespace {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ServiceNamespace {
+    fn into(self) -> &'static str {
+        match self {
+            ServiceNamespace::Appstream => "appstream",
+            ServiceNamespace::Dynamodb => "dynamodb",
+            ServiceNamespace::Ec2 => "ec2",
+            ServiceNamespace::Ecs => "ecs",
+            ServiceNamespace::Elasticmapreduce => "elasticmapreduce",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceNamespace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "appstream" => Ok(ServiceNamespace::Appstream),
+            "dynamodb" => Ok(ServiceNamespace::Dynamodb),
+            "ec2" => Ok(ServiceNamespace::Ec2),
+            "ecs" => Ok(ServiceNamespace::Ecs),
+            "elasticmapreduce" => Ok(ServiceNamespace::Elasticmapreduce),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a step adjustment for a <a>StepScalingPolicyConfiguration</a>. Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you've defined for the alarm. </p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>To trigger the adjustment when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>To trigger the adjustment when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can't overlap or have a gap.</p> </li> <li> <p>At most one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can't be null in the same step adjustment.</p> </li> </ul>"]
@@ -1220,7 +1572,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteScalingPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1252,7 +1604,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeregisterScalableTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1285,7 +1637,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeScalableTargetsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1318,7 +1670,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeScalingActivitiesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1351,7 +1703,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeScalingPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1382,7 +1734,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutScalingPolicyResponse>(String::from_utf8_lossy(&body)
@@ -1416,7 +1768,7 @@ impl<P, D> ApplicationAutoScaling for ApplicationAutoScalingClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RegisterScalableTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())

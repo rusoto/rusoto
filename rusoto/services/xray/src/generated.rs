@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -1227,7 +1223,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1272,7 +1268,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1317,7 +1313,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1362,7 +1358,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1407,7 +1403,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1452,7 +1448,7 @@ impl<P, D> XRay for XRayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

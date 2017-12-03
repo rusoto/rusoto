@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -59,6 +55,79 @@ pub struct AddTagsToResourceMessage {
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddTagsToResourceResponse;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AuthMechanismValue {
+    Default,
+    MongodbCr,
+    ScramSha1,
+}
+
+impl Into<String> for AuthMechanismValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AuthMechanismValue {
+    fn into(self) -> &'static str {
+        match self {
+            AuthMechanismValue::Default => "default",
+            AuthMechanismValue::MongodbCr => "mongodb_cr",
+            AuthMechanismValue::ScramSha1 => "scram_sha_1",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthMechanismValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "default" => Ok(AuthMechanismValue::Default),
+            "mongodb_cr" => Ok(AuthMechanismValue::MongodbCr),
+            "scram_sha_1" => Ok(AuthMechanismValue::ScramSha1),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AuthTypeValue {
+    No,
+    Password,
+}
+
+impl Into<String> for AuthTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AuthTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            AuthTypeValue::No => "no",
+            AuthTypeValue::Password => "password",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "no" => Ok(AuthTypeValue::No),
+            "password" => Ok(AuthTypeValue::Password),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -116,6 +185,41 @@ pub struct Certificate {
     #[serde(rename="ValidToDate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub valid_to_date: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CompressionTypeValue {
+    Gzip,
+    None,
+}
+
+impl Into<String> for CompressionTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CompressionTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            CompressionTypeValue::Gzip => "gzip",
+            CompressionTypeValue::None => "none",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "gzip" => Ok(CompressionTypeValue::Gzip),
+            "none" => Ok(CompressionTypeValue::None),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p/>"]
@@ -928,6 +1032,47 @@ pub struct DescribeTableStatisticsResponse {
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DmsSslModeValue {
+    None,
+    Require,
+    VerifyCa,
+    VerifyFull,
+}
+
+impl Into<String> for DmsSslModeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DmsSslModeValue {
+    fn into(self) -> &'static str {
+        match self {
+            DmsSslModeValue::None => "none",
+            DmsSslModeValue::Require => "require",
+            DmsSslModeValue::VerifyCa => "verify-ca",
+            DmsSslModeValue::VerifyFull => "verify-full",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DmsSslModeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "none" => Ok(DmsSslModeValue::None),
+            "require" => Ok(DmsSslModeValue::Require),
+            "verify-ca" => Ok(DmsSslModeValue::VerifyCa),
+            "verify-full" => Ok(DmsSslModeValue::VerifyFull),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DynamoDbSettings {
@@ -1145,6 +1290,44 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename="TagList")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MigrationTypeValue {
+    Cdc,
+    FullLoad,
+    FullLoadAndCdc,
+}
+
+impl Into<String> for MigrationTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MigrationTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            MigrationTypeValue::Cdc => "cdc",
+            MigrationTypeValue::FullLoad => "full-load",
+            MigrationTypeValue::FullLoadAndCdc => "full-load-and-cdc",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MigrationTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "cdc" => Ok(MigrationTypeValue::Cdc),
+            "full-load" => Ok(MigrationTypeValue::FullLoad),
+            "full-load-and-cdc" => Ok(MigrationTypeValue::FullLoadAndCdc),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p/>"]
@@ -1420,6 +1603,41 @@ pub struct MongoDbSettings {
     pub username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NestingLevelValue {
+    None,
+    One,
+}
+
+impl Into<String> for NestingLevelValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NestingLevelValue {
+    fn into(self) -> &'static str {
+        match self {
+            NestingLevelValue::None => "none",
+            NestingLevelValue::One => "one",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NestingLevelValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "none" => Ok(NestingLevelValue::None),
+            "one" => Ok(NestingLevelValue::One),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OrderableReplicationInstance {
@@ -1498,6 +1716,44 @@ pub struct RefreshSchemasStatus {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RefreshSchemasStatusTypeValue {
+    Failed,
+    Refreshing,
+    Successful,
+}
+
+impl Into<String> for RefreshSchemasStatusTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RefreshSchemasStatusTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            RefreshSchemasStatusTypeValue::Failed => "failed",
+            RefreshSchemasStatusTypeValue::Refreshing => "refreshing",
+            RefreshSchemasStatusTypeValue::Successful => "successful",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RefreshSchemasStatusTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "failed" => Ok(RefreshSchemasStatusTypeValue::Failed),
+            "refreshing" => Ok(RefreshSchemasStatusTypeValue::Refreshing),
+            "successful" => Ok(RefreshSchemasStatusTypeValue::Successful),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ReloadTablesMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance. </p>"]
@@ -1530,6 +1786,41 @@ pub struct RemoveTagsFromResourceMessage {
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveTagsFromResourceResponse;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationEndpointTypeValue {
+    Source,
+    Target,
+}
+
+impl Into<String> for ReplicationEndpointTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationEndpointTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationEndpointTypeValue::Source => "source",
+            ReplicationEndpointTypeValue::Target => "target",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationEndpointTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "source" => Ok(ReplicationEndpointTypeValue::Source),
+            "target" => Ok(ReplicationEndpointTypeValue::Target),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1781,6 +2072,38 @@ pub struct S3Settings {
     pub service_access_role_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    ReplicationInstance,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::ReplicationInstance => "replication-instance",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "replication-instance" => Ok(SourceType::ReplicationInstance),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartReplicationTaskMessage {
@@ -1803,6 +2126,44 @@ pub struct StartReplicationTaskResponse {
     #[serde(rename="ReplicationTask")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StartReplicationTaskTypeValue {
+    ReloadTarget,
+    ResumeProcessing,
+    StartReplication,
+}
+
+impl Into<String> for StartReplicationTaskTypeValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StartReplicationTaskTypeValue {
+    fn into(self) -> &'static str {
+        match self {
+            StartReplicationTaskTypeValue::ReloadTarget => "reload-target",
+            StartReplicationTaskTypeValue::ResumeProcessing => "resume-processing",
+            StartReplicationTaskTypeValue::StartReplication => "start-replication",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartReplicationTaskTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "reload-target" => Ok(StartReplicationTaskTypeValue::ReloadTarget),
+            "resume-processing" => Ok(StartReplicationTaskTypeValue::ResumeProcessing),
+            "start-replication" => Ok(StartReplicationTaskTypeValue::StartReplication),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p/>"]
@@ -5729,7 +6090,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5759,7 +6120,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateEndpointResponse>(String::from_utf8_lossy(&body)
@@ -5792,7 +6153,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5825,7 +6186,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5858,7 +6219,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5890,7 +6251,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5920,7 +6281,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5950,7 +6311,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteEndpointResponse>(String::from_utf8_lossy(&body)
@@ -5983,7 +6344,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6016,7 +6377,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6049,7 +6410,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6081,7 +6442,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6111,7 +6472,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAccountAttributesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6142,7 +6503,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6172,7 +6533,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConnectionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6203,7 +6564,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEndpointTypesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6233,7 +6594,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEndpointsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6264,7 +6625,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEventCategoriesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6297,7 +6658,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEventSubscriptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6328,7 +6689,7 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
@@ -6359,7 +6720,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6391,7 +6752,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6424,7 +6785,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeReplicationInstancesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6457,7 +6818,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6490,7 +6851,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeReplicationTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6521,7 +6882,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSchemasResponse>(String::from_utf8_lossy(&body)
@@ -6554,7 +6915,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTableStatisticsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6585,7 +6946,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ImportCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6615,7 +6976,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6645,7 +7006,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyEndpointResponse>(String::from_utf8_lossy(&body)
@@ -6678,7 +7039,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyEventSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6711,7 +7072,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyReplicationInstanceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6744,7 +7105,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6776,7 +7137,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6806,7 +7167,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RefreshSchemasResponse>(String::from_utf8_lossy(&body)
@@ -6838,7 +7199,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ReloadTablesResponse>(String::from_utf8_lossy(&body)
@@ -6871,7 +7232,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6902,7 +7263,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6932,7 +7293,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopReplicationTaskResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6962,7 +7323,7 @@ fn describe_orderable_replication_instances(&self, input: &DescribeOrderableRepl
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TestConnectionResponse>(String::from_utf8_lossy(&body)

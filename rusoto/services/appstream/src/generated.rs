@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -73,6 +69,44 @@ pub struct AssociateFleetRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssociateFleetResult;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AuthenticationType {
+    Api,
+    Saml,
+    Userpool,
+}
+
+impl Into<String> for AuthenticationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AuthenticationType {
+    fn into(self) -> &'static str {
+        match self {
+            AuthenticationType::Api => "API",
+            AuthenticationType::Saml => "SAML",
+            AuthenticationType::Userpool => "USERPOOL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "API" => Ok(AuthenticationType::Api),
+            "SAML" => Ok(AuthenticationType::Saml),
+            "USERPOOL" => Ok(AuthenticationType::Userpool),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p>The capacity configuration for the fleet.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -515,6 +549,48 @@ pub struct Fleet {
     pub vpc_config: Option<VpcConfig>,
 }
 
+#[doc="<p>Fleet attribute.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FleetAttribute {
+    DomainJoinInfo,
+    VpcConfiguration,
+    VpcConfigurationSecurityGroupIds,
+}
+
+impl Into<String> for FleetAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FleetAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            FleetAttribute::DomainJoinInfo => "DOMAIN_JOIN_INFO",
+            FleetAttribute::VpcConfiguration => "VPC_CONFIGURATION",
+            FleetAttribute::VpcConfigurationSecurityGroupIds => {
+                "VPC_CONFIGURATION_SECURITY_GROUP_IDS"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DOMAIN_JOIN_INFO" => Ok(FleetAttribute::DomainJoinInfo),
+            "VPC_CONFIGURATION" => Ok(FleetAttribute::VpcConfiguration),
+            "VPC_CONFIGURATION_SECURITY_GROUP_IDS" => {
+                Ok(FleetAttribute::VpcConfigurationSecurityGroupIds)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The details of the fleet error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetError {
@@ -526,6 +602,195 @@ pub struct FleetError {
     #[serde(rename="ErrorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FleetErrorCode {
+    DomainJoinErrorAccessDenied,
+    DomainJoinErrorDsMachineAccountQuotaExceeded,
+    DomainJoinErrorFileNotFound,
+    DomainJoinErrorInvalidParameter,
+    DomainJoinErrorLogonFailure,
+    DomainJoinErrorMoreData,
+    DomainJoinErrorNotSupported,
+    DomainJoinErrorNoSuchDomain,
+    DomainJoinInternalServiceError,
+    DomainJoinNerrInvalidWorkgroupName,
+    DomainJoinNerrPasswordExpired,
+    DomainJoinNerrWorkstationNotStarted,
+    IamServiceRoleIsMissing,
+    IamServiceRoleMissingDescribeSecurityGroupsAction,
+    IamServiceRoleMissingDescribeSubnetAction,
+    IamServiceRoleMissingEniCreateAction,
+    IamServiceRoleMissingEniDeleteAction,
+    IamServiceRoleMissingEniDescribeAction,
+    ImageNotFound,
+    InternalServiceError,
+    InvalidSubnetConfiguration,
+    NetworkInterfaceLimitExceeded,
+    SecurityGroupsNotFound,
+    SubnetHasInsufficientIpAddresses,
+    SubnetNotFound,
+}
+
+impl Into<String> for FleetErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FleetErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            FleetErrorCode::DomainJoinErrorAccessDenied => "DOMAIN_JOIN_ERROR_ACCESS_DENIED",
+            FleetErrorCode::DomainJoinErrorDsMachineAccountQuotaExceeded => {
+                "DOMAIN_JOIN_ERROR_DS_MACHINE_ACCOUNT_QUOTA_EXCEEDED"
+            }
+            FleetErrorCode::DomainJoinErrorFileNotFound => "DOMAIN_JOIN_ERROR_FILE_NOT_FOUND",
+            FleetErrorCode::DomainJoinErrorInvalidParameter => {
+                "DOMAIN_JOIN_ERROR_INVALID_PARAMETER"
+            }
+            FleetErrorCode::DomainJoinErrorLogonFailure => "DOMAIN_JOIN_ERROR_LOGON_FAILURE",
+            FleetErrorCode::DomainJoinErrorMoreData => "DOMAIN_JOIN_ERROR_MORE_DATA",
+            FleetErrorCode::DomainJoinErrorNotSupported => "DOMAIN_JOIN_ERROR_NOT_SUPPORTED",
+            FleetErrorCode::DomainJoinErrorNoSuchDomain => "DOMAIN_JOIN_ERROR_NO_SUCH_DOMAIN",
+            FleetErrorCode::DomainJoinInternalServiceError => "DOMAIN_JOIN_INTERNAL_SERVICE_ERROR",
+            FleetErrorCode::DomainJoinNerrInvalidWorkgroupName => {
+                "DOMAIN_JOIN_NERR_INVALID_WORKGROUP_NAME"
+            }
+            FleetErrorCode::DomainJoinNerrPasswordExpired => "DOMAIN_JOIN_NERR_PASSWORD_EXPIRED",
+            FleetErrorCode::DomainJoinNerrWorkstationNotStarted => {
+                "DOMAIN_JOIN_NERR_WORKSTATION_NOT_STARTED"
+            }
+            FleetErrorCode::IamServiceRoleIsMissing => "IAM_SERVICE_ROLE_IS_MISSING",
+            FleetErrorCode::IamServiceRoleMissingDescribeSecurityGroupsAction => {
+                "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SECURITY_GROUPS_ACTION"
+            }
+            FleetErrorCode::IamServiceRoleMissingDescribeSubnetAction => {
+                "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SUBNET_ACTION"
+            }
+            FleetErrorCode::IamServiceRoleMissingEniCreateAction => {
+                "IAM_SERVICE_ROLE_MISSING_ENI_CREATE_ACTION"
+            }
+            FleetErrorCode::IamServiceRoleMissingEniDeleteAction => {
+                "IAM_SERVICE_ROLE_MISSING_ENI_DELETE_ACTION"
+            }
+            FleetErrorCode::IamServiceRoleMissingEniDescribeAction => {
+                "IAM_SERVICE_ROLE_MISSING_ENI_DESCRIBE_ACTION"
+            }
+            FleetErrorCode::ImageNotFound => "IMAGE_NOT_FOUND",
+            FleetErrorCode::InternalServiceError => "INTERNAL_SERVICE_ERROR",
+            FleetErrorCode::InvalidSubnetConfiguration => "INVALID_SUBNET_CONFIGURATION",
+            FleetErrorCode::NetworkInterfaceLimitExceeded => "NETWORK_INTERFACE_LIMIT_EXCEEDED",
+            FleetErrorCode::SecurityGroupsNotFound => "SECURITY_GROUPS_NOT_FOUND",
+            FleetErrorCode::SubnetHasInsufficientIpAddresses => {
+                "SUBNET_HAS_INSUFFICIENT_IP_ADDRESSES"
+            }
+            FleetErrorCode::SubnetNotFound => "SUBNET_NOT_FOUND",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DOMAIN_JOIN_ERROR_ACCESS_DENIED" => Ok(FleetErrorCode::DomainJoinErrorAccessDenied),
+            "DOMAIN_JOIN_ERROR_DS_MACHINE_ACCOUNT_QUOTA_EXCEEDED" => {
+                Ok(FleetErrorCode::DomainJoinErrorDsMachineAccountQuotaExceeded)
+            }
+            "DOMAIN_JOIN_ERROR_FILE_NOT_FOUND" => Ok(FleetErrorCode::DomainJoinErrorFileNotFound),
+            "DOMAIN_JOIN_ERROR_INVALID_PARAMETER" => {
+                Ok(FleetErrorCode::DomainJoinErrorInvalidParameter)
+            }
+            "DOMAIN_JOIN_ERROR_LOGON_FAILURE" => Ok(FleetErrorCode::DomainJoinErrorLogonFailure),
+            "DOMAIN_JOIN_ERROR_MORE_DATA" => Ok(FleetErrorCode::DomainJoinErrorMoreData),
+            "DOMAIN_JOIN_ERROR_NOT_SUPPORTED" => Ok(FleetErrorCode::DomainJoinErrorNotSupported),
+            "DOMAIN_JOIN_ERROR_NO_SUCH_DOMAIN" => Ok(FleetErrorCode::DomainJoinErrorNoSuchDomain),
+            "DOMAIN_JOIN_INTERNAL_SERVICE_ERROR" => {
+                Ok(FleetErrorCode::DomainJoinInternalServiceError)
+            }
+            "DOMAIN_JOIN_NERR_INVALID_WORKGROUP_NAME" => {
+                Ok(FleetErrorCode::DomainJoinNerrInvalidWorkgroupName)
+            }
+            "DOMAIN_JOIN_NERR_PASSWORD_EXPIRED" => {
+                Ok(FleetErrorCode::DomainJoinNerrPasswordExpired)
+            }
+            "DOMAIN_JOIN_NERR_WORKSTATION_NOT_STARTED" => {
+                Ok(FleetErrorCode::DomainJoinNerrWorkstationNotStarted)
+            }
+            "IAM_SERVICE_ROLE_IS_MISSING" => Ok(FleetErrorCode::IamServiceRoleIsMissing),
+            "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SECURITY_GROUPS_ACTION" => {
+                Ok(FleetErrorCode::IamServiceRoleMissingDescribeSecurityGroupsAction)
+            }
+            "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SUBNET_ACTION" => {
+                Ok(FleetErrorCode::IamServiceRoleMissingDescribeSubnetAction)
+            }
+            "IAM_SERVICE_ROLE_MISSING_ENI_CREATE_ACTION" => {
+                Ok(FleetErrorCode::IamServiceRoleMissingEniCreateAction)
+            }
+            "IAM_SERVICE_ROLE_MISSING_ENI_DELETE_ACTION" => {
+                Ok(FleetErrorCode::IamServiceRoleMissingEniDeleteAction)
+            }
+            "IAM_SERVICE_ROLE_MISSING_ENI_DESCRIBE_ACTION" => {
+                Ok(FleetErrorCode::IamServiceRoleMissingEniDescribeAction)
+            }
+            "IMAGE_NOT_FOUND" => Ok(FleetErrorCode::ImageNotFound),
+            "INTERNAL_SERVICE_ERROR" => Ok(FleetErrorCode::InternalServiceError),
+            "INVALID_SUBNET_CONFIGURATION" => Ok(FleetErrorCode::InvalidSubnetConfiguration),
+            "NETWORK_INTERFACE_LIMIT_EXCEEDED" => Ok(FleetErrorCode::NetworkInterfaceLimitExceeded),
+            "SECURITY_GROUPS_NOT_FOUND" => Ok(FleetErrorCode::SecurityGroupsNotFound),
+            "SUBNET_HAS_INSUFFICIENT_IP_ADDRESSES" => {
+                Ok(FleetErrorCode::SubnetHasInsufficientIpAddresses)
+            }
+            "SUBNET_NOT_FOUND" => Ok(FleetErrorCode::SubnetNotFound),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FleetState {
+    Running,
+    Starting,
+    Stopped,
+    Stopping,
+}
+
+impl Into<String> for FleetState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FleetState {
+    fn into(self) -> &'static str {
+        match self {
+            FleetState::Running => "RUNNING",
+            FleetState::Starting => "STARTING",
+            FleetState::Stopped => "STOPPED",
+            FleetState::Stopping => "STOPPING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RUNNING" => Ok(FleetState::Running),
+            "STARTING" => Ok(FleetState::Starting),
+            "STOPPED" => Ok(FleetState::Stopped),
+            "STOPPING" => Ok(FleetState::Stopping),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>New streaming instances are booted from images. The image stores the application catalog and is connected to fleets.</p>"]
@@ -584,6 +849,47 @@ pub struct Image {
     pub visibility: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageState {
+    Available,
+    Deleting,
+    Failed,
+    Pending,
+}
+
+impl Into<String> for ImageState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageState {
+    fn into(self) -> &'static str {
+        match self {
+            ImageState::Available => "AVAILABLE",
+            ImageState::Deleting => "DELETING",
+            ImageState::Failed => "FAILED",
+            ImageState::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(ImageState::Available),
+            "DELETING" => Ok(ImageState::Deleting),
+            "FAILED" => Ok(ImageState::Failed),
+            "PENDING" => Ok(ImageState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The reason why the last state change occurred.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImageStateChangeReason {
@@ -595,6 +901,43 @@ pub struct ImageStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageStateChangeReasonCode {
+    ImageBuilderNotAvailable,
+    InternalError,
+}
+
+impl Into<String> for ImageStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            ImageStateChangeReasonCode::ImageBuilderNotAvailable => "IMAGE_BUILDER_NOT_AVAILABLE",
+            ImageStateChangeReasonCode::InternalError => "INTERNAL_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IMAGE_BUILDER_NOT_AVAILABLE" => {
+                Ok(ImageStateChangeReasonCode::ImageBuilderNotAvailable)
+            }
+            "INTERNAL_ERROR" => Ok(ImageStateChangeReasonCode::InternalError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -645,6 +988,38 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlatformType {
+    Windows,
+}
+
+impl Into<String> for PlatformType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlatformType {
+    fn into(self) -> &'static str {
+        match self {
+            PlatformType::Windows => "WINDOWS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "WINDOWS" => Ok(PlatformType::Windows),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The <i>AccountName</i> and <i>AccountPassword</i> of the service account, to be used by the streaming instance to connect to the directory.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServiceAccountCredentials {
@@ -678,6 +1053,44 @@ pub struct Session {
     #[doc="<p>The identifier of the user for whom the session was created.</p>"]
     #[serde(rename="UserId")]
     pub user_id: String,
+}
+
+#[doc="<p>Possible values for the state of a streaming session.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SessionState {
+    Active,
+    Expired,
+    Pending,
+}
+
+impl Into<String> for SessionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SessionState {
+    fn into(self) -> &'static str {
+        match self {
+            SessionState::Active => "ACTIVE",
+            SessionState::Expired => "EXPIRED",
+            SessionState::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SessionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(SessionState::Active),
+            "EXPIRED" => Ok(SessionState::Expired),
+            "PENDING" => Ok(SessionState::Pending),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Details about a stack.</p>"]
@@ -725,6 +1138,41 @@ pub struct StackError {
     pub error_message: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StackErrorCode {
+    InternalServiceError,
+    StorageConnectorError,
+}
+
+impl Into<String> for StackErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StackErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            StackErrorCode::InternalServiceError => "INTERNAL_SERVICE_ERROR",
+            StackErrorCode::StorageConnectorError => "STORAGE_CONNECTOR_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INTERNAL_SERVICE_ERROR" => Ok(StackErrorCode::InternalServiceError),
+            "STORAGE_CONNECTOR_ERROR" => Ok(StackErrorCode::StorageConnectorError),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartFleetRequest {
     #[doc="<p>The name of the fleet to start.</p>"]
@@ -755,6 +1203,38 @@ pub struct StorageConnector {
     #[serde(rename="ResourceIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub resource_identifier: Option<String>,
+}
+
+#[doc="<p>The type of storage connector. The possible values include: HOMEFOLDERS.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StorageConnectorType {
+    Homefolders,
+}
+
+impl Into<String> for StorageConnectorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StorageConnectorType {
+    fn into(self) -> &'static str {
+        match self {
+            StorageConnectorType::Homefolders => "HOMEFOLDERS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageConnectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HOMEFOLDERS" => Ok(StorageConnectorType::Homefolders),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -868,6 +1348,41 @@ pub struct UpdateStackResult {
     #[serde(rename="Stack")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stack: Option<Stack>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VisibilityType {
+    Private,
+    Public,
+}
+
+impl Into<String> for VisibilityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VisibilityType {
+    fn into(self) -> &'static str {
+        match self {
+            VisibilityType::Private => "PRIVATE",
+            VisibilityType::Public => "PUBLIC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VisibilityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PRIVATE" => Ok(VisibilityType::Private),
+            "PUBLIC" => Ok(VisibilityType::Public),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>VPC configuration information.</p>"]
@@ -3059,7 +3574,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateFleetResult>(String::from_utf8_lossy(&body)
@@ -3093,7 +3608,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3123,7 +3638,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateFleetResult>(String::from_utf8_lossy(&body)
@@ -3155,7 +3670,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&body)
@@ -3187,7 +3702,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateStreamingURLResult>(String::from_utf8_lossy(&body)
@@ -3221,7 +3736,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3251,7 +3766,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteFleetResult>(String::from_utf8_lossy(&body)
@@ -3283,7 +3798,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteStackResult>(String::from_utf8_lossy(&body)
@@ -3317,7 +3832,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDirectoryConfigsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3348,7 +3863,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetsResult>(String::from_utf8_lossy(&body)
@@ -3380,7 +3895,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeImagesResult>(String::from_utf8_lossy(&body)
@@ -3412,7 +3927,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSessionsResult>(String::from_utf8_lossy(&body)
@@ -3444,7 +3959,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&body)
@@ -3476,7 +3991,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateFleetResult>(String::from_utf8_lossy(&body)
@@ -3508,7 +4023,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ExpireSessionResult>(String::from_utf8_lossy(&body)
@@ -3541,7 +4056,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAssociatedFleetsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3572,7 +4087,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAssociatedStacksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3600,7 +4115,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartFleetResult>(String::from_utf8_lossy(&body)
@@ -3630,7 +4145,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopFleetResult>(String::from_utf8_lossy(&body).as_ref())
@@ -3663,7 +4178,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDirectoryConfigResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3693,7 +4208,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateFleetResult>(String::from_utf8_lossy(&body)
@@ -3725,7 +4240,7 @@ impl<P, D> AppStream for AppStreamClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateStackResult>(String::from_utf8_lossy(&body)

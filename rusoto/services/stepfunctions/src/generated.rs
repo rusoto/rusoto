@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -319,6 +315,50 @@ pub struct ExecutionStartedEventDetails {
     pub role_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExecutionStatus {
+    Aborted,
+    Failed,
+    Running,
+    Succeeded,
+    TimedOut,
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ExecutionStatus::Aborted => "ABORTED",
+            ExecutionStatus::Failed => "FAILED",
+            ExecutionStatus::Running => "RUNNING",
+            ExecutionStatus::Succeeded => "SUCCEEDED",
+            ExecutionStatus::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ABORTED" => Ok(ExecutionStatus::Aborted),
+            "FAILED" => Ok(ExecutionStatus::Failed),
+            "RUNNING" => Ok(ExecutionStatus::Running),
+            "SUCCEEDED" => Ok(ExecutionStatus::Succeeded),
+            "TIMED_OUT" => Ok(ExecutionStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ExecutionSucceededEventDetails {
     #[doc="<p>The JSON data output by the execution.</p>"]
@@ -466,6 +506,128 @@ pub struct HistoryEvent {
     #[doc="<p>The type of the event.</p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HistoryEventType {
+    ActivityFailed,
+    ActivityScheduleFailed,
+    ActivityScheduled,
+    ActivityStarted,
+    ActivitySucceeded,
+    ActivityTimedOut,
+    ChoiceStateEntered,
+    ChoiceStateExited,
+    ExecutionAborted,
+    ExecutionFailed,
+    ExecutionStarted,
+    ExecutionSucceeded,
+    ExecutionTimedOut,
+    FailStateEntered,
+    LambdaFunctionFailed,
+    LambdaFunctionScheduleFailed,
+    LambdaFunctionScheduled,
+    LambdaFunctionStartFailed,
+    LambdaFunctionStarted,
+    LambdaFunctionSucceeded,
+    LambdaFunctionTimedOut,
+    ParallelStateEntered,
+    ParallelStateExited,
+    PassStateEntered,
+    PassStateExited,
+    SucceedStateEntered,
+    SucceedStateExited,
+    TaskStateEntered,
+    TaskStateExited,
+    WaitStateEntered,
+    WaitStateExited,
+}
+
+impl Into<String> for HistoryEventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HistoryEventType {
+    fn into(self) -> &'static str {
+        match self {
+            HistoryEventType::ActivityFailed => "ActivityFailed",
+            HistoryEventType::ActivityScheduleFailed => "ActivityScheduleFailed",
+            HistoryEventType::ActivityScheduled => "ActivityScheduled",
+            HistoryEventType::ActivityStarted => "ActivityStarted",
+            HistoryEventType::ActivitySucceeded => "ActivitySucceeded",
+            HistoryEventType::ActivityTimedOut => "ActivityTimedOut",
+            HistoryEventType::ChoiceStateEntered => "ChoiceStateEntered",
+            HistoryEventType::ChoiceStateExited => "ChoiceStateExited",
+            HistoryEventType::ExecutionAborted => "ExecutionAborted",
+            HistoryEventType::ExecutionFailed => "ExecutionFailed",
+            HistoryEventType::ExecutionStarted => "ExecutionStarted",
+            HistoryEventType::ExecutionSucceeded => "ExecutionSucceeded",
+            HistoryEventType::ExecutionTimedOut => "ExecutionTimedOut",
+            HistoryEventType::FailStateEntered => "FailStateEntered",
+            HistoryEventType::LambdaFunctionFailed => "LambdaFunctionFailed",
+            HistoryEventType::LambdaFunctionScheduleFailed => "LambdaFunctionScheduleFailed",
+            HistoryEventType::LambdaFunctionScheduled => "LambdaFunctionScheduled",
+            HistoryEventType::LambdaFunctionStartFailed => "LambdaFunctionStartFailed",
+            HistoryEventType::LambdaFunctionStarted => "LambdaFunctionStarted",
+            HistoryEventType::LambdaFunctionSucceeded => "LambdaFunctionSucceeded",
+            HistoryEventType::LambdaFunctionTimedOut => "LambdaFunctionTimedOut",
+            HistoryEventType::ParallelStateEntered => "ParallelStateEntered",
+            HistoryEventType::ParallelStateExited => "ParallelStateExited",
+            HistoryEventType::PassStateEntered => "PassStateEntered",
+            HistoryEventType::PassStateExited => "PassStateExited",
+            HistoryEventType::SucceedStateEntered => "SucceedStateEntered",
+            HistoryEventType::SucceedStateExited => "SucceedStateExited",
+            HistoryEventType::TaskStateEntered => "TaskStateEntered",
+            HistoryEventType::TaskStateExited => "TaskStateExited",
+            HistoryEventType::WaitStateEntered => "WaitStateEntered",
+            HistoryEventType::WaitStateExited => "WaitStateExited",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HistoryEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivityFailed" => Ok(HistoryEventType::ActivityFailed),
+            "ActivityScheduleFailed" => Ok(HistoryEventType::ActivityScheduleFailed),
+            "ActivityScheduled" => Ok(HistoryEventType::ActivityScheduled),
+            "ActivityStarted" => Ok(HistoryEventType::ActivityStarted),
+            "ActivitySucceeded" => Ok(HistoryEventType::ActivitySucceeded),
+            "ActivityTimedOut" => Ok(HistoryEventType::ActivityTimedOut),
+            "ChoiceStateEntered" => Ok(HistoryEventType::ChoiceStateEntered),
+            "ChoiceStateExited" => Ok(HistoryEventType::ChoiceStateExited),
+            "ExecutionAborted" => Ok(HistoryEventType::ExecutionAborted),
+            "ExecutionFailed" => Ok(HistoryEventType::ExecutionFailed),
+            "ExecutionStarted" => Ok(HistoryEventType::ExecutionStarted),
+            "ExecutionSucceeded" => Ok(HistoryEventType::ExecutionSucceeded),
+            "ExecutionTimedOut" => Ok(HistoryEventType::ExecutionTimedOut),
+            "FailStateEntered" => Ok(HistoryEventType::FailStateEntered),
+            "LambdaFunctionFailed" => Ok(HistoryEventType::LambdaFunctionFailed),
+            "LambdaFunctionScheduleFailed" => Ok(HistoryEventType::LambdaFunctionScheduleFailed),
+            "LambdaFunctionScheduled" => Ok(HistoryEventType::LambdaFunctionScheduled),
+            "LambdaFunctionStartFailed" => Ok(HistoryEventType::LambdaFunctionStartFailed),
+            "LambdaFunctionStarted" => Ok(HistoryEventType::LambdaFunctionStarted),
+            "LambdaFunctionSucceeded" => Ok(HistoryEventType::LambdaFunctionSucceeded),
+            "LambdaFunctionTimedOut" => Ok(HistoryEventType::LambdaFunctionTimedOut),
+            "ParallelStateEntered" => Ok(HistoryEventType::ParallelStateEntered),
+            "ParallelStateExited" => Ok(HistoryEventType::ParallelStateExited),
+            "PassStateEntered" => Ok(HistoryEventType::PassStateEntered),
+            "PassStateExited" => Ok(HistoryEventType::PassStateExited),
+            "SucceedStateEntered" => Ok(HistoryEventType::SucceedStateEntered),
+            "SucceedStateExited" => Ok(HistoryEventType::SucceedStateExited),
+            "TaskStateEntered" => Ok(HistoryEventType::TaskStateEntered),
+            "TaskStateExited" => Ok(HistoryEventType::TaskStateExited),
+            "WaitStateEntered" => Ok(HistoryEventType::WaitStateEntered),
+            "WaitStateExited" => Ok(HistoryEventType::WaitStateExited),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -713,6 +875,41 @@ pub struct StateMachineListItem {
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the state machine.</p>"]
     #[serde(rename="stateMachineArn")]
     pub state_machine_arn: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StateMachineStatus {
+    Active,
+    Deleting,
+}
+
+impl Into<String> for StateMachineStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StateMachineStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StateMachineStatus::Active => "ACTIVE",
+            StateMachineStatus::Deleting => "DELETING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateMachineStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(StateMachineStatus::Active),
+            "DELETING" => Ok(StateMachineStatus::Deleting),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2388,7 +2585,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateActivityOutput>(String::from_utf8_lossy(&body)
@@ -2420,7 +2617,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateStateMachineOutput>(String::from_utf8_lossy(&body)
@@ -2452,7 +2649,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteActivityOutput>(String::from_utf8_lossy(&body)
@@ -2484,7 +2681,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteStateMachineOutput>(String::from_utf8_lossy(&body)
@@ -2516,7 +2713,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeActivityOutput>(String::from_utf8_lossy(&body)
@@ -2548,7 +2745,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeExecutionOutput>(String::from_utf8_lossy(&body)
@@ -2580,7 +2777,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeStateMachineOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2610,7 +2807,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetActivityTaskOutput>(String::from_utf8_lossy(&body)
@@ -2642,7 +2839,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetExecutionHistoryOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2672,7 +2869,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListActivitiesOutput>(String::from_utf8_lossy(&body)
@@ -2704,7 +2901,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListExecutionsOutput>(String::from_utf8_lossy(&body)
@@ -2736,7 +2933,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListStateMachinesOutput>(String::from_utf8_lossy(&body)
@@ -2768,7 +2965,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SendTaskFailureOutput>(String::from_utf8_lossy(&body)
@@ -2800,7 +2997,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SendTaskHeartbeatOutput>(String::from_utf8_lossy(&body)
@@ -2832,7 +3029,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SendTaskSuccessOutput>(String::from_utf8_lossy(&body)
@@ -2864,7 +3061,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartExecutionOutput>(String::from_utf8_lossy(&body)
@@ -2896,7 +3093,7 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopExecutionOutput>(String::from_utf8_lossy(&body)

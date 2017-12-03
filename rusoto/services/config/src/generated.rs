@@ -11,23 +11,54 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChronologicalOrder {
+    Forward,
+    Reverse,
+}
+
+impl Into<String> for ChronologicalOrder {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChronologicalOrder {
+    fn into(self) -> &'static str {
+        match self {
+            ChronologicalOrder::Forward => "Forward",
+            ChronologicalOrder::Reverse => "Reverse",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChronologicalOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Forward" => Ok(ChronologicalOrder::Forward),
+            "Reverse" => Ok(ChronologicalOrder::Reverse),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Compliance {
@@ -112,6 +143,47 @@ pub struct ComplianceSummaryByResourceType {
     #[serde(rename="ResourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComplianceType {
+    Compliant,
+    InsufficientData,
+    NonCompliant,
+    NotApplicable,
+}
+
+impl Into<String> for ComplianceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComplianceType {
+    fn into(self) -> &'static str {
+        match self {
+            ComplianceType::Compliant => "COMPLIANT",
+            ComplianceType::InsufficientData => "INSUFFICIENT_DATA",
+            ComplianceType::NonCompliant => "NON_COMPLIANT",
+            ComplianceType::NotApplicable => "NOT_APPLICABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLIANT" => Ok(ComplianceType::Compliant),
+            "INSUFFICIENT_DATA" => Ok(ComplianceType::InsufficientData),
+            "NON_COMPLIANT" => Ok(ComplianceType::NonCompliant),
+            "NOT_APPLICABLE" => Ok(ComplianceType::NotApplicable),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>"]
@@ -232,6 +304,47 @@ pub struct ConfigRuleEvaluationStatus {
     pub last_successful_invocation_time: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigRuleState {
+    Active,
+    Deleting,
+    DeletingResults,
+    Evaluating,
+}
+
+impl Into<String> for ConfigRuleState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigRuleState {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigRuleState::Active => "ACTIVE",
+            ConfigRuleState::Deleting => "DELETING",
+            ConfigRuleState::DeletingResults => "DELETING_RESULTS",
+            ConfigRuleState::Evaluating => "EVALUATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigRuleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ConfigRuleState::Active),
+            "DELETING" => Ok(ConfigRuleState::Deleting),
+            "DELETING_RESULTS" => Ok(ConfigRuleState::DeletingResults),
+            "EVALUATING" => Ok(ConfigRuleState::Evaluating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <note> <p>If you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot, see the following:</p> </note> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigSnapshotDeliveryProperties {
@@ -337,6 +450,47 @@ pub struct ConfigurationItem {
     #[serde(rename="version")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigurationItemStatus {
+    Deleted,
+    Discovered,
+    Failed,
+    Ok,
+}
+
+impl Into<String> for ConfigurationItemStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigurationItemStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigurationItemStatus::Deleted => "Deleted",
+            ConfigurationItemStatus::Discovered => "Discovered",
+            ConfigurationItemStatus::Failed => "Failed",
+            ConfigurationItemStatus::Ok => "Ok",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationItemStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Deleted" => Ok(ConfigurationItemStatus::Deleted),
+            "Discovered" => Ok(ConfigurationItemStatus::Discovered),
+            "Failed" => Ok(ConfigurationItemStatus::Failed),
+            "Ok" => Ok(ConfigurationItemStatus::Ok),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An object that represents the recording of configuration changes of an AWS resource.</p>"]
@@ -490,6 +644,44 @@ pub struct DeliveryChannelStatus {
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeliveryStatus {
+    Failure,
+    NotApplicable,
+    Success,
+}
+
+impl Into<String> for DeliveryStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeliveryStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DeliveryStatus::Failure => "Failure",
+            DeliveryStatus::NotApplicable => "Not_Applicable",
+            DeliveryStatus::Success => "Success",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failure" => Ok(DeliveryStatus::Failure),
+            "Not_Applicable" => Ok(DeliveryStatus::NotApplicable),
+            "Success" => Ok(DeliveryStatus::Success),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p/>"]
@@ -768,6 +960,38 @@ pub struct EvaluationResultQualifier {
     pub resource_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventSource {
+    AwsConfig,
+}
+
+impl Into<String> for EventSource {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventSource {
+    fn into(self) -> &'static str {
+        match self {
+            EventSource::AwsConfig => "aws.config",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "aws.config" => Ok(EventSource::AwsConfig),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
@@ -977,6 +1201,138 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MaximumExecutionFrequency {
+    OneHour,
+    SixHours,
+    ThreeHours,
+    TwelveHours,
+    TwentyFourHours,
+}
+
+impl Into<String> for MaximumExecutionFrequency {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MaximumExecutionFrequency {
+    fn into(self) -> &'static str {
+        match self {
+            MaximumExecutionFrequency::OneHour => "One_Hour",
+            MaximumExecutionFrequency::SixHours => "Six_Hours",
+            MaximumExecutionFrequency::ThreeHours => "Three_Hours",
+            MaximumExecutionFrequency::TwelveHours => "Twelve_Hours",
+            MaximumExecutionFrequency::TwentyFourHours => "TwentyFour_Hours",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaximumExecutionFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "One_Hour" => Ok(MaximumExecutionFrequency::OneHour),
+            "Six_Hours" => Ok(MaximumExecutionFrequency::SixHours),
+            "Three_Hours" => Ok(MaximumExecutionFrequency::ThreeHours),
+            "Twelve_Hours" => Ok(MaximumExecutionFrequency::TwelveHours),
+            "TwentyFour_Hours" => Ok(MaximumExecutionFrequency::TwentyFourHours),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MessageType {
+    ConfigurationItemChangeNotification,
+    ConfigurationSnapshotDeliveryCompleted,
+    OversizedConfigurationItemChangeNotification,
+    ScheduledNotification,
+}
+
+impl Into<String> for MessageType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MessageType {
+    fn into(self) -> &'static str {
+        match self {
+            MessageType::ConfigurationItemChangeNotification => {
+                "ConfigurationItemChangeNotification"
+            }
+            MessageType::ConfigurationSnapshotDeliveryCompleted => {
+                "ConfigurationSnapshotDeliveryCompleted"
+            }
+            MessageType::OversizedConfigurationItemChangeNotification => {
+                "OversizedConfigurationItemChangeNotification"
+            }
+            MessageType::ScheduledNotification => "ScheduledNotification",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ConfigurationItemChangeNotification" => {
+                Ok(MessageType::ConfigurationItemChangeNotification)
+            }
+            "ConfigurationSnapshotDeliveryCompleted" => {
+                Ok(MessageType::ConfigurationSnapshotDeliveryCompleted)
+            }
+            "OversizedConfigurationItemChangeNotification" => {
+                Ok(MessageType::OversizedConfigurationItemChangeNotification)
+            }
+            "ScheduledNotification" => Ok(MessageType::ScheduledNotification),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Owner {
+    Aws,
+    CustomLambda,
+}
+
+impl Into<String> for Owner {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Owner {
+    fn into(self) -> &'static str {
+        match self {
+            Owner::Aws => "AWS",
+            Owner::CustomLambda => "CUSTOM_LAMBDA",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Owner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS" => Ok(Owner::Aws),
+            "CUSTOM_LAMBDA" => Ok(Owner::CustomLambda),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutConfigRuleRequest {
     #[doc="<p>The rule that you want to add to your account.</p>"]
@@ -1023,6 +1379,44 @@ pub struct PutEvaluationsResponse {
     #[serde(rename="FailedEvaluations")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub failed_evaluations: Option<Vec<Evaluation>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecorderStatus {
+    Failure,
+    Pending,
+    Success,
+}
+
+impl Into<String> for RecorderStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecorderStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RecorderStatus::Failure => "Failure",
+            RecorderStatus::Pending => "Pending",
+            RecorderStatus::Success => "Success",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecorderStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failure" => Ok(RecorderStatus::Failure),
+            "Pending" => Ok(RecorderStatus::Pending),
+            "Success" => Ok(RecorderStatus::Success),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported resource types</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html\">Selecting Which Resources AWS Config Records</a>.</p>"]
@@ -1095,6 +1489,155 @@ pub struct ResourceIdentifier {
     #[serde(rename="resourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    AwsAcmCertificate,
+    AwsCloudFormationStack,
+    AwsCloudTrailTrail,
+    AwsCloudWatchAlarm,
+    AwsEc2CustomerGateway,
+    AwsEc2Eip,
+    AwsEc2Host,
+    AwsEc2Instance,
+    AwsEc2InternetGateway,
+    AwsEc2NetworkAcl,
+    AwsEc2NetworkInterface,
+    AwsEc2RouteTable,
+    AwsEc2SecurityGroup,
+    AwsEc2Subnet,
+    AwsEc2Vpc,
+    AwsEc2Vpnconnection,
+    AwsEc2Vpngateway,
+    AwsEc2Volume,
+    AwsElasticLoadBalancingV2LoadBalancer,
+    AwsIamGroup,
+    AwsIamPolicy,
+    AwsIamRole,
+    AwsIamUser,
+    AwsRdsDbinstance,
+    AwsRdsDbsecurityGroup,
+    AwsRdsDbsnapshot,
+    AwsRdsDbsubnetGroup,
+    AwsRdsEventSubscription,
+    AwsRedshiftCluster,
+    AwsRedshiftClusterParameterGroup,
+    AwsRedshiftClusterSecurityGroup,
+    AwsRedshiftClusterSnapshot,
+    AwsRedshiftClusterSubnetGroup,
+    AwsRedshiftEventSubscription,
+    AwsS3Bucket,
+    AwsSsmManagedInstanceInventory,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::AwsAcmCertificate => "AWS::ACM::Certificate",
+            ResourceType::AwsCloudFormationStack => "AWS::CloudFormation::Stack",
+            ResourceType::AwsCloudTrailTrail => "AWS::CloudTrail::Trail",
+            ResourceType::AwsCloudWatchAlarm => "AWS::CloudWatch::Alarm",
+            ResourceType::AwsEc2CustomerGateway => "AWS::EC2::CustomerGateway",
+            ResourceType::AwsEc2Eip => "AWS::EC2::EIP",
+            ResourceType::AwsEc2Host => "AWS::EC2::Host",
+            ResourceType::AwsEc2Instance => "AWS::EC2::Instance",
+            ResourceType::AwsEc2InternetGateway => "AWS::EC2::InternetGateway",
+            ResourceType::AwsEc2NetworkAcl => "AWS::EC2::NetworkAcl",
+            ResourceType::AwsEc2NetworkInterface => "AWS::EC2::NetworkInterface",
+            ResourceType::AwsEc2RouteTable => "AWS::EC2::RouteTable",
+            ResourceType::AwsEc2SecurityGroup => "AWS::EC2::SecurityGroup",
+            ResourceType::AwsEc2Subnet => "AWS::EC2::Subnet",
+            ResourceType::AwsEc2Vpc => "AWS::EC2::VPC",
+            ResourceType::AwsEc2Vpnconnection => "AWS::EC2::VPNConnection",
+            ResourceType::AwsEc2Vpngateway => "AWS::EC2::VPNGateway",
+            ResourceType::AwsEc2Volume => "AWS::EC2::Volume",
+            ResourceType::AwsElasticLoadBalancingV2LoadBalancer => {
+                "AWS::ElasticLoadBalancingV2::LoadBalancer"
+            }
+            ResourceType::AwsIamGroup => "AWS::IAM::Group",
+            ResourceType::AwsIamPolicy => "AWS::IAM::Policy",
+            ResourceType::AwsIamRole => "AWS::IAM::Role",
+            ResourceType::AwsIamUser => "AWS::IAM::User",
+            ResourceType::AwsRdsDbinstance => "AWS::RDS::DBInstance",
+            ResourceType::AwsRdsDbsecurityGroup => "AWS::RDS::DBSecurityGroup",
+            ResourceType::AwsRdsDbsnapshot => "AWS::RDS::DBSnapshot",
+            ResourceType::AwsRdsDbsubnetGroup => "AWS::RDS::DBSubnetGroup",
+            ResourceType::AwsRdsEventSubscription => "AWS::RDS::EventSubscription",
+            ResourceType::AwsRedshiftCluster => "AWS::Redshift::Cluster",
+            ResourceType::AwsRedshiftClusterParameterGroup => {
+                "AWS::Redshift::ClusterParameterGroup"
+            }
+            ResourceType::AwsRedshiftClusterSecurityGroup => "AWS::Redshift::ClusterSecurityGroup",
+            ResourceType::AwsRedshiftClusterSnapshot => "AWS::Redshift::ClusterSnapshot",
+            ResourceType::AwsRedshiftClusterSubnetGroup => "AWS::Redshift::ClusterSubnetGroup",
+            ResourceType::AwsRedshiftEventSubscription => "AWS::Redshift::EventSubscription",
+            ResourceType::AwsS3Bucket => "AWS::S3::Bucket",
+            ResourceType::AwsSsmManagedInstanceInventory => "AWS::SSM::ManagedInstanceInventory",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS::ACM::Certificate" => Ok(ResourceType::AwsAcmCertificate),
+            "AWS::CloudFormation::Stack" => Ok(ResourceType::AwsCloudFormationStack),
+            "AWS::CloudTrail::Trail" => Ok(ResourceType::AwsCloudTrailTrail),
+            "AWS::CloudWatch::Alarm" => Ok(ResourceType::AwsCloudWatchAlarm),
+            "AWS::EC2::CustomerGateway" => Ok(ResourceType::AwsEc2CustomerGateway),
+            "AWS::EC2::EIP" => Ok(ResourceType::AwsEc2Eip),
+            "AWS::EC2::Host" => Ok(ResourceType::AwsEc2Host),
+            "AWS::EC2::Instance" => Ok(ResourceType::AwsEc2Instance),
+            "AWS::EC2::InternetGateway" => Ok(ResourceType::AwsEc2InternetGateway),
+            "AWS::EC2::NetworkAcl" => Ok(ResourceType::AwsEc2NetworkAcl),
+            "AWS::EC2::NetworkInterface" => Ok(ResourceType::AwsEc2NetworkInterface),
+            "AWS::EC2::RouteTable" => Ok(ResourceType::AwsEc2RouteTable),
+            "AWS::EC2::SecurityGroup" => Ok(ResourceType::AwsEc2SecurityGroup),
+            "AWS::EC2::Subnet" => Ok(ResourceType::AwsEc2Subnet),
+            "AWS::EC2::VPC" => Ok(ResourceType::AwsEc2Vpc),
+            "AWS::EC2::VPNConnection" => Ok(ResourceType::AwsEc2Vpnconnection),
+            "AWS::EC2::VPNGateway" => Ok(ResourceType::AwsEc2Vpngateway),
+            "AWS::EC2::Volume" => Ok(ResourceType::AwsEc2Volume),
+            "AWS::ElasticLoadBalancingV2::LoadBalancer" => {
+                Ok(ResourceType::AwsElasticLoadBalancingV2LoadBalancer)
+            }
+            "AWS::IAM::Group" => Ok(ResourceType::AwsIamGroup),
+            "AWS::IAM::Policy" => Ok(ResourceType::AwsIamPolicy),
+            "AWS::IAM::Role" => Ok(ResourceType::AwsIamRole),
+            "AWS::IAM::User" => Ok(ResourceType::AwsIamUser),
+            "AWS::RDS::DBInstance" => Ok(ResourceType::AwsRdsDbinstance),
+            "AWS::RDS::DBSecurityGroup" => Ok(ResourceType::AwsRdsDbsecurityGroup),
+            "AWS::RDS::DBSnapshot" => Ok(ResourceType::AwsRdsDbsnapshot),
+            "AWS::RDS::DBSubnetGroup" => Ok(ResourceType::AwsRdsDbsubnetGroup),
+            "AWS::RDS::EventSubscription" => Ok(ResourceType::AwsRdsEventSubscription),
+            "AWS::Redshift::Cluster" => Ok(ResourceType::AwsRedshiftCluster),
+            "AWS::Redshift::ClusterParameterGroup" => {
+                Ok(ResourceType::AwsRedshiftClusterParameterGroup)
+            }
+            "AWS::Redshift::ClusterSecurityGroup" => {
+                Ok(ResourceType::AwsRedshiftClusterSecurityGroup)
+            }
+            "AWS::Redshift::ClusterSnapshot" => Ok(ResourceType::AwsRedshiftClusterSnapshot),
+            "AWS::Redshift::ClusterSubnetGroup" => Ok(ResourceType::AwsRedshiftClusterSubnetGroup),
+            "AWS::Redshift::EventSubscription" => Ok(ResourceType::AwsRedshiftEventSubscription),
+            "AWS::S3::Bucket" => Ok(ResourceType::AwsS3Bucket),
+            "AWS::SSM::ManagedInstanceInventory" => {
+                Ok(ResourceType::AwsSsmManagedInstanceInventory)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>"]
@@ -3736,7 +4279,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3763,7 +4306,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3790,7 +4333,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3818,7 +4361,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3850,7 +4393,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3882,7 +4425,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3915,7 +4458,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3949,7 +4492,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3979,7 +4522,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4012,7 +4555,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4044,7 +4587,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4077,7 +4620,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4110,7 +4653,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4143,7 +4686,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4175,7 +4718,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4206,7 +4749,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4239,7 +4782,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4271,7 +4814,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDiscoveredResourceCountsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4304,7 +4847,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4337,7 +4880,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4366,7 +4909,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4393,7 +4936,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4420,7 +4963,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4446,7 +4989,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&body)
@@ -4480,7 +5023,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4512,7 +5055,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4540,7 +5083,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

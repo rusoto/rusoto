@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -797,6 +793,41 @@ pub struct Deployment {
     #[serde(rename="GroupArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub group_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentType {
+    NewDeployment,
+    Redeployment,
+}
+
+impl Into<String> for DeploymentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentType {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentType::NewDeployment => "NewDeployment",
+            DeploymentType::Redeployment => "Redeployment",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NewDeployment" => Ok(DeploymentType::NewDeployment),
+            "Redeployment" => Ok(DeploymentType::Redeployment),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="Information on a Device"]
@@ -1979,6 +2010,41 @@ pub struct Logger {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoggerComponent {
+    GreengrassSystem,
+    Lambda,
+}
+
+impl Into<String> for LoggerComponent {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoggerComponent {
+    fn into(self) -> &'static str {
+        match self {
+            LoggerComponent::GreengrassSystem => "GreengrassSystem",
+            LoggerComponent::Lambda => "Lambda",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerComponent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GreengrassSystem" => Ok(LoggerComponent::GreengrassSystem),
+            "Lambda" => Ok(LoggerComponent::Lambda),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Information on logger definition version"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoggerDefinitionVersion {
@@ -1986,6 +2052,85 @@ pub struct LoggerDefinitionVersion {
     #[serde(rename="Loggers")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub loggers: Option<Vec<Logger>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoggerLevel {
+    Debug,
+    Error,
+    Fatal,
+    Info,
+    Warn,
+}
+
+impl Into<String> for LoggerLevel {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoggerLevel {
+    fn into(self) -> &'static str {
+        match self {
+            LoggerLevel::Debug => "DEBUG",
+            LoggerLevel::Error => "ERROR",
+            LoggerLevel::Fatal => "FATAL",
+            LoggerLevel::Info => "INFO",
+            LoggerLevel::Warn => "WARN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEBUG" => Ok(LoggerLevel::Debug),
+            "ERROR" => Ok(LoggerLevel::Error),
+            "FATAL" => Ok(LoggerLevel::Fatal),
+            "INFO" => Ok(LoggerLevel::Info),
+            "WARN" => Ok(LoggerLevel::Warn),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoggerType {
+    AwscloudWatch,
+    FileSystem,
+}
+
+impl Into<String> for LoggerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoggerType {
+    fn into(self) -> &'static str {
+        match self {
+            LoggerType::AwscloudWatch => "AWSCloudWatch",
+            LoggerType::FileSystem => "FileSystem",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWSCloudWatch" => Ok(LoggerType::AwscloudWatch),
+            "FileSystem" => Ok(LoggerType::FileSystem),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="Information on subscription"]
@@ -7814,7 +7959,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7860,7 +8005,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7911,7 +8056,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7961,7 +8106,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8012,7 +8157,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8061,7 +8206,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8112,7 +8257,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8163,7 +8308,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8215,7 +8360,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8266,7 +8411,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8315,7 +8460,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8367,7 +8512,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8416,7 +8561,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8467,7 +8612,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8518,7 +8663,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8571,7 +8716,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8619,7 +8764,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8665,7 +8810,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8712,7 +8857,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8758,7 +8903,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8804,7 +8949,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8851,7 +8996,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8899,7 +9044,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8946,7 +9091,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8993,7 +9138,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9038,7 +9183,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9083,7 +9228,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9130,7 +9275,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9178,7 +9323,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9223,7 +9368,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9271,7 +9416,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9319,7 +9464,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9368,7 +9513,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9412,7 +9557,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9459,7 +9604,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9507,7 +9652,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9555,7 +9700,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9600,7 +9745,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9648,7 +9793,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9694,7 +9839,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9742,7 +9887,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9792,7 +9937,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9847,7 +9992,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9900,7 +10045,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9952,7 +10097,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10005,7 +10150,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10059,7 +10204,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10113,7 +10258,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10168,7 +10313,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10216,7 +10361,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10271,7 +10416,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10322,7 +10467,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10375,7 +10520,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10429,7 +10574,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10484,7 +10629,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10538,7 +10683,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10587,7 +10732,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10635,7 +10780,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10682,7 +10827,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10730,7 +10875,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10777,7 +10922,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10825,7 +10970,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10874,7 +11019,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10922,7 +11067,7 @@ impl<P, D> GreenGrass for GreenGrassClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

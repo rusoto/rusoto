@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -90,6 +86,44 @@ pub struct ApplicationInfo {
     pub linked_to_git_hub: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApplicationRevisionSortBy {
+    FirstUsedTime,
+    LastUsedTime,
+    RegisterTime,
+}
+
+impl Into<String> for ApplicationRevisionSortBy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApplicationRevisionSortBy {
+    fn into(self) -> &'static str {
+        match self {
+            ApplicationRevisionSortBy::FirstUsedTime => "firstUsedTime",
+            ApplicationRevisionSortBy::LastUsedTime => "lastUsedTime",
+            ApplicationRevisionSortBy::RegisterTime => "registerTime",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationRevisionSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "firstUsedTime" => Ok(ApplicationRevisionSortBy::FirstUsedTime),
+            "lastUsedTime" => Ok(ApplicationRevisionSortBy::LastUsedTime),
+            "registerTime" => Ok(ApplicationRevisionSortBy::RegisterTime),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoRollbackConfiguration {
@@ -101,6 +135,44 @@ pub struct AutoRollbackConfiguration {
     #[serde(rename="events")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<String>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoRollbackEvent {
+    DeploymentFailure,
+    DeploymentStopOnAlarm,
+    DeploymentStopOnRequest,
+}
+
+impl Into<String> for AutoRollbackEvent {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoRollbackEvent {
+    fn into(self) -> &'static str {
+        match self {
+            AutoRollbackEvent::DeploymentFailure => "DEPLOYMENT_FAILURE",
+            AutoRollbackEvent::DeploymentStopOnAlarm => "DEPLOYMENT_STOP_ON_ALARM",
+            AutoRollbackEvent::DeploymentStopOnRequest => "DEPLOYMENT_STOP_ON_REQUEST",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoRollbackEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEPLOYMENT_FAILURE" => Ok(AutoRollbackEvent::DeploymentFailure),
+            "DEPLOYMENT_STOP_ON_ALARM" => Ok(AutoRollbackEvent::DeploymentStopOnAlarm),
+            "DEPLOYMENT_STOP_ON_REQUEST" => Ok(AutoRollbackEvent::DeploymentStopOnRequest),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about an Auto Scaling group.</p>"]
@@ -274,6 +346,44 @@ pub struct BlueInstanceTerminationOption {
     #[serde(rename="terminationWaitTimeInMinutes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BundleType {
+    Tar,
+    Tgz,
+    Zip,
+}
+
+impl Into<String> for BundleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BundleType {
+    fn into(self) -> &'static str {
+        match self {
+            BundleType::Tar => "tar",
+            BundleType::Tgz => "tgz",
+            BundleType::Zip => "zip",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BundleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "tar" => Ok(BundleType::Tar),
+            "tgz" => Ok(BundleType::Tgz),
+            "zip" => Ok(BundleType::Zip),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -502,6 +612,44 @@ pub struct DeploymentConfigInfo {
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentCreator {
+    Autoscaling,
+    CodeDeployRollback,
+    User,
+}
+
+impl Into<String> for DeploymentCreator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentCreator {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentCreator::Autoscaling => "autoscaling",
+            DeploymentCreator::CodeDeployRollback => "codeDeployRollback",
+            DeploymentCreator::User => "user",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentCreator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "autoscaling" => Ok(DeploymentCreator::Autoscaling),
+            "codeDeployRollback" => Ok(DeploymentCreator::CodeDeployRollback),
+            "user" => Ok(DeploymentCreator::User),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about a deployment group.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeploymentGroupInfo {
@@ -688,6 +836,41 @@ pub struct DeploymentInfo {
     pub update_outdated_instances_only: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentOption {
+    WithoutTrafficControl,
+    WithTrafficControl,
+}
+
+impl Into<String> for DeploymentOption {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentOption {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentOption::WithoutTrafficControl => "WITHOUT_TRAFFIC_CONTROL",
+            DeploymentOption::WithTrafficControl => "WITH_TRAFFIC_CONTROL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "WITHOUT_TRAFFIC_CONTROL" => Ok(DeploymentOption::WithoutTrafficControl),
+            "WITH_TRAFFIC_CONTROL" => Ok(DeploymentOption::WithTrafficControl),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the deployment status of the instances in the deployment.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeploymentOverview {
@@ -717,6 +900,41 @@ pub struct DeploymentOverview {
     pub succeeded: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentReadyAction {
+    ContinueDeployment,
+    StopDeployment,
+}
+
+impl Into<String> for DeploymentReadyAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentReadyAction {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentReadyAction::ContinueDeployment => "CONTINUE_DEPLOYMENT",
+            DeploymentReadyAction::StopDeployment => "STOP_DEPLOYMENT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentReadyAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONTINUE_DEPLOYMENT" => Ok(DeploymentReadyAction::ContinueDeployment),
+            "STOP_DEPLOYMENT" => Ok(DeploymentReadyAction::StopDeployment),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentReadyOption {
@@ -730,6 +948,56 @@ pub struct DeploymentReadyOption {
     pub wait_time_in_minutes: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentStatus {
+    Created,
+    Failed,
+    InProgress,
+    Queued,
+    Ready,
+    Stopped,
+    Succeeded,
+}
+
+impl Into<String> for DeploymentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentStatus::Created => "Created",
+            DeploymentStatus::Failed => "Failed",
+            DeploymentStatus::InProgress => "InProgress",
+            DeploymentStatus::Queued => "Queued",
+            DeploymentStatus::Ready => "Ready",
+            DeploymentStatus::Stopped => "Stopped",
+            DeploymentStatus::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Created" => Ok(DeploymentStatus::Created),
+            "Failed" => Ok(DeploymentStatus::Failed),
+            "InProgress" => Ok(DeploymentStatus::InProgress),
+            "Queued" => Ok(DeploymentStatus::Queued),
+            "Ready" => Ok(DeploymentStatus::Ready),
+            "Stopped" => Ok(DeploymentStatus::Stopped),
+            "Succeeded" => Ok(DeploymentStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentStyle {
@@ -741,6 +1009,41 @@ pub struct DeploymentStyle {
     #[serde(rename="deploymentType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentType {
+    BlueGreen,
+    InPlace,
+}
+
+impl Into<String> for DeploymentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentType {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentType::BlueGreen => "BLUE_GREEN",
+            DeploymentType::InPlace => "IN_PLACE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BLUE_GREEN" => Ok(DeploymentType::BlueGreen),
+            "IN_PLACE" => Ok(DeploymentType::InPlace),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a DeregisterOnPremisesInstance operation.</p>"]
@@ -789,6 +1092,44 @@ pub struct EC2TagFilter {
     pub value: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EC2TagFilterType {
+    KeyAndValue,
+    KeyOnly,
+    ValueOnly,
+}
+
+impl Into<String> for EC2TagFilterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EC2TagFilterType {
+    fn into(self) -> &'static str {
+        match self {
+            EC2TagFilterType::KeyAndValue => "KEY_AND_VALUE",
+            EC2TagFilterType::KeyOnly => "KEY_ONLY",
+            EC2TagFilterType::ValueOnly => "VALUE_ONLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EC2TagFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEY_AND_VALUE" => Ok(EC2TagFilterType::KeyAndValue),
+            "KEY_ONLY" => Ok(EC2TagFilterType::KeyOnly),
+            "VALUE_ONLY" => Ok(EC2TagFilterType::ValueOnly),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about groups of EC2 instance tags.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EC2TagSet {
@@ -807,6 +1148,89 @@ pub struct ELBInfo {
     pub name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ErrorCode {
+    AgentIssue,
+    AlarmActive,
+    ApplicationMissing,
+    AutoScalingConfiguration,
+    AutoScalingIamRolePermissions,
+    DeploymentGroupMissing,
+    HealthConstraints,
+    HealthConstraintsInvalid,
+    IamRoleMissing,
+    IamRolePermissions,
+    InternalError,
+    ManualStop,
+    NoEc2Subscription,
+    NoInstances,
+    OverMaxInstances,
+    RevisionMissing,
+    Throttled,
+    Timeout,
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            ErrorCode::AgentIssue => "AGENT_ISSUE",
+            ErrorCode::AlarmActive => "ALARM_ACTIVE",
+            ErrorCode::ApplicationMissing => "APPLICATION_MISSING",
+            ErrorCode::AutoScalingConfiguration => "AUTO_SCALING_CONFIGURATION",
+            ErrorCode::AutoScalingIamRolePermissions => "AUTO_SCALING_IAM_ROLE_PERMISSIONS",
+            ErrorCode::DeploymentGroupMissing => "DEPLOYMENT_GROUP_MISSING",
+            ErrorCode::HealthConstraints => "HEALTH_CONSTRAINTS",
+            ErrorCode::HealthConstraintsInvalid => "HEALTH_CONSTRAINTS_INVALID",
+            ErrorCode::IamRoleMissing => "IAM_ROLE_MISSING",
+            ErrorCode::IamRolePermissions => "IAM_ROLE_PERMISSIONS",
+            ErrorCode::InternalError => "INTERNAL_ERROR",
+            ErrorCode::ManualStop => "MANUAL_STOP",
+            ErrorCode::NoEc2Subscription => "NO_EC2_SUBSCRIPTION",
+            ErrorCode::NoInstances => "NO_INSTANCES",
+            ErrorCode::OverMaxInstances => "OVER_MAX_INSTANCES",
+            ErrorCode::RevisionMissing => "REVISION_MISSING",
+            ErrorCode::Throttled => "THROTTLED",
+            ErrorCode::Timeout => "TIMEOUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AGENT_ISSUE" => Ok(ErrorCode::AgentIssue),
+            "ALARM_ACTIVE" => Ok(ErrorCode::AlarmActive),
+            "APPLICATION_MISSING" => Ok(ErrorCode::ApplicationMissing),
+            "AUTO_SCALING_CONFIGURATION" => Ok(ErrorCode::AutoScalingConfiguration),
+            "AUTO_SCALING_IAM_ROLE_PERMISSIONS" => Ok(ErrorCode::AutoScalingIamRolePermissions),
+            "DEPLOYMENT_GROUP_MISSING" => Ok(ErrorCode::DeploymentGroupMissing),
+            "HEALTH_CONSTRAINTS" => Ok(ErrorCode::HealthConstraints),
+            "HEALTH_CONSTRAINTS_INVALID" => Ok(ErrorCode::HealthConstraintsInvalid),
+            "IAM_ROLE_MISSING" => Ok(ErrorCode::IamRoleMissing),
+            "IAM_ROLE_PERMISSIONS" => Ok(ErrorCode::IamRolePermissions),
+            "INTERNAL_ERROR" => Ok(ErrorCode::InternalError),
+            "MANUAL_STOP" => Ok(ErrorCode::ManualStop),
+            "NO_EC2_SUBSCRIPTION" => Ok(ErrorCode::NoEc2Subscription),
+            "NO_INSTANCES" => Ok(ErrorCode::NoInstances),
+            "OVER_MAX_INSTANCES" => Ok(ErrorCode::OverMaxInstances),
+            "REVISION_MISSING" => Ok(ErrorCode::RevisionMissing),
+            "THROTTLED" => Ok(ErrorCode::Throttled),
+            "TIMEOUT" => Ok(ErrorCode::Timeout),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about a deployment error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ErrorInformation {
@@ -818,6 +1242,44 @@ pub struct ErrorInformation {
     #[serde(rename="message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FileExistsBehavior {
+    Disallow,
+    Overwrite,
+    Retain,
+}
+
+impl Into<String> for FileExistsBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FileExistsBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            FileExistsBehavior::Disallow => "DISALLOW",
+            FileExistsBehavior::Overwrite => "OVERWRITE",
+            FileExistsBehavior::Retain => "RETAIN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileExistsBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISALLOW" => Ok(FileExistsBehavior::Disallow),
+            "OVERWRITE" => Ok(FileExistsBehavior::Overwrite),
+            "RETAIN" => Ok(FileExistsBehavior::Retain),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about an application revision.</p>"]
@@ -994,6 +1456,41 @@ pub struct GitHubLocation {
     pub repository: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GreenFleetProvisioningAction {
+    CopyAutoScalingGroup,
+    DiscoverExisting,
+}
+
+impl Into<String> for GreenFleetProvisioningAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GreenFleetProvisioningAction {
+    fn into(self) -> &'static str {
+        match self {
+            GreenFleetProvisioningAction::CopyAutoScalingGroup => "COPY_AUTO_SCALING_GROUP",
+            GreenFleetProvisioningAction::DiscoverExisting => "DISCOVER_EXISTING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GreenFleetProvisioningAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COPY_AUTO_SCALING_GROUP" => Ok(GreenFleetProvisioningAction::CopyAutoScalingGroup),
+            "DISCOVER_EXISTING" => Ok(GreenFleetProvisioningAction::DiscoverExisting),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GreenFleetProvisioningOption {
@@ -1001,6 +1498,41 @@ pub struct GreenFleetProvisioningOption {
     #[serde(rename="action")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceAction {
+    KeepAlive,
+    Terminate,
+}
+
+impl Into<String> for InstanceAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceAction {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceAction::KeepAlive => "KEEP_ALIVE",
+            InstanceAction::Terminate => "TERMINATE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEEP_ALIVE" => Ok(InstanceAction::KeepAlive),
+            "TERMINATE" => Ok(InstanceAction::Terminate),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about an on-premises instance.</p>"]
@@ -1036,6 +1568,56 @@ pub struct InstanceInfo {
     pub tags: Option<Vec<Tag>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Ready,
+    Skipped,
+    Succeeded,
+    Unknown,
+}
+
+impl Into<String> for InstanceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceStatus::Failed => "Failed",
+            InstanceStatus::InProgress => "InProgress",
+            InstanceStatus::Pending => "Pending",
+            InstanceStatus::Ready => "Ready",
+            InstanceStatus::Skipped => "Skipped",
+            InstanceStatus::Succeeded => "Succeeded",
+            InstanceStatus::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(InstanceStatus::Failed),
+            "InProgress" => Ok(InstanceStatus::InProgress),
+            "Pending" => Ok(InstanceStatus::Pending),
+            "Ready" => Ok(InstanceStatus::Ready),
+            "Skipped" => Ok(InstanceStatus::Skipped),
+            "Succeeded" => Ok(InstanceStatus::Succeeded),
+            "Unknown" => Ok(InstanceStatus::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about an instance in a deployment.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceSummary {
@@ -1065,6 +1647,41 @@ pub struct InstanceSummary {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceType {
+    Blue,
+    Green,
+}
+
+impl Into<String> for InstanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceType::Blue => "Blue",
+            InstanceType::Green => "Green",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Blue" => Ok(InstanceType::Blue),
+            "Green" => Ok(InstanceType::Green),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the most recent attempted or successful deployment to a deployment group.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct LastDeploymentInfo {
@@ -1084,6 +1701,53 @@ pub struct LastDeploymentInfo {
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LifecycleErrorCode {
+    ScriptFailed,
+    ScriptMissing,
+    ScriptNotExecutable,
+    ScriptTimedOut,
+    Success,
+    UnknownError,
+}
+
+impl Into<String> for LifecycleErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LifecycleErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            LifecycleErrorCode::ScriptFailed => "ScriptFailed",
+            LifecycleErrorCode::ScriptMissing => "ScriptMissing",
+            LifecycleErrorCode::ScriptNotExecutable => "ScriptNotExecutable",
+            LifecycleErrorCode::ScriptTimedOut => "ScriptTimedOut",
+            LifecycleErrorCode::Success => "Success",
+            LifecycleErrorCode::UnknownError => "UnknownError",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ScriptFailed" => Ok(LifecycleErrorCode::ScriptFailed),
+            "ScriptMissing" => Ok(LifecycleErrorCode::ScriptMissing),
+            "ScriptNotExecutable" => Ok(LifecycleErrorCode::ScriptNotExecutable),
+            "ScriptTimedOut" => Ok(LifecycleErrorCode::ScriptTimedOut),
+            "Success" => Ok(LifecycleErrorCode::Success),
+            "UnknownError" => Ok(LifecycleErrorCode::UnknownError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a deployment lifecycle event.</p>"]
@@ -1109,6 +1773,53 @@ pub struct LifecycleEvent {
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LifecycleEventStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Skipped,
+    Succeeded,
+    Unknown,
+}
+
+impl Into<String> for LifecycleEventStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LifecycleEventStatus {
+    fn into(self) -> &'static str {
+        match self {
+            LifecycleEventStatus::Failed => "Failed",
+            LifecycleEventStatus::InProgress => "InProgress",
+            LifecycleEventStatus::Pending => "Pending",
+            LifecycleEventStatus::Skipped => "Skipped",
+            LifecycleEventStatus::Succeeded => "Succeeded",
+            LifecycleEventStatus::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleEventStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(LifecycleEventStatus::Failed),
+            "InProgress" => Ok(LifecycleEventStatus::InProgress),
+            "Pending" => Ok(LifecycleEventStatus::Pending),
+            "Skipped" => Ok(LifecycleEventStatus::Skipped),
+            "Succeeded" => Ok(LifecycleEventStatus::Succeeded),
+            "Unknown" => Ok(LifecycleEventStatus::Unknown),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a ListApplicationRevisions operation.</p>"]
@@ -1352,6 +2063,44 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ListStateFilterAction {
+    Exclude,
+    Ignore,
+    Include,
+}
+
+impl Into<String> for ListStateFilterAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ListStateFilterAction {
+    fn into(self) -> &'static str {
+        match self {
+            ListStateFilterAction::Exclude => "exclude",
+            ListStateFilterAction::Ignore => "ignore",
+            ListStateFilterAction::Include => "include",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListStateFilterAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "exclude" => Ok(ListStateFilterAction::Exclude),
+            "ignore" => Ok(ListStateFilterAction::Ignore),
+            "include" => Ok(ListStateFilterAction::Include),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerInfo {
@@ -1376,6 +2125,41 @@ pub struct MinimumHealthyHosts {
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MinimumHealthyHostsType {
+    FleetPercent,
+    HostCount,
+}
+
+impl Into<String> for MinimumHealthyHostsType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MinimumHealthyHostsType {
+    fn into(self) -> &'static str {
+        match self {
+            MinimumHealthyHostsType::FleetPercent => "FLEET_PERCENT",
+            MinimumHealthyHostsType::HostCount => "HOST_COUNT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MinimumHealthyHostsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FLEET_PERCENT" => Ok(MinimumHealthyHostsType::FleetPercent),
+            "HOST_COUNT" => Ok(MinimumHealthyHostsType::HostCount),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about groups of on-premises instance tags.</p>"]
@@ -1418,6 +2202,41 @@ pub struct RegisterOnPremisesInstanceInput {
     pub instance_name: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RegistrationStatus {
+    Deregistered,
+    Registered,
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RegistrationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RegistrationStatus::Deregistered => "Deregistered",
+            RegistrationStatus::Registered => "Registered",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Deregistered" => Ok(RegistrationStatus::Deregistered),
+            "Registered" => Ok(RegistrationStatus::Registered),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
@@ -1457,6 +2276,41 @@ pub struct RevisionLocation {
     #[serde(rename="s3Location")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s_3_location: Option<S3Location>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RevisionLocationType {
+    GitHub,
+    S3,
+}
+
+impl Into<String> for RevisionLocationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RevisionLocationType {
+    fn into(self) -> &'static str {
+        match self {
+            RevisionLocationType::GitHub => "GitHub",
+            RevisionLocationType::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RevisionLocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GitHub" => Ok(RevisionLocationType::GitHub),
+            "S3" => Ok(RevisionLocationType::S3),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a deployment rollback.</p>"]
@@ -1509,6 +2363,41 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
     pub deployment_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortOrder {
+    fn into(self) -> &'static str {
+        match self {
+            SortOrder::Ascending => "ascending",
+            SortOrder::Descending => "descending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ascending" => Ok(SortOrder::Ascending),
+            "descending" => Ok(SortOrder::Descending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of a StopDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StopDeploymentInput {
@@ -1532,6 +2421,41 @@ pub struct StopDeploymentOutput {
     #[serde(rename="statusMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StopStatus {
+    Pending,
+    Succeeded,
+}
+
+impl Into<String> for StopStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StopStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StopStatus::Pending => "Pending",
+            StopStatus::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Pending" => Ok(StopStatus::Pending),
+            "Succeeded" => Ok(StopStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a tag.</p>"]
@@ -1562,6 +2486,44 @@ pub struct TagFilter {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TagFilterType {
+    KeyAndValue,
+    KeyOnly,
+    ValueOnly,
+}
+
+impl Into<String> for TagFilterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TagFilterType {
+    fn into(self) -> &'static str {
+        match self {
+            TagFilterType::KeyAndValue => "KEY_AND_VALUE",
+            TagFilterType::KeyOnly => "KEY_ONLY",
+            TagFilterType::ValueOnly => "VALUE_ONLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEY_AND_VALUE" => Ok(TagFilterType::KeyAndValue),
+            "KEY_ONLY" => Ok(TagFilterType::KeyOnly),
+            "VALUE_ONLY" => Ok(TagFilterType::ValueOnly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>"]
@@ -1618,6 +2580,65 @@ pub struct TriggerConfig {
     #[serde(rename="triggerTargetArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_target_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TriggerEventType {
+    DeploymentFailure,
+    DeploymentReady,
+    DeploymentRollback,
+    DeploymentStart,
+    DeploymentStop,
+    DeploymentSuccess,
+    InstanceFailure,
+    InstanceReady,
+    InstanceStart,
+    InstanceSuccess,
+}
+
+impl Into<String> for TriggerEventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TriggerEventType {
+    fn into(self) -> &'static str {
+        match self {
+            TriggerEventType::DeploymentFailure => "DeploymentFailure",
+            TriggerEventType::DeploymentReady => "DeploymentReady",
+            TriggerEventType::DeploymentRollback => "DeploymentRollback",
+            TriggerEventType::DeploymentStart => "DeploymentStart",
+            TriggerEventType::DeploymentStop => "DeploymentStop",
+            TriggerEventType::DeploymentSuccess => "DeploymentSuccess",
+            TriggerEventType::InstanceFailure => "InstanceFailure",
+            TriggerEventType::InstanceReady => "InstanceReady",
+            TriggerEventType::InstanceStart => "InstanceStart",
+            TriggerEventType::InstanceSuccess => "InstanceSuccess",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggerEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DeploymentFailure" => Ok(TriggerEventType::DeploymentFailure),
+            "DeploymentReady" => Ok(TriggerEventType::DeploymentReady),
+            "DeploymentRollback" => Ok(TriggerEventType::DeploymentRollback),
+            "DeploymentStart" => Ok(TriggerEventType::DeploymentStart),
+            "DeploymentStop" => Ok(TriggerEventType::DeploymentStop),
+            "DeploymentSuccess" => Ok(TriggerEventType::DeploymentSuccess),
+            "InstanceFailure" => Ok(TriggerEventType::InstanceFailure),
+            "InstanceReady" => Ok(TriggerEventType::InstanceReady),
+            "InstanceStart" => Ok(TriggerEventType::InstanceStart),
+            "InstanceSuccess" => Ok(TriggerEventType::InstanceSuccess),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of an UpdateApplication operation.</p>"]
@@ -5920,7 +6941,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5949,7 +6970,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5980,7 +7001,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6012,7 +7033,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6045,7 +7066,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6076,7 +7097,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6108,7 +7129,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6139,7 +7160,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6165,7 +7186,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&body)
@@ -6197,7 +7218,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&body)
@@ -6230,7 +7251,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6261,7 +7282,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6291,7 +7312,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6317,7 +7338,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6344,7 +7365,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6375,7 +7396,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6402,7 +7423,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&body)
@@ -6435,7 +7456,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6465,7 +7486,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&body)
@@ -6497,7 +7518,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6527,7 +7548,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&body)
@@ -6560,7 +7581,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6591,7 +7612,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6623,7 +7644,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6654,7 +7675,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&body)
@@ -6687,7 +7708,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6717,7 +7738,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6749,7 +7770,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6780,7 +7801,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&body)
@@ -6814,7 +7835,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6847,7 +7868,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6879,7 +7900,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6907,7 +7928,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6936,7 +7957,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6964,7 +7985,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6990,7 +8011,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&body)
@@ -7022,7 +8043,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7049,7 +8070,7 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())

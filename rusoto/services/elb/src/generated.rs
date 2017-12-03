@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -144,7 +140,7 @@ impl AccessLogEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1127,7 +1123,7 @@ impl ConnectionDrainingEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1648,7 +1644,7 @@ impl CrossZoneLoadBalancingEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -8025,7 +8021,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8073,7 +8069,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8120,7 +8116,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8167,7 +8163,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8215,7 +8211,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8263,7 +8259,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8310,7 +8306,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8358,7 +8354,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8408,7 +8404,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8457,7 +8453,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8505,7 +8501,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8555,7 +8551,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8605,7 +8601,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8653,7 +8649,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8701,7 +8697,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8749,7 +8745,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8797,7 +8793,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8845,7 +8841,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8893,7 +8889,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8940,7 +8936,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8988,7 +8984,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9036,7 +9032,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9085,7 +9081,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9133,7 +9129,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9181,7 +9177,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9226,7 +9222,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9271,7 +9267,7 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9315,7 +9311,7 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9362,7 +9358,7 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -44,6 +40,47 @@ pub struct BulkPublishResponse {
     #[serde(rename="IdentityPoolId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pool_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BulkPublishStatus {
+    Failed,
+    InProgress,
+    NotStarted,
+    Succeeded,
+}
+
+impl Into<String> for BulkPublishStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BulkPublishStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BulkPublishStatus::Failed => "FAILED",
+            BulkPublishStatus::InProgress => "IN_PROGRESS",
+            BulkPublishStatus::NotStarted => "NOT_STARTED",
+            BulkPublishStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BulkPublishStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(BulkPublishStatus::Failed),
+            "IN_PROGRESS" => Ok(BulkPublishStatus::InProgress),
+            "NOT_STARTED" => Ok(BulkPublishStatus::NotStarted),
+            "SUCCEEDED" => Ok(BulkPublishStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="Configuration options for configure Cognito streams."]
@@ -441,6 +478,82 @@ pub struct ListRecordsResponse {
     pub sync_session_token: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Operation {
+    Remove,
+    Replace,
+}
+
+impl Into<String> for Operation {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Operation {
+    fn into(self) -> &'static str {
+        match self {
+            Operation::Remove => "remove",
+            Operation::Replace => "replace",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Operation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "remove" => Ok(Operation::Remove),
+            "replace" => Ok(Operation::Replace),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Platform {
+    Adm,
+    Apns,
+    ApnsSandbox,
+    Gcm,
+}
+
+impl Into<String> for Platform {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Platform {
+    fn into(self) -> &'static str {
+        match self {
+            Platform::Adm => "ADM",
+            Platform::Apns => "APNS",
+            Platform::ApnsSandbox => "APNS_SANDBOX",
+            Platform::Gcm => "GCM",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Platform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADM" => Ok(Platform::Adm),
+            "APNS" => Ok(Platform::Apns),
+            "APNS_SANDBOX" => Ok(Platform::ApnsSandbox),
+            "GCM" => Ok(Platform::Gcm),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Configuration options to be applied to the identity pool.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PushSync {
@@ -573,6 +686,41 @@ pub struct SetIdentityPoolConfigurationResponse {
     #[serde(rename="PushSync")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub push_sync: Option<PushSync>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StreamingStatus {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for StreamingStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StreamingStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StreamingStatus::Disabled => "DISABLED",
+            StreamingStatus::Enabled => "ENABLED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLED" => Ok(StreamingStatus::Disabled),
+            "ENABLED" => Ok(StreamingStatus::Enabled),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A request to SubscribeToDatasetRequest.</p>"]
@@ -2586,7 +2734,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2633,7 +2781,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2680,7 +2828,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2726,7 +2874,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2775,7 +2923,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2822,7 +2970,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2868,7 +3016,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2914,7 +3062,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2969,7 +3117,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3021,7 +3169,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3082,7 +3230,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3129,7 +3277,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3175,7 +3323,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -3211,7 +3359,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3261,7 +3409,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3310,7 +3458,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3362,7 +3510,7 @@ impl<P, D> CognitoSync for CognitoSyncClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

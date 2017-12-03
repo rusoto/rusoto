@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -63,6 +59,41 @@ pub struct DescribeVoicesOutput {
     pub voices: Option<Vec<Voice>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Gender {
+    Female,
+    Male,
+}
+
+impl Into<String> for Gender {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Gender {
+    fn into(self) -> &'static str {
+        match self {
+            Gender::Female => "Female",
+            Gender::Male => "Male",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Gender {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Female" => Ok(Gender::Female),
+            "Male" => Ok(Gender::Male),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetLexiconInput {
     #[doc="<p>Name of the lexicon.</p>"]
@@ -80,6 +111,107 @@ pub struct GetLexiconOutput {
     #[serde(rename="LexiconAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub lexicon_attributes: Option<LexiconAttributes>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LanguageCode {
+    CyGB,
+    DaDK,
+    DeDE,
+    EnAU,
+    EnGB,
+    EnGBWLS,
+    EnIN,
+    EnUS,
+    EsES,
+    EsUS,
+    FrCA,
+    FrFR,
+    IsIS,
+    ItIT,
+    JaJP,
+    NbNO,
+    NlNL,
+    PlPL,
+    PtBR,
+    PtPT,
+    RoRO,
+    RuRU,
+    SvSE,
+    TrTR,
+}
+
+impl Into<String> for LanguageCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LanguageCode {
+    fn into(self) -> &'static str {
+        match self {
+            LanguageCode::CyGB => "cy-GB",
+            LanguageCode::DaDK => "da-DK",
+            LanguageCode::DeDE => "de-DE",
+            LanguageCode::EnAU => "en-AU",
+            LanguageCode::EnGB => "en-GB",
+            LanguageCode::EnGBWLS => "en-GB-WLS",
+            LanguageCode::EnIN => "en-IN",
+            LanguageCode::EnUS => "en-US",
+            LanguageCode::EsES => "es-ES",
+            LanguageCode::EsUS => "es-US",
+            LanguageCode::FrCA => "fr-CA",
+            LanguageCode::FrFR => "fr-FR",
+            LanguageCode::IsIS => "is-IS",
+            LanguageCode::ItIT => "it-IT",
+            LanguageCode::JaJP => "ja-JP",
+            LanguageCode::NbNO => "nb-NO",
+            LanguageCode::NlNL => "nl-NL",
+            LanguageCode::PlPL => "pl-PL",
+            LanguageCode::PtBR => "pt-BR",
+            LanguageCode::PtPT => "pt-PT",
+            LanguageCode::RoRO => "ro-RO",
+            LanguageCode::RuRU => "ru-RU",
+            LanguageCode::SvSE => "sv-SE",
+            LanguageCode::TrTR => "tr-TR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "cy-GB" => Ok(LanguageCode::CyGB),
+            "da-DK" => Ok(LanguageCode::DaDK),
+            "de-DE" => Ok(LanguageCode::DeDE),
+            "en-AU" => Ok(LanguageCode::EnAU),
+            "en-GB" => Ok(LanguageCode::EnGB),
+            "en-GB-WLS" => Ok(LanguageCode::EnGBWLS),
+            "en-IN" => Ok(LanguageCode::EnIN),
+            "en-US" => Ok(LanguageCode::EnUS),
+            "es-ES" => Ok(LanguageCode::EsES),
+            "es-US" => Ok(LanguageCode::EsUS),
+            "fr-CA" => Ok(LanguageCode::FrCA),
+            "fr-FR" => Ok(LanguageCode::FrFR),
+            "is-IS" => Ok(LanguageCode::IsIS),
+            "it-IT" => Ok(LanguageCode::ItIT),
+            "ja-JP" => Ok(LanguageCode::JaJP),
+            "nb-NO" => Ok(LanguageCode::NbNO),
+            "nl-NL" => Ok(LanguageCode::NlNL),
+            "pl-PL" => Ok(LanguageCode::PlPL),
+            "pt-BR" => Ok(LanguageCode::PtBR),
+            "pt-PT" => Ok(LanguageCode::PtPT),
+            "ro-RO" => Ok(LanguageCode::RoRO),
+            "ru-RU" => Ok(LanguageCode::RuRU),
+            "sv-SE" => Ok(LanguageCode::SvSE),
+            "tr-TR" => Ok(LanguageCode::TrTR),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides lexicon name and lexicon content in string format. For more information, see <a href=\"https://www.w3.org/TR/pronunciation-lexicon/\">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>"]
@@ -157,6 +289,47 @@ pub struct ListLexiconsOutput {
     pub next_token: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OutputFormat {
+    Json,
+    Mp3,
+    OggVorbis,
+    Pcm,
+}
+
+impl Into<String> for OutputFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OutputFormat {
+    fn into(self) -> &'static str {
+        match self {
+            OutputFormat::Json => "json",
+            OutputFormat::Mp3 => "mp3",
+            OutputFormat::OggVorbis => "ogg_vorbis",
+            OutputFormat::Pcm => "pcm",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutputFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "json" => Ok(OutputFormat::Json),
+            "mp3" => Ok(OutputFormat::Mp3),
+            "ogg_vorbis" => Ok(OutputFormat::OggVorbis),
+            "pcm" => Ok(OutputFormat::Pcm),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutLexiconInput {
     #[doc="<p>Content of the PLS lexicon as string data.</p>"]
@@ -169,6 +342,47 @@ pub struct PutLexiconInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutLexiconOutput;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SpeechMarkType {
+    Sentence,
+    Ssml,
+    Viseme,
+    Word,
+}
+
+impl Into<String> for SpeechMarkType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SpeechMarkType {
+    fn into(self) -> &'static str {
+        match self {
+            SpeechMarkType::Sentence => "sentence",
+            SpeechMarkType::Ssml => "ssml",
+            SpeechMarkType::Viseme => "viseme",
+            SpeechMarkType::Word => "word",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpeechMarkType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "sentence" => Ok(SpeechMarkType::Sentence),
+            "ssml" => Ok(SpeechMarkType::Ssml),
+            "viseme" => Ok(SpeechMarkType::Viseme),
+            "word" => Ok(SpeechMarkType::Word),
+            _ => Err(()),
+        }
+    }
+}
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SynthesizeSpeechInput {
@@ -209,6 +423,41 @@ pub struct SynthesizeSpeechOutput {
     pub request_characters: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TextType {
+    Ssml,
+    Text,
+}
+
+impl Into<String> for TextType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TextType {
+    fn into(self) -> &'static str {
+        match self {
+            TextType::Ssml => "ssml",
+            TextType::Text => "text",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ssml" => Ok(TextType::Ssml),
+            "text" => Ok(TextType::Text),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Description of the voice.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Voice {
@@ -232,6 +481,179 @@ pub struct Voice {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VoiceId {
+    Amy,
+    Astrid,
+    Brian,
+    Carla,
+    Carmen,
+    Celine,
+    Chantal,
+    Conchita,
+    Cristiano,
+    Dora,
+    Emma,
+    Enrique,
+    Ewa,
+    Filiz,
+    Geraint,
+    Giorgio,
+    Gwyneth,
+    Hans,
+    Ines,
+    Ivy,
+    Jacek,
+    Jan,
+    Joanna,
+    Joey,
+    Justin,
+    Karl,
+    Kendra,
+    Kimberly,
+    Liv,
+    Lotte,
+    Mads,
+    Maja,
+    Marlene,
+    Mathieu,
+    Maxim,
+    Miguel,
+    Mizuki,
+    Naja,
+    Nicole,
+    Penelope,
+    Raveena,
+    Ricardo,
+    Ruben,
+    Russell,
+    Salli,
+    Tatyana,
+    Vicki,
+    Vitoria,
+}
+
+impl Into<String> for VoiceId {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VoiceId {
+    fn into(self) -> &'static str {
+        match self {
+            VoiceId::Amy => "Amy",
+            VoiceId::Astrid => "Astrid",
+            VoiceId::Brian => "Brian",
+            VoiceId::Carla => "Carla",
+            VoiceId::Carmen => "Carmen",
+            VoiceId::Celine => "Celine",
+            VoiceId::Chantal => "Chantal",
+            VoiceId::Conchita => "Conchita",
+            VoiceId::Cristiano => "Cristiano",
+            VoiceId::Dora => "Dora",
+            VoiceId::Emma => "Emma",
+            VoiceId::Enrique => "Enrique",
+            VoiceId::Ewa => "Ewa",
+            VoiceId::Filiz => "Filiz",
+            VoiceId::Geraint => "Geraint",
+            VoiceId::Giorgio => "Giorgio",
+            VoiceId::Gwyneth => "Gwyneth",
+            VoiceId::Hans => "Hans",
+            VoiceId::Ines => "Ines",
+            VoiceId::Ivy => "Ivy",
+            VoiceId::Jacek => "Jacek",
+            VoiceId::Jan => "Jan",
+            VoiceId::Joanna => "Joanna",
+            VoiceId::Joey => "Joey",
+            VoiceId::Justin => "Justin",
+            VoiceId::Karl => "Karl",
+            VoiceId::Kendra => "Kendra",
+            VoiceId::Kimberly => "Kimberly",
+            VoiceId::Liv => "Liv",
+            VoiceId::Lotte => "Lotte",
+            VoiceId::Mads => "Mads",
+            VoiceId::Maja => "Maja",
+            VoiceId::Marlene => "Marlene",
+            VoiceId::Mathieu => "Mathieu",
+            VoiceId::Maxim => "Maxim",
+            VoiceId::Miguel => "Miguel",
+            VoiceId::Mizuki => "Mizuki",
+            VoiceId::Naja => "Naja",
+            VoiceId::Nicole => "Nicole",
+            VoiceId::Penelope => "Penelope",
+            VoiceId::Raveena => "Raveena",
+            VoiceId::Ricardo => "Ricardo",
+            VoiceId::Ruben => "Ruben",
+            VoiceId::Russell => "Russell",
+            VoiceId::Salli => "Salli",
+            VoiceId::Tatyana => "Tatyana",
+            VoiceId::Vicki => "Vicki",
+            VoiceId::Vitoria => "Vitoria",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VoiceId {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Amy" => Ok(VoiceId::Amy),
+            "Astrid" => Ok(VoiceId::Astrid),
+            "Brian" => Ok(VoiceId::Brian),
+            "Carla" => Ok(VoiceId::Carla),
+            "Carmen" => Ok(VoiceId::Carmen),
+            "Celine" => Ok(VoiceId::Celine),
+            "Chantal" => Ok(VoiceId::Chantal),
+            "Conchita" => Ok(VoiceId::Conchita),
+            "Cristiano" => Ok(VoiceId::Cristiano),
+            "Dora" => Ok(VoiceId::Dora),
+            "Emma" => Ok(VoiceId::Emma),
+            "Enrique" => Ok(VoiceId::Enrique),
+            "Ewa" => Ok(VoiceId::Ewa),
+            "Filiz" => Ok(VoiceId::Filiz),
+            "Geraint" => Ok(VoiceId::Geraint),
+            "Giorgio" => Ok(VoiceId::Giorgio),
+            "Gwyneth" => Ok(VoiceId::Gwyneth),
+            "Hans" => Ok(VoiceId::Hans),
+            "Ines" => Ok(VoiceId::Ines),
+            "Ivy" => Ok(VoiceId::Ivy),
+            "Jacek" => Ok(VoiceId::Jacek),
+            "Jan" => Ok(VoiceId::Jan),
+            "Joanna" => Ok(VoiceId::Joanna),
+            "Joey" => Ok(VoiceId::Joey),
+            "Justin" => Ok(VoiceId::Justin),
+            "Karl" => Ok(VoiceId::Karl),
+            "Kendra" => Ok(VoiceId::Kendra),
+            "Kimberly" => Ok(VoiceId::Kimberly),
+            "Liv" => Ok(VoiceId::Liv),
+            "Lotte" => Ok(VoiceId::Lotte),
+            "Mads" => Ok(VoiceId::Mads),
+            "Maja" => Ok(VoiceId::Maja),
+            "Marlene" => Ok(VoiceId::Marlene),
+            "Mathieu" => Ok(VoiceId::Mathieu),
+            "Maxim" => Ok(VoiceId::Maxim),
+            "Miguel" => Ok(VoiceId::Miguel),
+            "Mizuki" => Ok(VoiceId::Mizuki),
+            "Naja" => Ok(VoiceId::Naja),
+            "Nicole" => Ok(VoiceId::Nicole),
+            "Penelope" => Ok(VoiceId::Penelope),
+            "Raveena" => Ok(VoiceId::Raveena),
+            "Ricardo" => Ok(VoiceId::Ricardo),
+            "Ruben" => Ok(VoiceId::Ruben),
+            "Russell" => Ok(VoiceId::Russell),
+            "Salli" => Ok(VoiceId::Salli),
+            "Tatyana" => Ok(VoiceId::Tatyana),
+            "Vicki" => Ok(VoiceId::Vicki),
+            "Vitoria" => Ok(VoiceId::Vitoria),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by DeleteLexicon
@@ -874,7 +1296,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -925,7 +1347,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -967,7 +1389,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1015,7 +1437,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1058,7 +1480,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1103,7 +1525,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = SynthesizeSpeechOutput::default();
 

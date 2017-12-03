@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -43,6 +39,79 @@ pub struct AddTagsToResourceResponse {
     #[doc="<p>The status of the operation.</p>"]
     #[serde(rename="Status")]
     pub status: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ClientVersion {
+    _5_1,
+    _5_3,
+}
+
+impl Into<String> for ClientVersion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ClientVersion {
+    fn into(self) -> &'static str {
+        match self {
+            ClientVersion::_5_1 => "5.1",
+            ClientVersion::_5_3 => "5.3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClientVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "5.1" => Ok(ClientVersion::_5_1),
+            "5.3" => Ok(ClientVersion::_5_3),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloudHsmObjectState {
+    Degraded,
+    Ready,
+    Updating,
+}
+
+impl Into<String> for CloudHsmObjectState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloudHsmObjectState {
+    fn into(self) -> &'static str {
+        match self {
+            CloudHsmObjectState::Degraded => "DEGRADED",
+            CloudHsmObjectState::Ready => "READY",
+            CloudHsmObjectState::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudHsmObjectState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEGRADED" => Ok(CloudHsmObjectState::Degraded),
+            "READY" => Ok(CloudHsmObjectState::Ready),
+            "UPDATING" => Ok(CloudHsmObjectState::Updating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>"]
@@ -382,6 +451,56 @@ pub struct GetConfigResponse {
     pub config_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HsmStatus {
+    Degraded,
+    Pending,
+    Running,
+    Suspended,
+    Terminated,
+    Terminating,
+    Updating,
+}
+
+impl Into<String> for HsmStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HsmStatus {
+    fn into(self) -> &'static str {
+        match self {
+            HsmStatus::Degraded => "DEGRADED",
+            HsmStatus::Pending => "PENDING",
+            HsmStatus::Running => "RUNNING",
+            HsmStatus::Suspended => "SUSPENDED",
+            HsmStatus::Terminated => "TERMINATED",
+            HsmStatus::Terminating => "TERMINATING",
+            HsmStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HsmStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEGRADED" => Ok(HsmStatus::Degraded),
+            "PENDING" => Ok(HsmStatus::Pending),
+            "RUNNING" => Ok(HsmStatus::Running),
+            "SUSPENDED" => Ok(HsmStatus::Suspended),
+            "TERMINATED" => Ok(HsmStatus::Terminated),
+            "TERMINATING" => Ok(HsmStatus::Terminating),
+            "UPDATING" => Ok(HsmStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAvailableZonesRequest;
@@ -560,6 +679,38 @@ pub struct RemoveTagsFromResourceResponse {
     #[doc="<p>The status of the operation.</p>"]
     #[serde(rename="Status")]
     pub status: String,
+}
+
+#[doc="<p>Specifies the type of subscription for the HSM.</p> <ul> <li><b>PRODUCTION</b> - The HSM is being used in a production environment.</li> <li><b>TRIAL</b> - The HSM is being used in a product trial.</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubscriptionType {
+    Production,
+}
+
+impl Into<String> for SubscriptionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubscriptionType {
+    fn into(self) -> &'static str {
+        match self {
+            SubscriptionType::Production => "PRODUCTION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PRODUCTION" => Ok(SubscriptionType::Production),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>"]
@@ -2524,7 +2675,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AddTagsToResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2554,7 +2705,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateHapgResponse>(String::from_utf8_lossy(&body)
@@ -2584,7 +2735,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateHsmResponse>(String::from_utf8_lossy(&body)
@@ -2616,7 +2767,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateLunaClientResponse>(String::from_utf8_lossy(&body)
@@ -2648,7 +2799,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteHapgResponse>(String::from_utf8_lossy(&body)
@@ -2678,7 +2829,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteHsmResponse>(String::from_utf8_lossy(&body)
@@ -2710,7 +2861,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteLunaClientResponse>(String::from_utf8_lossy(&body)
@@ -2742,7 +2893,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeHapgResponse>(String::from_utf8_lossy(&body)
@@ -2774,7 +2925,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeHsmResponse>(String::from_utf8_lossy(&body)
@@ -2806,7 +2957,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeLunaClientResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2834,7 +2985,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetConfigResponse>(String::from_utf8_lossy(&body)
@@ -2863,7 +3014,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAvailableZonesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2891,7 +3042,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListHapgsResponse>(String::from_utf8_lossy(&body)
@@ -2921,7 +3072,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListHsmsResponse>(String::from_utf8_lossy(&body)
@@ -2953,7 +3104,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListLunaClientsResponse>(String::from_utf8_lossy(&body)
@@ -2986,7 +3137,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsForResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3016,7 +3167,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyHapgResponse>(String::from_utf8_lossy(&body)
@@ -3046,7 +3197,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyHsmResponse>(String::from_utf8_lossy(&body)
@@ -3078,7 +3229,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyLunaClientResponse>(String::from_utf8_lossy(&body)
@@ -3112,7 +3263,7 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RemoveTagsFromResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())

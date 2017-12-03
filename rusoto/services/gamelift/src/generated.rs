@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -44,6 +40,41 @@ pub struct AcceptMatchInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AcceptMatchOutput;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AcceptanceType {
+    Accept,
+    Reject,
+}
+
+impl Into<String> for AcceptanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AcceptanceType {
+    fn into(self) -> &'static str {
+        match self {
+            AcceptanceType::Accept => "ACCEPT",
+            AcceptanceType::Reject => "REJECT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AcceptanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCEPT" => Ok(AcceptanceType::Accept),
+            "REJECT" => Ok(AcceptanceType::Reject),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p>Properties describing a fleet alias.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -147,6 +178,89 @@ pub struct Build {
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BuildStatus {
+    Failed,
+    Initialized,
+    Ready,
+}
+
+impl Into<String> for BuildStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BuildStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BuildStatus::Failed => "FAILED",
+            BuildStatus::Initialized => "INITIALIZED",
+            BuildStatus::Ready => "READY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BuildStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(BuildStatus::Failed),
+            "INITIALIZED" => Ok(BuildStatus::Initialized),
+            "READY" => Ok(BuildStatus::Ready),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperatorType {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+}
+
+impl Into<String> for ComparisonOperatorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperatorType {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperatorType::GreaterThanOrEqualToThreshold => {
+                "GreaterThanOrEqualToThreshold"
+            }
+            ComparisonOperatorType::GreaterThanThreshold => "GreaterThanThreshold",
+            ComparisonOperatorType::LessThanOrEqualToThreshold => "LessThanOrEqualToThreshold",
+            ComparisonOperatorType::LessThanThreshold => "LessThanThreshold",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GreaterThanOrEqualToThreshold" => {
+                Ok(ComparisonOperatorType::GreaterThanOrEqualToThreshold)
+            }
+            "GreaterThanThreshold" => Ok(ComparisonOperatorType::GreaterThanThreshold),
+            "LessThanOrEqualToThreshold" => Ok(ComparisonOperatorType::LessThanOrEqualToThreshold),
+            "LessThanThreshold" => Ok(ComparisonOperatorType::LessThanThreshold),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1124,6 +1238,119 @@ pub struct EC2InstanceLimit {
     pub instance_limit: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EC2InstanceType {
+    C32Xlarge,
+    C34Xlarge,
+    C38Xlarge,
+    C3Large,
+    C3Xlarge,
+    C42Xlarge,
+    C44Xlarge,
+    C48Xlarge,
+    C4Large,
+    C4Xlarge,
+    M32Xlarge,
+    M3Large,
+    M3Medium,
+    M3Xlarge,
+    M410Xlarge,
+    M42Xlarge,
+    M44Xlarge,
+    M4Large,
+    M4Xlarge,
+    R32Xlarge,
+    R34Xlarge,
+    R38Xlarge,
+    R3Large,
+    R3Xlarge,
+    T2Large,
+    T2Medium,
+    T2Micro,
+    T2Small,
+}
+
+impl Into<String> for EC2InstanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EC2InstanceType {
+    fn into(self) -> &'static str {
+        match self {
+            EC2InstanceType::C32Xlarge => "c3.2xlarge",
+            EC2InstanceType::C34Xlarge => "c3.4xlarge",
+            EC2InstanceType::C38Xlarge => "c3.8xlarge",
+            EC2InstanceType::C3Large => "c3.large",
+            EC2InstanceType::C3Xlarge => "c3.xlarge",
+            EC2InstanceType::C42Xlarge => "c4.2xlarge",
+            EC2InstanceType::C44Xlarge => "c4.4xlarge",
+            EC2InstanceType::C48Xlarge => "c4.8xlarge",
+            EC2InstanceType::C4Large => "c4.large",
+            EC2InstanceType::C4Xlarge => "c4.xlarge",
+            EC2InstanceType::M32Xlarge => "m3.2xlarge",
+            EC2InstanceType::M3Large => "m3.large",
+            EC2InstanceType::M3Medium => "m3.medium",
+            EC2InstanceType::M3Xlarge => "m3.xlarge",
+            EC2InstanceType::M410Xlarge => "m4.10xlarge",
+            EC2InstanceType::M42Xlarge => "m4.2xlarge",
+            EC2InstanceType::M44Xlarge => "m4.4xlarge",
+            EC2InstanceType::M4Large => "m4.large",
+            EC2InstanceType::M4Xlarge => "m4.xlarge",
+            EC2InstanceType::R32Xlarge => "r3.2xlarge",
+            EC2InstanceType::R34Xlarge => "r3.4xlarge",
+            EC2InstanceType::R38Xlarge => "r3.8xlarge",
+            EC2InstanceType::R3Large => "r3.large",
+            EC2InstanceType::R3Xlarge => "r3.xlarge",
+            EC2InstanceType::T2Large => "t2.large",
+            EC2InstanceType::T2Medium => "t2.medium",
+            EC2InstanceType::T2Micro => "t2.micro",
+            EC2InstanceType::T2Small => "t2.small",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EC2InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "c3.2xlarge" => Ok(EC2InstanceType::C32Xlarge),
+            "c3.4xlarge" => Ok(EC2InstanceType::C34Xlarge),
+            "c3.8xlarge" => Ok(EC2InstanceType::C38Xlarge),
+            "c3.large" => Ok(EC2InstanceType::C3Large),
+            "c3.xlarge" => Ok(EC2InstanceType::C3Xlarge),
+            "c4.2xlarge" => Ok(EC2InstanceType::C42Xlarge),
+            "c4.4xlarge" => Ok(EC2InstanceType::C44Xlarge),
+            "c4.8xlarge" => Ok(EC2InstanceType::C48Xlarge),
+            "c4.large" => Ok(EC2InstanceType::C4Large),
+            "c4.xlarge" => Ok(EC2InstanceType::C4Xlarge),
+            "m3.2xlarge" => Ok(EC2InstanceType::M32Xlarge),
+            "m3.large" => Ok(EC2InstanceType::M3Large),
+            "m3.medium" => Ok(EC2InstanceType::M3Medium),
+            "m3.xlarge" => Ok(EC2InstanceType::M3Xlarge),
+            "m4.10xlarge" => Ok(EC2InstanceType::M410Xlarge),
+            "m4.2xlarge" => Ok(EC2InstanceType::M42Xlarge),
+            "m4.4xlarge" => Ok(EC2InstanceType::M44Xlarge),
+            "m4.large" => Ok(EC2InstanceType::M4Large),
+            "m4.xlarge" => Ok(EC2InstanceType::M4Xlarge),
+            "r3.2xlarge" => Ok(EC2InstanceType::R32Xlarge),
+            "r3.4xlarge" => Ok(EC2InstanceType::R34Xlarge),
+            "r3.8xlarge" => Ok(EC2InstanceType::R38Xlarge),
+            "r3.large" => Ok(EC2InstanceType::R3Large),
+            "r3.xlarge" => Ok(EC2InstanceType::R3Xlarge),
+            "t2.large" => Ok(EC2InstanceType::T2Large),
+            "t2.medium" => Ok(EC2InstanceType::T2Medium),
+            "t2.micro" => Ok(EC2InstanceType::T2Micro),
+            "t2.small" => Ok(EC2InstanceType::T2Small),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Event {
@@ -1151,6 +1378,148 @@ pub struct Event {
     #[serde(rename="ResourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventCode {
+    FleetActivationFailed,
+    FleetActivationFailedNoInstances,
+    FleetBinaryDownloadFailed,
+    FleetCreated,
+    FleetCreationExtractingBuild,
+    FleetCreationRunningInstaller,
+    FleetCreationValidatingRuntimeConfig,
+    FleetDeleted,
+    FleetInitializationFailed,
+    FleetNewGameSessionProtectionPolicyUpdated,
+    FleetScalingEvent,
+    FleetStateActivating,
+    FleetStateActive,
+    FleetStateBuilding,
+    FleetStateDownloading,
+    FleetStateError,
+    FleetStateValidating,
+    FleetValidationExecutableRuntimeFailure,
+    FleetValidationLaunchPathNotFound,
+    FleetValidationTimedOut,
+    GameSessionActivationTimeout,
+    GenericEvent,
+    ServerProcessCrashed,
+    ServerProcessForceTerminated,
+    ServerProcessInvalidPath,
+    ServerProcessProcessExitTimeout,
+    ServerProcessProcessReadyTimeout,
+    ServerProcessSdkInitializationTimeout,
+    ServerProcessTerminatedUnhealthy,
+}
+
+impl Into<String> for EventCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventCode {
+    fn into(self) -> &'static str {
+        match self {
+            EventCode::FleetActivationFailed => "FLEET_ACTIVATION_FAILED",
+            EventCode::FleetActivationFailedNoInstances => "FLEET_ACTIVATION_FAILED_NO_INSTANCES",
+            EventCode::FleetBinaryDownloadFailed => "FLEET_BINARY_DOWNLOAD_FAILED",
+            EventCode::FleetCreated => "FLEET_CREATED",
+            EventCode::FleetCreationExtractingBuild => "FLEET_CREATION_EXTRACTING_BUILD",
+            EventCode::FleetCreationRunningInstaller => "FLEET_CREATION_RUNNING_INSTALLER",
+            EventCode::FleetCreationValidatingRuntimeConfig => {
+                "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG"
+            }
+            EventCode::FleetDeleted => "FLEET_DELETED",
+            EventCode::FleetInitializationFailed => "FLEET_INITIALIZATION_FAILED",
+            EventCode::FleetNewGameSessionProtectionPolicyUpdated => {
+                "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED"
+            }
+            EventCode::FleetScalingEvent => "FLEET_SCALING_EVENT",
+            EventCode::FleetStateActivating => "FLEET_STATE_ACTIVATING",
+            EventCode::FleetStateActive => "FLEET_STATE_ACTIVE",
+            EventCode::FleetStateBuilding => "FLEET_STATE_BUILDING",
+            EventCode::FleetStateDownloading => "FLEET_STATE_DOWNLOADING",
+            EventCode::FleetStateError => "FLEET_STATE_ERROR",
+            EventCode::FleetStateValidating => "FLEET_STATE_VALIDATING",
+            EventCode::FleetValidationExecutableRuntimeFailure => {
+                "FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE"
+            }
+            EventCode::FleetValidationLaunchPathNotFound => {
+                "FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND"
+            }
+            EventCode::FleetValidationTimedOut => "FLEET_VALIDATION_TIMED_OUT",
+            EventCode::GameSessionActivationTimeout => "GAME_SESSION_ACTIVATION_TIMEOUT",
+            EventCode::GenericEvent => "GENERIC_EVENT",
+            EventCode::ServerProcessCrashed => "SERVER_PROCESS_CRASHED",
+            EventCode::ServerProcessForceTerminated => "SERVER_PROCESS_FORCE_TERMINATED",
+            EventCode::ServerProcessInvalidPath => "SERVER_PROCESS_INVALID_PATH",
+            EventCode::ServerProcessProcessExitTimeout => "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT",
+            EventCode::ServerProcessProcessReadyTimeout => "SERVER_PROCESS_PROCESS_READY_TIMEOUT",
+            EventCode::ServerProcessSdkInitializationTimeout => {
+                "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT"
+            }
+            EventCode::ServerProcessTerminatedUnhealthy => "SERVER_PROCESS_TERMINATED_UNHEALTHY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FLEET_ACTIVATION_FAILED" => Ok(EventCode::FleetActivationFailed),
+            "FLEET_ACTIVATION_FAILED_NO_INSTANCES" => {
+                Ok(EventCode::FleetActivationFailedNoInstances)
+            }
+            "FLEET_BINARY_DOWNLOAD_FAILED" => Ok(EventCode::FleetBinaryDownloadFailed),
+            "FLEET_CREATED" => Ok(EventCode::FleetCreated),
+            "FLEET_CREATION_EXTRACTING_BUILD" => Ok(EventCode::FleetCreationExtractingBuild),
+            "FLEET_CREATION_RUNNING_INSTALLER" => Ok(EventCode::FleetCreationRunningInstaller),
+            "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG" => {
+                Ok(EventCode::FleetCreationValidatingRuntimeConfig)
+            }
+            "FLEET_DELETED" => Ok(EventCode::FleetDeleted),
+            "FLEET_INITIALIZATION_FAILED" => Ok(EventCode::FleetInitializationFailed),
+            "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED" => {
+                Ok(EventCode::FleetNewGameSessionProtectionPolicyUpdated)
+            }
+            "FLEET_SCALING_EVENT" => Ok(EventCode::FleetScalingEvent),
+            "FLEET_STATE_ACTIVATING" => Ok(EventCode::FleetStateActivating),
+            "FLEET_STATE_ACTIVE" => Ok(EventCode::FleetStateActive),
+            "FLEET_STATE_BUILDING" => Ok(EventCode::FleetStateBuilding),
+            "FLEET_STATE_DOWNLOADING" => Ok(EventCode::FleetStateDownloading),
+            "FLEET_STATE_ERROR" => Ok(EventCode::FleetStateError),
+            "FLEET_STATE_VALIDATING" => Ok(EventCode::FleetStateValidating),
+            "FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE" => {
+                Ok(EventCode::FleetValidationExecutableRuntimeFailure)
+            }
+            "FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND" => {
+                Ok(EventCode::FleetValidationLaunchPathNotFound)
+            }
+            "FLEET_VALIDATION_TIMED_OUT" => Ok(EventCode::FleetValidationTimedOut),
+            "GAME_SESSION_ACTIVATION_TIMEOUT" => Ok(EventCode::GameSessionActivationTimeout),
+            "GENERIC_EVENT" => Ok(EventCode::GenericEvent),
+            "SERVER_PROCESS_CRASHED" => Ok(EventCode::ServerProcessCrashed),
+            "SERVER_PROCESS_FORCE_TERMINATED" => Ok(EventCode::ServerProcessForceTerminated),
+            "SERVER_PROCESS_INVALID_PATH" => Ok(EventCode::ServerProcessInvalidPath),
+            "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT" => Ok(EventCode::ServerProcessProcessExitTimeout),
+            "SERVER_PROCESS_PROCESS_READY_TIMEOUT" => {
+                Ok(EventCode::ServerProcessProcessReadyTimeout)
+            }
+            "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT" => {
+                Ok(EventCode::ServerProcessSdkInitializationTimeout)
+            }
+            "SERVER_PROCESS_TERMINATED_UNHEALTHY" => {
+                Ok(EventCode::ServerProcessTerminatedUnhealthy)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>General properties describing a fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
@@ -1233,6 +1602,62 @@ pub struct FleetCapacity {
     #[serde(rename="InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FleetStatus {
+    Activating,
+    Active,
+    Building,
+    Deleting,
+    Downloading,
+    Error,
+    New,
+    Terminated,
+    Validating,
+}
+
+impl Into<String> for FleetStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FleetStatus {
+    fn into(self) -> &'static str {
+        match self {
+            FleetStatus::Activating => "ACTIVATING",
+            FleetStatus::Active => "ACTIVE",
+            FleetStatus::Building => "BUILDING",
+            FleetStatus::Deleting => "DELETING",
+            FleetStatus::Downloading => "DOWNLOADING",
+            FleetStatus::Error => "ERROR",
+            FleetStatus::New => "NEW",
+            FleetStatus::Terminated => "TERMINATED",
+            FleetStatus::Validating => "VALIDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVATING" => Ok(FleetStatus::Activating),
+            "ACTIVE" => Ok(FleetStatus::Active),
+            "BUILDING" => Ok(FleetStatus::Building),
+            "DELETING" => Ok(FleetStatus::Deleting),
+            "DOWNLOADING" => Ok(FleetStatus::Downloading),
+            "ERROR" => Ok(FleetStatus::Error),
+            "NEW" => Ok(FleetStatus::New),
+            "TERMINATED" => Ok(FleetStatus::Terminated),
+            "VALIDATING" => Ok(FleetStatus::Validating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
@@ -1435,6 +1860,47 @@ pub struct GameSessionPlacement {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GameSessionPlacementState {
+    Cancelled,
+    Fulfilled,
+    Pending,
+    TimedOut,
+}
+
+impl Into<String> for GameSessionPlacementState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GameSessionPlacementState {
+    fn into(self) -> &'static str {
+        match self {
+            GameSessionPlacementState::Cancelled => "CANCELLED",
+            GameSessionPlacementState::Fulfilled => "FULFILLED",
+            GameSessionPlacementState::Pending => "PENDING",
+            GameSessionPlacementState::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameSessionPlacementState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(GameSessionPlacementState::Cancelled),
+            "FULFILLED" => Ok(GameSessionPlacementState::Fulfilled),
+            "PENDING" => Ok(GameSessionPlacementState::Pending),
+            "TIMED_OUT" => Ok(GameSessionPlacementState::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue's default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy's maximum.</p> </li> </ul> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GameSessionQueue {
@@ -1467,6 +1933,50 @@ pub struct GameSessionQueueDestination {
     #[serde(rename="DestinationArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub destination_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GameSessionStatus {
+    Activating,
+    Active,
+    Error,
+    Terminated,
+    Terminating,
+}
+
+impl Into<String> for GameSessionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GameSessionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            GameSessionStatus::Activating => "ACTIVATING",
+            GameSessionStatus::Active => "ACTIVE",
+            GameSessionStatus::Error => "ERROR",
+            GameSessionStatus::Terminated => "TERMINATED",
+            GameSessionStatus::Terminating => "TERMINATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameSessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVATING" => Ok(GameSessionStatus::Activating),
+            "ACTIVE" => Ok(GameSessionStatus::Active),
+            "ERROR" => Ok(GameSessionStatus::Error),
+            "TERMINATED" => Ok(GameSessionStatus::Terminated),
+            "TERMINATING" => Ok(GameSessionStatus::Terminating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1577,6 +2087,44 @@ pub struct InstanceCredentials {
     pub user_name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceStatus {
+    Active,
+    Pending,
+    Terminating,
+}
+
+impl Into<String> for InstanceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceStatus::Active => "ACTIVE",
+            InstanceStatus::Pending => "PENDING",
+            InstanceStatus::Terminating => "TERMINATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(InstanceStatus::Active),
+            "PENDING" => Ok(InstanceStatus::Pending),
+            "TERMINATING" => Ok(InstanceStatus::Terminating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on Amazon GameLift. Each game session hosted on a fleet is assigned a unique combination of IP address and port number, which must fall into the fleet's allowed ranges. This combination is included in the <a>GameSession</a> object. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IpPermission {
@@ -1592,6 +2140,41 @@ pub struct IpPermission {
     #[doc="<p>Ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <code>FromPort</code>.</p>"]
     #[serde(rename="ToPort")]
     pub to_port: i64,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IpProtocol {
+    Tcp,
+    Udp,
+}
+
+impl Into<String> for IpProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IpProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            IpProtocol::Tcp => "TCP",
+            IpProtocol::Udp => "UDP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "TCP" => Ok(IpProtocol::Tcp),
+            "UDP" => Ok(IpProtocol::Udp),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1758,6 +2341,59 @@ pub struct MatchmakingConfiguration {
     pub rule_set_name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MatchmakingConfigurationStatus {
+    Cancelled,
+    Completed,
+    Failed,
+    Placing,
+    Queued,
+    RequiresAcceptance,
+    Searching,
+    TimedOut,
+}
+
+impl Into<String> for MatchmakingConfigurationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MatchmakingConfigurationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            MatchmakingConfigurationStatus::Cancelled => "CANCELLED",
+            MatchmakingConfigurationStatus::Completed => "COMPLETED",
+            MatchmakingConfigurationStatus::Failed => "FAILED",
+            MatchmakingConfigurationStatus::Placing => "PLACING",
+            MatchmakingConfigurationStatus::Queued => "QUEUED",
+            MatchmakingConfigurationStatus::RequiresAcceptance => "REQUIRES_ACCEPTANCE",
+            MatchmakingConfigurationStatus::Searching => "SEARCHING",
+            MatchmakingConfigurationStatus::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchmakingConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(MatchmakingConfigurationStatus::Cancelled),
+            "COMPLETED" => Ok(MatchmakingConfigurationStatus::Completed),
+            "FAILED" => Ok(MatchmakingConfigurationStatus::Failed),
+            "PLACING" => Ok(MatchmakingConfigurationStatus::Placing),
+            "QUEUED" => Ok(MatchmakingConfigurationStatus::Queued),
+            "REQUIRES_ACCEPTANCE" => Ok(MatchmakingConfigurationStatus::RequiresAcceptance),
+            "SEARCHING" => Ok(MatchmakingConfigurationStatus::Searching),
+            "TIMED_OUT" => Ok(MatchmakingConfigurationStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Set of rule statements, used with FlexMatch, that determine how to build a certain kind of player match. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-rules.html\">Create Matchmaking Rules for Your Game</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player's skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players--such as each player must meet a certain skill level, or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time if no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MatchmakingRuleSet {
@@ -1809,6 +2445,103 @@ pub struct MatchmakingTicket {
     #[serde(rename="TicketId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ticket_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricName {
+    ActivatingGameSessions,
+    ActiveGameSessions,
+    ActiveInstances,
+    AvailableGameSessions,
+    AvailablePlayerSessions,
+    CurrentPlayerSessions,
+    IdleInstances,
+    PercentAvailableGameSessions,
+    PercentIdleInstances,
+    QueueDepth,
+    WaitTime,
+}
+
+impl Into<String> for MetricName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricName {
+    fn into(self) -> &'static str {
+        match self {
+            MetricName::ActivatingGameSessions => "ActivatingGameSessions",
+            MetricName::ActiveGameSessions => "ActiveGameSessions",
+            MetricName::ActiveInstances => "ActiveInstances",
+            MetricName::AvailableGameSessions => "AvailableGameSessions",
+            MetricName::AvailablePlayerSessions => "AvailablePlayerSessions",
+            MetricName::CurrentPlayerSessions => "CurrentPlayerSessions",
+            MetricName::IdleInstances => "IdleInstances",
+            MetricName::PercentAvailableGameSessions => "PercentAvailableGameSessions",
+            MetricName::PercentIdleInstances => "PercentIdleInstances",
+            MetricName::QueueDepth => "QueueDepth",
+            MetricName::WaitTime => "WaitTime",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivatingGameSessions" => Ok(MetricName::ActivatingGameSessions),
+            "ActiveGameSessions" => Ok(MetricName::ActiveGameSessions),
+            "ActiveInstances" => Ok(MetricName::ActiveInstances),
+            "AvailableGameSessions" => Ok(MetricName::AvailableGameSessions),
+            "AvailablePlayerSessions" => Ok(MetricName::AvailablePlayerSessions),
+            "CurrentPlayerSessions" => Ok(MetricName::CurrentPlayerSessions),
+            "IdleInstances" => Ok(MetricName::IdleInstances),
+            "PercentAvailableGameSessions" => Ok(MetricName::PercentAvailableGameSessions),
+            "PercentIdleInstances" => Ok(MetricName::PercentIdleInstances),
+            "QueueDepth" => Ok(MetricName::QueueDepth),
+            "WaitTime" => Ok(MetricName::WaitTime),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperatingSystem {
+    AmazonLinux,
+    Windows2012,
+}
+
+impl Into<String> for OperatingSystem {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperatingSystem {
+    fn into(self) -> &'static str {
+        match self {
+            OperatingSystem::AmazonLinux => "AMAZON_LINUX",
+            OperatingSystem::Windows2012 => "WINDOWS_2012",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatingSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AMAZON_LINUX" => Ok(OperatingSystem::AmazonLinux),
+            "WINDOWS_2012" => Ok(OperatingSystem::Windows2012),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
@@ -1920,6 +2653,117 @@ pub struct PlayerSession {
     pub termination_time: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlayerSessionCreationPolicy {
+    AcceptAll,
+    DenyAll,
+}
+
+impl Into<String> for PlayerSessionCreationPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlayerSessionCreationPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            PlayerSessionCreationPolicy::AcceptAll => "ACCEPT_ALL",
+            PlayerSessionCreationPolicy::DenyAll => "DENY_ALL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlayerSessionCreationPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCEPT_ALL" => Ok(PlayerSessionCreationPolicy::AcceptAll),
+            "DENY_ALL" => Ok(PlayerSessionCreationPolicy::DenyAll),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlayerSessionStatus {
+    Active,
+    Completed,
+    Reserved,
+    Timedout,
+}
+
+impl Into<String> for PlayerSessionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlayerSessionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PlayerSessionStatus::Active => "ACTIVE",
+            PlayerSessionStatus::Completed => "COMPLETED",
+            PlayerSessionStatus::Reserved => "RESERVED",
+            PlayerSessionStatus::Timedout => "TIMEDOUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlayerSessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(PlayerSessionStatus::Active),
+            "COMPLETED" => Ok(PlayerSessionStatus::Completed),
+            "RESERVED" => Ok(PlayerSessionStatus::Reserved),
+            "TIMEDOUT" => Ok(PlayerSessionStatus::Timedout),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProtectionPolicy {
+    FullProtection,
+    NoProtection,
+}
+
+impl Into<String> for ProtectionPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProtectionPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            ProtectionPolicy::FullProtection => "FullProtection",
+            ProtectionPolicy::NoProtection => "NoProtection",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectionPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FullProtection" => Ok(ProtectionPolicy::FullProtection),
+            "NoProtection" => Ok(ProtectionPolicy::NoProtection),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutScalingPolicyInput {
@@ -2026,6 +2870,41 @@ pub struct RoutingStrategy {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RoutingStrategyType {
+    Simple,
+    Terminal,
+}
+
+impl Into<String> for RoutingStrategyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RoutingStrategyType {
+    fn into(self) -> &'static str {
+        match self {
+            RoutingStrategyType::Simple => "SIMPLE",
+            RoutingStrategyType::Terminal => "TERMINAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoutingStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SIMPLE" => Ok(RoutingStrategyType::Simple),
+            "TERMINAL" => Ok(RoutingStrategyType::Terminal),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A collection of server process configurations that describe what processes to run on each instance in a fleet. All fleets must have a run-time configuration. Each instance in the fleet launches the server processes specified in the run-time configuration and launches new ones as existing processes end. Each instance regularly checks for an updated run-time configuration and follows the new instructions. </p> <p>The run-time configuration enables the instances in a fleet to run multiple processes simultaneously. Potential scenarios are as follows: (1) Run multiple processes of a single game server executable to maximize usage of your hosting resources. (2) Run one or more processes of different build executables, such as your game server executable and a related program, or two or more different versions of a game server. (3) Run multiple processes of a single game server but with different launch parameters, for example to run one process on each instance in debug mode.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. A run-time configuration must specify fewer than this limit. To calculate the total number of processes specified in a run-time configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <code> <a>ServerProcess</a> </code> object in the run-time configuration.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RuntimeConfiguration {
@@ -2058,6 +2937,44 @@ pub struct S3Location {
     #[serde(rename="RoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalingAdjustmentType {
+    ChangeInCapacity,
+    ExactCapacity,
+    PercentChangeInCapacity,
+}
+
+impl Into<String> for ScalingAdjustmentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalingAdjustmentType {
+    fn into(self) -> &'static str {
+        match self {
+            ScalingAdjustmentType::ChangeInCapacity => "ChangeInCapacity",
+            ScalingAdjustmentType::ExactCapacity => "ExactCapacity",
+            ScalingAdjustmentType::PercentChangeInCapacity => "PercentChangeInCapacity",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingAdjustmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ChangeInCapacity" => Ok(ScalingAdjustmentType::ChangeInCapacity),
+            "ExactCapacity" => Ok(ScalingAdjustmentType::ExactCapacity),
+            "PercentChangeInCapacity" => Ok(ScalingAdjustmentType::PercentChangeInCapacity),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
@@ -2099,6 +3016,56 @@ pub struct ScalingPolicy {
     #[serde(rename="Threshold")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub threshold: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalingStatusType {
+    Active,
+    Deleted,
+    DeleteRequested,
+    Deleting,
+    Error,
+    UpdateRequested,
+    Updating,
+}
+
+impl Into<String> for ScalingStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalingStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            ScalingStatusType::Active => "ACTIVE",
+            ScalingStatusType::Deleted => "DELETED",
+            ScalingStatusType::DeleteRequested => "DELETE_REQUESTED",
+            ScalingStatusType::Deleting => "DELETING",
+            ScalingStatusType::Error => "ERROR",
+            ScalingStatusType::UpdateRequested => "UPDATE_REQUESTED",
+            ScalingStatusType::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(ScalingStatusType::Active),
+            "DELETED" => Ok(ScalingStatusType::Deleted),
+            "DELETE_REQUESTED" => Ok(ScalingStatusType::DeleteRequested),
+            "DELETING" => Ok(ScalingStatusType::Deleting),
+            "ERROR" => Ok(ScalingStatusType::Error),
+            "UPDATE_REQUESTED" => Ok(ScalingStatusType::UpdateRequested),
+            "UPDATING" => Ok(ScalingStatusType::Updating),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -8731,7 +9698,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AcceptMatchOutput>(String::from_utf8_lossy(&body)
@@ -8763,7 +9730,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateAliasOutput>(String::from_utf8_lossy(&body)
@@ -8795,7 +9762,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateBuildOutput>(String::from_utf8_lossy(&body)
@@ -8827,7 +9794,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateFleetOutput>(String::from_utf8_lossy(&body)
@@ -8859,7 +9826,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateGameSessionOutput>(String::from_utf8_lossy(&body)
@@ -8892,7 +9859,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8923,7 +9890,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8955,7 +9922,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateMatchmakingRuleSetOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8986,7 +9953,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePlayerSessionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9016,7 +9983,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9044,7 +10011,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9068,7 +10035,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9092,7 +10059,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9119,7 +10086,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9150,7 +10117,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9181,7 +10148,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -9207,7 +10174,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAliasOutput>(String::from_utf8_lossy(&body)
@@ -9239,7 +10206,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeBuildOutput>(String::from_utf8_lossy(&body)
@@ -9272,7 +10239,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9304,7 +10271,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9336,7 +10303,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9366,7 +10333,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetEventsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9397,7 +10364,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9429,7 +10396,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeFleetUtilizationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9461,7 +10428,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeGameSessionDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9493,7 +10460,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9525,7 +10492,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeGameSessionQueuesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9556,7 +10523,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeGameSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9586,7 +10553,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstancesOutput>(String::from_utf8_lossy(&body)
@@ -9618,7 +10585,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMatchmakingOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9649,7 +10616,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMatchmakingConfigurationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9680,7 +10647,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMatchmakingRuleSetsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9712,7 +10679,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9743,7 +10710,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9775,7 +10742,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeScalingPoliciesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9807,7 +10774,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetGameSessionLogUrlOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -9837,7 +10804,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceAccessOutput>(String::from_utf8_lossy(&body)
@@ -9869,7 +10836,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAliasesOutput>(String::from_utf8_lossy(&body)
@@ -9899,7 +10866,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
@@ -9929,7 +10896,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListFleetsOutput>(String::from_utf8_lossy(&body)
@@ -9961,7 +10928,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutScalingPolicyOutput>(String::from_utf8_lossy(&body)
@@ -9994,7 +10961,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RequestUploadCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10025,7 +10992,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ResolveAliasOutput>(String::from_utf8_lossy(&body)
@@ -10057,7 +11024,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SearchGameSessionsOutput>(String::from_utf8_lossy(&body)
@@ -10090,7 +11057,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10121,7 +11088,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartMatchmakingOutput>(String::from_utf8_lossy(&body)
@@ -10154,7 +11121,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10185,7 +11152,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopMatchmakingOutput>(String::from_utf8_lossy(&body)
@@ -10217,7 +11184,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateAliasOutput>(String::from_utf8_lossy(&body)
@@ -10249,7 +11216,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateBuildOutput>(String::from_utf8_lossy(&body)
@@ -10282,7 +11249,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10312,7 +11279,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10343,7 +11310,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10374,7 +11341,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateGameSessionOutput>(String::from_utf8_lossy(&body)
@@ -10407,7 +11374,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10438,7 +11405,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10470,7 +11437,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10502,7 +11469,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ValidateMatchmakingRuleSetOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())

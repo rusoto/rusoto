@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -788,6 +784,80 @@ pub struct BatchReadException {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BatchReadExceptionType {
+    AccessDeniedException,
+    CannotListParentOfRootException,
+    DirectoryNotEnabledException,
+    FacetValidationException,
+    InternalServiceException,
+    InvalidArnException,
+    InvalidNextTokenException,
+    LimitExceededException,
+    NotIndexException,
+    NotNodeException,
+    NotPolicyException,
+    ResourceNotFoundException,
+    ValidationException,
+}
+
+impl Into<String> for BatchReadExceptionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BatchReadExceptionType {
+    fn into(self) -> &'static str {
+        match self {
+            BatchReadExceptionType::AccessDeniedException => "AccessDeniedException",
+            BatchReadExceptionType::CannotListParentOfRootException => {
+                "CannotListParentOfRootException"
+            }
+            BatchReadExceptionType::DirectoryNotEnabledException => "DirectoryNotEnabledException",
+            BatchReadExceptionType::FacetValidationException => "FacetValidationException",
+            BatchReadExceptionType::InternalServiceException => "InternalServiceException",
+            BatchReadExceptionType::InvalidArnException => "InvalidArnException",
+            BatchReadExceptionType::InvalidNextTokenException => "InvalidNextTokenException",
+            BatchReadExceptionType::LimitExceededException => "LimitExceededException",
+            BatchReadExceptionType::NotIndexException => "NotIndexException",
+            BatchReadExceptionType::NotNodeException => "NotNodeException",
+            BatchReadExceptionType::NotPolicyException => "NotPolicyException",
+            BatchReadExceptionType::ResourceNotFoundException => "ResourceNotFoundException",
+            BatchReadExceptionType::ValidationException => "ValidationException",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchReadExceptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AccessDeniedException" => Ok(BatchReadExceptionType::AccessDeniedException),
+            "CannotListParentOfRootException" => {
+                Ok(BatchReadExceptionType::CannotListParentOfRootException)
+            }
+            "DirectoryNotEnabledException" => {
+                Ok(BatchReadExceptionType::DirectoryNotEnabledException)
+            }
+            "FacetValidationException" => Ok(BatchReadExceptionType::FacetValidationException),
+            "InternalServiceException" => Ok(BatchReadExceptionType::InternalServiceException),
+            "InvalidArnException" => Ok(BatchReadExceptionType::InvalidArnException),
+            "InvalidNextTokenException" => Ok(BatchReadExceptionType::InvalidNextTokenException),
+            "LimitExceededException" => Ok(BatchReadExceptionType::LimitExceededException),
+            "NotIndexException" => Ok(BatchReadExceptionType::NotIndexException),
+            "NotNodeException" => Ok(BatchReadExceptionType::NotNodeException),
+            "NotPolicyException" => Ok(BatchReadExceptionType::NotPolicyException),
+            "ResourceNotFoundException" => Ok(BatchReadExceptionType::ResourceNotFoundException),
+            "ValidationException" => Ok(BatchReadExceptionType::ValidationException),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the output of a <code>BatchRead</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchReadOperation {
@@ -956,6 +1026,106 @@ pub struct BatchUpdateObjectAttributesResponse {
     pub object_identifier: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BatchWriteExceptionType {
+    AccessDeniedException,
+    DirectoryNotEnabledException,
+    FacetValidationException,
+    IndexedAttributeMissingException,
+    InternalServiceException,
+    InvalidArnException,
+    InvalidAttachmentException,
+    LimitExceededException,
+    LinkNameAlreadyInUseException,
+    NotIndexException,
+    NotPolicyException,
+    ObjectAlreadyDetachedException,
+    ObjectNotDetachedException,
+    ResourceNotFoundException,
+    StillContainsLinksException,
+    UnsupportedIndexTypeException,
+    ValidationException,
+}
+
+impl Into<String> for BatchWriteExceptionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BatchWriteExceptionType {
+    fn into(self) -> &'static str {
+        match self {
+            BatchWriteExceptionType::AccessDeniedException => "AccessDeniedException",
+            BatchWriteExceptionType::DirectoryNotEnabledException => "DirectoryNotEnabledException",
+            BatchWriteExceptionType::FacetValidationException => "FacetValidationException",
+            BatchWriteExceptionType::IndexedAttributeMissingException => {
+                "IndexedAttributeMissingException"
+            }
+            BatchWriteExceptionType::InternalServiceException => "InternalServiceException",
+            BatchWriteExceptionType::InvalidArnException => "InvalidArnException",
+            BatchWriteExceptionType::InvalidAttachmentException => "InvalidAttachmentException",
+            BatchWriteExceptionType::LimitExceededException => "LimitExceededException",
+            BatchWriteExceptionType::LinkNameAlreadyInUseException => {
+                "LinkNameAlreadyInUseException"
+            }
+            BatchWriteExceptionType::NotIndexException => "NotIndexException",
+            BatchWriteExceptionType::NotPolicyException => "NotPolicyException",
+            BatchWriteExceptionType::ObjectAlreadyDetachedException => {
+                "ObjectAlreadyDetachedException"
+            }
+            BatchWriteExceptionType::ObjectNotDetachedException => "ObjectNotDetachedException",
+            BatchWriteExceptionType::ResourceNotFoundException => "ResourceNotFoundException",
+            BatchWriteExceptionType::StillContainsLinksException => "StillContainsLinksException",
+            BatchWriteExceptionType::UnsupportedIndexTypeException => {
+                "UnsupportedIndexTypeException"
+            }
+            BatchWriteExceptionType::ValidationException => "ValidationException",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchWriteExceptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AccessDeniedException" => Ok(BatchWriteExceptionType::AccessDeniedException),
+            "DirectoryNotEnabledException" => {
+                Ok(BatchWriteExceptionType::DirectoryNotEnabledException)
+            }
+            "FacetValidationException" => Ok(BatchWriteExceptionType::FacetValidationException),
+            "IndexedAttributeMissingException" => {
+                Ok(BatchWriteExceptionType::IndexedAttributeMissingException)
+            }
+            "InternalServiceException" => Ok(BatchWriteExceptionType::InternalServiceException),
+            "InvalidArnException" => Ok(BatchWriteExceptionType::InvalidArnException),
+            "InvalidAttachmentException" => Ok(BatchWriteExceptionType::InvalidAttachmentException),
+            "LimitExceededException" => Ok(BatchWriteExceptionType::LimitExceededException),
+            "LinkNameAlreadyInUseException" => {
+                Ok(BatchWriteExceptionType::LinkNameAlreadyInUseException)
+            }
+            "NotIndexException" => Ok(BatchWriteExceptionType::NotIndexException),
+            "NotPolicyException" => Ok(BatchWriteExceptionType::NotPolicyException),
+            "ObjectAlreadyDetachedException" => {
+                Ok(BatchWriteExceptionType::ObjectAlreadyDetachedException)
+            }
+            "ObjectNotDetachedException" => Ok(BatchWriteExceptionType::ObjectNotDetachedException),
+            "ResourceNotFoundException" => Ok(BatchWriteExceptionType::ResourceNotFoundException),
+            "StillContainsLinksException" => {
+                Ok(BatchWriteExceptionType::StillContainsLinksException)
+            }
+            "UnsupportedIndexTypeException" => {
+                Ok(BatchWriteExceptionType::UnsupportedIndexTypeException)
+            }
+            "ValidationException" => Ok(BatchWriteExceptionType::ValidationException),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the output of a <code>BatchWrite</code> operation. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchWriteOperation {
@@ -1094,6 +1264,41 @@ pub struct BatchWriteResponse {
     #[serde(rename="Responses")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub responses: Option<Vec<BatchWriteOperationResponse>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConsistencyLevel {
+    Eventual,
+    Serializable,
+}
+
+impl Into<String> for ConsistencyLevel {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConsistencyLevel {
+    fn into(self) -> &'static str {
+        match self {
+            ConsistencyLevel::Eventual => "EVENTUAL",
+            ConsistencyLevel::Serializable => "SERIALIZABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConsistencyLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EVENTUAL" => Ok(ConsistencyLevel::Eventual),
+            "SERIALIZABLE" => Ok(ConsistencyLevel::Serializable),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1386,6 +1591,44 @@ pub struct Directory {
     pub state: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DirectoryState {
+    Deleted,
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for DirectoryState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DirectoryState {
+    fn into(self) -> &'static str {
+        match self {
+            DirectoryState::Deleted => "DELETED",
+            DirectoryState::Disabled => "DISABLED",
+            DirectoryState::Enabled => "ENABLED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETED" => Ok(DirectoryState::Deleted),
+            "DISABLED" => Ok(DirectoryState::Disabled),
+            "ENABLED" => Ok(DirectoryState::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisableDirectoryRequest {
     #[doc="<p>The ARN of the directory to disable.</p>"]
@@ -1476,6 +1719,50 @@ pub struct FacetAttributeReference {
     #[doc="<p>The target facet name that is associated with the facet reference. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences\">Attribute References</a> for more information.</p>"]
     #[serde(rename="TargetFacetName")]
     pub target_facet_name: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FacetAttributeType {
+    Binary,
+    Boolean,
+    Datetime,
+    Number,
+    String,
+}
+
+impl Into<String> for FacetAttributeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FacetAttributeType {
+    fn into(self) -> &'static str {
+        match self {
+            FacetAttributeType::Binary => "BINARY",
+            FacetAttributeType::Boolean => "BOOLEAN",
+            FacetAttributeType::Datetime => "DATETIME",
+            FacetAttributeType::Number => "NUMBER",
+            FacetAttributeType::String => "STRING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FacetAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BINARY" => Ok(FacetAttributeType::Binary),
+            "BOOLEAN" => Ok(FacetAttributeType::Boolean),
+            "DATETIME" => Ok(FacetAttributeType::Datetime),
+            "NUMBER" => Ok(FacetAttributeType::Number),
+            "STRING" => Ok(FacetAttributeType::String),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A structure that contains information used to update an attribute.</p>"]
@@ -2280,6 +2567,47 @@ pub struct ObjectReference {
     pub selector: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ObjectType {
+    Index,
+    LeafNode,
+    Node,
+    Policy,
+}
+
+impl Into<String> for ObjectType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ObjectType {
+    fn into(self) -> &'static str {
+        match self {
+            ObjectType::Index => "INDEX",
+            ObjectType::LeafNode => "LEAF_NODE",
+            ObjectType::Node => "NODE",
+            ObjectType::Policy => "POLICY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INDEX" => Ok(ObjectType::Index),
+            "LEAF_NODE" => Ok(ObjectType::LeafNode),
+            "NODE" => Ok(ObjectType::Node),
+            "POLICY" => Ok(ObjectType::Policy),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Returns the path to the <code>ObjectIdentifiers</code> that is associated with the directory.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PathToObjectIdentifiers {
@@ -2363,6 +2691,50 @@ pub struct PutSchemaFromJsonResponse {
     pub arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RangeMode {
+    Exclusive,
+    First,
+    Inclusive,
+    Last,
+    LastBeforeMissingValues,
+}
+
+impl Into<String> for RangeMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RangeMode {
+    fn into(self) -> &'static str {
+        match self {
+            RangeMode::Exclusive => "EXCLUSIVE",
+            RangeMode::First => "FIRST",
+            RangeMode::Inclusive => "INCLUSIVE",
+            RangeMode::Last => "LAST",
+            RangeMode::LastBeforeMissingValues => "LAST_BEFORE_MISSING_VALUES",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RangeMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EXCLUSIVE" => Ok(RangeMode::Exclusive),
+            "FIRST" => Ok(RangeMode::First),
+            "INCLUSIVE" => Ok(RangeMode::Inclusive),
+            "LAST" => Ok(RangeMode::Last),
+            "LAST_BEFORE_MISSING_VALUES" => Ok(RangeMode::LastBeforeMissingValues),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveFacetFromObjectRequest {
     #[doc="<p>The ARN of the directory in which the object resides.</p>"]
@@ -2379,6 +2751,41 @@ pub struct RemoveFacetFromObjectRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveFacetFromObjectResponse;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RequiredAttributeBehavior {
+    NotRequired,
+    RequiredAlways,
+}
+
+impl Into<String> for RequiredAttributeBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RequiredAttributeBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            RequiredAttributeBehavior::NotRequired => "NOT_REQUIRED",
+            RequiredAttributeBehavior::RequiredAlways => "REQUIRED_ALWAYS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequiredAttributeBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NOT_REQUIRED" => Ok(RequiredAttributeBehavior::NotRequired),
+            "REQUIRED_ALWAYS" => Ok(RequiredAttributeBehavior::RequiredAlways),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Rule {
@@ -2390,6 +2797,47 @@ pub struct Rule {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RuleType {
+    BinaryLength,
+    NumberComparison,
+    StringFromSet,
+    StringLength,
+}
+
+impl Into<String> for RuleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RuleType {
+    fn into(self) -> &'static str {
+        match self {
+            RuleType::BinaryLength => "BINARY_LENGTH",
+            RuleType::NumberComparison => "NUMBER_COMPARISON",
+            RuleType::StringFromSet => "STRING_FROM_SET",
+            RuleType::StringLength => "STRING_LENGTH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BINARY_LENGTH" => Ok(RuleType::BinaryLength),
+            "NUMBER_COMPARISON" => Ok(RuleType::NumberComparison),
+            "STRING_FROM_SET" => Ok(RuleType::StringFromSet),
+            "STRING_LENGTH" => Ok(RuleType::StringLength),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A facet.</p>"]
@@ -2582,6 +3030,41 @@ pub struct UntagResourceRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UntagResourceResponse;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UpdateActionType {
+    CreateOrUpdate,
+    Delete,
+}
+
+impl Into<String> for UpdateActionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UpdateActionType {
+    fn into(self) -> &'static str {
+        match self {
+            UpdateActionType::CreateOrUpdate => "CREATE_OR_UPDATE",
+            UpdateActionType::Delete => "DELETE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATE_OR_UPDATE" => Ok(UpdateActionType::CreateOrUpdate),
+            "DELETE" => Ok(UpdateActionType::Delete),
+            _ => Err(()),
+        }
+    }
+}
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateFacetRequest {
@@ -10135,7 +10618,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10180,7 +10663,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10225,7 +10708,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10273,7 +10756,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10318,7 +10801,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10363,7 +10846,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10410,7 +10893,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10455,7 +10938,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10500,7 +10983,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10545,7 +11028,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10590,7 +11073,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10635,7 +11118,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10680,7 +11163,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10726,7 +11209,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10770,7 +11253,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10815,7 +11298,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10860,7 +11343,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10904,7 +11387,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10950,7 +11433,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10995,7 +11478,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11040,7 +11523,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11085,7 +11568,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11130,7 +11613,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
 
 
@@ -11163,7 +11646,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11207,7 +11690,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11251,7 +11734,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11294,7 +11777,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11344,7 +11827,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11388,7 +11871,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11434,7 +11917,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11482,7 +11965,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11532,7 +12015,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11578,7 +12061,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11625,7 +12108,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11670,7 +12153,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11715,7 +12198,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11761,7 +12244,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11809,7 +12292,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11859,7 +12342,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11908,7 +12391,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11954,7 +12437,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12004,7 +12487,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12053,7 +12536,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12099,7 +12582,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12150,7 +12633,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12197,7 +12680,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12244,7 +12727,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12290,7 +12773,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12338,7 +12821,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12385,7 +12868,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12430,7 +12913,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12475,7 +12958,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12521,7 +13004,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12567,7 +13050,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12612,7 +13095,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12657,7 +13140,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12703,7 +13186,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12749,7 +13232,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12795,7 +13278,7 @@ impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
