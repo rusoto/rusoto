@@ -43,7 +43,7 @@ fn credentials_from_container(
             }
         };
     let address: String = format!(
-        "http://{}{}/",
+        "http://{}{}",
         AWS_CREDENTIALS_PROVIDER_IP,
         aws_container_credentials_relative_uri
     );
