@@ -194,22 +194,45 @@ mod tests {
 
     #[test]
     fn custom_region_http() {
-        let a_region = Region::Custom("http://localhost".to_owned());
+        let a_region = Region::Custom {
+            endpoint: "http://localhost".to_owned(),
+            name: "eu-west-3".to_owned(),
+        };
         let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("http", request.scheme());
         assert_eq!("localhost", request.hostname());
     }
 
     #[test]
     fn custom_region_https() {
-        let a_region = Region::Custom("https://localhost".to_owned());
+        let a_region = Region::Custom {
+            endpoint: "https://localhost".to_owned(),
+            name: "eu-west-3".to_owned(),
+        };
         let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("https", request.scheme());
         assert_eq!("localhost", request.hostname());
     }
 
     #[test]
     fn custom_region_with_port() {
-        let a_region = Region::Custom("https://localhost:8000".to_owned());
+        let a_region = Region::Custom {
+            endpoint: "https://localhost:8000".to_owned(),
+            name: "eu-west-3".to_owned(),
+        };
         let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("https", request.scheme());
         assert_eq!("localhost:8000", request.hostname());
+    }
+
+    #[test]
+    fn custom_region_no_scheme() {
+        let a_region = Region::Custom {
+            endpoint: "localhost".to_owned(),
+            name: "eu-west-3".to_owned(),
+        };
+        let request = SignedRequest::new("POST", "sqs", &a_region, "/");
+        assert_eq!("https", request.scheme());
+        assert_eq!("localhost", request.hostname());
     }
 }
