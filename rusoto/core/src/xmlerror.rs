@@ -1,5 +1,5 @@
 use xmlutil::{XmlParseError, Peek, Next};
-use xmlutil::{characters, start_element, end_element, string_field, peek_at_name};
+use xmlutil::{characters, start_element, end_element, skip_tree, string_field, peek_at_name};
 
 #[derive(Default, Debug)]
 pub struct XmlError {
@@ -14,37 +14,38 @@ impl XmlErrorDeserializer {
     pub fn deserialize<T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
                                        -> Result<XmlError, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = XmlError::default();
 
         loop {
-            match &try!(peek_at_name(stack))[..] {
+            match &peek_at_name(stack)?[..] {
                 "Type" => {
-                    obj.error_type = try!(string_field("Type", stack));
-                    continue;
+                    obj.error_type = string_field("Type", stack)?;
                 }
                 "Code" => {
-                    obj.code = try!(string_field("Code", stack));
-                    continue;
+                    obj.code = string_field("Code", stack)?;
                 }
                 "Message" => {
-                    obj.message = try!(string_field("Message", stack));
-                    continue;
+                    obj.message = string_field("Message", stack)?;
                 }
                 "Detail" => {
-                    try!(start_element("Detail", stack));
+                    start_element("Detail", stack)?;
                     if let Ok(characters) = characters(stack) {
                         obj.detail = Some(characters.to_string());
-                        try!(end_element("Detail", stack));
+                        end_element("Detail", stack)?;
                     }
-                    continue;
+                },
+                "" => {
+                    break
+                },
+                _ => {
+                    skip_tree(stack);
                 }
-                _ => break,
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }

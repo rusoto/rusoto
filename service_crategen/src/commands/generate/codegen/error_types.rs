@@ -156,8 +156,7 @@ impl GenerateErrorTypes for XmlErrorTypes {
                     pub fn from_body(body: &str) -> {type_name} {{
                         let reader = EventReader::new(body.as_bytes());
                         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
+                        find_start_element(&mut stack);
                         match XmlErrorDeserializer::deserialize(\"Error\", &mut stack) {{
                             Ok(parsed_error) => {{
                                 match &parsed_error.code[..] {{
