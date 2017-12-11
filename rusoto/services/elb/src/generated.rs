@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -5609,8 +5610,7 @@ impl AddTagsError {
     pub fn from_body(body: &str) -> AddTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -5691,8 +5691,7 @@ impl ApplySecurityGroupsToLoadBalancerError {
     pub fn from_body(body: &str) -> ApplySecurityGroupsToLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -5783,8 +5782,7 @@ impl AttachLoadBalancerToSubnetsError {
     pub fn from_body(body: &str) -> AttachLoadBalancerToSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -5871,8 +5869,7 @@ impl ConfigureHealthCheckError {
     pub fn from_body(body: &str) -> ConfigureHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => ConfigureHealthCheckError::AccessPointNotFound(
@@ -5949,8 +5946,7 @@ impl CreateAppCookieStickinessPolicyError {
     pub fn from_body(body: &str) -> CreateAppCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6047,8 +6043,7 @@ impl CreateLBCookieStickinessPolicyError {
     pub fn from_body(body: &str) -> CreateLBCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6159,8 +6154,7 @@ impl CreateLoadBalancerError {
     pub fn from_body(body: &str) -> CreateLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CertificateNotFoundException" => {
@@ -6283,8 +6277,7 @@ impl CreateLoadBalancerListenersError {
     pub fn from_body(body: &str) -> CreateLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6389,8 +6382,7 @@ impl CreateLoadBalancerPolicyError {
     pub fn from_body(body: &str) -> CreateLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6483,8 +6475,7 @@ impl DeleteLoadBalancerError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
@@ -6551,8 +6542,7 @@ impl DeleteLoadBalancerListenersError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6627,8 +6617,7 @@ impl DeleteLoadBalancerPolicyError {
     pub fn from_body(body: &str) -> DeleteLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6709,8 +6698,7 @@ impl DeregisterInstancesFromLoadBalancerError {
     pub fn from_body(body: &str) -> DeregisterInstancesFromLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6787,8 +6775,7 @@ impl DescribeAccountLimitsError {
     pub fn from_body(body: &str) -> DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
@@ -6857,8 +6844,7 @@ impl DescribeInstanceHealthError {
     pub fn from_body(body: &str) -> DescribeInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -6937,8 +6923,7 @@ impl DescribeLoadBalancerAttributesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7019,8 +7004,7 @@ impl DescribeLoadBalancerPoliciesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7097,8 +7081,7 @@ impl DescribeLoadBalancerPolicyTypesError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "PolicyTypeNotFoundException" => {
@@ -7173,8 +7156,7 @@ impl DescribeLoadBalancersError {
     pub fn from_body(body: &str) -> DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => DescribeLoadBalancersError::AccessPointNotFound(
@@ -7249,8 +7231,7 @@ impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7321,8 +7302,7 @@ impl DetachLoadBalancerFromSubnetsError {
     pub fn from_body(body: &str) -> DetachLoadBalancerFromSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7403,8 +7383,7 @@ impl DisableAvailabilityZonesForLoadBalancerError {
     pub fn from_body(body: &str) -> DisableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7485,8 +7464,7 @@ impl EnableAvailabilityZonesForLoadBalancerError {
     pub fn from_body(body: &str) -> EnableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7563,8 +7541,7 @@ impl ModifyLoadBalancerAttributesError {
     pub fn from_body(body: &str) -> ModifyLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7651,8 +7628,7 @@ impl RegisterInstancesWithLoadBalancerError {
     pub fn from_body(body: &str) -> RegisterInstancesWithLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7731,8 +7707,7 @@ impl RemoveTagsError {
     pub fn from_body(body: &str) -> RemoveTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7809,8 +7784,7 @@ impl SetLoadBalancerListenerSSLCertificateError {
     pub fn from_body(body: &str) -> SetLoadBalancerListenerSSLCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -7913,8 +7887,7 @@ impl SetLoadBalancerPoliciesForBackendServerError {
     pub fn from_body(body: &str) -> SetLoadBalancerPoliciesForBackendServerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {
@@ -8007,8 +7980,7 @@ impl SetLoadBalancerPoliciesOfListenerError {
     pub fn from_body(body: &str) -> SetLoadBalancerPoliciesOfListenerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessPointNotFoundException" => {

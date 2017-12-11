@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -6882,8 +6883,7 @@ impl CloneReceiptRuleSetError {
     pub fn from_body(body: &str) -> CloneReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsException" => {
@@ -6966,8 +6966,7 @@ impl CreateConfigurationSetError {
     pub fn from_body(body: &str) -> CreateConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetAlreadyExistsException" => {
@@ -7060,8 +7059,7 @@ impl CreateConfigurationSetEventDestinationError {
     pub fn from_body(body: &str) -> CreateConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -7174,8 +7172,7 @@ impl CreateReceiptFilterError {
     pub fn from_body(body: &str) -> CreateReceiptFilterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsException" => {
@@ -7262,8 +7259,7 @@ impl CreateReceiptRuleError {
     pub fn from_body(body: &str) -> CreateReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsException" => {
@@ -7362,8 +7358,7 @@ impl CreateReceiptRuleSetError {
     pub fn from_body(body: &str) -> CreateReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsException" => {
@@ -7438,8 +7433,7 @@ impl DeleteConfigurationSetError {
     pub fn from_body(body: &str) -> DeleteConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -7514,8 +7508,7 @@ impl DeleteConfigurationSetEventDestinationError {
     pub fn from_body(body: &str) -> DeleteConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -7596,8 +7589,7 @@ impl DeleteIdentityError {
     pub fn from_body(body: &str) -> DeleteIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteIdentityError::Unknown(String::from(body)),
@@ -7660,8 +7652,7 @@ impl DeleteIdentityPolicyError {
     pub fn from_body(body: &str) -> DeleteIdentityPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteIdentityPolicyError::Unknown(String::from(body)),
@@ -7726,8 +7717,7 @@ impl DeleteReceiptFilterError {
     pub fn from_body(body: &str) -> DeleteReceiptFilterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteReceiptFilterError::Unknown(String::from(body)),
@@ -7794,8 +7784,7 @@ impl DeleteReceiptRuleError {
     pub fn from_body(body: &str) -> DeleteReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleSetDoesNotExistException" => {
@@ -7866,8 +7855,7 @@ impl DeleteReceiptRuleSetError {
     pub fn from_body(body: &str) -> DeleteReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CannotDeleteException" => {
@@ -7936,8 +7924,7 @@ impl DeleteVerifiedEmailAddressError {
     pub fn from_body(body: &str) -> DeleteVerifiedEmailAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVerifiedEmailAddressError::Unknown(String::from(body)),
@@ -8002,8 +7989,7 @@ impl DescribeActiveReceiptRuleSetError {
     pub fn from_body(body: &str) -> DescribeActiveReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeActiveReceiptRuleSetError::Unknown(String::from(body)),
@@ -8070,8 +8056,7 @@ impl DescribeConfigurationSetError {
     pub fn from_body(body: &str) -> DescribeConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -8146,8 +8131,7 @@ impl DescribeReceiptRuleError {
     pub fn from_body(body: &str) -> DescribeReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleDoesNotExistException" => {
@@ -8222,8 +8206,7 @@ impl DescribeReceiptRuleSetError {
     pub fn from_body(body: &str) -> DescribeReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleSetDoesNotExistException" => {
@@ -8294,8 +8277,7 @@ impl GetIdentityDkimAttributesError {
     pub fn from_body(body: &str) -> GetIdentityDkimAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityDkimAttributesError::Unknown(String::from(body)),
@@ -8360,8 +8342,7 @@ impl GetIdentityMailFromDomainAttributesError {
     pub fn from_body(body: &str) -> GetIdentityMailFromDomainAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityMailFromDomainAttributesError::Unknown(String::from(body)),
@@ -8426,8 +8407,7 @@ impl GetIdentityNotificationAttributesError {
     pub fn from_body(body: &str) -> GetIdentityNotificationAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityNotificationAttributesError::Unknown(String::from(body)),
@@ -8492,8 +8472,7 @@ impl GetIdentityPoliciesError {
     pub fn from_body(body: &str) -> GetIdentityPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityPoliciesError::Unknown(String::from(body)),
@@ -8558,8 +8537,7 @@ impl GetIdentityVerificationAttributesError {
     pub fn from_body(body: &str) -> GetIdentityVerificationAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityVerificationAttributesError::Unknown(String::from(body)),
@@ -8624,8 +8602,7 @@ impl GetSendQuotaError {
     pub fn from_body(body: &str) -> GetSendQuotaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendQuotaError::Unknown(String::from(body)),
@@ -8688,8 +8665,7 @@ impl GetSendStatisticsError {
     pub fn from_body(body: &str) -> GetSendStatisticsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendStatisticsError::Unknown(String::from(body)),
@@ -8754,8 +8730,7 @@ impl ListConfigurationSetsError {
     pub fn from_body(body: &str) -> ListConfigurationSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListConfigurationSetsError::Unknown(String::from(body)),
@@ -8820,8 +8795,7 @@ impl ListIdentitiesError {
     pub fn from_body(body: &str) -> ListIdentitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListIdentitiesError::Unknown(String::from(body)),
@@ -8884,8 +8858,7 @@ impl ListIdentityPoliciesError {
     pub fn from_body(body: &str) -> ListIdentityPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListIdentityPoliciesError::Unknown(String::from(body)),
@@ -8950,8 +8923,7 @@ impl ListReceiptFiltersError {
     pub fn from_body(body: &str) -> ListReceiptFiltersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptFiltersError::Unknown(String::from(body)),
@@ -9016,8 +8988,7 @@ impl ListReceiptRuleSetsError {
     pub fn from_body(body: &str) -> ListReceiptRuleSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptRuleSetsError::Unknown(String::from(body)),
@@ -9082,8 +9053,7 @@ impl ListVerifiedEmailAddressesError {
     pub fn from_body(body: &str) -> ListVerifiedEmailAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListVerifiedEmailAddressesError::Unknown(String::from(body)),
@@ -9150,8 +9120,7 @@ impl PutIdentityPolicyError {
     pub fn from_body(body: &str) -> PutIdentityPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidPolicyException" => {
@@ -9224,8 +9193,7 @@ impl ReorderReceiptRuleSetError {
     pub fn from_body(body: &str) -> ReorderReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleDoesNotExistException" => {
@@ -9300,8 +9268,7 @@ impl SendBounceError {
     pub fn from_body(body: &str) -> SendBounceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "MessageRejected" => {
@@ -9374,8 +9341,7 @@ impl SendEmailError {
     pub fn from_body(body: &str) -> SendEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -9456,8 +9422,7 @@ impl SendRawEmailError {
     pub fn from_body(body: &str) -> SendRawEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -9536,8 +9501,7 @@ impl SetActiveReceiptRuleSetError {
     pub fn from_body(body: &str) -> SetActiveReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleSetDoesNotExistException" => {
@@ -9608,8 +9572,7 @@ impl SetIdentityDkimEnabledError {
     pub fn from_body(body: &str) -> SetIdentityDkimEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityDkimEnabledError::Unknown(String::from(body)),
@@ -9674,8 +9637,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
     pub fn from_body(body: &str) -> SetIdentityFeedbackForwardingEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityFeedbackForwardingEnabledError::Unknown(String::from(body)),
@@ -9740,8 +9702,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
     pub fn from_body(body: &str) -> SetIdentityHeadersInNotificationsEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityHeadersInNotificationsEnabledError::Unknown(String::from(body)),
@@ -9808,8 +9769,7 @@ impl SetIdentityMailFromDomainError {
     pub fn from_body(body: &str) -> SetIdentityMailFromDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityMailFromDomainError::Unknown(String::from(body)),
@@ -9874,8 +9834,7 @@ impl SetIdentityNotificationTopicError {
     pub fn from_body(body: &str) -> SetIdentityNotificationTopicError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityNotificationTopicError::Unknown(String::from(body)),
@@ -9944,8 +9903,7 @@ impl SetReceiptRulePositionError {
     pub fn from_body(body: &str) -> SetReceiptRulePositionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RuleDoesNotExistException" => SetReceiptRulePositionError::RuleDoesNotExist(
@@ -10030,8 +9988,7 @@ impl UpdateConfigurationSetEventDestinationError {
     pub fn from_body(body: &str) -> UpdateConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConfigurationSetDoesNotExistException" => {
@@ -10146,8 +10103,7 @@ impl UpdateReceiptRuleError {
     pub fn from_body(body: &str) -> UpdateReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidLambdaFunctionException" => UpdateReceiptRuleError::InvalidLambdaFunction(
@@ -10238,8 +10194,7 @@ impl VerifyDomainDkimError {
     pub fn from_body(body: &str) -> VerifyDomainDkimError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyDomainDkimError::Unknown(String::from(body)),
@@ -10302,8 +10257,7 @@ impl VerifyDomainIdentityError {
     pub fn from_body(body: &str) -> VerifyDomainIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyDomainIdentityError::Unknown(String::from(body)),
@@ -10368,8 +10322,7 @@ impl VerifyEmailAddressError {
     pub fn from_body(body: &str) -> VerifyEmailAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailAddressError::Unknown(String::from(body)),
@@ -10434,8 +10387,7 @@ impl VerifyEmailIdentityError {
     pub fn from_body(body: &str) -> VerifyEmailIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailIdentityError::Unknown(String::from(body)),

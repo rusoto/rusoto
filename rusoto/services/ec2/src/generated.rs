@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -45075,8 +45076,7 @@ impl AcceptReservedInstancesExchangeQuoteError {
     pub fn from_body(body: &str) -> AcceptReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
@@ -45141,8 +45141,7 @@ impl AcceptVpcPeeringConnectionError {
     pub fn from_body(body: &str) -> AcceptVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcPeeringConnectionError::Unknown(String::from(body)),
@@ -45207,8 +45206,7 @@ impl AllocateAddressError {
     pub fn from_body(body: &str) -> AllocateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateAddressError::Unknown(String::from(body)),
@@ -45271,8 +45269,7 @@ impl AllocateHostsError {
     pub fn from_body(body: &str) -> AllocateHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateHostsError::Unknown(String::from(body)),
@@ -45335,8 +45332,7 @@ impl AssignIpv6AddressesError {
     pub fn from_body(body: &str) -> AssignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignIpv6AddressesError::Unknown(String::from(body)),
@@ -45401,8 +45397,7 @@ impl AssignPrivateIpAddressesError {
     pub fn from_body(body: &str) -> AssignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignPrivateIpAddressesError::Unknown(String::from(body)),
@@ -45467,8 +45462,7 @@ impl AssociateAddressError {
     pub fn from_body(body: &str) -> AssociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateAddressError::Unknown(String::from(body)),
@@ -45531,8 +45525,7 @@ impl AssociateDhcpOptionsError {
     pub fn from_body(body: &str) -> AssociateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateDhcpOptionsError::Unknown(String::from(body)),
@@ -45597,8 +45590,7 @@ impl AssociateIamInstanceProfileError {
     pub fn from_body(body: &str) -> AssociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateIamInstanceProfileError::Unknown(String::from(body)),
@@ -45663,8 +45655,7 @@ impl AssociateRouteTableError {
     pub fn from_body(body: &str) -> AssociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateRouteTableError::Unknown(String::from(body)),
@@ -45729,8 +45720,7 @@ impl AssociateSubnetCidrBlockError {
     pub fn from_body(body: &str) -> AssociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateSubnetCidrBlockError::Unknown(String::from(body)),
@@ -45795,8 +45785,7 @@ impl AssociateVpcCidrBlockError {
     pub fn from_body(body: &str) -> AssociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateVpcCidrBlockError::Unknown(String::from(body)),
@@ -45861,8 +45850,7 @@ impl AttachClassicLinkVpcError {
     pub fn from_body(body: &str) -> AttachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachClassicLinkVpcError::Unknown(String::from(body)),
@@ -45927,8 +45915,7 @@ impl AttachInternetGatewayError {
     pub fn from_body(body: &str) -> AttachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachInternetGatewayError::Unknown(String::from(body)),
@@ -45993,8 +45980,7 @@ impl AttachNetworkInterfaceError {
     pub fn from_body(body: &str) -> AttachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachNetworkInterfaceError::Unknown(String::from(body)),
@@ -46059,8 +46045,7 @@ impl AttachVolumeError {
     pub fn from_body(body: &str) -> AttachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVolumeError::Unknown(String::from(body)),
@@ -46123,8 +46108,7 @@ impl AttachVpnGatewayError {
     pub fn from_body(body: &str) -> AttachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVpnGatewayError::Unknown(String::from(body)),
@@ -46187,8 +46171,7 @@ impl AuthorizeSecurityGroupEgressError {
     pub fn from_body(body: &str) -> AuthorizeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupEgressError::Unknown(String::from(body)),
@@ -46253,8 +46236,7 @@ impl AuthorizeSecurityGroupIngressError {
     pub fn from_body(body: &str) -> AuthorizeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupIngressError::Unknown(String::from(body)),
@@ -46319,8 +46301,7 @@ impl BundleInstanceError {
     pub fn from_body(body: &str) -> BundleInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BundleInstanceError::Unknown(String::from(body)),
@@ -46383,8 +46364,7 @@ impl CancelBundleTaskError {
     pub fn from_body(body: &str) -> CancelBundleTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelBundleTaskError::Unknown(String::from(body)),
@@ -46447,8 +46427,7 @@ impl CancelConversionTaskError {
     pub fn from_body(body: &str) -> CancelConversionTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelConversionTaskError::Unknown(String::from(body)),
@@ -46513,8 +46492,7 @@ impl CancelExportTaskError {
     pub fn from_body(body: &str) -> CancelExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelExportTaskError::Unknown(String::from(body)),
@@ -46577,8 +46555,7 @@ impl CancelImportTaskError {
     pub fn from_body(body: &str) -> CancelImportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelImportTaskError::Unknown(String::from(body)),
@@ -46641,8 +46618,7 @@ impl CancelReservedInstancesListingError {
     pub fn from_body(body: &str) -> CancelReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelReservedInstancesListingError::Unknown(String::from(body)),
@@ -46707,8 +46683,7 @@ impl EC2CancelSpotFleetRequestsError {
     pub fn from_body(body: &str) -> EC2CancelSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EC2CancelSpotFleetRequestsError::Unknown(String::from(body)),
@@ -46773,8 +46748,7 @@ impl CancelSpotInstanceRequestsError {
     pub fn from_body(body: &str) -> CancelSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelSpotInstanceRequestsError::Unknown(String::from(body)),
@@ -46839,8 +46813,7 @@ impl ConfirmProductInstanceError {
     pub fn from_body(body: &str) -> ConfirmProductInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ConfirmProductInstanceError::Unknown(String::from(body)),
@@ -46905,8 +46878,7 @@ impl CopyImageError {
     pub fn from_body(body: &str) -> CopyImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyImageError::Unknown(String::from(body)),
@@ -46969,8 +46941,7 @@ impl CopySnapshotError {
     pub fn from_body(body: &str) -> CopySnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopySnapshotError::Unknown(String::from(body)),
@@ -47033,8 +47004,7 @@ impl CreateCustomerGatewayError {
     pub fn from_body(body: &str) -> CreateCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateCustomerGatewayError::Unknown(String::from(body)),
@@ -47099,8 +47069,7 @@ impl CreateDefaultVpcError {
     pub fn from_body(body: &str) -> CreateDefaultVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultVpcError::Unknown(String::from(body)),
@@ -47163,8 +47132,7 @@ impl CreateDhcpOptionsError {
     pub fn from_body(body: &str) -> CreateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDhcpOptionsError::Unknown(String::from(body)),
@@ -47229,8 +47197,7 @@ impl CreateEgressOnlyInternetGatewayError {
     pub fn from_body(body: &str) -> CreateEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateEgressOnlyInternetGatewayError::Unknown(String::from(body)),
@@ -47295,8 +47262,7 @@ impl CreateFlowLogsError {
     pub fn from_body(body: &str) -> CreateFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFlowLogsError::Unknown(String::from(body)),
@@ -47359,8 +47325,7 @@ impl CreateFpgaImageError {
     pub fn from_body(body: &str) -> CreateFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFpgaImageError::Unknown(String::from(body)),
@@ -47423,8 +47388,7 @@ impl CreateImageError {
     pub fn from_body(body: &str) -> CreateImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateImageError::Unknown(String::from(body)),
@@ -47487,8 +47451,7 @@ impl CreateInstanceExportTaskError {
     pub fn from_body(body: &str) -> CreateInstanceExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInstanceExportTaskError::Unknown(String::from(body)),
@@ -47553,8 +47516,7 @@ impl CreateInternetGatewayError {
     pub fn from_body(body: &str) -> CreateInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInternetGatewayError::Unknown(String::from(body)),
@@ -47619,8 +47581,7 @@ impl CreateKeyPairError {
     pub fn from_body(body: &str) -> CreateKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateKeyPairError::Unknown(String::from(body)),
@@ -47683,8 +47644,7 @@ impl CreateNatGatewayError {
     pub fn from_body(body: &str) -> CreateNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNatGatewayError::Unknown(String::from(body)),
@@ -47747,8 +47707,7 @@ impl CreateNetworkAclError {
     pub fn from_body(body: &str) -> CreateNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclError::Unknown(String::from(body)),
@@ -47811,8 +47770,7 @@ impl CreateNetworkAclEntryError {
     pub fn from_body(body: &str) -> CreateNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclEntryError::Unknown(String::from(body)),
@@ -47877,8 +47835,7 @@ impl CreateNetworkInterfaceError {
     pub fn from_body(body: &str) -> CreateNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfaceError::Unknown(String::from(body)),
@@ -47943,8 +47900,7 @@ impl CreateNetworkInterfacePermissionError {
     pub fn from_body(body: &str) -> CreateNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfacePermissionError::Unknown(String::from(body)),
@@ -48009,8 +47965,7 @@ impl CreatePlacementGroupError {
     pub fn from_body(body: &str) -> CreatePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreatePlacementGroupError::Unknown(String::from(body)),
@@ -48075,8 +48030,7 @@ impl CreateReservedInstancesListingError {
     pub fn from_body(body: &str) -> CreateReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateReservedInstancesListingError::Unknown(String::from(body)),
@@ -48141,8 +48095,7 @@ impl CreateRouteError {
     pub fn from_body(body: &str) -> CreateRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteError::Unknown(String::from(body)),
@@ -48205,8 +48158,7 @@ impl CreateRouteTableError {
     pub fn from_body(body: &str) -> CreateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteTableError::Unknown(String::from(body)),
@@ -48269,8 +48221,7 @@ impl CreateSecurityGroupError {
     pub fn from_body(body: &str) -> CreateSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSecurityGroupError::Unknown(String::from(body)),
@@ -48335,8 +48286,7 @@ impl CreateSnapshotError {
     pub fn from_body(body: &str) -> CreateSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSnapshotError::Unknown(String::from(body)),
@@ -48399,8 +48349,7 @@ impl CreateSpotDatafeedSubscriptionError {
     pub fn from_body(body: &str) -> CreateSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSpotDatafeedSubscriptionError::Unknown(String::from(body)),
@@ -48465,8 +48414,7 @@ impl CreateSubnetError {
     pub fn from_body(body: &str) -> CreateSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSubnetError::Unknown(String::from(body)),
@@ -48529,8 +48477,7 @@ impl CreateTagsError {
     pub fn from_body(body: &str) -> CreateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateTagsError::Unknown(String::from(body)),
@@ -48593,8 +48540,7 @@ impl CreateVolumeError {
     pub fn from_body(body: &str) -> CreateVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVolumeError::Unknown(String::from(body)),
@@ -48657,8 +48603,7 @@ impl CreateVpcError {
     pub fn from_body(body: &str) -> CreateVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcError::Unknown(String::from(body)),
@@ -48721,8 +48666,7 @@ impl CreateVpcEndpointError {
     pub fn from_body(body: &str) -> CreateVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointError::Unknown(String::from(body)),
@@ -48787,8 +48731,7 @@ impl CreateVpcPeeringConnectionError {
     pub fn from_body(body: &str) -> CreateVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
@@ -48853,8 +48796,7 @@ impl CreateVpnConnectionError {
     pub fn from_body(body: &str) -> CreateVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionError::Unknown(String::from(body)),
@@ -48919,8 +48861,7 @@ impl CreateVpnConnectionRouteError {
     pub fn from_body(body: &str) -> CreateVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionRouteError::Unknown(String::from(body)),
@@ -48985,8 +48926,7 @@ impl CreateVpnGatewayError {
     pub fn from_body(body: &str) -> CreateVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnGatewayError::Unknown(String::from(body)),
@@ -49049,8 +48989,7 @@ impl DeleteCustomerGatewayError {
     pub fn from_body(body: &str) -> DeleteCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteCustomerGatewayError::Unknown(String::from(body)),
@@ -49115,8 +49054,7 @@ impl DeleteDhcpOptionsError {
     pub fn from_body(body: &str) -> DeleteDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteDhcpOptionsError::Unknown(String::from(body)),
@@ -49181,8 +49119,7 @@ impl DeleteEgressOnlyInternetGatewayError {
     pub fn from_body(body: &str) -> DeleteEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEgressOnlyInternetGatewayError::Unknown(String::from(body)),
@@ -49247,8 +49184,7 @@ impl DeleteFlowLogsError {
     pub fn from_body(body: &str) -> DeleteFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFlowLogsError::Unknown(String::from(body)),
@@ -49311,8 +49247,7 @@ impl DeleteInternetGatewayError {
     pub fn from_body(body: &str) -> DeleteInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteInternetGatewayError::Unknown(String::from(body)),
@@ -49377,8 +49312,7 @@ impl DeleteKeyPairError {
     pub fn from_body(body: &str) -> DeleteKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteKeyPairError::Unknown(String::from(body)),
@@ -49441,8 +49375,7 @@ impl DeleteNatGatewayError {
     pub fn from_body(body: &str) -> DeleteNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNatGatewayError::Unknown(String::from(body)),
@@ -49505,8 +49438,7 @@ impl DeleteNetworkAclError {
     pub fn from_body(body: &str) -> DeleteNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclError::Unknown(String::from(body)),
@@ -49569,8 +49501,7 @@ impl DeleteNetworkAclEntryError {
     pub fn from_body(body: &str) -> DeleteNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclEntryError::Unknown(String::from(body)),
@@ -49635,8 +49566,7 @@ impl DeleteNetworkInterfaceError {
     pub fn from_body(body: &str) -> DeleteNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfaceError::Unknown(String::from(body)),
@@ -49701,8 +49631,7 @@ impl DeleteNetworkInterfacePermissionError {
     pub fn from_body(body: &str) -> DeleteNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfacePermissionError::Unknown(String::from(body)),
@@ -49767,8 +49696,7 @@ impl DeletePlacementGroupError {
     pub fn from_body(body: &str) -> DeletePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeletePlacementGroupError::Unknown(String::from(body)),
@@ -49833,8 +49761,7 @@ impl DeleteRouteError {
     pub fn from_body(body: &str) -> DeleteRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteError::Unknown(String::from(body)),
@@ -49897,8 +49824,7 @@ impl DeleteRouteTableError {
     pub fn from_body(body: &str) -> DeleteRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteTableError::Unknown(String::from(body)),
@@ -49961,8 +49887,7 @@ impl DeleteSecurityGroupError {
     pub fn from_body(body: &str) -> DeleteSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSecurityGroupError::Unknown(String::from(body)),
@@ -50027,8 +49952,7 @@ impl DeleteSnapshotError {
     pub fn from_body(body: &str) -> DeleteSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSnapshotError::Unknown(String::from(body)),
@@ -50091,8 +50015,7 @@ impl DeleteSpotDatafeedSubscriptionError {
     pub fn from_body(body: &str) -> DeleteSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSpotDatafeedSubscriptionError::Unknown(String::from(body)),
@@ -50157,8 +50080,7 @@ impl DeleteSubnetError {
     pub fn from_body(body: &str) -> DeleteSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSubnetError::Unknown(String::from(body)),
@@ -50221,8 +50143,7 @@ impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTagsError::Unknown(String::from(body)),
@@ -50285,8 +50206,7 @@ impl DeleteVolumeError {
     pub fn from_body(body: &str) -> DeleteVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVolumeError::Unknown(String::from(body)),
@@ -50349,8 +50269,7 @@ impl DeleteVpcError {
     pub fn from_body(body: &str) -> DeleteVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcError::Unknown(String::from(body)),
@@ -50413,8 +50332,7 @@ impl DeleteVpcEndpointsError {
     pub fn from_body(body: &str) -> DeleteVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointsError::Unknown(String::from(body)),
@@ -50479,8 +50397,7 @@ impl DeleteVpcPeeringConnectionError {
     pub fn from_body(body: &str) -> DeleteVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
@@ -50545,8 +50462,7 @@ impl DeleteVpnConnectionError {
     pub fn from_body(body: &str) -> DeleteVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionError::Unknown(String::from(body)),
@@ -50611,8 +50527,7 @@ impl DeleteVpnConnectionRouteError {
     pub fn from_body(body: &str) -> DeleteVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionRouteError::Unknown(String::from(body)),
@@ -50677,8 +50592,7 @@ impl DeleteVpnGatewayError {
     pub fn from_body(body: &str) -> DeleteVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnGatewayError::Unknown(String::from(body)),
@@ -50741,8 +50655,7 @@ impl DeregisterImageError {
     pub fn from_body(body: &str) -> DeregisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeregisterImageError::Unknown(String::from(body)),
@@ -50805,8 +50718,7 @@ impl DescribeAccountAttributesError {
     pub fn from_body(body: &str) -> DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
@@ -50871,8 +50783,7 @@ impl DescribeAddressesError {
     pub fn from_body(body: &str) -> DescribeAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAddressesError::Unknown(String::from(body)),
@@ -50937,8 +50848,7 @@ impl DescribeAvailabilityZonesError {
     pub fn from_body(body: &str) -> DescribeAvailabilityZonesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAvailabilityZonesError::Unknown(String::from(body)),
@@ -51003,8 +50913,7 @@ impl DescribeBundleTasksError {
     pub fn from_body(body: &str) -> DescribeBundleTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeBundleTasksError::Unknown(String::from(body)),
@@ -51069,8 +50978,7 @@ impl DescribeClassicLinkInstancesError {
     pub fn from_body(body: &str) -> DescribeClassicLinkInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeClassicLinkInstancesError::Unknown(String::from(body)),
@@ -51135,8 +51043,7 @@ impl DescribeConversionTasksError {
     pub fn from_body(body: &str) -> DescribeConversionTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeConversionTasksError::Unknown(String::from(body)),
@@ -51201,8 +51108,7 @@ impl DescribeCustomerGatewaysError {
     pub fn from_body(body: &str) -> DescribeCustomerGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeCustomerGatewaysError::Unknown(String::from(body)),
@@ -51267,8 +51173,7 @@ impl DescribeDhcpOptionsError {
     pub fn from_body(body: &str) -> DescribeDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDhcpOptionsError::Unknown(String::from(body)),
@@ -51333,8 +51238,7 @@ impl DescribeEgressOnlyInternetGatewaysError {
     pub fn from_body(body: &str) -> DescribeEgressOnlyInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEgressOnlyInternetGatewaysError::Unknown(String::from(body)),
@@ -51399,8 +51303,7 @@ impl DescribeElasticGpusError {
     pub fn from_body(body: &str) -> DescribeElasticGpusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeElasticGpusError::Unknown(String::from(body)),
@@ -51465,8 +51368,7 @@ impl DescribeExportTasksError {
     pub fn from_body(body: &str) -> DescribeExportTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeExportTasksError::Unknown(String::from(body)),
@@ -51531,8 +51433,7 @@ impl DescribeFlowLogsError {
     pub fn from_body(body: &str) -> DescribeFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFlowLogsError::Unknown(String::from(body)),
@@ -51595,8 +51496,7 @@ impl DescribeFpgaImagesError {
     pub fn from_body(body: &str) -> DescribeFpgaImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImagesError::Unknown(String::from(body)),
@@ -51661,8 +51561,7 @@ impl DescribeHostReservationOfferingsError {
     pub fn from_body(body: &str) -> DescribeHostReservationOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationOfferingsError::Unknown(String::from(body)),
@@ -51727,8 +51626,7 @@ impl DescribeHostReservationsError {
     pub fn from_body(body: &str) -> DescribeHostReservationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationsError::Unknown(String::from(body)),
@@ -51793,8 +51691,7 @@ impl DescribeHostsError {
     pub fn from_body(body: &str) -> DescribeHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostsError::Unknown(String::from(body)),
@@ -51857,8 +51754,7 @@ impl DescribeIamInstanceProfileAssociationsError {
     pub fn from_body(body: &str) -> DescribeIamInstanceProfileAssociationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIamInstanceProfileAssociationsError::Unknown(String::from(body)),
@@ -51923,8 +51819,7 @@ impl DescribeIdFormatError {
     pub fn from_body(body: &str) -> DescribeIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdFormatError::Unknown(String::from(body)),
@@ -51987,8 +51882,7 @@ impl DescribeIdentityIdFormatError {
     pub fn from_body(body: &str) -> DescribeIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdentityIdFormatError::Unknown(String::from(body)),
@@ -52053,8 +51947,7 @@ impl DescribeImageAttributeError {
     pub fn from_body(body: &str) -> DescribeImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImageAttributeError::Unknown(String::from(body)),
@@ -52119,8 +52012,7 @@ impl DescribeImagesError {
     pub fn from_body(body: &str) -> DescribeImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImagesError::Unknown(String::from(body)),
@@ -52183,8 +52075,7 @@ impl DescribeImportImageTasksError {
     pub fn from_body(body: &str) -> DescribeImportImageTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportImageTasksError::Unknown(String::from(body)),
@@ -52249,8 +52140,7 @@ impl DescribeImportSnapshotTasksError {
     pub fn from_body(body: &str) -> DescribeImportSnapshotTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportSnapshotTasksError::Unknown(String::from(body)),
@@ -52315,8 +52205,7 @@ impl DescribeInstanceAttributeError {
     pub fn from_body(body: &str) -> DescribeInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceAttributeError::Unknown(String::from(body)),
@@ -52381,8 +52270,7 @@ impl DescribeInstanceStatusError {
     pub fn from_body(body: &str) -> DescribeInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceStatusError::Unknown(String::from(body)),
@@ -52447,8 +52335,7 @@ impl DescribeInstancesError {
     pub fn from_body(body: &str) -> DescribeInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstancesError::Unknown(String::from(body)),
@@ -52513,8 +52400,7 @@ impl DescribeInternetGatewaysError {
     pub fn from_body(body: &str) -> DescribeInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInternetGatewaysError::Unknown(String::from(body)),
@@ -52579,8 +52465,7 @@ impl DescribeKeyPairsError {
     pub fn from_body(body: &str) -> DescribeKeyPairsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeKeyPairsError::Unknown(String::from(body)),
@@ -52643,8 +52528,7 @@ impl DescribeMovingAddressesError {
     pub fn from_body(body: &str) -> DescribeMovingAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeMovingAddressesError::Unknown(String::from(body)),
@@ -52709,8 +52593,7 @@ impl DescribeNatGatewaysError {
     pub fn from_body(body: &str) -> DescribeNatGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNatGatewaysError::Unknown(String::from(body)),
@@ -52775,8 +52658,7 @@ impl DescribeNetworkAclsError {
     pub fn from_body(body: &str) -> DescribeNetworkAclsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkAclsError::Unknown(String::from(body)),
@@ -52841,8 +52723,7 @@ impl DescribeNetworkInterfaceAttributeError {
     pub fn from_body(body: &str) -> DescribeNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfaceAttributeError::Unknown(String::from(body)),
@@ -52907,8 +52788,7 @@ impl DescribeNetworkInterfacePermissionsError {
     pub fn from_body(body: &str) -> DescribeNetworkInterfacePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacePermissionsError::Unknown(String::from(body)),
@@ -52973,8 +52853,7 @@ impl DescribeNetworkInterfacesError {
     pub fn from_body(body: &str) -> DescribeNetworkInterfacesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacesError::Unknown(String::from(body)),
@@ -53039,8 +52918,7 @@ impl DescribePlacementGroupsError {
     pub fn from_body(body: &str) -> DescribePlacementGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePlacementGroupsError::Unknown(String::from(body)),
@@ -53105,8 +52983,7 @@ impl DescribePrefixListsError {
     pub fn from_body(body: &str) -> DescribePrefixListsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePrefixListsError::Unknown(String::from(body)),
@@ -53171,8 +53048,7 @@ impl DescribeRegionsError {
     pub fn from_body(body: &str) -> DescribeRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRegionsError::Unknown(String::from(body)),
@@ -53235,8 +53111,7 @@ impl DescribeReservedInstancesError {
     pub fn from_body(body: &str) -> DescribeReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesError::Unknown(String::from(body)),
@@ -53301,8 +53176,7 @@ impl DescribeReservedInstancesListingsError {
     pub fn from_body(body: &str) -> DescribeReservedInstancesListingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesListingsError::Unknown(String::from(body)),
@@ -53367,8 +53241,7 @@ impl DescribeReservedInstancesModificationsError {
     pub fn from_body(body: &str) -> DescribeReservedInstancesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesModificationsError::Unknown(String::from(body)),
@@ -53433,8 +53306,7 @@ impl DescribeReservedInstancesOfferingsError {
     pub fn from_body(body: &str) -> DescribeReservedInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesOfferingsError::Unknown(String::from(body)),
@@ -53499,8 +53371,7 @@ impl DescribeRouteTablesError {
     pub fn from_body(body: &str) -> DescribeRouteTablesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRouteTablesError::Unknown(String::from(body)),
@@ -53565,8 +53436,7 @@ impl DescribeScheduledInstanceAvailabilityError {
     pub fn from_body(body: &str) -> DescribeScheduledInstanceAvailabilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstanceAvailabilityError::Unknown(String::from(body)),
@@ -53631,8 +53501,7 @@ impl DescribeScheduledInstancesError {
     pub fn from_body(body: &str) -> DescribeScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstancesError::Unknown(String::from(body)),
@@ -53697,8 +53566,7 @@ impl DescribeSecurityGroupReferencesError {
     pub fn from_body(body: &str) -> DescribeSecurityGroupReferencesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupReferencesError::Unknown(String::from(body)),
@@ -53763,8 +53631,7 @@ impl DescribeSecurityGroupsError {
     pub fn from_body(body: &str) -> DescribeSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupsError::Unknown(String::from(body)),
@@ -53829,8 +53696,7 @@ impl DescribeSnapshotAttributeError {
     pub fn from_body(body: &str) -> DescribeSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotAttributeError::Unknown(String::from(body)),
@@ -53895,8 +53761,7 @@ impl DescribeSnapshotsError {
     pub fn from_body(body: &str) -> DescribeSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotsError::Unknown(String::from(body)),
@@ -53961,8 +53826,7 @@ impl DescribeSpotDatafeedSubscriptionError {
     pub fn from_body(body: &str) -> DescribeSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotDatafeedSubscriptionError::Unknown(String::from(body)),
@@ -54027,8 +53891,7 @@ impl DescribeSpotFleetInstancesError {
     pub fn from_body(body: &str) -> DescribeSpotFleetInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetInstancesError::Unknown(String::from(body)),
@@ -54093,8 +53956,7 @@ impl DescribeSpotFleetRequestHistoryError {
     pub fn from_body(body: &str) -> DescribeSpotFleetRequestHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestHistoryError::Unknown(String::from(body)),
@@ -54159,8 +54021,7 @@ impl DescribeSpotFleetRequestsError {
     pub fn from_body(body: &str) -> DescribeSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestsError::Unknown(String::from(body)),
@@ -54225,8 +54086,7 @@ impl DescribeSpotInstanceRequestsError {
     pub fn from_body(body: &str) -> DescribeSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotInstanceRequestsError::Unknown(String::from(body)),
@@ -54291,8 +54151,7 @@ impl DescribeSpotPriceHistoryError {
     pub fn from_body(body: &str) -> DescribeSpotPriceHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotPriceHistoryError::Unknown(String::from(body)),
@@ -54357,8 +54216,7 @@ impl DescribeStaleSecurityGroupsError {
     pub fn from_body(body: &str) -> DescribeStaleSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStaleSecurityGroupsError::Unknown(String::from(body)),
@@ -54423,8 +54281,7 @@ impl DescribeSubnetsError {
     pub fn from_body(body: &str) -> DescribeSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSubnetsError::Unknown(String::from(body)),
@@ -54487,8 +54344,7 @@ impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeTagsError::Unknown(String::from(body)),
@@ -54551,8 +54407,7 @@ impl DescribeVolumeAttributeError {
     pub fn from_body(body: &str) -> DescribeVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeAttributeError::Unknown(String::from(body)),
@@ -54617,8 +54472,7 @@ impl DescribeVolumeStatusError {
     pub fn from_body(body: &str) -> DescribeVolumeStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeStatusError::Unknown(String::from(body)),
@@ -54683,8 +54537,7 @@ impl DescribeVolumesError {
     pub fn from_body(body: &str) -> DescribeVolumesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesError::Unknown(String::from(body)),
@@ -54747,8 +54600,7 @@ impl DescribeVolumesModificationsError {
     pub fn from_body(body: &str) -> DescribeVolumesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesModificationsError::Unknown(String::from(body)),
@@ -54813,8 +54665,7 @@ impl DescribeVpcAttributeError {
     pub fn from_body(body: &str) -> DescribeVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcAttributeError::Unknown(String::from(body)),
@@ -54879,8 +54730,7 @@ impl DescribeVpcClassicLinkError {
     pub fn from_body(body: &str) -> DescribeVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkError::Unknown(String::from(body)),
@@ -54945,8 +54795,7 @@ impl DescribeVpcClassicLinkDnsSupportError {
     pub fn from_body(body: &str) -> DescribeVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
@@ -55011,8 +54860,7 @@ impl DescribeVpcEndpointServicesError {
     pub fn from_body(body: &str) -> DescribeVpcEndpointServicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicesError::Unknown(String::from(body)),
@@ -55077,8 +54925,7 @@ impl DescribeVpcEndpointsError {
     pub fn from_body(body: &str) -> DescribeVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointsError::Unknown(String::from(body)),
@@ -55143,8 +54990,7 @@ impl DescribeVpcPeeringConnectionsError {
     pub fn from_body(body: &str) -> DescribeVpcPeeringConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
@@ -55209,8 +55055,7 @@ impl DescribeVpcsError {
     pub fn from_body(body: &str) -> DescribeVpcsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcsError::Unknown(String::from(body)),
@@ -55273,8 +55118,7 @@ impl DescribeVpnConnectionsError {
     pub fn from_body(body: &str) -> DescribeVpnConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnConnectionsError::Unknown(String::from(body)),
@@ -55339,8 +55183,7 @@ impl DescribeVpnGatewaysError {
     pub fn from_body(body: &str) -> DescribeVpnGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnGatewaysError::Unknown(String::from(body)),
@@ -55405,8 +55248,7 @@ impl DetachClassicLinkVpcError {
     pub fn from_body(body: &str) -> DetachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachClassicLinkVpcError::Unknown(String::from(body)),
@@ -55471,8 +55313,7 @@ impl DetachInternetGatewayError {
     pub fn from_body(body: &str) -> DetachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachInternetGatewayError::Unknown(String::from(body)),
@@ -55537,8 +55378,7 @@ impl DetachNetworkInterfaceError {
     pub fn from_body(body: &str) -> DetachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachNetworkInterfaceError::Unknown(String::from(body)),
@@ -55603,8 +55443,7 @@ impl DetachVolumeError {
     pub fn from_body(body: &str) -> DetachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVolumeError::Unknown(String::from(body)),
@@ -55667,8 +55506,7 @@ impl DetachVpnGatewayError {
     pub fn from_body(body: &str) -> DetachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVpnGatewayError::Unknown(String::from(body)),
@@ -55731,8 +55569,7 @@ impl DisableVgwRoutePropagationError {
     pub fn from_body(body: &str) -> DisableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVgwRoutePropagationError::Unknown(String::from(body)),
@@ -55797,8 +55634,7 @@ impl DisableVpcClassicLinkError {
     pub fn from_body(body: &str) -> DisableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkError::Unknown(String::from(body)),
@@ -55863,8 +55699,7 @@ impl DisableVpcClassicLinkDnsSupportError {
     pub fn from_body(body: &str) -> DisableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
@@ -55929,8 +55764,7 @@ impl DisassociateAddressError {
     pub fn from_body(body: &str) -> DisassociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateAddressError::Unknown(String::from(body)),
@@ -55995,8 +55829,7 @@ impl DisassociateIamInstanceProfileError {
     pub fn from_body(body: &str) -> DisassociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateIamInstanceProfileError::Unknown(String::from(body)),
@@ -56061,8 +55894,7 @@ impl DisassociateRouteTableError {
     pub fn from_body(body: &str) -> DisassociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateRouteTableError::Unknown(String::from(body)),
@@ -56127,8 +55959,7 @@ impl DisassociateSubnetCidrBlockError {
     pub fn from_body(body: &str) -> DisassociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateSubnetCidrBlockError::Unknown(String::from(body)),
@@ -56193,8 +56024,7 @@ impl DisassociateVpcCidrBlockError {
     pub fn from_body(body: &str) -> DisassociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateVpcCidrBlockError::Unknown(String::from(body)),
@@ -56259,8 +56089,7 @@ impl EnableVgwRoutePropagationError {
     pub fn from_body(body: &str) -> EnableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVgwRoutePropagationError::Unknown(String::from(body)),
@@ -56325,8 +56154,7 @@ impl EnableVolumeIOError {
     pub fn from_body(body: &str) -> EnableVolumeIOError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVolumeIOError::Unknown(String::from(body)),
@@ -56389,8 +56217,7 @@ impl EnableVpcClassicLinkError {
     pub fn from_body(body: &str) -> EnableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkError::Unknown(String::from(body)),
@@ -56455,8 +56282,7 @@ impl EnableVpcClassicLinkDnsSupportError {
     pub fn from_body(body: &str) -> EnableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
@@ -56521,8 +56347,7 @@ impl GetConsoleOutputError {
     pub fn from_body(body: &str) -> GetConsoleOutputError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleOutputError::Unknown(String::from(body)),
@@ -56585,8 +56410,7 @@ impl GetConsoleScreenshotError {
     pub fn from_body(body: &str) -> GetConsoleScreenshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleScreenshotError::Unknown(String::from(body)),
@@ -56651,8 +56475,7 @@ impl GetHostReservationPurchasePreviewError {
     pub fn from_body(body: &str) -> GetHostReservationPurchasePreviewError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHostReservationPurchasePreviewError::Unknown(String::from(body)),
@@ -56717,8 +56540,7 @@ impl GetPasswordDataError {
     pub fn from_body(body: &str) -> GetPasswordDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetPasswordDataError::Unknown(String::from(body)),
@@ -56781,8 +56603,7 @@ impl GetReservedInstancesExchangeQuoteError {
     pub fn from_body(body: &str) -> GetReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
@@ -56847,8 +56668,7 @@ impl ImportImageError {
     pub fn from_body(body: &str) -> ImportImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportImageError::Unknown(String::from(body)),
@@ -56911,8 +56731,7 @@ impl ImportInstanceError {
     pub fn from_body(body: &str) -> ImportInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportInstanceError::Unknown(String::from(body)),
@@ -56975,8 +56794,7 @@ impl ImportKeyPairError {
     pub fn from_body(body: &str) -> ImportKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportKeyPairError::Unknown(String::from(body)),
@@ -57039,8 +56857,7 @@ impl ImportSnapshotError {
     pub fn from_body(body: &str) -> ImportSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportSnapshotError::Unknown(String::from(body)),
@@ -57103,8 +56920,7 @@ impl ImportVolumeError {
     pub fn from_body(body: &str) -> ImportVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportVolumeError::Unknown(String::from(body)),
@@ -57167,8 +56983,7 @@ impl ModifyHostsError {
     pub fn from_body(body: &str) -> ModifyHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyHostsError::Unknown(String::from(body)),
@@ -57231,8 +57046,7 @@ impl ModifyIdFormatError {
     pub fn from_body(body: &str) -> ModifyIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdFormatError::Unknown(String::from(body)),
@@ -57295,8 +57109,7 @@ impl ModifyIdentityIdFormatError {
     pub fn from_body(body: &str) -> ModifyIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdentityIdFormatError::Unknown(String::from(body)),
@@ -57361,8 +57174,7 @@ impl ModifyImageAttributeError {
     pub fn from_body(body: &str) -> ModifyImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyImageAttributeError::Unknown(String::from(body)),
@@ -57427,8 +57239,7 @@ impl ModifyInstanceAttributeError {
     pub fn from_body(body: &str) -> ModifyInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceAttributeError::Unknown(String::from(body)),
@@ -57493,8 +57304,7 @@ impl ModifyInstancePlacementError {
     pub fn from_body(body: &str) -> ModifyInstancePlacementError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstancePlacementError::Unknown(String::from(body)),
@@ -57559,8 +57369,7 @@ impl ModifyNetworkInterfaceAttributeError {
     pub fn from_body(body: &str) -> ModifyNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyNetworkInterfaceAttributeError::Unknown(String::from(body)),
@@ -57625,8 +57434,7 @@ impl ModifyReservedInstancesError {
     pub fn from_body(body: &str) -> ModifyReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyReservedInstancesError::Unknown(String::from(body)),
@@ -57691,8 +57499,7 @@ impl ModifySnapshotAttributeError {
     pub fn from_body(body: &str) -> ModifySnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySnapshotAttributeError::Unknown(String::from(body)),
@@ -57757,8 +57564,7 @@ impl ModifySpotFleetRequestError {
     pub fn from_body(body: &str) -> ModifySpotFleetRequestError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySpotFleetRequestError::Unknown(String::from(body)),
@@ -57823,8 +57629,7 @@ impl ModifySubnetAttributeError {
     pub fn from_body(body: &str) -> ModifySubnetAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySubnetAttributeError::Unknown(String::from(body)),
@@ -57889,8 +57694,7 @@ impl ModifyVolumeError {
     pub fn from_body(body: &str) -> ModifyVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeError::Unknown(String::from(body)),
@@ -57953,8 +57757,7 @@ impl ModifyVolumeAttributeError {
     pub fn from_body(body: &str) -> ModifyVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeAttributeError::Unknown(String::from(body)),
@@ -58019,8 +57822,7 @@ impl ModifyVpcAttributeError {
     pub fn from_body(body: &str) -> ModifyVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcAttributeError::Unknown(String::from(body)),
@@ -58085,8 +57887,7 @@ impl ModifyVpcEndpointError {
     pub fn from_body(body: &str) -> ModifyVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointError::Unknown(String::from(body)),
@@ -58151,8 +57952,7 @@ impl ModifyVpcPeeringConnectionOptionsError {
     pub fn from_body(body: &str) -> ModifyVpcPeeringConnectionOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcPeeringConnectionOptionsError::Unknown(String::from(body)),
@@ -58217,8 +58017,7 @@ impl MonitorInstancesError {
     pub fn from_body(body: &str) -> MonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MonitorInstancesError::Unknown(String::from(body)),
@@ -58281,8 +58080,7 @@ impl MoveAddressToVpcError {
     pub fn from_body(body: &str) -> MoveAddressToVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MoveAddressToVpcError::Unknown(String::from(body)),
@@ -58345,8 +58143,7 @@ impl PurchaseHostReservationError {
     pub fn from_body(body: &str) -> PurchaseHostReservationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseHostReservationError::Unknown(String::from(body)),
@@ -58411,8 +58208,7 @@ impl PurchaseReservedInstancesOfferingError {
     pub fn from_body(body: &str) -> PurchaseReservedInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseReservedInstancesOfferingError::Unknown(String::from(body)),
@@ -58477,8 +58273,7 @@ impl PurchaseScheduledInstancesError {
     pub fn from_body(body: &str) -> PurchaseScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseScheduledInstancesError::Unknown(String::from(body)),
@@ -58543,8 +58338,7 @@ impl RebootInstancesError {
     pub fn from_body(body: &str) -> RebootInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RebootInstancesError::Unknown(String::from(body)),
@@ -58607,8 +58401,7 @@ impl RegisterImageError {
     pub fn from_body(body: &str) -> RegisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RegisterImageError::Unknown(String::from(body)),
@@ -58671,8 +58464,7 @@ impl RejectVpcPeeringConnectionError {
     pub fn from_body(body: &str) -> RejectVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcPeeringConnectionError::Unknown(String::from(body)),
@@ -58737,8 +58529,7 @@ impl ReleaseAddressError {
     pub fn from_body(body: &str) -> ReleaseAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseAddressError::Unknown(String::from(body)),
@@ -58801,8 +58592,7 @@ impl ReleaseHostsError {
     pub fn from_body(body: &str) -> ReleaseHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseHostsError::Unknown(String::from(body)),
@@ -58865,8 +58655,7 @@ impl ReplaceIamInstanceProfileAssociationError {
     pub fn from_body(body: &str) -> ReplaceIamInstanceProfileAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceIamInstanceProfileAssociationError::Unknown(String::from(body)),
@@ -58931,8 +58720,7 @@ impl ReplaceNetworkAclAssociationError {
     pub fn from_body(body: &str) -> ReplaceNetworkAclAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclAssociationError::Unknown(String::from(body)),
@@ -58997,8 +58785,7 @@ impl ReplaceNetworkAclEntryError {
     pub fn from_body(body: &str) -> ReplaceNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclEntryError::Unknown(String::from(body)),
@@ -59063,8 +58850,7 @@ impl ReplaceRouteError {
     pub fn from_body(body: &str) -> ReplaceRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteError::Unknown(String::from(body)),
@@ -59127,8 +58913,7 @@ impl ReplaceRouteTableAssociationError {
     pub fn from_body(body: &str) -> ReplaceRouteTableAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteTableAssociationError::Unknown(String::from(body)),
@@ -59193,8 +58978,7 @@ impl ReportInstanceStatusError {
     pub fn from_body(body: &str) -> ReportInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReportInstanceStatusError::Unknown(String::from(body)),
@@ -59259,8 +59043,7 @@ impl RequestSpotFleetError {
     pub fn from_body(body: &str) -> RequestSpotFleetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotFleetError::Unknown(String::from(body)),
@@ -59323,8 +59106,7 @@ impl RequestSpotInstancesError {
     pub fn from_body(body: &str) -> RequestSpotInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotInstancesError::Unknown(String::from(body)),
@@ -59389,8 +59171,7 @@ impl ResetImageAttributeError {
     pub fn from_body(body: &str) -> ResetImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetImageAttributeError::Unknown(String::from(body)),
@@ -59455,8 +59236,7 @@ impl ResetInstanceAttributeError {
     pub fn from_body(body: &str) -> ResetInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetInstanceAttributeError::Unknown(String::from(body)),
@@ -59521,8 +59301,7 @@ impl ResetNetworkInterfaceAttributeError {
     pub fn from_body(body: &str) -> ResetNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetNetworkInterfaceAttributeError::Unknown(String::from(body)),
@@ -59587,8 +59366,7 @@ impl ResetSnapshotAttributeError {
     pub fn from_body(body: &str) -> ResetSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetSnapshotAttributeError::Unknown(String::from(body)),
@@ -59653,8 +59431,7 @@ impl RestoreAddressToClassicError {
     pub fn from_body(body: &str) -> RestoreAddressToClassicError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestoreAddressToClassicError::Unknown(String::from(body)),
@@ -59719,8 +59496,7 @@ impl RevokeSecurityGroupEgressError {
     pub fn from_body(body: &str) -> RevokeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupEgressError::Unknown(String::from(body)),
@@ -59785,8 +59561,7 @@ impl RevokeSecurityGroupIngressError {
     pub fn from_body(body: &str) -> RevokeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupIngressError::Unknown(String::from(body)),
@@ -59851,8 +59626,7 @@ impl RunInstancesError {
     pub fn from_body(body: &str) -> RunInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunInstancesError::Unknown(String::from(body)),
@@ -59915,8 +59689,7 @@ impl RunScheduledInstancesError {
     pub fn from_body(body: &str) -> RunScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunScheduledInstancesError::Unknown(String::from(body)),
@@ -59981,8 +59754,7 @@ impl StartInstancesError {
     pub fn from_body(body: &str) -> StartInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StartInstancesError::Unknown(String::from(body)),
@@ -60045,8 +59817,7 @@ impl StopInstancesError {
     pub fn from_body(body: &str) -> StopInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StopInstancesError::Unknown(String::from(body)),
@@ -60109,8 +59880,7 @@ impl TerminateInstancesError {
     pub fn from_body(body: &str) -> TerminateInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TerminateInstancesError::Unknown(String::from(body)),
@@ -60175,8 +59945,7 @@ impl UnassignIpv6AddressesError {
     pub fn from_body(body: &str) -> UnassignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignIpv6AddressesError::Unknown(String::from(body)),
@@ -60241,8 +60010,7 @@ impl UnassignPrivateIpAddressesError {
     pub fn from_body(body: &str) -> UnassignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignPrivateIpAddressesError::Unknown(String::from(body)),
@@ -60307,8 +60075,7 @@ impl UnmonitorInstancesError {
     pub fn from_body(body: &str) -> UnmonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnmonitorInstancesError::Unknown(String::from(body)),

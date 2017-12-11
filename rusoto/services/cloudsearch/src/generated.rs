@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -5490,8 +5491,7 @@ impl BuildSuggestersError {
     pub fn from_body(body: &str) -> BuildSuggestersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => BuildSuggestersError::Base(String::from(parsed_error.message)),
@@ -5570,8 +5570,7 @@ impl CreateDomainError {
     pub fn from_body(body: &str) -> CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),
@@ -5654,8 +5653,7 @@ impl DefineAnalysisSchemeError {
     pub fn from_body(body: &str) -> DefineAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -5750,8 +5748,7 @@ impl DefineExpressionError {
     pub fn from_body(body: &str) -> DefineExpressionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DefineExpressionError::Base(String::from(parsed_error.message)),
@@ -5842,8 +5839,7 @@ impl DefineIndexFieldError {
     pub fn from_body(body: &str) -> DefineIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DefineIndexFieldError::Base(String::from(parsed_error.message)),
@@ -5934,8 +5930,7 @@ impl DefineSuggesterError {
     pub fn from_body(body: &str) -> DefineSuggesterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DefineSuggesterError::Base(String::from(parsed_error.message)),
@@ -6024,8 +6019,7 @@ impl DeleteAnalysisSchemeError {
     pub fn from_body(body: &str) -> DeleteAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6110,8 +6104,7 @@ impl DeleteDomainError {
     pub fn from_body(body: &str) -> DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),
@@ -6188,8 +6181,7 @@ impl DeleteExpressionError {
     pub fn from_body(body: &str) -> DeleteExpressionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DeleteExpressionError::Base(String::from(parsed_error.message)),
@@ -6274,8 +6266,7 @@ impl DeleteIndexFieldError {
     pub fn from_body(body: &str) -> DeleteIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DeleteIndexFieldError::Base(String::from(parsed_error.message)),
@@ -6360,8 +6351,7 @@ impl DeleteSuggesterError {
     pub fn from_body(body: &str) -> DeleteSuggesterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DeleteSuggesterError::Base(String::from(parsed_error.message)),
@@ -6444,8 +6434,7 @@ impl DescribeAnalysisSchemesError {
     pub fn from_body(body: &str) -> DescribeAnalysisSchemesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6534,8 +6523,7 @@ impl DescribeAvailabilityOptionsError {
     pub fn from_body(body: &str) -> DescribeAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6630,8 +6618,7 @@ impl DescribeDomainsError {
     pub fn from_body(body: &str) -> DescribeDomainsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => DescribeDomainsError::Base(String::from(parsed_error.message)),
@@ -6706,8 +6693,7 @@ impl DescribeExpressionsError {
     pub fn from_body(body: &str) -> DescribeExpressionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6790,8 +6776,7 @@ impl DescribeIndexFieldsError {
     pub fn from_body(body: &str) -> DescribeIndexFieldsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6874,8 +6859,7 @@ impl DescribeScalingParametersError {
     pub fn from_body(body: &str) -> DescribeScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -6958,8 +6942,7 @@ impl DescribeServiceAccessPoliciesError {
     pub fn from_body(body: &str) -> DescribeServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -7044,8 +7027,7 @@ impl DescribeSuggestersError {
     pub fn from_body(body: &str) -> DescribeSuggestersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -7128,8 +7110,7 @@ impl IndexDocumentsError {
     pub fn from_body(body: &str) -> IndexDocumentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => IndexDocumentsError::Base(String::from(parsed_error.message)),
@@ -7204,8 +7185,7 @@ impl ListDomainNamesError {
     pub fn from_body(body: &str) -> ListDomainNamesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => ListDomainNamesError::Base(String::from(parsed_error.message)),
@@ -7282,8 +7262,7 @@ impl UpdateAvailabilityOptionsError {
     pub fn from_body(body: &str) -> UpdateAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -7382,8 +7361,7 @@ impl UpdateScalingParametersError {
     pub fn from_body(body: &str) -> UpdateScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {
@@ -7478,8 +7456,7 @@ impl UpdateServiceAccessPoliciesError {
     pub fn from_body(body: &str) -> UpdateServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BaseException" => {

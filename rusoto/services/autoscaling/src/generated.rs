@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -8406,8 +8407,7 @@ impl AttachInstancesError {
     pub fn from_body(body: &str) -> AttachInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => AttachInstancesError::ResourceContentionFault(
@@ -8476,8 +8476,7 @@ impl AttachLoadBalancerTargetGroupsError {
     pub fn from_body(body: &str) -> AttachLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -8550,8 +8549,7 @@ impl AttachLoadBalancersError {
     pub fn from_body(body: &str) -> AttachLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => AttachLoadBalancersError::ResourceContentionFault(
@@ -8622,8 +8620,7 @@ impl CompleteLifecycleActionError {
     pub fn from_body(body: &str) -> CompleteLifecycleActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -8700,8 +8697,7 @@ impl CreateAutoScalingGroupError {
     pub fn from_body(body: &str) -> CreateAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsFault" => CreateAutoScalingGroupError::AlreadyExistsFault(
@@ -8784,8 +8780,7 @@ impl CreateLaunchConfigurationError {
     pub fn from_body(body: &str) -> CreateLaunchConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsFault" => CreateLaunchConfigurationError::AlreadyExistsFault(
@@ -8872,8 +8867,7 @@ impl CreateOrUpdateTagsError {
     pub fn from_body(body: &str) -> CreateOrUpdateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsFault" => {
@@ -8960,8 +8954,7 @@ impl DeleteAutoScalingGroupError {
     pub fn from_body(body: &str) -> DeleteAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DeleteAutoScalingGroupError::ResourceContentionFault(
@@ -9044,8 +9037,7 @@ impl DeleteLaunchConfigurationError {
     pub fn from_body(body: &str) -> DeleteLaunchConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9122,8 +9114,7 @@ impl DeleteLifecycleHookError {
     pub fn from_body(body: &str) -> DeleteLifecycleHookError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DeleteLifecycleHookError::ResourceContentionFault(
@@ -9194,8 +9185,7 @@ impl DeleteNotificationConfigurationError {
     pub fn from_body(body: &str) -> DeleteNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9268,8 +9258,7 @@ impl DeletePolicyError {
     pub fn from_body(body: &str) -> DeletePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9338,8 +9327,7 @@ impl DeleteScheduledActionError {
     pub fn from_body(body: &str) -> DeleteScheduledActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DeleteScheduledActionError::ResourceContentionFault(
@@ -9412,8 +9400,7 @@ impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9486,8 +9473,7 @@ impl DescribeAccountLimitsError {
     pub fn from_body(body: &str) -> DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DescribeAccountLimitsError::ResourceContentionFault(
@@ -9558,8 +9544,7 @@ impl DescribeAdjustmentTypesError {
     pub fn from_body(body: &str) -> DescribeAdjustmentTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9634,8 +9619,7 @@ impl DescribeAutoScalingGroupsError {
     pub fn from_body(body: &str) -> DescribeAutoScalingGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeAutoScalingGroupsError::InvalidNextToken(
@@ -9714,8 +9698,7 @@ impl DescribeAutoScalingInstancesError {
     pub fn from_body(body: &str) -> DescribeAutoScalingInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
@@ -9792,8 +9775,7 @@ impl DescribeAutoScalingNotificationTypesError {
     pub fn from_body(body: &str) -> DescribeAutoScalingNotificationTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -9868,8 +9850,7 @@ impl DescribeLaunchConfigurationsError {
     pub fn from_body(body: &str) -> DescribeLaunchConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
@@ -9946,8 +9927,7 @@ impl DescribeLifecycleHookTypesError {
     pub fn from_body(body: &str) -> DescribeLifecycleHookTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10020,8 +10000,7 @@ impl DescribeLifecycleHooksError {
     pub fn from_body(body: &str) -> DescribeLifecycleHooksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DescribeLifecycleHooksError::ResourceContentionFault(
@@ -10092,8 +10071,7 @@ impl DescribeLoadBalancerTargetGroupsError {
     pub fn from_body(body: &str) -> DescribeLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10166,8 +10144,7 @@ impl DescribeLoadBalancersError {
     pub fn from_body(body: &str) -> DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DescribeLoadBalancersError::ResourceContentionFault(
@@ -10238,8 +10215,7 @@ impl DescribeMetricCollectionTypesError {
     pub fn from_body(body: &str) -> DescribeMetricCollectionTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10314,8 +10290,7 @@ impl DescribeNotificationConfigurationsError {
     pub fn from_body(body: &str) -> DescribeNotificationConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(
@@ -10394,8 +10369,7 @@ impl DescribePoliciesError {
     pub fn from_body(body: &str) -> DescribePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
@@ -10470,8 +10444,7 @@ impl DescribeScalingActivitiesError {
     pub fn from_body(body: &str) -> DescribeScalingActivitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeScalingActivitiesError::InvalidNextToken(
@@ -10548,8 +10521,7 @@ impl DescribeScalingProcessTypesError {
     pub fn from_body(body: &str) -> DescribeScalingProcessTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10624,8 +10596,7 @@ impl DescribeScheduledActionsError {
     pub fn from_body(body: &str) -> DescribeScheduledActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeScheduledActionsError::InvalidNextToken(
@@ -10704,8 +10675,7 @@ impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
@@ -10778,8 +10748,7 @@ impl DescribeTerminationPolicyTypesError {
     pub fn from_body(body: &str) -> DescribeTerminationPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10852,8 +10821,7 @@ impl DetachInstancesError {
     pub fn from_body(body: &str) -> DetachInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DetachInstancesError::ResourceContentionFault(
@@ -10922,8 +10890,7 @@ impl DetachLoadBalancerTargetGroupsError {
     pub fn from_body(body: &str) -> DetachLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -10996,8 +10963,7 @@ impl DetachLoadBalancersError {
     pub fn from_body(body: &str) -> DetachLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => DetachLoadBalancersError::ResourceContentionFault(
@@ -11068,8 +11034,7 @@ impl DisableMetricsCollectionError {
     pub fn from_body(body: &str) -> DisableMetricsCollectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11142,8 +11107,7 @@ impl EnableMetricsCollectionError {
     pub fn from_body(body: &str) -> EnableMetricsCollectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11216,8 +11180,7 @@ impl EnterStandbyError {
     pub fn from_body(body: &str) -> EnterStandbyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11288,8 +11251,7 @@ impl ExecutePolicyError {
     pub fn from_body(body: &str) -> ExecutePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11364,8 +11326,7 @@ impl ExitStandbyError {
     pub fn from_body(body: &str) -> ExitStandbyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11436,8 +11397,7 @@ impl PutLifecycleHookError {
     pub fn from_body(body: &str) -> PutLifecycleHookError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededFault" => {
@@ -11512,8 +11472,7 @@ impl PutNotificationConfigurationError {
     pub fn from_body(body: &str) -> PutNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededFault" => PutNotificationConfigurationError::LimitExceededFault(
@@ -11592,8 +11551,7 @@ impl PutScalingPolicyError {
     pub fn from_body(body: &str) -> PutScalingPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededFault" => {
@@ -11670,8 +11628,7 @@ impl PutScheduledUpdateGroupActionError {
     pub fn from_body(body: &str) -> PutScheduledUpdateGroupActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AlreadyExistsFault" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
@@ -11752,8 +11709,7 @@ impl RecordLifecycleActionHeartbeatError {
     pub fn from_body(body: &str) -> RecordLifecycleActionHeartbeatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -11828,8 +11784,7 @@ impl ResumeProcessesError {
     pub fn from_body(body: &str) -> ResumeProcessesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => ResumeProcessesError::ResourceContentionFault(
@@ -11904,8 +11859,7 @@ impl SetDesiredCapacityError {
     pub fn from_body(body: &str) -> SetDesiredCapacityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => SetDesiredCapacityError::ResourceContentionFault(
@@ -11982,8 +11936,7 @@ impl SetInstanceHealthError {
     pub fn from_body(body: &str) -> SetInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => SetInstanceHealthError::ResourceContentionFault(
@@ -12056,8 +12009,7 @@ impl SetInstanceProtectionError {
     pub fn from_body(body: &str) -> SetInstanceProtectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededFault" => SetInstanceProtectionError::LimitExceededFault(
@@ -12134,8 +12086,7 @@ impl SuspendProcessesError {
     pub fn from_body(body: &str) -> SuspendProcessesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => SuspendProcessesError::ResourceContentionFault(
@@ -12210,8 +12161,7 @@ impl TerminateInstanceInAutoScalingGroupError {
     pub fn from_body(body: &str) -> TerminateInstanceInAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => {
@@ -12294,8 +12244,7 @@ impl UpdateAutoScalingGroupError {
     pub fn from_body(body: &str) -> UpdateAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContentionFault" => UpdateAutoScalingGroupError::ResourceContentionFault(

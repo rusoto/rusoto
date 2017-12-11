@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -7894,8 +7895,7 @@ impl AddTagsToResourceError {
     pub fn from_body(body: &str) -> AddTagsToResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => AddTagsToResourceError::CacheClusterNotFoundFault(
@@ -7988,8 +7988,7 @@ impl AuthorizeCacheSecurityGroupIngressError {
     pub fn from_body(body: &str) -> AuthorizeCacheSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationAlreadyExistsFault" => {
@@ -8104,8 +8103,7 @@ impl CopySnapshotError {
     pub fn from_body(body: &str) -> CopySnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -8222,8 +8220,7 @@ impl CreateCacheClusterError {
     pub fn from_body(body: &str) -> CreateCacheClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterAlreadyExistsFault" => {
@@ -8382,8 +8379,7 @@ impl CreateCacheParameterGroupError {
     pub fn from_body(body: &str) -> CreateCacheParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupAlreadyExistsFault" => {
@@ -8492,8 +8488,7 @@ impl CreateCacheSecurityGroupError {
     pub fn from_body(body: &str) -> CreateCacheSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSecurityGroupAlreadyExistsFault" => {
@@ -8590,8 +8585,7 @@ impl CreateCacheSubnetGroupError {
     pub fn from_body(body: &str) -> CreateCacheSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSubnetGroupAlreadyExistsFault" => {
@@ -8708,8 +8702,7 @@ impl CreateReplicationGroupError {
     pub fn from_body(body: &str) -> CreateReplicationGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -8884,8 +8877,7 @@ impl CreateSnapshotError {
     pub fn from_body(body: &str) -> CreateSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => CreateSnapshotError::CacheClusterNotFoundFault(
@@ -9008,8 +9000,7 @@ impl DeleteCacheClusterError {
     pub fn from_body(body: &str) -> DeleteCacheClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => DeleteCacheClusterError::CacheClusterNotFoundFault(
@@ -9122,8 +9113,7 @@ impl DeleteCacheParameterGroupError {
     pub fn from_body(body: &str) -> DeleteCacheParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupNotFoundFault" => {
@@ -9222,8 +9212,7 @@ impl DeleteCacheSecurityGroupError {
     pub fn from_body(body: &str) -> DeleteCacheSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSecurityGroupNotFoundFault" => {
@@ -9316,8 +9305,7 @@ impl DeleteCacheSubnetGroupError {
     pub fn from_body(body: &str) -> DeleteCacheSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSubnetGroupInUse" => DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(
@@ -9406,8 +9394,7 @@ impl DeleteReplicationGroupError {
     pub fn from_body(body: &str) -> DeleteReplicationGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -9522,8 +9509,7 @@ impl DeleteSnapshotError {
     pub fn from_body(body: &str) -> DeleteSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -9610,8 +9596,7 @@ impl DescribeCacheClustersError {
     pub fn from_body(body: &str) -> DescribeCacheClustersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -9694,8 +9679,7 @@ impl DescribeCacheEngineVersionsError {
     pub fn from_body(body: &str) -> DescribeCacheEngineVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeCacheEngineVersionsError::Unknown(String::from(body)),
@@ -9766,8 +9750,7 @@ impl DescribeCacheParameterGroupsError {
     pub fn from_body(body: &str) -> DescribeCacheParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupNotFoundFault" => {
@@ -9856,8 +9839,7 @@ impl DescribeCacheParametersError {
     pub fn from_body(body: &str) -> DescribeCacheParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupNotFoundFault" => {
@@ -9946,8 +9928,7 @@ impl DescribeCacheSecurityGroupsError {
     pub fn from_body(body: &str) -> DescribeCacheSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSecurityGroupNotFoundFault" => {
@@ -10032,8 +10013,7 @@ impl DescribeCacheSubnetGroupsError {
     pub fn from_body(body: &str) -> DescribeCacheSubnetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSubnetGroupNotFoundFault" => {
@@ -10108,8 +10088,7 @@ impl DescribeEngineDefaultParametersError {
     pub fn from_body(body: &str) -> DescribeEngineDefaultParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -10190,8 +10169,7 @@ impl DescribeEventsError {
     pub fn from_body(body: &str) -> DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -10270,8 +10248,7 @@ impl DescribeReplicationGroupsError {
     pub fn from_body(body: &str) -> DescribeReplicationGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -10360,8 +10337,7 @@ impl DescribeReservedCacheNodesError {
     pub fn from_body(body: &str) -> DescribeReservedCacheNodesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombinationException" => {
@@ -10450,8 +10426,7 @@ impl DescribeReservedCacheNodesOfferingsError {
     pub fn from_body(body: &str) -> DescribeReservedCacheNodesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
@@ -10533,8 +10508,7 @@ impl DescribeSnapshotsError {
     pub fn from_body(body: &str) -> DescribeSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => DescribeSnapshotsError::CacheClusterNotFoundFault(
@@ -10625,8 +10599,7 @@ impl ListAllowedNodeTypeModificationsError {
     pub fn from_body(body: &str) -> ListAllowedNodeTypeModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -10723,8 +10696,7 @@ impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -10825,8 +10797,7 @@ impl ModifyCacheClusterError {
     pub fn from_body(body: &str) -> ModifyCacheClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => ModifyCacheClusterError::CacheClusterNotFoundFault(
@@ -10963,8 +10934,7 @@ impl ModifyCacheParameterGroupError {
     pub fn from_body(body: &str) -> ModifyCacheParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupNotFoundFault" => {
@@ -11063,8 +11033,7 @@ impl ModifyCacheSubnetGroupError {
     pub fn from_body(body: &str) -> ModifyCacheSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSubnetGroupNotFoundFault" => {
@@ -11175,8 +11144,7 @@ impl ModifyReplicationGroupError {
     pub fn from_body(body: &str) -> ModifyReplicationGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -11329,8 +11297,7 @@ impl PurchaseReservedCacheNodesOfferingError {
     pub fn from_body(body: &str) -> PurchaseReservedCacheNodesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
@@ -11414,8 +11381,7 @@ impl RebootCacheClusterError {
     pub fn from_body(body: &str) -> RebootCacheClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => RebootCacheClusterError::CacheClusterNotFoundFault(
@@ -11498,8 +11464,7 @@ impl RemoveTagsFromResourceError {
     pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheClusterNotFoundFault" => {
@@ -11590,8 +11555,7 @@ impl ResetCacheParameterGroupError {
     pub fn from_body(body: &str) -> ResetCacheParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheParameterGroupNotFoundFault" => {
@@ -11690,8 +11654,7 @@ impl RevokeCacheSecurityGroupIngressError {
     pub fn from_body(body: &str) -> RevokeCacheSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AuthorizationNotFoundFault" => {
@@ -11806,8 +11769,7 @@ impl TestFailoverError {
     pub fn from_body(body: &str) -> TestFailoverError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "APICallRateForCustomerExceededFault" => {

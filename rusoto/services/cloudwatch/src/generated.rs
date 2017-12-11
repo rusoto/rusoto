@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -2959,8 +2960,7 @@ impl DeleteAlarmsError {
     pub fn from_body(body: &str) -> DeleteAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFound" => {
@@ -3033,8 +3033,7 @@ impl DeleteDashboardsError {
     pub fn from_body(body: &str) -> DeleteDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DashboardNotFoundError" => DeleteDashboardsError::DashboardNotFoundError(
@@ -3111,8 +3110,7 @@ impl DescribeAlarmHistoryError {
     pub fn from_body(body: &str) -> DescribeAlarmHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
@@ -3183,8 +3181,7 @@ impl DescribeAlarmsError {
     pub fn from_body(body: &str) -> DescribeAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
@@ -3251,8 +3248,7 @@ impl DescribeAlarmsForMetricError {
     pub fn from_body(body: &str) -> DescribeAlarmsForMetricError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAlarmsForMetricError::Unknown(String::from(body)),
@@ -3317,8 +3313,7 @@ impl DisableAlarmActionsError {
     pub fn from_body(body: &str) -> DisableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableAlarmActionsError::Unknown(String::from(body)),
@@ -3383,8 +3378,7 @@ impl EnableAlarmActionsError {
     pub fn from_body(body: &str) -> EnableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableAlarmActionsError::Unknown(String::from(body)),
@@ -3455,8 +3449,7 @@ impl GetDashboardError {
     pub fn from_body(body: &str) -> GetDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DashboardNotFoundError" => {
@@ -3539,8 +3532,7 @@ impl GetMetricStatisticsError {
     pub fn from_body(body: &str) -> GetMetricStatisticsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InternalServiceFault" => GetMetricStatisticsError::InternalServiceFault(
@@ -3631,8 +3623,7 @@ impl ListDashboardsError {
     pub fn from_body(body: &str) -> ListDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InternalServiceFault" => {
@@ -3707,8 +3698,7 @@ impl ListMetricsError {
     pub fn from_body(body: &str) -> ListMetricsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InternalServiceFault" => {
@@ -3783,8 +3773,7 @@ impl PutDashboardError {
     pub fn from_body(body: &str) -> PutDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DashboardInvalidInputError" => PutDashboardError::DashboardInvalidInputError(
@@ -3857,8 +3846,7 @@ impl PutMetricAlarmError {
     pub fn from_body(body: &str) -> PutMetricAlarmError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededFault" => {
@@ -3933,8 +3921,7 @@ impl PutMetricDataError {
     pub fn from_body(body: &str) -> PutMetricDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InternalServiceFault" => {
@@ -4019,8 +4006,7 @@ impl SetAlarmStateError {
     pub fn from_body(body: &str) -> SetAlarmStateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidFormatFault" => {

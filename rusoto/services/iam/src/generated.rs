@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -12648,8 +12649,7 @@ impl AddClientIDToOpenIDConnectProviderError {
     pub fn from_body(body: &str) -> AddClientIDToOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => AddClientIDToOpenIDConnectProviderError::InvalidInput(
@@ -12744,8 +12744,7 @@ impl AddRoleToInstanceProfileError {
     pub fn from_body(body: &str) -> AddRoleToInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -12840,8 +12839,7 @@ impl AddUserToGroupError {
     pub fn from_body(body: &str) -> AddUserToGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -12924,8 +12922,7 @@ impl AttachGroupPolicyError {
     pub fn from_body(body: &str) -> AttachGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -13016,8 +13013,7 @@ impl AttachRolePolicyError {
     pub fn from_body(body: &str) -> AttachRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -13108,8 +13104,7 @@ impl AttachUserPolicyError {
     pub fn from_body(body: &str) -> AttachUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -13200,8 +13195,7 @@ impl ChangePasswordError {
     pub fn from_body(body: &str) -> ChangePasswordError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityTemporarilyUnmodifiableException" => {
@@ -13296,8 +13290,7 @@ impl CreateAccessKeyError {
     pub fn from_body(body: &str) -> CreateAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -13378,8 +13371,7 @@ impl CreateAccountAliasError {
     pub fn from_body(body: &str) -> CreateAccountAliasError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -13464,8 +13456,7 @@ impl CreateGroupError {
     pub fn from_body(body: &str) -> CreateGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -13550,8 +13541,7 @@ impl CreateInstanceProfileError {
     pub fn from_body(body: &str) -> CreateInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => CreateInstanceProfileError::EntityAlreadyExists(
@@ -13638,8 +13628,7 @@ impl CreateLoginProfileError {
     pub fn from_body(body: &str) -> CreateLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -13734,8 +13723,7 @@ impl CreateOpenIDConnectProviderError {
     pub fn from_body(body: &str) -> CreateOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -13828,8 +13816,7 @@ impl CreatePolicyError {
     pub fn from_body(body: &str) -> CreatePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -13922,8 +13909,7 @@ impl CreatePolicyVersionError {
     pub fn from_body(body: &str) -> CreatePolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -14020,8 +14006,7 @@ impl CreateRoleError {
     pub fn from_body(body: &str) -> CreateRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -14112,8 +14097,7 @@ impl CreateSAMLProviderError {
     pub fn from_body(body: &str) -> CreateSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -14202,8 +14186,7 @@ impl CreateServiceLinkedRoleError {
     pub fn from_body(body: &str) -> CreateServiceLinkedRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -14290,8 +14273,7 @@ impl CreateServiceSpecificCredentialError {
     pub fn from_body(body: &str) -> CreateServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => CreateServiceSpecificCredentialError::LimitExceeded(
@@ -14378,8 +14360,7 @@ impl CreateUserError {
     pub fn from_body(body: &str) -> CreateUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -14464,8 +14445,7 @@ impl CreateVirtualMFADeviceError {
     pub fn from_body(body: &str) -> CreateVirtualMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -14552,8 +14532,7 @@ impl DeactivateMFADeviceError {
     pub fn from_body(body: &str) -> DeactivateMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityTemporarilyUnmodifiableException" => {
@@ -14642,8 +14621,7 @@ impl DeleteAccessKeyError {
     pub fn from_body(body: &str) -> DeleteAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -14724,8 +14702,7 @@ impl DeleteAccountAliasError {
     pub fn from_body(body: &str) -> DeleteAccountAliasError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -14808,8 +14785,7 @@ impl DeleteAccountPasswordPolicyError {
     pub fn from_body(body: &str) -> DeleteAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => DeleteAccountPasswordPolicyError::LimitExceeded(
@@ -14894,8 +14870,7 @@ impl DeleteGroupError {
     pub fn from_body(body: &str) -> DeleteGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -14980,8 +14955,7 @@ impl DeleteGroupPolicyError {
     pub fn from_body(body: &str) -> DeleteGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -15066,8 +15040,7 @@ impl DeleteInstanceProfileError {
     pub fn from_body(body: &str) -> DeleteInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -15156,8 +15129,7 @@ impl DeleteLoginProfileError {
     pub fn from_body(body: &str) -> DeleteLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityTemporarilyUnmodifiableException" => {
@@ -15246,8 +15218,7 @@ impl DeleteOpenIDConnectProviderError {
     pub fn from_body(body: &str) -> DeleteOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => DeleteOpenIDConnectProviderError::InvalidInput(
@@ -15334,8 +15305,7 @@ impl DeletePolicyError {
     pub fn from_body(body: &str) -> DeletePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -15428,8 +15398,7 @@ impl DeletePolicyVersionError {
     pub fn from_body(body: &str) -> DeletePolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -15524,8 +15493,7 @@ impl DeleteRoleError {
     pub fn from_body(body: &str) -> DeleteRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -15616,8 +15584,7 @@ impl DeleteRolePolicyError {
     pub fn from_body(body: &str) -> DeleteRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -15704,8 +15671,7 @@ impl DeleteSAMLProviderError {
     pub fn from_body(body: &str) -> DeleteSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -15788,8 +15754,7 @@ impl DeleteSSHPublicKeyError {
     pub fn from_body(body: &str) -> DeleteSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -15866,8 +15831,7 @@ impl DeleteServerCertificateError {
     pub fn from_body(body: &str) -> DeleteServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -15950,8 +15914,7 @@ impl DeleteServiceSpecificCredentialError {
     pub fn from_body(body: &str) -> DeleteServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => DeleteServiceSpecificCredentialError::NoSuchEntity(
@@ -16026,8 +15989,7 @@ impl DeleteSigningCertificateError {
     pub fn from_body(body: &str) -> DeleteSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -16112,8 +16074,7 @@ impl DeleteUserError {
     pub fn from_body(body: &str) -> DeleteUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -16198,8 +16159,7 @@ impl DeleteUserPolicyError {
     pub fn from_body(body: &str) -> DeleteUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -16282,8 +16242,7 @@ impl DeleteVirtualMFADeviceError {
     pub fn from_body(body: &str) -> DeleteVirtualMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DeleteConflictException" => {
@@ -16372,8 +16331,7 @@ impl DetachGroupPolicyError {
     pub fn from_body(body: &str) -> DetachGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -16464,8 +16422,7 @@ impl DetachRolePolicyError {
     pub fn from_body(body: &str) -> DetachRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -16556,8 +16513,7 @@ impl DetachUserPolicyError {
     pub fn from_body(body: &str) -> DetachUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -16648,8 +16604,7 @@ impl EnableMFADeviceError {
     pub fn from_body(body: &str) -> EnableMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -16744,8 +16699,7 @@ impl GenerateCredentialReportError {
     pub fn from_body(body: &str) -> GenerateCredentialReportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -16820,8 +16774,7 @@ impl GetAccessKeyLastUsedError {
     pub fn from_body(body: &str) -> GetAccessKeyLastUsedError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -16892,8 +16845,7 @@ impl GetAccountAuthorizationDetailsError {
     pub fn from_body(body: &str) -> GetAccountAuthorizationDetailsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => GetAccountAuthorizationDetailsError::ServiceFailure(
@@ -16966,8 +16918,7 @@ impl GetAccountPasswordPolicyError {
     pub fn from_body(body: &str) -> GetAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17042,8 +16993,7 @@ impl GetAccountSummaryError {
     pub fn from_body(body: &str) -> GetAccountSummaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -17114,8 +17064,7 @@ impl GetContextKeysForCustomPolicyError {
     pub fn from_body(body: &str) -> GetContextKeysForCustomPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => GetContextKeysForCustomPolicyError::InvalidInput(
@@ -17188,8 +17137,7 @@ impl GetContextKeysForPrincipalPolicyError {
     pub fn from_body(body: &str) -> GetContextKeysForPrincipalPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => GetContextKeysForPrincipalPolicyError::InvalidInput(
@@ -17270,8 +17218,7 @@ impl GetCredentialReportError {
     pub fn from_body(body: &str) -> GetCredentialReportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CredentialReportExpiredException" => {
@@ -17362,8 +17309,7 @@ impl GetGroupError {
     pub fn from_body(body: &str) -> GetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17438,8 +17384,7 @@ impl GetGroupPolicyError {
     pub fn from_body(body: &str) -> GetGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17514,8 +17459,7 @@ impl GetInstanceProfileError {
     pub fn from_body(body: &str) -> GetInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17592,8 +17536,7 @@ impl GetLoginProfileError {
     pub fn from_body(body: &str) -> GetLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17670,8 +17613,7 @@ impl GetOpenIDConnectProviderError {
     pub fn from_body(body: &str) -> GetOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -17754,8 +17696,7 @@ impl GetPolicyError {
     pub fn from_body(body: &str) -> GetPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -17836,8 +17777,7 @@ impl GetPolicyVersionError {
     pub fn from_body(body: &str) -> GetPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -17916,8 +17856,7 @@ impl GetRoleError {
     pub fn from_body(body: &str) -> GetRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -17992,8 +17931,7 @@ impl GetRolePolicyError {
     pub fn from_body(body: &str) -> GetRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18070,8 +18008,7 @@ impl GetSAMLProviderError {
     pub fn from_body(body: &str) -> GetSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -18150,8 +18087,7 @@ impl GetSSHPublicKeyError {
     pub fn from_body(body: &str) -> GetSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18228,8 +18164,7 @@ impl GetServerCertificateError {
     pub fn from_body(body: &str) -> GetServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18306,8 +18241,7 @@ impl GetUserError {
     pub fn from_body(body: &str) -> GetUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18382,8 +18316,7 @@ impl GetUserPolicyError {
     pub fn from_body(body: &str) -> GetUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18458,8 +18391,7 @@ impl ListAccessKeysError {
     pub fn from_body(body: &str) -> ListAccessKeysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -18532,8 +18464,7 @@ impl ListAccountAliasesError {
     pub fn from_body(body: &str) -> ListAccountAliasesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -18608,8 +18539,7 @@ impl ListAttachedGroupPoliciesError {
     pub fn from_body(body: &str) -> ListAttachedGroupPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -18692,8 +18622,7 @@ impl ListAttachedRolePoliciesError {
     pub fn from_body(body: &str) -> ListAttachedRolePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -18776,8 +18705,7 @@ impl ListAttachedUserPoliciesError {
     pub fn from_body(body: &str) -> ListAttachedUserPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -18860,8 +18788,7 @@ impl ListEntitiesForPolicyError {
     pub fn from_body(body: &str) -> ListEntitiesForPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -18942,8 +18869,7 @@ impl ListGroupPoliciesError {
     pub fn from_body(body: &str) -> ListGroupPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -19018,8 +18944,7 @@ impl ListGroupsError {
     pub fn from_body(body: &str) -> ListGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19090,8 +19015,7 @@ impl ListGroupsForUserError {
     pub fn from_body(body: &str) -> ListGroupsForUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -19166,8 +19090,7 @@ impl ListInstanceProfilesError {
     pub fn from_body(body: &str) -> ListInstanceProfilesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19240,8 +19163,7 @@ impl ListInstanceProfilesForRoleError {
     pub fn from_body(body: &str) -> ListInstanceProfilesForRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => ListInstanceProfilesForRoleError::NoSuchEntity(
@@ -19318,8 +19240,7 @@ impl ListMFADevicesError {
     pub fn from_body(body: &str) -> ListMFADevicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -19392,8 +19313,7 @@ impl ListOpenIDConnectProvidersError {
     pub fn from_body(body: &str) -> ListOpenIDConnectProvidersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => ListOpenIDConnectProvidersError::ServiceFailure(
@@ -19464,8 +19384,7 @@ impl ListPoliciesError {
     pub fn from_body(body: &str) -> ListPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19538,8 +19457,7 @@ impl ListPolicyVersionsError {
     pub fn from_body(body: &str) -> ListPolicyVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -19620,8 +19538,7 @@ impl ListRolePoliciesError {
     pub fn from_body(body: &str) -> ListRolePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -19694,8 +19611,7 @@ impl ListRolesError {
     pub fn from_body(body: &str) -> ListRolesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19764,8 +19680,7 @@ impl ListSAMLProvidersError {
     pub fn from_body(body: &str) -> ListSAMLProvidersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19836,8 +19751,7 @@ impl ListSSHPublicKeysError {
     pub fn from_body(body: &str) -> ListSSHPublicKeysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -19908,8 +19822,7 @@ impl ListServerCertificatesError {
     pub fn from_body(body: &str) -> ListServerCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -19982,8 +19895,7 @@ impl ListServiceSpecificCredentialsError {
     pub fn from_body(body: &str) -> ListServiceSpecificCredentialsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => ListServiceSpecificCredentialsError::NoSuchEntity(
@@ -20062,8 +19974,7 @@ impl ListSigningCertificatesError {
     pub fn from_body(body: &str) -> ListSigningCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -20140,8 +20051,7 @@ impl ListUserPoliciesError {
     pub fn from_body(body: &str) -> ListUserPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -20214,8 +20124,7 @@ impl ListUsersError {
     pub fn from_body(body: &str) -> ListUsersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ServiceFailureException" => {
@@ -20282,8 +20191,7 @@ impl ListVirtualMFADevicesError {
     pub fn from_body(body: &str) -> ListVirtualMFADevicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListVirtualMFADevicesError::Unknown(String::from(body)),
@@ -20356,8 +20264,7 @@ impl PutGroupPolicyError {
     pub fn from_body(body: &str) -> PutGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -20446,8 +20353,7 @@ impl PutRolePolicyError {
     pub fn from_body(body: &str) -> PutRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -20538,8 +20444,7 @@ impl PutUserPolicyError {
     pub fn from_body(body: &str) -> PutUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -20624,8 +20529,7 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
     pub fn from_body(body: &str) -> RemoveClientIDFromOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -20716,8 +20620,7 @@ impl RemoveRoleFromInstanceProfileError {
     pub fn from_body(body: &str) -> RemoveRoleFromInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => RemoveRoleFromInstanceProfileError::LimitExceeded(
@@ -20806,8 +20709,7 @@ impl RemoveUserFromGroupError {
     pub fn from_body(body: &str) -> RemoveUserFromGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -20886,8 +20788,7 @@ impl ResetServiceSpecificCredentialError {
     pub fn from_body(body: &str) -> ResetServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => ResetServiceSpecificCredentialError::NoSuchEntity(
@@ -20964,8 +20865,7 @@ impl ResyncMFADeviceError {
     pub fn from_body(body: &str) -> ResyncMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAuthenticationCodeException" => {
@@ -21054,8 +20954,7 @@ impl SetDefaultPolicyVersionError {
     pub fn from_body(body: &str) -> SetDefaultPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -21140,8 +21039,7 @@ impl SimulateCustomPolicyError {
     pub fn from_body(body: &str) -> SimulateCustomPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -21220,8 +21118,7 @@ impl SimulatePrincipalPolicyError {
     pub fn from_body(body: &str) -> SimulatePrincipalPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -21304,8 +21201,7 @@ impl UpdateAccessKeyError {
     pub fn from_body(body: &str) -> UpdateAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -21388,8 +21284,7 @@ impl UpdateAccountPasswordPolicyError {
     pub fn from_body(body: &str) -> UpdateAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => UpdateAccountPasswordPolicyError::LimitExceeded(
@@ -21482,8 +21377,7 @@ impl UpdateAssumeRolePolicyError {
     pub fn from_body(body: &str) -> UpdateAssumeRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -21578,8 +21472,7 @@ impl UpdateGroupError {
     pub fn from_body(body: &str) -> UpdateGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -21668,8 +21561,7 @@ impl UpdateLoginProfileError {
     pub fn from_body(body: &str) -> UpdateLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityTemporarilyUnmodifiableException" => {
@@ -21764,8 +21656,7 @@ impl UpdateOpenIDConnectProviderThumbprintError {
     pub fn from_body(body: &str) -> UpdateOpenIDConnectProviderThumbprintError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -21854,8 +21745,7 @@ impl UpdateRoleDescriptionError {
     pub fn from_body(body: &str) -> UpdateRoleDescriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -21940,8 +21830,7 @@ impl UpdateSAMLProviderError {
     pub fn from_body(body: &str) -> UpdateSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInputException" => {
@@ -22024,8 +21913,7 @@ impl UpdateSSHPublicKeyError {
     pub fn from_body(body: &str) -> UpdateSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => {
@@ -22102,8 +21990,7 @@ impl UpdateServerCertificateError {
     pub fn from_body(body: &str) -> UpdateServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -22188,8 +22075,7 @@ impl UpdateServiceSpecificCredentialError {
     pub fn from_body(body: &str) -> UpdateServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "NoSuchEntityException" => UpdateServiceSpecificCredentialError::NoSuchEntity(
@@ -22264,8 +22150,7 @@ impl UpdateSigningCertificateError {
     pub fn from_body(body: &str) -> UpdateSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LimitExceededException" => {
@@ -22352,8 +22237,7 @@ impl UpdateUserError {
     pub fn from_body(body: &str) -> UpdateUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -22448,8 +22332,7 @@ impl UploadSSHPublicKeyError {
     pub fn from_body(body: &str) -> UploadSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DuplicateSSHPublicKeyException" => {
@@ -22548,8 +22431,7 @@ impl UploadServerCertificateError {
     pub fn from_body(body: &str) -> UploadServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EntityAlreadyExistsException" => {
@@ -22652,8 +22534,7 @@ impl UploadSigningCertificateError {
     pub fn from_body(body: &str) -> UploadSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DuplicateCertificateException" => {

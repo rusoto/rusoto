@@ -34,7 +34,8 @@ use xml::EventWriter;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 enum DeserializerNext {
     Close,
     Skip,
@@ -8998,8 +8999,7 @@ impl AssociateVPCWithHostedZoneError {
     pub fn from_body(body: &str) -> AssociateVPCWithHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConflictingDomainExists" => {
@@ -9106,8 +9106,7 @@ impl ChangeResourceRecordSetsError {
     pub fn from_body(body: &str) -> ChangeResourceRecordSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidChangeBatch" => ChangeResourceRecordSetsError::InvalidChangeBatch(
@@ -9204,8 +9203,7 @@ impl ChangeTagsForResourceError {
     pub fn from_body(body: &str) -> ChangeTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -9296,8 +9294,7 @@ impl CreateHealthCheckError {
     pub fn from_body(body: &str) -> CreateHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HealthCheckAlreadyExists" => CreateHealthCheckError::HealthCheckAlreadyExists(
@@ -9392,8 +9389,7 @@ impl CreateHostedZoneError {
     pub fn from_body(body: &str) -> CreateHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConflictingDomainExists" => CreateHostedZoneError::ConflictingDomainExists(
@@ -9506,8 +9502,7 @@ impl CreateReusableDelegationSetError {
     pub fn from_body(body: &str) -> CreateReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DelegationSetAlreadyCreated" => {
@@ -9614,8 +9609,7 @@ impl CreateTrafficPolicyError {
     pub fn from_body(body: &str) -> CreateTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -9710,8 +9704,7 @@ impl CreateTrafficPolicyInstanceError {
     pub fn from_body(body: &str) -> CreateTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => CreateTrafficPolicyInstanceError::InvalidInput(String::from(
@@ -9810,8 +9803,7 @@ impl CreateTrafficPolicyVersionError {
     pub fn from_body(body: &str) -> CreateTrafficPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConcurrentModification" => {
@@ -9906,8 +9898,7 @@ impl CreateVPCAssociationAuthorizationError {
     pub fn from_body(body: &str) -> CreateVPCAssociationAuthorizationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConcurrentModification" => {
@@ -10004,8 +9995,7 @@ impl DeleteHealthCheckError {
     pub fn from_body(body: &str) -> DeleteHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HealthCheckInUse" => {
@@ -10092,8 +10082,7 @@ impl DeleteHostedZoneError {
     pub fn from_body(body: &str) -> DeleteHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HostedZoneNotEmpty" => {
@@ -10184,8 +10173,7 @@ impl DeleteReusableDelegationSetError {
     pub fn from_body(body: &str) -> DeleteReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DelegationSetInUse" => DeleteReusableDelegationSetError::DelegationSetInUse(
@@ -10276,8 +10264,7 @@ impl DeleteTrafficPolicyError {
     pub fn from_body(body: &str) -> DeleteTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConcurrentModification" => DeleteTrafficPolicyError::ConcurrentModification(
@@ -10364,8 +10351,7 @@ impl DeleteTrafficPolicyInstanceError {
     pub fn from_body(body: &str) -> DeleteTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
@@ -10456,8 +10442,7 @@ impl DeleteVPCAssociationAuthorizationError {
     pub fn from_body(body: &str) -> DeleteVPCAssociationAuthorizationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConcurrentModification" => {
@@ -10558,8 +10543,7 @@ impl DisassociateVPCFromHostedZoneError {
     pub fn from_body(body: &str) -> DisassociateVPCFromHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
@@ -10650,8 +10634,7 @@ impl GetChangeError {
     pub fn from_body(body: &str) -> GetChangeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => GetChangeError::InvalidInput(String::from(parsed_error.message)),
@@ -10718,8 +10701,7 @@ impl GetCheckerIpRangesError {
     pub fn from_body(body: &str) -> GetCheckerIpRangesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCheckerIpRangesError::Unknown(String::from(body)),
@@ -10788,8 +10770,7 @@ impl GetGeoLocationError {
     pub fn from_body(body: &str) -> GetGeoLocationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -10866,8 +10847,7 @@ impl GetHealthCheckError {
     pub fn from_body(body: &str) -> GetHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "IncompatibleVersion" => {
@@ -10942,8 +10922,7 @@ impl GetHealthCheckCountError {
     pub fn from_body(body: &str) -> GetHealthCheckCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHealthCheckCountError::Unknown(String::from(body)),
@@ -11012,8 +10991,7 @@ impl GetHealthCheckLastFailureReasonError {
     pub fn from_body(body: &str) -> GetHealthCheckLastFailureReasonError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => GetHealthCheckLastFailureReasonError::InvalidInput(
@@ -11090,8 +11068,7 @@ impl GetHealthCheckStatusError {
     pub fn from_body(body: &str) -> GetHealthCheckStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11168,8 +11145,7 @@ impl GetHostedZoneError {
     pub fn from_body(body: &str) -> GetHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11242,8 +11218,7 @@ impl GetHostedZoneCountError {
     pub fn from_body(body: &str) -> GetHostedZoneCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11318,8 +11293,7 @@ impl GetReusableDelegationSetError {
     pub fn from_body(body: &str) -> GetReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DelegationSetNotReusable" => {
@@ -11402,8 +11376,7 @@ impl GetTrafficPolicyError {
     pub fn from_body(body: &str) -> GetTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11478,8 +11451,7 @@ impl GetTrafficPolicyInstanceError {
     pub fn from_body(body: &str) -> GetTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11554,8 +11526,7 @@ impl GetTrafficPolicyInstanceCountError {
     pub fn from_body(body: &str) -> GetTrafficPolicyInstanceCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetTrafficPolicyInstanceCountError::Unknown(String::from(body)),
@@ -11622,8 +11593,7 @@ impl ListGeoLocationsError {
     pub fn from_body(body: &str) -> ListGeoLocationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -11694,8 +11664,7 @@ impl ListHealthChecksError {
     pub fn from_body(body: &str) -> ListHealthChecksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "IncompatibleVersion" => {
@@ -11772,8 +11741,7 @@ impl ListHostedZonesError {
     pub fn from_body(body: &str) -> ListHostedZonesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DelegationSetNotReusable" => ListHostedZonesError::DelegationSetNotReusable(
@@ -11852,8 +11820,7 @@ impl ListHostedZonesByNameError {
     pub fn from_body(body: &str) -> ListHostedZonesByNameError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidDomainName" => ListHostedZonesByNameError::InvalidDomainName(
@@ -11930,8 +11897,7 @@ impl ListResourceRecordSetsError {
     pub fn from_body(body: &str) -> ListResourceRecordSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12006,8 +11972,7 @@ impl ListReusableDelegationSetsError {
     pub fn from_body(body: &str) -> ListReusableDelegationSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => ListReusableDelegationSetsError::InvalidInput(String::from(
@@ -12086,8 +12051,7 @@ impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12182,8 +12146,7 @@ impl ListTagsForResourcesError {
     pub fn from_body(body: &str) -> ListTagsForResourcesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12270,8 +12233,7 @@ impl ListTrafficPoliciesError {
     pub fn from_body(body: &str) -> ListTrafficPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12344,8 +12306,7 @@ impl ListTrafficPolicyInstancesError {
     pub fn from_body(body: &str) -> ListTrafficPolicyInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => ListTrafficPolicyInstancesError::InvalidInput(String::from(
@@ -12426,8 +12387,7 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
     pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
@@ -12516,8 +12476,7 @@ impl ListTrafficPolicyInstancesByPolicyError {
     pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => ListTrafficPolicyInstancesByPolicyError::InvalidInput(
@@ -12604,8 +12563,7 @@ impl ListTrafficPolicyVersionsError {
     pub fn from_body(body: &str) -> ListTrafficPolicyVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12684,8 +12642,7 @@ impl ListVPCAssociationAuthorizationsError {
     pub fn from_body(body: &str) -> ListVPCAssociationAuthorizationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => ListVPCAssociationAuthorizationsError::InvalidInput(
@@ -12768,8 +12725,7 @@ impl TestDNSAnswerError {
     pub fn from_body(body: &str) -> TestDNSAnswerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -12846,8 +12802,7 @@ impl UpdateHealthCheckError {
     pub fn from_body(body: &str) -> UpdateHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HealthCheckVersionMismatch" => {
@@ -12930,8 +12885,7 @@ impl UpdateHostedZoneCommentError {
     pub fn from_body(body: &str) -> UpdateHostedZoneCommentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidInput" => {
@@ -13010,8 +12964,7 @@ impl UpdateTrafficPolicyCommentError {
     pub fn from_body(body: &str) -> UpdateTrafficPolicyCommentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConcurrentModification" => {
@@ -13100,8 +13053,7 @@ impl UpdateTrafficPolicyInstanceError {
     pub fn from_body(body: &str) -> UpdateTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ConflictingTypes" => UpdateTrafficPolicyInstanceError::ConflictingTypes(

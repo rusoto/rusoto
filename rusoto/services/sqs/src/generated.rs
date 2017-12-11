@@ -30,7 +30,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
+use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
+                           start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -2247,8 +2248,7 @@ impl AddPermissionError {
     pub fn from_body(body: &str) -> AddPermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OverLimit" => AddPermissionError::OverLimit(String::from(parsed_error.message)),
@@ -2317,8 +2317,7 @@ impl ChangeMessageVisibilityError {
     pub fn from_body(body: &str) -> ChangeMessageVisibilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "MessageNotInflight" => ChangeMessageVisibilityError::MessageNotInflight(
@@ -2399,8 +2398,7 @@ impl ChangeMessageVisibilityBatchError {
     pub fn from_body(body: &str) -> ChangeMessageVisibilityBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BatchEntryIdsNotDistinct" => {
@@ -2489,8 +2487,7 @@ impl CreateQueueError {
     pub fn from_body(body: &str) -> CreateQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "QueueDeletedRecently" => {
@@ -2565,8 +2562,7 @@ impl DeleteMessageError {
     pub fn from_body(body: &str) -> DeleteMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidIdFormat" => {
@@ -2645,8 +2641,7 @@ impl DeleteMessageBatchError {
     pub fn from_body(body: &str) -> DeleteMessageBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BatchEntryIdsNotDistinct" => DeleteMessageBatchError::BatchEntryIdsNotDistinct(
@@ -2729,8 +2724,7 @@ impl DeleteQueueError {
     pub fn from_body(body: &str) -> DeleteQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteQueueError::Unknown(String::from(body)),
@@ -2795,8 +2789,7 @@ impl GetQueueAttributesError {
     pub fn from_body(body: &str) -> GetQueueAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAttributeName" => GetQueueAttributesError::InvalidAttributeName(
@@ -2867,8 +2860,7 @@ impl GetQueueUrlError {
     pub fn from_body(body: &str) -> GetQueueUrlError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "QueueDoesNotExist" => {
@@ -2937,8 +2929,7 @@ impl ListDeadLetterSourceQueuesError {
     pub fn from_body(body: &str) -> ListDeadLetterSourceQueuesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "QueueDoesNotExist" => ListDeadLetterSourceQueuesError::QueueDoesNotExist(
@@ -3007,8 +2998,7 @@ impl ListQueuesError {
     pub fn from_body(body: &str) -> ListQueuesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListQueuesError::Unknown(String::from(body)),
@@ -3075,8 +3065,7 @@ impl PurgeQueueError {
     pub fn from_body(body: &str) -> PurgeQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "PurgeQueueInProgress" => {
@@ -3149,8 +3138,7 @@ impl ReceiveMessageError {
     pub fn from_body(body: &str) -> ReceiveMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OverLimit" => ReceiveMessageError::OverLimit(String::from(parsed_error.message)),
@@ -3215,8 +3203,7 @@ impl RemovePermissionError {
     pub fn from_body(body: &str) -> RemovePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RemovePermissionError::Unknown(String::from(body)),
@@ -3283,8 +3270,7 @@ impl SendMessageError {
     pub fn from_body(body: &str) -> SendMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidMessageContents" => {
@@ -3367,8 +3353,7 @@ impl SendMessageBatchError {
     pub fn from_body(body: &str) -> SendMessageBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BatchEntryIdsNotDistinct" => SendMessageBatchError::BatchEntryIdsNotDistinct(
@@ -3459,8 +3444,7 @@ impl SetQueueAttributesError {
     pub fn from_body(body: &str) -> SetQueueAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        let _start_document = stack.next();
-        let _response_envelope = stack.next();
+        find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAttributeName" => SetQueueAttributesError::InvalidAttributeName(
