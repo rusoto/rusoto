@@ -40,11 +40,15 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>Describes an AWS customer account authorized to restore a snapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountWithRestoreAccess {
     #[doc="<p>The identifier of an AWS support account authorized to restore a snapshot. For AWS support, the identifier is <code>amazon-redshift-support</code>. </p>"]
+    #[serde(rename="AccountAlias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_alias: Option<String>,
     #[doc="<p>The identifier of an AWS customer account authorized to restore a snapshot.</p>"]
+    #[serde(rename="AccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<String>,
 }
 
@@ -136,15 +140,22 @@ impl AccountsWithRestoreAccessListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeClusterSecurityGroupIngressMessage {
     #[doc="<p>The IP range to be added the Amazon Redshift security group.</p>"]
+    #[serde(rename="CIDRIP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidrip: Option<String>,
     #[doc="<p>The name of the security group to which the ingress rule is added.</p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
     pub cluster_security_group_name: String,
     #[doc="<p>The EC2 security group to be added the Amazon Redshift security group.</p>"]
+    #[serde(rename="EC2SecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_name: Option<String>,
     #[doc="<p>The AWS account number of the owner of the security group specified by the <i>EC2SecurityGroupName</i> parameter. The AWS Access Key ID is not an acceptable value. </p> <p>Example: <code>111122223333</code> </p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_owner_id: Option<String>,
 }
 
@@ -178,8 +189,10 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeClusterSecurityGroupIngressResult {
+    #[serde(rename="ClusterSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
@@ -228,13 +241,17 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeSnapshotAccessMessage {
     #[doc="<p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>"]
+    #[serde(rename="AccountWithRestoreAccess")]
     pub account_with_restore_access: String,
     #[doc="<p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>"]
+    #[serde(rename="SnapshotClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The identifier of the snapshot the account is authorized to restore.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
 }
 
@@ -260,8 +277,10 @@ impl AuthorizeSnapshotAccessMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeSnapshotAccessResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -308,9 +327,11 @@ impl AuthorizeSnapshotAccessResultDeserializer {
     }
 }
 #[doc="<p>Describes an availability zone.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZone {
     #[doc="<p>The name of the availability zone.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -426,73 +447,139 @@ impl BooleanOptionalDeserializer {
     }
 }
 #[doc="<p>Describes a cluster.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Cluster {
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>"]
+    #[serde(rename="AllowVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automatic cluster snapshots are retained.</p>"]
+    #[serde(rename="AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The name of the Availability Zone in which the cluster is located.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The date and time that the cluster was created.</p>"]
+    #[serde(rename="ClusterCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_create_time: Option<String>,
     #[doc="<p>The unique identifier of the cluster.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The nodes in the cluster.</p>"]
+    #[serde(rename="ClusterNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_nodes: Option<Vec<ClusterNode>>,
     #[doc="<p>The list of cluster parameter groups that are associated with this cluster. Each parameter group in the list is returned with its status.</p>"]
+    #[serde(rename="ClusterParameterGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_groups: Option<Vec<ClusterParameterGroupStatus>>,
     #[doc="<p>The public key for the cluster.</p>"]
+    #[serde(rename="ClusterPublicKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_public_key: Option<String>,
     #[doc="<p>The specific revision number of the database in the cluster.</p>"]
+    #[serde(rename="ClusterRevisionNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_revision_number: Option<String>,
     #[doc="<p>A list of cluster security group that are associated with the cluster. Each security group is represented by an element that contains <code>ClusterSecurityGroup.Name</code> and <code>ClusterSecurityGroup.Status</code> subelements. </p> <p>Cluster security groups are used when the cluster is not created in an Amazon Virtual Private Cloud (VPC). Clusters that are created in a VPC use VPC security groups, which are listed by the <b>VpcSecurityGroups</b> parameter. </p>"]
+    #[serde(rename="ClusterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroupMembership>>,
     #[doc="<p>A value that returns the destination region and retention period that are configured for cross-region snapshot copy.</p>"]
+    #[serde(rename="ClusterSnapshotCopyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_snapshot_copy_status: Option<ClusterSnapshotCopyStatus>,
     #[doc="<p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul>"]
+    #[serde(rename="ClusterStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_status: Option<String>,
     #[doc="<p>The name of the subnet group that is associated with the cluster. This parameter is valid only when the cluster is in a VPC.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The version ID of the Amazon Redshift engine that is running on the cluster.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The name of the initial database that was created when the cluster was created. This same name is returned for the life of the cluster. If an initial database was not specified, a database named <code>dev</code>dev was created by default. </p>"]
+    #[serde(rename="DBName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_name: Option<String>,
     #[doc="<p>The status of the elastic IP (EIP) address.</p>"]
+    #[serde(rename="ElasticIpStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_ip_status: Option<ElasticIpStatus>,
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that data in the cluster is encrypted at rest.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The connection endpoint.</p>"]
+    #[serde(rename="Endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<Endpoint>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>A value that reports whether the Amazon Redshift cluster has finished applying any hardware security module (HSM) settings changes specified in a modify cluster command.</p> <p>Values: active, applying</p>"]
+    #[serde(rename="HsmStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_status: Option<HsmStatus>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p>"]
+    #[serde(rename="IamRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_roles: Option<Vec<ClusterIamRole>>,
     #[doc="<p>The AWS Key Management Service (AWS KMS) key ID of the encryption key used to encrypt data in the cluster.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The master user name for the cluster. This name is used to connect to the database that is specified in the <b>DBName</b> parameter. </p>"]
+    #[serde(rename="MasterUsername")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_username: Option<String>,
     #[doc="<p>The status of a modify operation, if any, initiated for the cluster.</p>"]
+    #[serde(rename="ModifyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modify_status: Option<String>,
     #[doc="<p>The node type for the nodes in the cluster.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The number of compute nodes in the cluster.</p>"]
+    #[serde(rename="NumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_nodes: Option<i64>,
     #[doc="<p>A value that, if present, indicates that changes to the cluster are pending. Specific pending changes are identified by subelements.</p>"]
+    #[serde(rename="PendingModifiedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_modified_values: Option<PendingModifiedValues>,
     #[doc="<p>The weekly time range, in Universal Coordinated Time (UTC), during which system maintenance can occur.</p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that the cluster can be accessed from a public network.</p>"]
+    #[serde(rename="PubliclyAccessible")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub publicly_accessible: Option<bool>,
     #[doc="<p>A value that describes the status of a cluster restore action. This parameter returns null if the cluster was not created by restoring a snapshot.</p>"]
+    #[serde(rename="RestoreStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restore_status: Option<RestoreStatus>,
     #[doc="<p>The list of tags for the cluster.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The identifier of the VPC the cluster is in, if the cluster is in a VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
     #[doc="<p>A list of Amazon Virtual Private Cloud (Amazon VPC) security groups that are associated with the cluster. This parameter is returned only if the cluster is in a VPC.</p>"]
+    #[serde(rename="VpcSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
@@ -681,13 +768,19 @@ impl ClusterDeserializer {
     }
 }
 #[doc="<p>Temporary credentials with authorization to log in to an Amazon Redshift database. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterCredentials {
     #[doc="<p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>"]
+    #[serde(rename="DbPassword")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_password: Option<String>,
     #[doc="<p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for the current session. The user name is prefixed with <code>IAM:</code> for an existing user name or <code>IAMA:</code> if the user was auto-created. </p>"]
+    #[serde(rename="DbUser")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_user: Option<String>,
     #[doc="<p>The date and time <code>DbPassword</code> expires.</p>"]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
 }
 
@@ -743,11 +836,15 @@ impl ClusterCredentialsDeserializer {
     }
 }
 #[doc="<p>An AWS Identity and Access Management (IAM) role that can be used by the associated Amazon Redshift cluster to access other AWS services.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterIamRole {
     #[doc="<p>A value that describes the status of the IAM role's association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul>"]
+    #[serde(rename="ApplyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub apply_status: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role, for example, <code>arn:aws:iam::123456789012:role/RedshiftCopyUnload</code>. </p>"]
+    #[serde(rename="IamRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_role_arn: Option<String>,
 }
 
@@ -881,13 +978,19 @@ impl ClusterListDeserializer {
     }
 }
 #[doc="<p>The identifier of a node in a cluster.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterNode {
     #[doc="<p>Whether the node is a leader node or a compute node.</p>"]
+    #[serde(rename="NodeRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_role: Option<String>,
     #[doc="<p>The private IP address of a node within a cluster.</p>"]
+    #[serde(rename="PrivateIPAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The public IP address of a node within a cluster.</p>"]
+    #[serde(rename="PublicIPAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip_address: Option<String>,
 }
 
@@ -985,15 +1088,23 @@ impl ClusterNodesListDeserializer {
     }
 }
 #[doc="<p>Describes a parameter group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterGroup {
     #[doc="<p>The description of the parameter group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The name of the cluster parameter group family that this cluster parameter group is compatible with.</p>"]
+    #[serde(rename="ParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_family: Option<String>,
     #[doc="<p>The name of the cluster parameter group.</p>"]
+    #[serde(rename="ParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_name: Option<String>,
     #[doc="<p>The list of tags for the cluster parameter group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1053,11 +1164,15 @@ impl ClusterParameterGroupDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusterParameters</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterGroupDetails {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Parameter</a> instances. Each instance lists the parameters of one cluster parameter group. </p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
@@ -1109,11 +1224,15 @@ impl ClusterParameterGroupDetailsDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterGroupNameMessage {
     #[doc="<p>The name of the cluster parameter group.</p>"]
+    #[serde(rename="ParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_name: Option<String>,
     #[doc="<p>The status of the parameter group. For example, if you made a change to a parameter group name-value pair, then the change could be pending a reboot of an associated cluster.</p>"]
+    #[serde(rename="ParameterGroupStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_status: Option<String>,
 }
 
@@ -1167,13 +1286,19 @@ impl ClusterParameterGroupNameMessageDeserializer {
     }
 }
 #[doc="<p>Describes the status of a parameter group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterGroupStatus {
     #[doc="<p>The list of parameter statuses.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    #[serde(rename="ClusterParameterStatusList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_status_list: Option<Vec<ClusterParameterStatus>>,
     #[doc="<p>The status of parameter updates.</p>"]
+    #[serde(rename="ParameterApplyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_apply_status: Option<String>,
     #[doc="<p>The name of the cluster parameter group.</p>"]
+    #[serde(rename="ParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_name: Option<String>,
 }
 
@@ -1271,11 +1396,15 @@ impl ClusterParameterGroupStatusListDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusterParameterGroups</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterGroupsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>ClusterParameterGroup</a> instances. Each instance describes one cluster parameter group. </p>"]
+    #[serde(rename="ParameterGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
 }
 
@@ -1327,13 +1456,19 @@ impl ClusterParameterGroupsMessageDeserializer {
     }
 }
 #[doc="<p>Describes the status of a parameter group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterParameterStatus {
     #[doc="<p>The error that prevented the parameter from being applied to the database.</p>"]
+    #[serde(rename="ParameterApplyErrorDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_apply_error_description: Option<String>,
     #[doc="<p>The status of the parameter that indicates whether the parameter is in sync with the database, waiting for a cluster reboot, or encountered an error when being applied.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The parameter value is in sync with the database.</p> </li> <li> <p> <code>pending-reboot</code>: The parameter value will be applied after the cluster reboots.</p> </li> <li> <p> <code>applying</code>: The parameter value is being applied to the database.</p> </li> <li> <p> <code>invalid-parameter</code>: Cannot apply the parameter value because it has an invalid value or syntax.</p> </li> <li> <p> <code>apply-deferred</code>: The parameter contains static property changes. The changes are deferred until the cluster reboots.</p> </li> <li> <p> <code>apply-error</code>: Cannot connect to the cluster. The parameter change will be applied after the cluster reboots.</p> </li> <li> <p> <code>unknown-error</code>: Cannot apply the parameter change right now. The change will be applied after the cluster reboots.</p> </li> </ul>"]
+    #[serde(rename="ParameterApplyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_apply_status: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
+    #[serde(rename="ParameterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name: Option<String>,
 }
 
@@ -1432,17 +1567,27 @@ impl ClusterParameterStatusListDeserializer {
     }
 }
 #[doc="<p>Describes a security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSecurityGroup {
     #[doc="<p>The name of the cluster security group to which the operation was applied.</p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group_name: Option<String>,
     #[doc="<p>A description of the security group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>A list of EC2 security groups that are permitted to access clusters associated with this cluster security group.</p>"]
+    #[serde(rename="EC2SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_groups: Option<Vec<EC2SecurityGroup>>,
     #[doc="<p>A list of IP ranges (CIDR blocks) that are permitted to access clusters associated with this cluster security group.</p>"]
+    #[serde(rename="IPRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_ranges: Option<Vec<IPRange>>,
     #[doc="<p>The list of tags for the cluster security group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1506,11 +1651,15 @@ impl ClusterSecurityGroupDeserializer {
     }
 }
 #[doc="<p>Describes a cluster security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSecurityGroupMembership {
     #[doc="<p>The name of the cluster security group.</p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group_name: Option<String>,
     #[doc="<p>The status of the cluster security group.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -1604,11 +1753,15 @@ impl ClusterSecurityGroupMembershipListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSecurityGroupMessage {
     #[doc="<p>A list of <a>ClusterSecurityGroup</a> instances. </p>"]
+    #[serde(rename="ClusterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroup>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -1713,13 +1866,19 @@ impl ClusterSecurityGroupsDeserializer {
     }
 }
 #[doc="<p>Returns the destination region and retention period that are configured for cross-region snapshot copy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSnapshotCopyStatus {
     #[doc="<p>The destination region that snapshots are automatically copied to when cross-region snapshot copy is enabled.</p>"]
+    #[serde(rename="DestinationRegion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_region: Option<String>,
     #[doc="<p>The number of days that automated snapshots are retained in the destination region after they are copied from a source region.</p>"]
+    #[serde(rename="RetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub retention_period: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant.</p>"]
+    #[serde(rename="SnapshotCopyGrantName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grant_name: Option<String>,
 }
 
@@ -1776,19 +1935,31 @@ impl ClusterSnapshotCopyStatusDeserializer {
     }
 }
 #[doc="<p>Describes a subnet group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSubnetGroup {
     #[doc="<p>The name of the cluster subnet group.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The description of the cluster subnet group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The status of the cluster subnet group. Possible values are <code>Complete</code>, <code>Incomplete</code> and <code>Invalid</code>. </p>"]
+    #[serde(rename="SubnetGroupStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_group_status: Option<String>,
     #[doc="<p>A list of the VPC <a>Subnet</a> elements. </p>"]
+    #[serde(rename="Subnets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>The list of tags for the cluster subnet group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The VPC ID of the cluster subnet group.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -1856,11 +2027,15 @@ impl ClusterSubnetGroupDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusterSubnetGroups</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterSubnetGroupMessage {
     #[doc="<p>A list of <a>ClusterSubnetGroup</a> instances. </p>"]
+    #[serde(rename="ClusterSubnetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_groups: Option<Vec<ClusterSubnetGroup>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -1953,13 +2128,19 @@ impl ClusterSubnetGroupsDeserializer {
     }
 }
 #[doc="<p>Describes a cluster version, including the parameter group family and description of the version.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterVersion {
     #[doc="<p>The name of the cluster parameter group family for the cluster.</p>"]
+    #[serde(rename="ClusterParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group_family: Option<String>,
     #[doc="<p>The version number used by the cluster.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The description of the cluster version.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
 }
 
@@ -2058,11 +2239,15 @@ impl ClusterVersionListDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusterVersions</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterVersionsMessage {
     #[doc="<p>A list of <code>Version</code> elements. </p>"]
+    #[serde(rename="ClusterVersions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_versions: Option<Vec<ClusterVersion>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -2114,11 +2299,15 @@ impl ClusterVersionsMessageDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusters</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClustersMessage {
     #[doc="<p>A list of <code>Cluster</code> objects, where each object describes one cluster. </p>"]
+    #[serde(rename="Clusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clusters: Option<Vec<Cluster>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -2169,13 +2358,17 @@ impl ClustersMessageDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyClusterSnapshotMessage {
     #[doc="<p>The identifier of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid cluster.</p> </li> </ul>"]
+    #[serde(rename="SourceSnapshotClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The identifier for the source snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid automated snapshot whose state is <code>available</code>.</p> </li> </ul>"]
+    #[serde(rename="SourceSnapshotIdentifier")]
     pub source_snapshot_identifier: String,
     #[doc="<p>The identifier given to the new manual snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for the AWS account that is making the request.</p> </li> </ul>"]
+    #[serde(rename="TargetSnapshotIdentifier")]
     pub target_snapshot_identifier: String,
 }
 
@@ -2201,8 +2394,10 @@ impl CopyClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyClusterSnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -2249,61 +2444,111 @@ impl CopyClusterSnapshotResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterMessage {
     #[doc="<p>Reserved.</p>"]
+    #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
     #[doc="<p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.</p> <p>When a new major version of the Amazon Redshift engine is released, you can request that the service automatically apply upgrades during the maintenance window to the Amazon Redshift engine that is running on your cluster.</p> <p>Default: <code>true</code> </p>"]
+    #[serde(rename="AllowVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: <code>1</code> </p> <p>Constraints: Must be a value from 0 to 35.</p>"]
+    #[serde(rename="AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency.</p> <p>Default: A random, system-chosen Availability Zone in the region that is specified by the endpoint.</p> <p>Example: <code>us-east-1d</code> </p> <p>Constraint: The specified Availability Zone must be in the same region as the current endpoint.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. The identifier also appears in the Amazon Redshift console.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>myexamplecluster</code> </p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Working with Amazon Redshift Parameter Groups</a> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="ClusterParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p>"]
+    #[serde(rename="ClusterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The name of a cluster subnet group to be associated with this cluster.</p> <p>If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC).</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The type of the cluster. When cluster type is specified as</p> <ul> <li> <p> <code>single-node</code>, the <b>NumberOfNodes</b> parameter is not required.</p> </li> <li> <p> <code>multi-node</code>, the <b>NumberOfNodes</b> parameter is required.</p> </li> </ul> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p> <p>Default: <code>multi-node</code> </p>"]
+    #[serde(rename="ClusterType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_type: Option<String>,
     #[doc="<p>The version of the Amazon Redshift engine software that you want to deploy on the cluster.</p> <p>The version selected runs on all the nodes in the cluster.</p> <p>Constraints: Only version 1.0 is currently available.</p> <p>Example: <code>1.0</code> </p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The name of the first database to be created when the cluster is created.</p> <p>To create additional databases after the cluster is created, connect to the cluster with a SQL client and use SQL commands to create a database. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/t_creating_database.html\">Create a Database</a> in the Amazon Redshift Database Developer Guide. </p> <p>Default: <code>dev</code> </p> <p>Constraints:</p> <ul> <li> <p>Must contain 1 to 64 alphanumeric characters.</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a word that is reserved by the service. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul>"]
+    #[serde(rename="DBName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_name: Option<String>,
     #[doc="<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    #[serde(rename="ElasticIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_ip: Option<String>,
     #[doc="<p>If <code>true</code>, the data in the cluster is encrypted at rest. </p> <p>Default: false</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. You can supply up to 10 IAM roles in a single request.</p> <p>A cluster can have up to 10 IAM roles associated with it at any time.</p>"]
+    #[serde(rename="IamRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_roles: Option<Vec<String>>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except ' (single quote), \" (double quote), \\, /, @, or space.</p> </li> </ul>"]
+    #[serde(rename="MasterUserPassword")]
     pub master_user_password: String,
     #[doc="<p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul>"]
+    #[serde(rename="MasterUsername")]
     pub master_username: String,
     #[doc="<p>The node type to be provisioned for the cluster. For information about node types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes\"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>. </p>"]
+    #[serde(rename="NodeType")]
     pub node_type: String,
     #[doc="<p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes\"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>"]
+    #[serde(rename="NumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_nodes: Option<i64>,
     #[doc="<p>The port number on which the cluster accepts incoming connections.</p> <p>The cluster is accessible only via the JDBC and ODBC connection strings. Part of the connection string requires the port on which the cluster will listen for incoming connections.</p> <p>Default: <code>5439</code> </p> <p>Valid Values: <code>1150-65535</code> </p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which automated cluster maintenance can occur.</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p> Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week. For more information about the time blocks for each region, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-maintenance-windows\">Maintenance Windows</a> in Amazon Redshift Cluster Management Guide.</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. </p>"]
+    #[serde(rename="PubliclyAccessible")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub publicly_accessible: Option<bool>,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p>"]
+    #[serde(rename="VpcSecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
@@ -2428,15 +2673,20 @@ impl CreateClusterMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterParameterGroupMessage {
     #[doc="<p>A description of the parameter group.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>The Amazon Redshift engine version to which the cluster parameter group applies. The cluster engine version determines the set of parameters.</p> <p>To get a list of valid parameter group family names, you can call <a>DescribeClusterParameterGroups</a>. By default, Amazon Redshift returns a list of all the parameter groups that are owned by your AWS account, including the default parameter groups for each Amazon Redshift engine version. The parameter group family names associated with the default parameter groups provide you the valid values. For example, a valid family name is \"redshift-1.0\". </p>"]
+    #[serde(rename="ParameterGroupFamily")]
     pub parameter_group_family: String,
     #[doc="<p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note>"]
+    #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2463,8 +2713,10 @@ impl CreateClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterParameterGroupResult {
+    #[serde(rename="ClusterParameterGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group: Option<ClusterParameterGroup>,
 }
 
@@ -2512,8 +2764,10 @@ impl CreateClusterParameterGroupResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -2560,13 +2814,17 @@ impl CreateClusterResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSecurityGroupMessage {
     #[doc="<p>The name for the security group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be \"Default\".</p> </li> <li> <p>Must be unique for all security groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesecuritygroup</code> </p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
     pub cluster_security_group_name: String,
     #[doc="<p>A description for the security group.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2591,8 +2849,10 @@ impl CreateClusterSecurityGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSecurityGroupResult {
+    #[serde(rename="ClusterSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
@@ -2641,13 +2901,17 @@ impl CreateClusterSecurityGroupResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSnapshotMessage {
     #[doc="<p>The cluster identifier for which you want a snapshot.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>A unique identifier for the snapshot that you are requesting. This identifier must be unique for all snapshots within the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2672,8 +2936,10 @@ impl CreateClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -2720,15 +2986,20 @@ impl CreateClusterSnapshotResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSubnetGroupMessage {
     #[doc="<p>The name for the subnet group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be \"Default\".</p> </li> <li> <p>Must be unique for all subnet groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesubnetgroup</code> </p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
     pub cluster_subnet_group_name: String,
     #[doc="<p>A description for the subnet group.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>An array of VPC subnet IDs. A maximum of 20 subnets can be modified in a single request.</p>"]
+    #[serde(rename="SubnetIds")]
     pub subnet_ids: Vec<String>,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2756,8 +3027,10 @@ impl CreateClusterSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterSubnetGroupResult {
+    #[serde(rename="ClusterSubnetGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
 }
 
@@ -2805,23 +3078,37 @@ impl CreateClusterSubnetGroupResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEventSubscriptionMessage {
     #[doc="<p>A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
     #[doc="<p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
+    #[serde(rename="EventCategories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     #[doc="<p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic used to transmit the event notifications. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
+    #[serde(rename="SnsTopicArn")]
     pub sns_topic_arn: String,
     #[doc="<p>A list of one or more identifiers of Amazon Redshift source objects. All of the objects must be of the same type as was specified in the source type parameter. The event subscription will return only events generated by the specified objects. If not specified, then events are returned for all objects within the source type specified.</p> <p>Example: my-cluster-1, my-cluster-2</p> <p>Example: my-snapshot-20131010</p>"]
+    #[serde(rename="SourceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_ids: Option<Vec<String>>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a cluster, you would set this parameter to cluster. If this value is not specified, events are returned for all Amazon Redshift objects in your AWS account. You must specify a source type in order to specify source IDs.</p> <p>Valid values: cluster, cluster-parameter-group, cluster-security-group, and cluster-snapshot.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
     #[doc="<p>The name of the event subscription to be created.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="SubscriptionName")]
     pub subscription_name: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2868,8 +3155,10 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEventSubscriptionResult {
+    #[serde(rename="EventSubscription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_subscription: Option<EventSubscription>,
 }
 
@@ -2917,11 +3206,14 @@ impl CreateEventSubscriptionResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmClientCertificateMessage {
     #[doc="<p>The identifier to be assigned to the new HSM client certificate that the cluster will use to connect to the HSM to use the database encryption keys.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
     pub hsm_client_certificate_identifier: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2944,8 +3236,10 @@ impl CreateHsmClientCertificateMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmClientCertificateResult {
+    #[serde(rename="HsmClientCertificate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate: Option<HsmClientCertificate>,
 }
 
@@ -2994,21 +3288,29 @@ impl CreateHsmClientCertificateResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmConfigurationMessage {
     #[doc="<p>A text description of the HSM configuration to be created.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>The identifier to be assigned to the new Amazon Redshift HSM configuration.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
     pub hsm_configuration_identifier: String,
     #[doc="<p>The IP address that the Amazon Redshift cluster must use to access the HSM.</p>"]
+    #[serde(rename="HsmIpAddress")]
     pub hsm_ip_address: String,
     #[doc="<p>The name of the partition in the HSM where the Amazon Redshift clusters will store their database encryption keys.</p>"]
+    #[serde(rename="HsmPartitionName")]
     pub hsm_partition_name: String,
     #[doc="<p>The password required to access the HSM partition.</p>"]
+    #[serde(rename="HsmPartitionPassword")]
     pub hsm_partition_password: String,
     #[doc="<p>The HSMs public certificate file. When using Cloud HSM, the file name is server.pem.</p>"]
+    #[serde(rename="HsmServerPublicCertificate")]
     pub hsm_server_public_certificate: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -3041,8 +3343,10 @@ impl CreateHsmConfigurationMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmConfigurationResult {
+    #[serde(rename="HsmConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration: Option<HsmConfiguration>,
 }
 
@@ -3090,13 +3394,18 @@ impl CreateHsmConfigurationResultDeserializer {
     }
 }
 #[doc="<p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSnapshotCopyGrantMessage {
     #[doc="<p>The unique identifier of the customer master key (CMK) to which to grant Amazon Redshift permission. If no key is specified, the default key is used.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>"]
+    #[serde(rename="SnapshotCopyGrantName")]
     pub snapshot_copy_grant_name: String,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -3123,8 +3432,10 @@ impl CreateSnapshotCopyGrantMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSnapshotCopyGrantResult {
+    #[serde(rename="SnapshotCopyGrant")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grant: Option<SnapshotCopyGrant>,
 }
 
@@ -3172,11 +3483,13 @@ impl CreateSnapshotCopyGrantResultDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <code>CreateTags</code> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsMessage {
     #[doc="<p>The Amazon Resource Name (ARN) to which you want to add the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
+    #[serde(rename="ResourceName")]
     pub resource_name: String,
     #[doc="<p>One or more name/value pairs to add as tags to the specified resource. Each tag name is passed in with the parameter <code>Key</code> and the corresponding value is passed in with the parameter <code>Value</code>. The <code>Key</code> and <code>Value</code> parameters are separated by a comma (,). Separate multiple tags with a space. For example, <code>--tags \"Key\"=\"owner\",\"Value\"=\"admin\" \"Key\"=\"environment\",\"Value\"=\"test\" \"Key\"=\"version\",\"Value\"=\"1.0\"</code>. </p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -3210,13 +3523,19 @@ impl DbGroupListSerializer {
 }
 
 #[doc="<p>Describes the default cluster parameters for a parameter group family.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DefaultClusterParameters {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The name of the cluster parameter group family to which the engine default parameters apply.</p>"]
+    #[serde(rename="ParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_family: Option<String>,
     #[doc="<p>The list of cluster default parameters.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
@@ -3273,13 +3592,18 @@ impl DefaultClusterParametersDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterMessage {
     #[doc="<p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="FinalClusterSnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub final_cluster_snapshot_identifier: Option<String>,
     #[doc="<p>Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If <code>true</code>, a final cluster snapshot is not created. If <code>false</code>, a final cluster snapshot is created before the cluster is deleted. </p> <note> <p>The <i>FinalClusterSnapshotIdentifier</i> parameter must be specified if <i>SkipFinalClusterSnapshot</i> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="SkipFinalClusterSnapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub skip_final_cluster_snapshot: Option<bool>,
 }
 
@@ -3308,9 +3632,10 @@ impl DeleteClusterMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterParameterGroupMessage {
     #[doc="<p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul>"]
+    #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
 }
 
@@ -3330,8 +3655,10 @@ impl DeleteClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -3378,9 +3705,10 @@ impl DeleteClusterResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterSecurityGroupMessage {
     #[doc="<p>The name of the cluster security group to be deleted.</p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
     pub cluster_security_group_name: String,
 }
 
@@ -3401,11 +3729,14 @@ impl DeleteClusterSecurityGroupMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterSnapshotMessage {
     #[doc="<p>The unique identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints: Must be the name of valid cluster.</p>"]
+    #[serde(rename="SnapshotClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The unique identifier of the manual snapshot to be deleted.</p> <p>Constraints: Must be the name of an existing snapshot that is in the <code>available</code> state.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
 }
 
@@ -3429,8 +3760,10 @@ impl DeleteClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterSnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -3477,9 +3810,10 @@ impl DeleteClusterSnapshotResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterSubnetGroupMessage {
     #[doc="<p>The name of the cluster subnet group name to be deleted.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
     pub cluster_subnet_group_name: String,
 }
 
@@ -3500,9 +3834,10 @@ impl DeleteClusterSubnetGroupMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEventSubscriptionMessage {
     #[doc="<p>The name of the Amazon Redshift event notification subscription to be deleted.</p>"]
+    #[serde(rename="SubscriptionName")]
     pub subscription_name: String,
 }
 
@@ -3523,9 +3858,10 @@ impl DeleteEventSubscriptionMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmClientCertificateMessage {
     #[doc="<p>The identifier of the HSM client certificate to be deleted.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
     pub hsm_client_certificate_identifier: String,
 }
 
@@ -3546,9 +3882,10 @@ impl DeleteHsmClientCertificateMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmConfigurationMessage {
     #[doc="<p>The identifier of the Amazon Redshift HSM configuration to be deleted.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
     pub hsm_configuration_identifier: String,
 }
 
@@ -3569,9 +3906,10 @@ impl DeleteHsmConfigurationMessageSerializer {
 }
 
 #[doc="<p>The result of the <code>DeleteSnapshotCopyGrant</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSnapshotCopyGrantMessage {
     #[doc="<p>The name of the snapshot copy grant to delete.</p>"]
+    #[serde(rename="SnapshotCopyGrantName")]
     pub snapshot_copy_grant_name: String,
 }
 
@@ -3592,11 +3930,13 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
 }
 
 #[doc="<p>Contains the output from the <code>DeleteTags</code> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsMessage {
     #[doc="<p>The Amazon Resource Name (ARN) from which you want to remove the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
+    #[serde(rename="ResourceName")]
     pub resource_name: String,
     #[doc="<p>The tag key that you want to delete.</p>"]
+    #[serde(rename="TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
@@ -3618,17 +3958,27 @@ impl DeleteTagsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterParameterGroupsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The name of a specific parameter group for which to return details. By default, details about all parameter groups and the default parameter group are returned.</p>"]
+    #[serde(rename="ParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_name: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster parameter groups that are associated with the specified key or keys. For example, suppose that you have parameter groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the parameter groups that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster parameter groups that are associated with the specified tag value or values. For example, suppose that you have parameter groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the parameter groups that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -3669,15 +4019,22 @@ impl DescribeClusterParameterGroupsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterParametersMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The name of a cluster parameter group for which to return details.</p>"]
+    #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
     #[doc="<p>The parameter types to return. Specify <code>user</code> to show parameters that are different form the default. Similarly, specify <code>engine-default</code> to show parameters that are the same as the default parameter group. </p> <p>Default: All parameter types returned.</p> <p>Valid Values: <code>user</code> | <code>engine-default</code> </p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
 }
 
@@ -3710,17 +4067,27 @@ impl DescribeClusterParametersMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterSecurityGroupsMessage {
     #[doc="<p>The name of a cluster security group for which you are requesting details. You can specify either the <b>Marker</b> parameter or a <b>ClusterSecurityGroupName</b> parameter, but not both. </p> <p> Example: <code>securitygroup1</code> </p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group_name: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSecurityGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterSecurityGroupName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster security groups that are associated with the specified key or keys. For example, suppose that you have security groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the security groups that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster security groups that are associated with the specified tag value or values. For example, suppose that you have security groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the security groups that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -3761,27 +4128,47 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterSnapshotsMessage {
     #[doc="<p>The identifier of the cluster for which information about snapshots is requested.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>A time value that requests only snapshots created at or before the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSnapshots</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The AWS customer account used to create or copy the snapshot. Use this field to filter the results to snapshots owned by a particular account. To describe snapshots you own, either specify your AWS customer account, or do not specify the parameter.</p>"]
+    #[serde(rename="OwnerAccount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_account: Option<String>,
     #[doc="<p>The snapshot identifier of the snapshot about which to return information.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_identifier: Option<String>,
     #[doc="<p>The type of snapshots for which you are requesting information. By default, snapshots of all types are returned.</p> <p>Valid Values: <code>automated</code> | <code>manual</code> </p>"]
+    #[serde(rename="SnapshotType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_type: Option<String>,
     #[doc="<p>A value that requests only snapshots created at or after the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster snapshots that are associated with the specified key or keys. For example, suppose that you have snapshots that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster snapshots that are associated with the specified tag value or values. For example, suppose that you have snapshots that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -3842,17 +4229,27 @@ impl DescribeClusterSnapshotsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterSubnetGroupsMessage {
     #[doc="<p>The name of the cluster subnet group for which information is requested.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSubnetGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster subnet groups that are associated with the specified key or keys. For example, suppose that you have subnet groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the subnet groups that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster subnet groups that are associated with the specified tag value or values. For example, suppose that you have subnet groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the subnet groups that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -3893,15 +4290,23 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterVersionsMessage {
     #[doc="<p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
+    #[serde(rename="ClusterParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group_family: Option<String>,
     #[doc="<p>The specific cluster version to return.</p> <p>Example: <code>1.0</code> </p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterVersions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3936,17 +4341,27 @@ impl DescribeClusterVersionsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersMessage {
     #[doc="<p>The unique identifier of a cluster whose properties you are requesting. This parameter is case sensitive.</p> <p>The default is that all clusters defined for an account are returned.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterIdentifier</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching clusters that are associated with the specified key or keys. For example, suppose that you have clusters that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the clusters that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching clusters that are associated with the specified tag value or values. For example, suppose that you have clusters that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the clusters that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -3987,13 +4402,18 @@ impl DescribeClustersMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDefaultClusterParametersMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeDefaultClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The name of the cluster parameter group family.</p>"]
+    #[serde(rename="ParameterGroupFamily")]
     pub parameter_group_family: String,
 }
 
@@ -4021,8 +4441,10 @@ impl DescribeDefaultClusterParametersMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDefaultClusterParametersResult {
+    #[serde(rename="DefaultClusterParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_cluster_parameters: Option<DefaultClusterParameters>,
 }
 
@@ -4069,9 +4491,11 @@ impl DescribeDefaultClusterParametersResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventCategoriesMessage {
     #[doc="<p>The source type, such as cluster or parameter group, to which the described event categories apply.</p> <p>Valid values: cluster, cluster-snapshot, cluster-parameter-group, and cluster-security-group.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
 }
 
@@ -4094,13 +4518,19 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeEventSubscriptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The name of the Amazon Redshift event notification subscription to be described.</p>"]
+    #[serde(rename="SubscriptionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_name: Option<String>,
 }
 
@@ -4131,21 +4561,35 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The number of minutes prior to the time of the request for which to retrieve events. For example, if the request is sent at 18:00 and you specify a duration of 60, then only events which have occurred after 17:00 will be returned.</p> <p>Default: <code>60</code> </p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeEvents</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The identifier of the event source for which events will be returned. If this parameter is not specified, then all sources are included in the response.</p> <p>Constraints:</p> <p>If <i>SourceIdentifier</i> is supplied, <i>SourceType</i> must also be provided.</p> <ul> <li> <p>Specify a cluster identifier when <i>SourceType</i> is <code>cluster</code>.</p> </li> <li> <p>Specify a cluster security group name when <i>SourceType</i> is <code>cluster-security-group</code>.</p> </li> <li> <p>Specify a cluster parameter group name when <i>SourceType</i> is <code>cluster-parameter-group</code>.</p> </li> <li> <p>Specify a cluster snapshot identifier when <i>SourceType</i> is <code>cluster-snapshot</code>.</p> </li> </ul>"]
+    #[serde(rename="SourceIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p> <p>Constraints:</p> <p>If <i>SourceType</i> is supplied, <i>SourceIdentifier</i> must also be provided.</p> <ul> <li> <p>Specify <code>cluster</code> when <i>SourceIdentifier</i> is a cluster identifier.</p> </li> <li> <p>Specify <code>cluster-security-group</code> when <i>SourceIdentifier</i> is a cluster security group name.</p> </li> <li> <p>Specify <code>cluster-parameter-group</code> when <i>SourceIdentifier</i> is a cluster parameter group name.</p> </li> <li> <p>Specify <code>cluster-snapshot</code> when <i>SourceIdentifier</i> is a cluster snapshot identifier.</p> </li> </ul>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
     #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
 }
 
@@ -4192,17 +4636,27 @@ impl DescribeEventsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHsmClientCertificatesMessage {
     #[doc="<p>The identifier of a specific HSM client certificate for which you want information. If no identifier is specified, information is returned for all HSM client certificates owned by your AWS customer account.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmClientCertificates</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching HSM client certificates that are associated with the specified key or keys. For example, suppose that you have HSM client certificates that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the HSM client certificates that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching HSM client certificates that are associated with the specified tag value or values. For example, suppose that you have HSM client certificates that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM client certificates that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -4243,17 +4697,27 @@ impl DescribeHsmClientCertificatesMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHsmConfigurationsMessage {
     #[doc="<p>The identifier of a specific Amazon Redshift HSM configuration to be described. If no identifier is specified, information is returned for all HSM configurations owned by your AWS customer account.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmConfigurations</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching HSM configurations that are associated with the specified key or keys. For example, suppose that you have HSM configurations that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the HSM configurations that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching HSM configurations that are associated with the specified tag value or values. For example, suppose that you have HSM configurations that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM configurations that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -4294,9 +4758,10 @@ impl DescribeHsmConfigurationsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoggingStatusMessage {
     #[doc="<p>The identifier of the cluster from which to get the logging status.</p> <p>Example: <code>examplecluster</code> </p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -4317,15 +4782,23 @@ impl DescribeLoggingStatusMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeOrderableClusterOptionsMessage {
     #[doc="<p>The version filter value. Specify this parameter to show only the available offerings matching the specified version.</p> <p>Default: All versions.</p> <p>Constraints: Must be one of the version returned from <a>DescribeClusterVersions</a>.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeOrderableClusterOptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The node type filter value. Specify this parameter to show only the available offerings matching the specified node type.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
 }
 
@@ -4360,13 +4833,19 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedNodeOfferingsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodeOfferings</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The unique identifier for the offering.</p>"]
+    #[serde(rename="ReservedNodeOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_offering_id: Option<String>,
 }
 
@@ -4397,13 +4876,19 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedNodesMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodes</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>Identifier for the node reservation.</p>"]
+    #[serde(rename="ReservedNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_id: Option<String>,
 }
 
@@ -4434,9 +4919,10 @@ impl DescribeReservedNodesMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeResizeMessage {
     #[doc="<p>The unique identifier of a cluster whose resize progress you are requesting. This parameter is case-sensitive.</p> <p>By default, resize operations for all clusters defined for an AWS account are returned.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -4457,17 +4943,27 @@ impl DescribeResizeMessageSerializer {
 }
 
 #[doc="<p>The result of the <code>DescribeSnapshotCopyGrants</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotCopyGrantsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant.</p>"]
+    #[serde(rename="SnapshotCopyGrantName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grant_name: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching resources that are associated with the specified key or keys. For example, suppose that you have resources tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with all resources that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -4508,15 +5004,23 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTableRestoreStatusMessage {
     #[doc="<p>The Amazon Redshift cluster that the table is being restored to.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>An optional pagination token provided by a previous <code>DescribeTableRestoreStatus</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The identifier of the table restore request to return status for. If you don't specify a <code>TableRestoreRequestId</code> value, then <code>DescribeTableRestoreStatus</code> returns the status of all in-progress table restore requests.</p>"]
+    #[serde(rename="TableRestoreRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub table_restore_request_id: Option<String>,
 }
 
@@ -4551,19 +5055,31 @@ impl DescribeTableRestoreStatusMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value. </p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) for which you want to describe the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
+    #[serde(rename="ResourceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_name: Option<String>,
     #[doc="<p>The type of resource with which you want to view tags. Valid resource types are: </p> <ul> <li> <p>Cluster</p> </li> <li> <p>CIDR/IP</p> </li> <li> <p>EC2 security group</p> </li> <li> <p>Snapshot</p> </li> <li> <p>Cluster security group</p> </li> <li> <p>Subnet group</p> </li> <li> <p>HSM connection</p> </li> <li> <p>HSM certificate</p> </li> <li> <p>Parameter group</p> </li> <li> <p>Snapshot copy grant</p> </li> </ul> <p>For more information about Amazon Redshift resource types and constructing ARNs, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/constructing-redshift-arn.html\">Constructing an Amazon Redshift Amazon Resource Name (ARN)</a> in the Amazon Redshift Cluster Management Guide. </p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching resources that are associated with the specified key or keys. For example, suppose that you have resources tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with all resources that have either or both of these tag keys associated with them.</p>"]
+    #[serde(rename="TagKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>"]
+    #[serde(rename="TagValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
@@ -4608,9 +5124,10 @@ impl DescribeTagsMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableLoggingMessage {
     #[doc="<p>The identifier of the cluster on which logging is to be stopped.</p> <p>Example: <code>examplecluster</code> </p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -4631,9 +5148,10 @@ impl DisableLoggingMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableSnapshotCopyMessage {
     #[doc="<p>The unique identifier of the source cluster that you want to disable copying of snapshots to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -4653,8 +5171,10 @@ impl DisableSnapshotCopyMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableSnapshotCopyResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -4729,15 +5249,23 @@ impl DoubleOptionalDeserializer {
     }
 }
 #[doc="<p>Describes an Amazon EC2 security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EC2SecurityGroup {
     #[doc="<p>The name of the EC2 Security Group.</p>"]
+    #[serde(rename="EC2SecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_name: Option<String>,
     #[doc="<p>The AWS ID of the owner of the EC2 security group specified in the <code>EC2SecurityGroupName</code> field. </p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_owner_id: Option<String>,
     #[doc="<p>The status of the EC2 security group.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the EC2 security group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -4839,11 +5367,15 @@ impl EC2SecurityGroupListDeserializer {
     }
 }
 #[doc="<p>Describes the status of the elastic IP (EIP) address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticIpStatus {
     #[doc="<p>The elastic IP (EIP) address for the cluster.</p>"]
+    #[serde(rename="ElasticIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_ip: Option<String>,
     #[doc="<p>The status of the elastic IP (EIP) address.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -4894,13 +5426,17 @@ impl ElasticIpStatusDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableLoggingMessage {
     #[doc="<p>The name of an existing S3 bucket where the log files are to be stored.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the same region as the cluster</p> </li> <li> <p>The cluster must have read bucket and put object permissions</p> </li> </ul>"]
+    #[serde(rename="BucketName")]
     pub bucket_name: String,
     #[doc="<p>The identifier of the cluster on which logging is to be started.</p> <p>Example: <code>examplecluster</code> </p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The prefix applied to the log file names.</p> <p>Constraints:</p> <ul> <li> <p>Cannot exceed 512 characters</p> </li> <li> <p>Cannot contain spaces( ), double quotes (\"), single quotes ('), a backslash (\\), or control characters. The hexadecimal codes for invalid characters are: </p> <ul> <li> <p>x00 to x20</p> </li> <li> <p>x22</p> </li> <li> <p>x27</p> </li> <li> <p>x5c</p> </li> <li> <p>x7f or larger</p> </li> </ul> </li> </ul>"]
+    #[serde(rename="S3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key_prefix: Option<String>,
 }
 
@@ -4927,15 +5463,21 @@ impl EnableLoggingMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableSnapshotCopyMessage {
     #[doc="<p>The unique identifier of the source cluster to copy snapshots from.</p> <p>Constraints: Must be the valid name of an existing cluster that does not already have cross-region snapshot copy enabled.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The destination region that you want to copy snapshots to.</p> <p>Constraints: Must be the name of a valid region. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#redshift_region\">Regions and Endpoints</a> in the Amazon Web Services General Reference. </p>"]
+    #[serde(rename="DestinationRegion")]
     pub destination_region: String,
     #[doc="<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>Default: 7.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>"]
+    #[serde(rename="RetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub retention_period: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant to use when snapshots of an AWS KMS-encrypted cluster are copied to the destination region.</p>"]
+    #[serde(rename="SnapshotCopyGrantName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grant_name: Option<String>,
 }
 
@@ -4965,8 +5507,10 @@ impl EnableSnapshotCopyMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableSnapshotCopyResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -5013,11 +5557,15 @@ impl EnableSnapshotCopyResultDeserializer {
     }
 }
 #[doc="<p>Describes a connection endpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Endpoint {
     #[doc="<p>The DNS address of the Cluster.</p>"]
+    #[serde(rename="Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub address: Option<String>,
     #[doc="<p>The port that the database engine is listening on.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
 }
 
@@ -5067,21 +5615,35 @@ impl EndpointDeserializer {
     }
 }
 #[doc="<p>Describes an event.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Event {
     #[doc="<p>The date and time of the event.</p>"]
+    #[serde(rename="Date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<String>,
     #[doc="<p>A list of the event categories.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
+    #[serde(rename="EventCategories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     #[doc="<p>The identifier of the event.</p>"]
+    #[serde(rename="EventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<String>,
     #[doc="<p>The text of this event.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p>The severity of the event.</p> <p>Values: ERROR, INFO</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<String>,
     #[doc="<p>The identifier for the source of the event.</p>"]
+    #[serde(rename="SourceIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_identifier: Option<String>,
     #[doc="<p>The source type for this event.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
 }
 
@@ -5207,11 +5769,15 @@ impl EventCategoriesListSerializer {
 }
 
 #[doc="<p>Describes event categories.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventCategoriesMap {
     #[doc="<p>The events in the event category.</p>"]
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<EventInfoMap>>,
     #[doc="<p>The source type, such as cluster or cluster-snapshot, that the returned categories belong to.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
 }
 
@@ -5304,9 +5870,11 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventCategoriesMessage {
     #[doc="<p>A list of event categories descriptions.</p>"]
+    #[serde(rename="EventCategoriesMapList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
 }
 
@@ -5354,15 +5922,23 @@ impl EventCategoriesMessageDeserializer {
     }
 }
 #[doc="<p>Describes event information.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventInfoMap {
     #[doc="<p>The category of an Amazon Redshift event.</p>"]
+    #[serde(rename="EventCategories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     #[doc="<p>The description of an Amazon Redshift event.</p>"]
+    #[serde(rename="EventDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_description: Option<String>,
     #[doc="<p>The identifier of an Amazon Redshift event.</p>"]
+    #[serde(rename="EventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<String>,
     #[doc="<p>The severity of the event.</p> <p>Values: ERROR, INFO</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<String>,
 }
 
@@ -5506,29 +6082,51 @@ impl EventListDeserializer {
     }
 }
 #[doc="<p>Describes event subscriptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventSubscription {
     #[doc="<p>The name of the Amazon Redshift event notification subscription.</p>"]
+    #[serde(rename="CustSubscriptionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cust_subscription_id: Option<String>,
     #[doc="<p>The AWS customer account associated with the Amazon Redshift event notification subscription.</p>"]
+    #[serde(rename="CustomerAwsId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_aws_id: Option<String>,
     #[doc="<p>A Boolean value indicating whether the subscription is enabled. <code>true</code> indicates the subscription is enabled.</p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
     #[doc="<p>The list of Amazon Redshift event categories specified in the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
+    #[serde(rename="EventCategoriesList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories_list: Option<Vec<String>>,
     #[doc="<p>The event severity specified in the Amazon Redshift event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic used by the event notification subscription.</p>"]
+    #[serde(rename="SnsTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>A list of the sources that publish events to the Amazon Redshift event notification subscription.</p>"]
+    #[serde(rename="SourceIdsList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_ids_list: Option<Vec<String>>,
     #[doc="<p>The source type of the events returned the Amazon Redshift event notification, such as cluster, or cluster-snapshot.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
     #[doc="<p>The status of the Amazon Redshift event notification subscription.</p> <p>Constraints:</p> <ul> <li> <p>Can be one of the following: active | no-permission | topic-not-exist</p> </li> <li> <p>The status \"no-permission\" indicates that Amazon Redshift no longer has permission to post to the Amazon SNS topic. The status \"topic-not-exist\" indicates that the topic was deleted after the subscription was created.</p> </li> </ul>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The date and time the Amazon Redshift event notification subscription was created.</p>"]
+    #[serde(rename="SubscriptionCreationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_creation_time: Option<String>,
     #[doc="<p>The list of tags for the event subscription.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -5659,11 +6257,15 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventSubscriptionsMessage {
     #[doc="<p>A list of event subscriptions.</p>"]
+    #[serde(rename="EventSubscriptionsList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5715,11 +6317,15 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventsMessage {
     #[doc="<p>A list of <code>Event</code> instances. </p>"]
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<Event>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5770,19 +6376,29 @@ impl EventsMessageDeserializer {
     }
 }
 #[doc="<p>The request parameters to get cluster credentials.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClusterCredentialsMessage {
     #[doc="<p>Create a database user with the name specified for <code>DbUser</code> if one does not exist.</p>"]
+    #[serde(rename="AutoCreate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_create: Option<bool>,
     #[doc="<p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>A list of the names of existing database groups that <code>DbUser</code> will join for the current session. If not specified, the new user is added only to PUBLIC.</p>"]
+    #[serde(rename="DbGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_groups: Option<Vec<String>>,
     #[doc="<p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
+    #[serde(rename="DbName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_name: Option<String>,
     #[doc="<p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
+    #[serde(rename="DbUser")]
     pub db_user: String,
     #[doc="<p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>"]
+    #[serde(rename="DurationSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration_seconds: Option<i64>,
 }
 
@@ -5822,13 +6438,19 @@ impl GetClusterCredentialsMessageSerializer {
 }
 
 #[doc="<p>Returns information about an HSM client certificate. The certificate is stored in a secure Hardware Storage Module (HSM), and used by the Amazon Redshift cluster to encrypt data files.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HsmClientCertificate {
     #[doc="<p>The identifier of the HSM client certificate.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>The public key that the Amazon Redshift cluster will use to connect to the HSM. You must register the public key in the HSM.</p>"]
+    #[serde(rename="HsmClientCertificatePublicKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_public_key: Option<String>,
     #[doc="<p>The list of tags for the HSM client certificate.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -5925,11 +6547,15 @@ impl HsmClientCertificateListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HsmClientCertificateMessage {
     #[doc="<p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>"]
+    #[serde(rename="HsmClientCertificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificates: Option<Vec<HsmClientCertificate>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5979,17 +6605,27 @@ impl HsmClientCertificateMessageDeserializer {
     }
 }
 #[doc="<p>Returns information about an HSM configuration, which is an object that describes to Amazon Redshift clusters the information they require to connect to an HSM where they can store database encryption keys.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HsmConfiguration {
     #[doc="<p>A text description of the HSM configuration.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The name of the Amazon Redshift HSM configuration.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>The IP address that the Amazon Redshift cluster must use to access the HSM.</p>"]
+    #[serde(rename="HsmIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_ip_address: Option<String>,
     #[doc="<p>The name of the partition in the HSM where the Amazon Redshift clusters will store their database encryption keys.</p>"]
+    #[serde(rename="HsmPartitionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_partition_name: Option<String>,
     #[doc="<p>The list of tags for the HSM configuration.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -6095,11 +6731,15 @@ impl HsmConfigurationListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HsmConfigurationMessage {
     #[doc="<p>A list of <code>HsmConfiguration</code> objects.</p>"]
+    #[serde(rename="HsmConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configurations: Option<Vec<HsmConfiguration>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -6151,13 +6791,19 @@ impl HsmConfigurationMessageDeserializer {
     }
 }
 #[doc="<p>Describes the status of changes to HSM settings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HsmStatus {
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>Reports whether the Amazon Redshift cluster has finished applying any HSM settings changes specified in a modify cluster command.</p> <p>Values: active, applying</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -6214,13 +6860,19 @@ impl HsmStatusDeserializer {
     }
 }
 #[doc="<p>Describes an IP range used in a security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IPRange {
     #[doc="<p>The IP range in Classless Inter-Domain Routing (CIDR) notation.</p>"]
+    #[serde(rename="CIDRIP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidrip: Option<String>,
     #[doc="<p>The status of the IP range, for example, \"authorized\".</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the IP range.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -6478,19 +7130,31 @@ impl IntegerOptionalDeserializer {
     }
 }
 #[doc="<p>Describes the status of logging for a cluster.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoggingStatus {
     #[doc="<p>The name of the S3 bucket where the log files are stored.</p>"]
+    #[serde(rename="BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket_name: Option<String>,
     #[doc="<p>The message indicating that logs failed to be delivered.</p>"]
+    #[serde(rename="LastFailureMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_failure_message: Option<String>,
     #[doc="<p>The last time when logs failed to be delivered.</p>"]
+    #[serde(rename="LastFailureTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_failure_time: Option<String>,
     #[doc="<p>The last time that logs were delivered.</p>"]
+    #[serde(rename="LastSuccessfulDeliveryTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_successful_delivery_time: Option<String>,
     #[doc="<p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>"]
+    #[serde(rename="LoggingEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logging_enabled: Option<bool>,
     #[doc="<p>The prefix applied to the log file names.</p>"]
+    #[serde(rename="S3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key_prefix: Option<String>,
 }
 
@@ -6589,13 +7253,18 @@ impl LongOptionalDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterIamRolesMessage {
     #[doc="<p>Zero or more IAM roles to associate with the cluster. The roles must be in their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles with a single cluster in a single request.</p>"]
+    #[serde(rename="AddIamRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub add_iam_roles: Option<Vec<String>>,
     #[doc="<p>The unique identifier of the cluster for which you want to associate or disassociate IAM roles.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>Zero or more IAM roles in ARN format to disassociate from the cluster. You can disassociate up to 10 IAM roles from a single cluster in a single request.</p>"]
+    #[serde(rename="RemoveIamRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remove_iam_roles: Option<Vec<String>>,
 }
 
@@ -6625,8 +7294,10 @@ impl ModifyClusterIamRolesMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterIamRolesResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -6673,43 +7344,78 @@ impl ModifyClusterIamRolesResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterMessage {
     #[doc="<p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="AllowVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>"]
+    #[serde(rename="AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The unique identifier of the cluster to be modified.</p> <p>Example: <code>examplecluster</code> </p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The name of the cluster parameter group to apply to this cluster. This change is applied only after the cluster is rebooted. To reboot a cluster use <a>RebootCluster</a>. </p> <p>Default: Uses existing setting.</p> <p>Constraints: The cluster parameter group must be in the same parameter group family that matches the cluster version.</p>"]
+    #[serde(rename="ClusterParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of cluster security groups to be authorized on this cluster. This change is asynchronously applied as soon as possible.</p> <p>Security groups currently associated with the cluster, and not in the list of groups to apply, will be revoked from the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
+    #[serde(rename="ClusterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The new cluster type.</p> <p>When you submit your cluster resize request, your existing cluster goes into a read-only mode. After Amazon Redshift provisions a new cluster based on your resize requirements, there will be outage for a period while the old cluster is deleted and your connection is switched to the new cluster. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> multi-node | single-node </code> </p>"]
+    #[serde(rename="ClusterType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_type: Option<String>,
     #[doc="<p>The new version number of the Amazon Redshift engine to upgrade to.</p> <p>For major version upgrades, if a non-default cluster parameter group is currently in use, a new cluster parameter group in the cluster parameter group family for the new version must be specified. The new cluster parameter group can be the default for that cluster parameter group family. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Example: <code>1.0</code> </p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>"]
+    #[serde(rename="ElasticIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_ip: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>The new password for the cluster master user. This change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <note> <p>Operations never return the password, so this operation provides a way to regain access to the master user account for a cluster if the password is lost.</p> </note> <p>Default: Uses existing setting.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except ' (single quote), \" (double quote), \\, /, @, or space.</p> </li> </ul>"]
+    #[serde(rename="MasterUserPassword")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_user_password: Option<String>,
     #[doc="<p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>"]
+    #[serde(rename="NewClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_cluster_identifier: Option<String>,
     #[doc="<p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code> ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>"]
+    #[serde(rename="NumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_nodes: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which system maintenance can occur, if necessary. If system maintenance is necessary during the window, it may result in an outage.</p> <p>This maintenance window change is made immediately. If the new maintenance window indicates the current time, there must be at least 120 minutes between the current time and end of the window in order to ensure that pending changes are applied.</p> <p>Default: Uses existing setting.</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi, for example <code>wed:07:30-wed:08:00</code>.</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes.</p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>"]
+    #[serde(rename="PubliclyAccessible")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub publicly_accessible: Option<bool>,
     #[doc="<p>A list of virtual private cloud (VPC) security groups to be associated with the cluster.</p>"]
+    #[serde(rename="VpcSecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
@@ -6804,11 +7510,13 @@ impl ModifyClusterMessageSerializer {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterParameterGroupMessage {
     #[doc="<p>The name of the parameter group to be modified.</p>"]
+    #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
     #[doc="<p>An array of parameters to be modified. A maximum of 20 parameters can be modified in a single request.</p> <p>For each parameter to be modified, you must supply at least the parameter name and parameter value; other name-value pairs of the parameter are optional.</p> <p>For the workload management (WLM) configuration, you must supply all the name-value pairs in the wlm_json_configuration parameter.</p>"]
+    #[serde(rename="Parameters")]
     pub parameters: Vec<Parameter>,
 }
 
@@ -6831,8 +7539,10 @@ impl ModifyClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -6879,13 +7589,17 @@ impl ModifyClusterResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterSubnetGroupMessage {
     #[doc="<p>The name of the subnet group to be modified.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
     pub cluster_subnet_group_name: String,
     #[doc="<p>A text description of the subnet group to be modified.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>An array of VPC subnet IDs. A maximum of 20 subnets can be modified in a single request.</p>"]
+    #[serde(rename="SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
 
@@ -6912,8 +7626,10 @@ impl ModifyClusterSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyClusterSubnetGroupResult {
+    #[serde(rename="ClusterSubnetGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
 }
 
@@ -6961,21 +7677,34 @@ impl ModifyClusterSubnetGroupResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEventSubscriptionMessage {
     #[doc="<p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
     #[doc="<p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
+    #[serde(rename="EventCategories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     #[doc="<p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
+    #[serde(rename="Severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the SNS topic to be used by the event notification subscription.</p>"]
+    #[serde(rename="SnsTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>A list of one or more identifiers of Amazon Redshift source objects. All of the objects must be of the same type as was specified in the source type parameter. The event subscription will return only events generated by the specified objects. If not specified, then events are returned for all objects within the source type specified.</p> <p>Example: my-cluster-1, my-cluster-2</p> <p>Example: my-snapshot-20131010</p>"]
+    #[serde(rename="SourceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_ids: Option<Vec<String>>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a cluster, you would set this parameter to cluster. If this value is not specified, events are returned for all Amazon Redshift objects in your AWS account. You must specify a source type in order to specify source IDs.</p> <p>Valid values: cluster, cluster-parameter-group, cluster-security-group, and cluster-snapshot.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
     #[doc="<p>The name of the modified Amazon Redshift event notification subscription.</p>"]
+    #[serde(rename="SubscriptionName")]
     pub subscription_name: String,
 }
 
@@ -7021,8 +7750,10 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEventSubscriptionResult {
+    #[serde(rename="EventSubscription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_subscription: Option<EventSubscription>,
 }
 
@@ -7070,11 +7801,13 @@ impl ModifyEventSubscriptionResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
     #[doc="<p>The unique identifier of the cluster for which you want to change the retention period for automated snapshots that are copied to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>If you decrease the retention period for automated snapshots that are copied to a destination region, Amazon Redshift will delete any existing automated snapshots that were copied to the destination region and that fall outside of the new retention period.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>"]
+    #[serde(rename="RetentionPeriod")]
     pub retention_period: i64,
 }
 
@@ -7096,8 +7829,10 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySnapshotCopyRetentionPeriodResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -7145,15 +7880,23 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
     }
 }
 #[doc="<p>Describes an orderable cluster option.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OrderableClusterOption {
     #[doc="<p>A list of availability zones for the orderable cluster.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZone>>,
     #[doc="<p>The cluster type, for example <code>multi-node</code>. </p>"]
+    #[serde(rename="ClusterType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_type: Option<String>,
     #[doc="<p>The version of the orderable cluster.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The node type for the orderable cluster.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
 }
 
@@ -7255,11 +7998,15 @@ impl OrderableClusterOptionsListDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeOrderableClusterOptions</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OrderableClusterOptionsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>An <code>OrderableClusterOption</code> structure containing information about orderable options for the cluster.</p>"]
+    #[serde(rename="OrderableClusterOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
 }
 
@@ -7309,25 +8056,43 @@ impl OrderableClusterOptionsMessageDeserializer {
     }
 }
 #[doc="<p>Describes a parameter in a cluster parameter group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Parameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
+    #[serde(rename="AllowedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allowed_values: Option<String>,
     #[doc="<p>Specifies how to apply the WLM configuration parameter. Some properties can be applied dynamically, while other properties require that any associated clusters be rebooted for the configuration changes to be applied. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
+    #[serde(rename="ApplyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub apply_type: Option<String>,
     #[doc="<p>The data type of the parameter.</p>"]
+    #[serde(rename="DataType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>If <code>true</code>, the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed. </p>"]
+    #[serde(rename="IsModifiable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest engine version to which the parameter can apply.</p>"]
+    #[serde(rename="MinimumEngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
+    #[serde(rename="ParameterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name: Option<String>,
     #[doc="<p>The value of the parameter.</p>"]
+    #[serde(rename="ParameterValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_value: Option<String>,
     #[doc="<p>The source of the parameter value, such as \"engine-default\" or \"user\".</p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
 }
 
@@ -7567,25 +8332,43 @@ impl ParametersListSerializer {
 }
 
 #[doc="<p>Describes cluster attributes that are in a pending state. A change to one or more the attributes was requested and is in progress or will be applied.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PendingModifiedValues {
     #[doc="<p>The pending or in-progress change of the automated snapshot retention period.</p>"]
+    #[serde(rename="AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The pending or in-progress change of the new identifier for the cluster.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The pending or in-progress change of the cluster type.</p>"]
+    #[serde(rename="ClusterType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_type: Option<String>,
     #[doc="<p>The pending or in-progress change of the service version.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>The pending or in-progress change of the master user password for the cluster.</p>"]
+    #[serde(rename="MasterUserPassword")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_user_password: Option<String>,
     #[doc="<p>The pending or in-progress change of the cluster's node type.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The pending or in-progress change of the number of nodes in the cluster.</p>"]
+    #[serde(rename="NumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_nodes: Option<i64>,
     #[doc="<p>The pending or in-progress change of the ability to connect to the cluster from the public network.</p>"]
+    #[serde(rename="PubliclyAccessible")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub publicly_accessible: Option<bool>,
 }
 
@@ -7671,11 +8454,14 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedNodeOfferingMessage {
     #[doc="<p>The number of reserved nodes that you want to purchase.</p> <p>Default: <code>1</code> </p>"]
+    #[serde(rename="NodeCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_count: Option<i64>,
     #[doc="<p>The unique identifier of the reserved node offering you want to purchase.</p>"]
+    #[serde(rename="ReservedNodeOfferingId")]
     pub reserved_node_offering_id: String,
 }
 
@@ -7699,8 +8485,10 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedNodeOfferingResult {
+    #[serde(rename="ReservedNode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node: Option<ReservedNode>,
 }
 
@@ -7749,9 +8537,10 @@ impl PurchaseReservedNodeOfferingResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootClusterMessage {
     #[doc="<p>The cluster identifier.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -7771,8 +8560,10 @@ impl RebootClusterMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootClusterResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -7819,11 +8610,15 @@ impl RebootClusterResultDeserializer {
     }
 }
 #[doc="<p>Describes a recurring charge.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecurringCharge {
     #[doc="<p>The amount charged per the period of time specified by the recurring charge frequency.</p>"]
+    #[serde(rename="RecurringChargeAmount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charge_amount: Option<f64>,
     #[doc="<p>The frequency at which the recurring charge amount is applied.</p>"]
+    #[serde(rename="RecurringChargeFrequency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charge_frequency: Option<String>,
 }
 
@@ -7918,31 +8713,55 @@ impl RecurringChargeListDeserializer {
     }
 }
 #[doc="<p>Describes a reserved node. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedNode {
     #[doc="<p>The currency code for the reserved cluster.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the node reservation in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The fixed cost Amazon Redshift charges you for this reserved node.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f64>,
     #[doc="<p>The number of reserved compute nodes.</p>"]
+    #[serde(rename="NodeCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_count: Option<i64>,
     #[doc="<p>The node type of the reserved node.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The anticipated utilization of the reserved node, as defined in the reserved node offering.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The recurring charges for the reserved node.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The unique identifier for the reservation.</p>"]
+    #[serde(rename="ReservedNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_id: Option<String>,
     #[doc="<p>The identifier for the reserved node offering.</p>"]
+    #[serde(rename="ReservedNodeOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_offering_id: Option<String>,
     #[doc="<p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The hourly rate Amazon Redshift charges you for this reserved node.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f64>,
 }
 
@@ -8077,23 +8896,39 @@ impl ReservedNodeListDeserializer {
     }
 }
 #[doc="<p>Describes a reserved node offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedNodeOffering {
     #[doc="<p>The currency code for the compute nodes offering.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration, in seconds, for which the offering will reserve the node.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The upfront fixed charge you will pay to purchase the specific reserved node offering.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f64>,
     #[doc="<p>The node type offered by the reserved node offering.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The anticipated utilization of the reserved node, as defined in the reserved node offering.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The charge to your account regardless of whether you are creating any clusters using the node offering. Recurring charges are only in effect for heavy-utilization reserved nodes.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The offering identifier.</p>"]
+    #[serde(rename="ReservedNodeOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_offering_id: Option<String>,
     #[doc="<p>The rate you are charged for each hour the cluster that is using the offering is running.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f64>,
 }
 
@@ -8211,11 +9046,15 @@ impl ReservedNodeOfferingListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedNodeOfferingsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of <code>ReservedNodeOffering</code> objects.</p>"]
+    #[serde(rename="ReservedNodeOfferings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
 }
 
@@ -8265,11 +9104,15 @@ impl ReservedNodeOfferingsMessageDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedNodesMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The list of <code>ReservedNode</code> objects.</p>"]
+    #[serde(rename="ReservedNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_nodes: Option<Vec<ReservedNode>>,
 }
 
@@ -8321,13 +9164,18 @@ impl ReservedNodesMessageDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetClusterParameterGroupMessage {
     #[doc="<p>The name of the cluster parameter group to be reset.</p>"]
+    #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
     #[doc="<p>An array of names of parameters to be reset. If <i>ResetAllParameters</i> option is not used, then at least one parameter name must be supplied. </p> <p>Constraints: A maximum of 20 parameters can be reset in a single request.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>If <code>true</code>, all parameters in the specified parameter group will be reset to their default values. </p> <p>Default: <code>true</code> </p>"]
+    #[serde(rename="ResetAllParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reset_all_parameters: Option<bool>,
 }
 
@@ -8357,31 +9205,55 @@ impl ResetClusterParameterGroupMessageSerializer {
 }
 
 #[doc="<p>Describes the result of a cluster resize operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResizeProgressMessage {
     #[doc="<p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>"]
+    #[serde(rename="AvgResizeRateInMegaBytesPerSecond")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub avg_resize_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The amount of seconds that have elapsed since the resize operation began. After the resize operation completes, this value shows the total actual time, in seconds, for the resize operation.</p>"]
+    #[serde(rename="ElapsedTimeInSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>"]
+    #[serde(rename="EstimatedTimeToCompletionInSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub estimated_time_to_completion_in_seconds: Option<i64>,
     #[doc="<p>The names of tables that have been completely imported .</p> <p>Valid Values: List of table names.</p>"]
+    #[serde(rename="ImportTablesCompleted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_tables_completed: Option<Vec<String>>,
     #[doc="<p>The names of tables that are being currently imported.</p> <p>Valid Values: List of table names.</p>"]
+    #[serde(rename="ImportTablesInProgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_tables_in_progress: Option<Vec<String>>,
     #[doc="<p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>"]
+    #[serde(rename="ImportTablesNotStarted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_tables_not_started: Option<Vec<String>>,
     #[doc="<p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>"]
+    #[serde(rename="ProgressInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> </p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>"]
+    #[serde(rename="TargetClusterType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_cluster_type: Option<String>,
     #[doc="<p>The node type that the cluster will have after the resize operation is complete.</p>"]
+    #[serde(rename="TargetNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_node_type: Option<String>,
     #[doc="<p>The number of nodes that the cluster will have after the resize operation is complete.</p>"]
+    #[serde(rename="TargetNumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_number_of_nodes: Option<i64>,
     #[doc="<p>The estimated total amount of data, in megabytes, on the cluster before the resize operation began.</p>"]
+    #[serde(rename="TotalResizeDataInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_resize_data_in_mega_bytes: Option<i64>,
 }
 
@@ -8524,51 +9396,93 @@ impl RestorableNodeTypeListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreFromClusterSnapshotMessage {
     #[doc="<p>Reserved.</p>"]
+    #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
     #[doc="<p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster. </p> <p>Default: <code>true</code> </p>"]
+    #[serde(rename="AllowVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: The value selected for the cluster from which the snapshot was taken.</p> <p>Constraints: Must be a value from 0 to 35.</p>"]
+    #[serde(rename="AutomatedSnapshotRetentionPeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The Amazon EC2 Availability Zone in which to restore the cluster.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Example: <code>us-east-1a</code> </p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Working with Amazon Redshift Parameter Groups</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="ClusterParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p> <p>Cluster security groups only apply to clusters outside of VPCs.</p>"]
+    #[serde(rename="ClusterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The name of the subnet group where you want to cluster restored.</p> <p>A snapshot of cluster in VPC can be restored only in VPC. Therefore, you must provide subnet group name where you want the cluster restored.</p>"]
+    #[serde(rename="ClusterSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The elastic IP (EIP) address for the cluster.</p>"]
+    #[serde(rename="ElasticIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_ip: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
+    #[serde(rename="HsmClientCertificateIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
+    #[serde(rename="HsmConfigurationIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. You can supply up to 10 IAM roles in a single request.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
+    #[serde(rename="IamRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_roles: Option<Vec<String>>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster that you restore from a shared snapshot.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds2.xlarge into ds1.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type. For more information about node types, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes\"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i> </p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>"]
+    #[serde(rename="OwnerAccount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_account: Option<String>,
     #[doc="<p>The port number on which the cluster accepts connections.</p> <p>Default: The same port as the original cluster.</p> <p>Constraints: Must be between <code>1115</code> and <code>65535</code>.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which automated cluster maintenance can occur.</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p> Default: The value selected for the cluster from which the snapshot was taken. For more information about the time blocks for each region, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-maintenance-windows\">Maintenance Windows</a> in Amazon Redshift Cluster Management Guide. </p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. </p>"]
+    #[serde(rename="PubliclyAccessible")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub publicly_accessible: Option<bool>,
     #[doc="<p>The name of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>"]
+    #[serde(rename="SnapshotClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The name of the snapshot from which to create the new cluster. This parameter isn't case sensitive.</p> <p>Example: <code>my-snapshot-id</code> </p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
     #[doc="<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p> <p>VPC security groups only apply to clusters in VPCs.</p>"]
+    #[serde(rename="VpcSecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
@@ -8677,8 +9591,10 @@ impl RestoreFromClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreFromClusterSnapshotResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -8726,19 +9642,31 @@ impl RestoreFromClusterSnapshotResultDeserializer {
     }
 }
 #[doc="<p>Describes the status of a cluster restore action. Returns null if the cluster was not created by restoring a snapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreStatus {
     #[doc="<p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup.</p>"]
+    #[serde(rename="CurrentRestoreRateInMegaBytesPerSecond")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_restore_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish.</p>"]
+    #[serde(rename="ElapsedTimeInSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore.</p>"]
+    #[serde(rename="EstimatedTimeToCompletionInSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub estimated_time_to_completion_in_seconds: Option<i64>,
     #[doc="<p>The number of megabytes that have been transferred from snapshot storage.</p>"]
+    #[serde(rename="ProgressInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The size of the set of snapshot data used to restore the cluster.</p>"]
+    #[serde(rename="SnapshotSizeInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_size_in_mega_bytes: Option<i64>,
     #[doc="<p>The status of the restore action. Returns starting, restoring, completed, or failed.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -8810,23 +9738,34 @@ impl RestoreStatusDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreTableFromClusterSnapshotMessage {
     #[doc="<p>The identifier of the Amazon Redshift cluster to restore the table to.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
     #[doc="<p>The name of the table to create as a result of the current request.</p>"]
+    #[serde(rename="NewTableName")]
     pub new_table_name: String,
     #[doc="<p>The identifier of the snapshot to restore the table from. This snapshot must have been created from the Amazon Redshift cluster specified by the <code>ClusterIdentifier</code> parameter.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
     #[doc="<p>The name of the source database that contains the table to restore from.</p>"]
+    #[serde(rename="SourceDatabaseName")]
     pub source_database_name: String,
     #[doc="<p>The name of the source schema that contains the table to restore from. If you do not specify a <code>SourceSchemaName</code> value, the default is <code>public</code>.</p>"]
+    #[serde(rename="SourceSchemaName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_schema_name: Option<String>,
     #[doc="<p>The name of the source table to restore from.</p>"]
+    #[serde(rename="SourceTableName")]
     pub source_table_name: String,
     #[doc="<p>The name of the database to restore the table to.</p>"]
+    #[serde(rename="TargetDatabaseName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_database_name: Option<String>,
     #[doc="<p>The name of the schema to restore the table to.</p>"]
+    #[serde(rename="TargetSchemaName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_schema_name: Option<String>,
 }
 
@@ -8866,8 +9805,10 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreTableFromClusterSnapshotResult {
+    #[serde(rename="TableRestoreStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub table_restore_status: Option<TableRestoreStatus>,
 }
 
@@ -8916,15 +9857,22 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeClusterSecurityGroupIngressMessage {
     #[doc="<p>The IP range for which to revoke access. This range must be a valid Classless Inter-Domain Routing (CIDR) block of IP addresses. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code> and <code>EC2SecurityGroupOwnerId</code> cannot be provided. </p>"]
+    #[serde(rename="CIDRIP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidrip: Option<String>,
     #[doc="<p>The name of the security Group from which to revoke the ingress rule.</p>"]
+    #[serde(rename="ClusterSecurityGroupName")]
     pub cluster_security_group_name: String,
     #[doc="<p>The name of the EC2 Security Group whose access is to be revoked. If <code>EC2SecurityGroupName</code> is specified, <code>EC2SecurityGroupOwnerId</code> must also be provided and <code>CIDRIP</code> cannot be provided. </p>"]
+    #[serde(rename="EC2SecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_name: Option<String>,
     #[doc="<p>The AWS account number of the owner of the security group specified in the <code>EC2SecurityGroupName</code> parameter. The AWS access key ID is not an acceptable value. If <code>EC2SecurityGroupOwnerId</code> is specified, <code>EC2SecurityGroupName</code> must also be provided. and <code>CIDRIP</code> cannot be provided. </p> <p>Example: <code>111122223333</code> </p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_owner_id: Option<String>,
 }
 
@@ -8956,8 +9904,10 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeClusterSecurityGroupIngressResult {
+    #[serde(rename="ClusterSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_security_group: Option<ClusterSecurityGroup>,
 }
 
@@ -9006,13 +9956,17 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeSnapshotAccessMessage {
     #[doc="<p>The identifier of the AWS customer account that can no longer restore the specified snapshot.</p>"]
+    #[serde(rename="AccountWithRestoreAccess")]
     pub account_with_restore_access: String,
     #[doc="<p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>"]
+    #[serde(rename="SnapshotClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The identifier of the snapshot that the account can no longer access.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
     pub snapshot_identifier: String,
 }
 
@@ -9038,8 +9992,10 @@ impl RevokeSnapshotAccessMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeSnapshotAccessResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -9086,9 +10042,10 @@ impl RevokeSnapshotAccessResultDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RotateEncryptionKeyMessage {
     #[doc="<p>The unique identifier of the cluster that you want to rotate the encryption keys for.</p> <p>Constraints: Must be the name of valid cluster that has encryption enabled.</p>"]
+    #[serde(rename="ClusterIdentifier")]
     pub cluster_identifier: String,
 }
 
@@ -9108,8 +10065,10 @@ impl RotateEncryptionKeyMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RotateEncryptionKeyResult {
+    #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -9170,65 +10129,123 @@ impl SensitiveStringDeserializer {
     }
 }
 #[doc="<p>Describes a snapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Snapshot {
     #[doc="<p>A list of the AWS customer accounts authorized to restore the snapshot. Returns <code>null</code> if no accounts are authorized. Visible only to the snapshot owner. </p>"]
+    #[serde(rename="AccountsWithRestoreAccess")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accounts_with_restore_access: Option<Vec<AccountWithRestoreAccess>>,
     #[doc="<p>The size of the incremental backup.</p>"]
+    #[serde(rename="ActualIncrementalBackupSizeInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actual_incremental_backup_size_in_mega_bytes: Option<f64>,
     #[doc="<p>The Availability Zone in which the cluster was created.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of megabytes that have been transferred to the snapshot backup.</p>"]
+    #[serde(rename="BackupProgressInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub backup_progress_in_mega_bytes: Option<f64>,
     #[doc="<p>The time (UTC) when the cluster was originally created.</p>"]
+    #[serde(rename="ClusterCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_create_time: Option<String>,
     #[doc="<p>The identifier of the cluster for which the snapshot was taken.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The version ID of the Amazon Redshift engine that is running on the cluster.</p>"]
+    #[serde(rename="ClusterVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_version: Option<String>,
     #[doc="<p>The number of megabytes per second being transferred to the snapshot backup. Returns <code>0</code> for a completed backup. </p>"]
+    #[serde(rename="CurrentBackupRateInMegaBytesPerSecond")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_backup_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The name of the database that was created when the cluster was created.</p>"]
+    #[serde(rename="DBName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub db_name: Option<String>,
     #[doc="<p>The amount of time an in-progress snapshot backup has been running, or the amount of time it took a completed backup to finish.</p>"]
+    #[serde(rename="ElapsedTimeInSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>If <code>true</code>, the data in the snapshot is encrypted at rest.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>A boolean that indicates whether the snapshot data is encrypted using the HSM keys of the source cluster. <code>true</code> indicates that the data is encrypted using HSM keys.</p>"]
+    #[serde(rename="EncryptedWithHSM")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted_with_hsm: Option<bool>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
+    #[serde(rename="EnhancedVpcRouting")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>The estimate of the time remaining before the snapshot backup will complete. Returns <code>0</code> for a completed backup. </p>"]
+    #[serde(rename="EstimatedSecondsToCompletion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub estimated_seconds_to_completion: Option<i64>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that was used to encrypt data in the cluster from which the snapshot was taken.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The master user name for the cluster.</p>"]
+    #[serde(rename="MasterUsername")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_username: Option<String>,
     #[doc="<p>The node type of the nodes in the cluster.</p>"]
+    #[serde(rename="NodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_type: Option<String>,
     #[doc="<p>The number of nodes in the cluster.</p>"]
+    #[serde(rename="NumberOfNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_nodes: Option<i64>,
     #[doc="<p>For manual snapshots, the AWS customer account used to create or copy the snapshot. For automatic snapshots, the owner of the cluster. The owner can perform all snapshot actions, such as sharing a manual snapshot.</p>"]
+    #[serde(rename="OwnerAccount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_account: Option<String>,
     #[doc="<p>The port that the cluster is listening on.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The list of node types that this cluster snapshot is able to restore into.</p>"]
+    #[serde(rename="RestorableNodeTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restorable_node_types: Option<Vec<String>>,
     #[doc="<p>The time (UTC) when Amazon Redshift began the snapshot. A snapshot contains a copy of the cluster data as of this exact time.</p>"]
+    #[serde(rename="SnapshotCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_create_time: Option<String>,
     #[doc="<p>The snapshot identifier that is provided in the request.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_identifier: Option<String>,
     #[doc="<p>The snapshot type. Snapshots created using <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> will be of type \"manual\". </p>"]
+    #[serde(rename="SnapshotType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_type: Option<String>,
     #[doc="<p>The source region from which the snapshot was copied.</p>"]
+    #[serde(rename="SourceRegion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_region: Option<String>,
     #[doc="<p>The snapshot status. The value of the status depends on the API operation used. </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as \"creating\". </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as \"creating\", \"available\", \"final snapshot\", or \"failed\".</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as \"deleted\".</p> </li> </ul>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the cluster snapshot.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The size of the complete set of backup data that would be used to restore the cluster.</p>"]
+    #[serde(rename="TotalBackupSizeInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_backup_size_in_mega_bytes: Option<f64>,
     #[doc="<p>The VPC identifier of the cluster if the snapshot is from a cluster in a VPC. Otherwise, this field is not in the output.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -9401,13 +10418,19 @@ impl SnapshotDeserializer {
     }
 }
 #[doc="<p>The snapshot copy grant that grants Amazon Redshift permission to encrypt copied snapshots with the specified customer master key (CMK) from AWS KMS in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotCopyGrant {
     #[doc="<p>The unique identifier of the customer master key (CMK) in AWS KMS to which Amazon Redshift is granted permission.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of the snapshot copy grant.</p>"]
+    #[serde(rename="SnapshotCopyGrantName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grant_name: Option<String>,
     #[doc="<p>A list of tag instances.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -9503,11 +10526,15 @@ impl SnapshotCopyGrantListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotCopyGrantMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The list of <code>SnapshotCopyGrant</code> objects.</p>"]
+    #[serde(rename="SnapshotCopyGrants")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
 }
 
@@ -9600,11 +10627,15 @@ impl SnapshotListDeserializer {
     }
 }
 #[doc="<p>Contains the output from the <a>DescribeClusterSnapshots</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Snapshot</a> instances. </p>"]
+    #[serde(rename="Snapshots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
@@ -9737,12 +10768,18 @@ impl StringDeserializer {
     }
 }
 #[doc="<p>Describes a subnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subnet {
+    #[serde(rename="SubnetAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_availability_zone: Option<AvailabilityZone>,
     #[doc="<p>The identifier of the subnet.</p>"]
+    #[serde(rename="SubnetIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_identifier: Option<String>,
     #[doc="<p>The status of the subnet.</p>"]
+    #[serde(rename="SubnetStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_status: Option<String>,
 }
 
@@ -9866,35 +10903,63 @@ impl TStampDeserializer {
     }
 }
 #[doc="<p>Describes the status of a <a>RestoreTableFromClusterSnapshot</a> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableRestoreStatus {
     #[doc="<p>The identifier of the Amazon Redshift cluster that the table is being restored to.</p>"]
+    #[serde(rename="ClusterIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_identifier: Option<String>,
     #[doc="<p>A description of the status of the table restore request. Status values include <code>SUCCEEDED</code>, <code>FAILED</code>, <code>CANCELED</code>, <code>PENDING</code>, <code>IN_PROGRESS</code>.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p>The name of the table to create as a result of the table restore request.</p>"]
+    #[serde(rename="NewTableName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_table_name: Option<String>,
     #[doc="<p>The amount of data restored to the new table so far, in megabytes (MB).</p>"]
+    #[serde(rename="ProgressInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The time that the table restore request was made, in Universal Coordinated Time (UTC).</p>"]
+    #[serde(rename="RequestTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_time: Option<String>,
     #[doc="<p>The identifier of the snapshot that the table is being restored from.</p>"]
+    #[serde(rename="SnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_identifier: Option<String>,
     #[doc="<p>The name of the source database that contains the table being restored.</p>"]
+    #[serde(rename="SourceDatabaseName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_database_name: Option<String>,
     #[doc="<p>The name of the source schema that contains the table being restored.</p>"]
+    #[serde(rename="SourceSchemaName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_schema_name: Option<String>,
     #[doc="<p>The name of the source table being restored.</p>"]
+    #[serde(rename="SourceTableName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_table_name: Option<String>,
     #[doc="<p>A value that describes the current state of the table restore request.</p> <p>Valid Values: <code>SUCCEEDED</code>, <code>FAILED</code>, <code>CANCELED</code>, <code>PENDING</code>, <code>IN_PROGRESS</code> </p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The unique identifier for the table restore request.</p>"]
+    #[serde(rename="TableRestoreRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub table_restore_request_id: Option<String>,
     #[doc="<p>The name of the database to restore the table to.</p>"]
+    #[serde(rename="TargetDatabaseName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_database_name: Option<String>,
     #[doc="<p>The name of the schema to restore the table to.</p>"]
+    #[serde(rename="TargetSchemaName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_schema_name: Option<String>,
     #[doc="<p>The total amount of data to restore to the new table, in megabytes (MB).</p>"]
+    #[serde(rename="TotalDataInMegaBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_data_in_mega_bytes: Option<i64>,
 }
 
@@ -10045,11 +11110,15 @@ impl TableRestoreStatusListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableRestoreStatusMessage {
     #[doc="<p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of status details for one or more table restore requests.</p>"]
+    #[serde(rename="TableRestoreStatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
 }
 
@@ -10115,11 +11184,15 @@ impl TableRestoreStatusTypeDeserializer {
     }
 }
 #[doc="<p>A tag consisting of a name/value pair for a resource.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key, or name, for the resource tag.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The value for the resource tag.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -10267,13 +11340,19 @@ impl TagValueListSerializer {
 }
 
 #[doc="<p>A tag and its associated resource.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TaggedResource {
     #[doc="<p>The Amazon Resource Name (ARN) with which the tag is associated. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>.</p>"]
+    #[serde(rename="ResourceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_name: Option<String>,
     #[doc="<p>The type of resource with which the tag is associated. Valid resource types are: </p> <ul> <li> <p>Cluster</p> </li> <li> <p>CIDR/IP</p> </li> <li> <p>EC2 security group</p> </li> <li> <p>Snapshot</p> </li> <li> <p>Cluster security group</p> </li> <li> <p>Subnet group</p> </li> <li> <p>HSM connection</p> </li> <li> <p>HSM certificate</p> </li> <li> <p>Parameter group</p> </li> </ul> <p>For more information about Amazon Redshift resource types and constructing ARNs, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/constructing-redshift-arn.html\">Constructing an Amazon Redshift Amazon Resource Name (ARN)</a> in the Amazon Redshift Cluster Management Guide. </p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tag for the resource.</p>"]
+    #[serde(rename="Tag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag: Option<Tag>,
 }
 
@@ -10369,11 +11448,15 @@ impl TaggedResourceListDeserializer {
     }
 }
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TaggedResourceListMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of tags with their associated resources.</p>"]
+    #[serde(rename="TaggedResources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tagged_resources: Option<Vec<TaggedResource>>,
 }
 
@@ -10437,11 +11520,15 @@ impl VpcSecurityGroupIdListSerializer {
 }
 
 #[doc="<p>Describes the members of a VPC security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcSecurityGroupMembership {
     #[doc="<p>The status of the VPC security group.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The identifier of the VPC security group.</p>"]
+    #[serde(rename="VpcSecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_security_group_id: Option<String>,
 }
 

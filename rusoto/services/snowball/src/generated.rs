@@ -89,28 +89,28 @@ pub struct Address {
     pub street_3: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelClusterRequest {
     #[doc="<p>The 39-character ID for the cluster that you want to cancel, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
     pub cluster_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelClusterResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobRequest {
     #[doc="<p>The 39-character job ID for the job that you want to cancel, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     pub job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobResult;
 
 #[doc="<p>Contains a cluster's state, a cluster's ID, and other important information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterListEntry {
     #[doc="<p>The 39-character ID for the cluster that you want to list, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
@@ -131,7 +131,7 @@ pub struct ClusterListEntry {
 }
 
 #[doc="<p>Contains metadata about a specific cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClusterMetadata {
     #[doc="<p>The automatically generated ID for a specific address.</p>"]
     #[serde(rename="AddressId")]
@@ -187,14 +187,14 @@ pub struct ClusterMetadata {
     pub snowball_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAddressRequest {
     #[doc="<p>The address that you want the Snowball shipped to.</p>"]
     #[serde(rename="Address")]
     pub address: Address,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAddressResult {
     #[doc="<p>The automatically generated ID for a specific address. You'll use this ID when you create a job to specify which address you want the Snowball for that job shipped to.</p>"]
     #[serde(rename="AddressId")]
@@ -202,7 +202,7 @@ pub struct CreateAddressResult {
     pub address_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterRequest {
     #[doc="<p>The ID for the address that you want the cluster shipped to.&gt;</p>"]
     #[serde(rename="AddressId")]
@@ -241,7 +241,7 @@ pub struct CreateClusterRequest {
     pub snowball_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterResult {
     #[doc="<p>The automatically generated ID for a cluster.</p>"]
     #[serde(rename="ClusterId")]
@@ -249,7 +249,7 @@ pub struct CreateClusterResult {
     pub cluster_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobRequest {
     #[doc="<p>The ID for the address that you want the Snowball shipped to.</p>"]
     #[serde(rename="AddressId")]
@@ -301,7 +301,7 @@ pub struct CreateJobRequest {
     pub snowball_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobResult {
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
@@ -310,7 +310,7 @@ pub struct CreateJobResult {
 }
 
 #[doc="<p>Defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DataTransfer {
     #[doc="<p>The number of bytes transferred between a Snowball and Amazon S3.</p>"]
     #[serde(rename="BytesTransferred")]
@@ -330,14 +330,14 @@ pub struct DataTransfer {
     pub total_objects: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressRequest {
     #[doc="<p>The automatically generated ID for a specific address.</p>"]
     #[serde(rename="AddressId")]
     pub address_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressResult {
     #[doc="<p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to.</p>"]
     #[serde(rename="Address")]
@@ -345,7 +345,7 @@ pub struct DescribeAddressResult {
     pub address: Option<Address>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressesRequest {
     #[doc="<p>The number of <code>ADDRESS</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
@@ -357,7 +357,7 @@ pub struct DescribeAddressesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressesResult {
     #[doc="<p>The Snowball shipping addresses that were created for this account.</p>"]
     #[serde(rename="Addresses")]
@@ -369,14 +369,14 @@ pub struct DescribeAddressesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterRequest {
     #[doc="<p>The automatically generated ID for a cluster.</p>"]
     #[serde(rename="ClusterId")]
     pub cluster_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClusterResult {
     #[doc="<p>Information about a specific cluster, including shipping information, cluster status, and other important metadata.</p>"]
     #[serde(rename="ClusterMetadata")]
@@ -384,14 +384,14 @@ pub struct DescribeClusterResult {
     pub cluster_metadata: Option<ClusterMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobRequest {
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     pub job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobResult {
     #[doc="<p>Information about a specific job, including shipping information, job status, and other important metadata.</p>"]
     #[serde(rename="JobMetadata")]
@@ -412,14 +412,14 @@ pub struct EventTriggerDefinition {
     pub event_resource_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobManifestRequest {
     #[doc="<p>The ID for a job that you want to get the manifest file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     pub job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobManifestResult {
     #[doc="<p>The Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value.</p>"]
     #[serde(rename="ManifestURI")]
@@ -427,14 +427,14 @@ pub struct GetJobManifestResult {
     pub manifest_uri: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobUnlockCodeRequest {
     #[doc="<p>The ID for the job that you want to get the <code>UnlockCode</code> value for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     pub job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobUnlockCodeResult {
     #[doc="<p>The <code>UnlockCode</code> value for the specified job. The <code>UnlockCode</code> value can be accessed for up to 90 days after the job has been created.</p>"]
     #[serde(rename="UnlockCode")]
@@ -442,10 +442,10 @@ pub struct GetJobUnlockCodeResult {
     pub unlock_code: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSnowballUsageRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSnowballUsageResult {
     #[doc="<p>The service limit for number of Snowballs this account can have at once. The default service limit is 1 (one).</p>"]
     #[serde(rename="SnowballLimit")]
@@ -458,7 +458,7 @@ pub struct GetSnowballUsageResult {
 }
 
 #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of an export job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobListEntry {
     #[doc="<p>The creation date for this job.</p>"]
     #[serde(rename="CreationDate")]
@@ -491,7 +491,7 @@ pub struct JobListEntry {
 }
 
 #[doc="<p>Contains job logs. Whenever Snowball is used to import data into or export data out of Amazon S3, you'll have the option of downloading a PDF job report. Job logs are returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type. The job logs can be accessed for up to 60 minutes after this request has been made. To access any of the job logs after 60 minutes have passed, you'll have to make another call to the <code>DescribeJob</code> action.</p> <p>For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snowball for your job part is being delivered to you.</p> <p>The job report provides you insight into the state of your Amazon S3 data transfer. The report includes details about your job or job part for your records.</p> <p>For deeper visibility into the status of your transferred objects, you can look at the two associated logs: a success log and a failure log. The logs are saved in comma-separated value (CSV) format, and the name of each log includes the ID of the job or job part that the log describes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobLogs {
     #[doc="<p>A link to an Amazon S3 presigned URL where the job completion report is located.</p>"]
     #[serde(rename="JobCompletionReportURI")]
@@ -508,7 +508,7 @@ pub struct JobLogs {
 }
 
 #[doc="<p>Contains information about a specific job including shipping information, job status, and other important metadata. This information is returned as a part of the response syntax of the <code>DescribeJob</code> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobMetadata {
     #[doc="<p>The ID for the address that you want the Snowball shipped to.</p>"]
     #[serde(rename="AddressId")]
@@ -619,7 +619,7 @@ pub struct LambdaResource {
     pub lambda_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClusterJobsRequest {
     #[doc="<p>The 39-character ID for the cluster that you want to list, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
@@ -634,7 +634,7 @@ pub struct ListClusterJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClusterJobsResult {
     #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>"]
     #[serde(rename="JobListEntries")]
@@ -646,7 +646,7 @@ pub struct ListClusterJobsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClustersRequest {
     #[doc="<p>The number of <code>ClusterListEntry</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
@@ -658,7 +658,7 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClustersResult {
     #[doc="<p>Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>"]
     #[serde(rename="ClusterListEntries")]
@@ -670,7 +670,7 @@ pub struct ListClustersResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsRequest {
     #[doc="<p>The number of <code>JobListEntry</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
@@ -682,7 +682,7 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsResult {
     #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>"]
     #[serde(rename="JobListEntries")]
@@ -725,7 +725,7 @@ pub struct S3Resource {
 }
 
 #[doc="<p>The <code>Status</code> and <code>TrackingNumber</code> information for an inbound or outbound shipment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Shipment {
     #[doc="<p>Status information for a shipment.</p>"]
     #[serde(rename="Status")]
@@ -738,7 +738,7 @@ pub struct Shipment {
 }
 
 #[doc="<p>A job's shipping information, including inbound and outbound tracking numbers and shipping speed options.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ShippingDetails {
     #[doc="<p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being delivered to the address that you specified for a particular job.</p>"]
     #[serde(rename="InboundShipment")]
@@ -754,7 +754,7 @@ pub struct ShippingDetails {
     pub shipping_option: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClusterRequest {
     #[doc="<p>The ID of the updated <a>Address</a> object.</p>"]
     #[serde(rename="AddressId")]
@@ -789,10 +789,10 @@ pub struct UpdateClusterRequest {
     pub shipping_option: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClusterResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobRequest {
     #[doc="<p>The ID of the updated <a>Address</a> object.</p>"]
     #[serde(rename="AddressId")]
@@ -831,7 +831,7 @@ pub struct UpdateJobRequest {
     pub snowball_capacity_preference: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobResult;
 
 /// Errors returned by CancelCluster

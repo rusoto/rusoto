@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>The input for the AcceptCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptCertificateTransferRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -99,7 +99,7 @@ pub struct Action {
 }
 
 #[doc="<p>The input for the AttachPrincipalPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachPrincipalPolicyRequest {
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
@@ -110,7 +110,7 @@ pub struct AttachPrincipalPolicyRequest {
 }
 
 #[doc="<p>The input for the AttachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachThingPrincipalRequest {
     #[doc="<p>The principal, such as a certificate or other credential.</p>"]
     #[serde(rename="principal")]
@@ -121,11 +121,11 @@ pub struct AttachThingPrincipalRequest {
 }
 
 #[doc="<p>The output from the AttachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachThingPrincipalResponse;
 
 #[doc="<p>The attribute payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttributePayload {
     #[doc="<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
     #[serde(rename="attributes")]
@@ -138,7 +138,7 @@ pub struct AttributePayload {
 }
 
 #[doc="<p>A CA certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CACertificate {
     #[doc="<p>The ARN of the CA certificate.</p>"]
     #[serde(rename="certificateArn")]
@@ -159,7 +159,7 @@ pub struct CACertificate {
 }
 
 #[doc="<p>Describes a CA certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CACertificateDescription {
     #[doc="<p>Whether the CA certificate configured for auto registration of device certificates. Valid values are \"ENABLE\" and \"DISABLE\"</p>"]
     #[serde(rename="autoRegistrationStatus")]
@@ -192,7 +192,7 @@ pub struct CACertificateDescription {
 }
 
 #[doc="<p>The input for the CancelCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelCertificateTransferRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -200,7 +200,7 @@ pub struct CancelCertificateTransferRequest {
 }
 
 #[doc="<p>Information about a certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Certificate {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="certificateArn")]
@@ -221,7 +221,7 @@ pub struct Certificate {
 }
 
 #[doc="<p>Describes a certificate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CertificateDescription {
     #[doc="<p>The certificate ID of the CA certificate used to sign this certificate.</p>"]
     #[serde(rename="caCertificateId")]
@@ -307,7 +307,7 @@ pub struct CloudwatchMetricAction {
 }
 
 #[doc="<p>The input for the CreateCertificateFromCsr operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCertificateFromCsrRequest {
     #[doc="<p>The certificate signing request (CSR).</p>"]
     #[serde(rename="certificateSigningRequest")]
@@ -319,7 +319,7 @@ pub struct CreateCertificateFromCsrRequest {
 }
 
 #[doc="<p>The output from the CreateCertificateFromCsr operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCertificateFromCsrResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>"]
     #[serde(rename="certificateArn")]
@@ -336,7 +336,7 @@ pub struct CreateCertificateFromCsrResponse {
 }
 
 #[doc="<p>The input for the CreateKeysAndCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateKeysAndCertificateRequest {
     #[doc="<p>Specifies whether the certificate is active.</p>"]
     #[serde(rename="setAsActive")]
@@ -345,7 +345,7 @@ pub struct CreateKeysAndCertificateRequest {
 }
 
 #[doc="<p>The output of the CreateKeysAndCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateKeysAndCertificateResponse {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="certificateArn")]
@@ -366,7 +366,7 @@ pub struct CreateKeysAndCertificateResponse {
 }
 
 #[doc="<p>The input for the CreatePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyRequest {
     #[doc="<p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>"]
     #[serde(rename="policyDocument")]
@@ -377,7 +377,7 @@ pub struct CreatePolicyRequest {
 }
 
 #[doc="<p>The output from the CreatePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyResponse {
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
@@ -398,7 +398,7 @@ pub struct CreatePolicyResponse {
 }
 
 #[doc="<p>The input for the CreatePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyVersionRequest {
     #[doc="<p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespaces</p>"]
     #[serde(rename="policyDocument")]
@@ -413,7 +413,7 @@ pub struct CreatePolicyVersionRequest {
 }
 
 #[doc="<p>The output of the CreatePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyVersionResponse {
     #[doc="<p>Specifies whether the policy version is the default.</p>"]
     #[serde(rename="isDefaultVersion")]
@@ -434,7 +434,7 @@ pub struct CreatePolicyVersionResponse {
 }
 
 #[doc="<p>The input for the CreateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateThingRequest {
     #[doc="<p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
     #[serde(rename="attributePayload")]
@@ -450,7 +450,7 @@ pub struct CreateThingRequest {
 }
 
 #[doc="<p>The output of the CreateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateThingResponse {
     #[doc="<p>The ARN of the new thing.</p>"]
     #[serde(rename="thingArn")]
@@ -463,7 +463,7 @@ pub struct CreateThingResponse {
 }
 
 #[doc="<p>The input for the CreateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateThingTypeRequest {
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
@@ -475,7 +475,7 @@ pub struct CreateThingTypeRequest {
 }
 
 #[doc="<p>The output of the CreateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateThingTypeResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the thing type.</p>"]
     #[serde(rename="thingTypeArn")]
@@ -488,7 +488,7 @@ pub struct CreateThingTypeResponse {
 }
 
 #[doc="<p>The input for the CreateTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTopicRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
@@ -499,7 +499,7 @@ pub struct CreateTopicRuleRequest {
 }
 
 #[doc="<p>Input for the DeleteCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCACertificateRequest {
     #[doc="<p>The ID of the certificate to delete.</p>"]
     #[serde(rename="certificateId")]
@@ -507,11 +507,11 @@ pub struct DeleteCACertificateRequest {
 }
 
 #[doc="<p>The output for the DeleteCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCACertificateResponse;
 
 #[doc="<p>The input for the DeleteCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCertificateRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -519,7 +519,7 @@ pub struct DeleteCertificateRequest {
 }
 
 #[doc="<p>The input for the DeletePolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePolicyRequest {
     #[doc="<p>The name of the policy to delete.</p>"]
     #[serde(rename="policyName")]
@@ -527,7 +527,7 @@ pub struct DeletePolicyRequest {
 }
 
 #[doc="<p>The input for the DeletePolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePolicyVersionRequest {
     #[doc="<p>The name of the policy.</p>"]
     #[serde(rename="policyName")]
@@ -538,15 +538,15 @@ pub struct DeletePolicyVersionRequest {
 }
 
 #[doc="<p>The input for the DeleteRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRegistrationCodeRequest;
 
 #[doc="<p>The output for the DeleteRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRegistrationCodeResponse;
 
 #[doc="<p>The input for the DeleteThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteThingRequest {
     #[doc="<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"]
     #[serde(rename="expectedVersion")]
@@ -558,11 +558,11 @@ pub struct DeleteThingRequest {
 }
 
 #[doc="<p>The output of the DeleteThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteThingResponse;
 
 #[doc="<p>The input for the DeleteThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteThingTypeRequest {
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
@@ -570,11 +570,11 @@ pub struct DeleteThingTypeRequest {
 }
 
 #[doc="<p>The output for the DeleteThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteThingTypeResponse;
 
 #[doc="<p>The input for the DeleteTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTopicRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
@@ -582,7 +582,7 @@ pub struct DeleteTopicRuleRequest {
 }
 
 #[doc="<p>The input for the DeprecateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeprecateThingTypeRequest {
     #[doc="<p>The name of the thing type to deprecate.</p>"]
     #[serde(rename="thingTypeName")]
@@ -594,11 +594,11 @@ pub struct DeprecateThingTypeRequest {
 }
 
 #[doc="<p>The output for the DeprecateThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeprecateThingTypeResponse;
 
 #[doc="<p>The input for the DescribeCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCACertificateRequest {
     #[doc="<p>The CA certificate identifier.</p>"]
     #[serde(rename="certificateId")]
@@ -606,7 +606,7 @@ pub struct DescribeCACertificateRequest {
 }
 
 #[doc="<p>The output from the DescribeCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCACertificateResponse {
     #[doc="<p>The CA certificate description.</p>"]
     #[serde(rename="certificateDescription")]
@@ -615,7 +615,7 @@ pub struct DescribeCACertificateResponse {
 }
 
 #[doc="<p>The input for the DescribeCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCertificateRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -623,7 +623,7 @@ pub struct DescribeCertificateRequest {
 }
 
 #[doc="<p>The output of the DescribeCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCertificateResponse {
     #[doc="<p>The description of the certificate.</p>"]
     #[serde(rename="certificateDescription")]
@@ -632,11 +632,11 @@ pub struct DescribeCertificateResponse {
 }
 
 #[doc="<p>The input for the DescribeEndpoint operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointRequest;
 
 #[doc="<p>The output from the DescribeEndpoint operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointResponse {
     #[doc="<p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>"]
     #[serde(rename="endpointAddress")]
@@ -645,7 +645,7 @@ pub struct DescribeEndpointResponse {
 }
 
 #[doc="<p>The input for the DescribeThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeThingRequest {
     #[doc="<p>The name of the thing.</p>"]
     #[serde(rename="thingName")]
@@ -653,7 +653,7 @@ pub struct DescribeThingRequest {
 }
 
 #[doc="<p>The output from the DescribeThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeThingResponse {
     #[doc="<p>The thing attributes.</p>"]
     #[serde(rename="attributes")]
@@ -678,7 +678,7 @@ pub struct DescribeThingResponse {
 }
 
 #[doc="<p>The input for the DescribeThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeThingTypeRequest {
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
@@ -686,7 +686,7 @@ pub struct DescribeThingTypeRequest {
 }
 
 #[doc="<p>The output for the DescribeThingType operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeThingTypeResponse {
     #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
     #[serde(rename="thingTypeMetadata")]
@@ -703,7 +703,7 @@ pub struct DescribeThingTypeResponse {
 }
 
 #[doc="<p>The input for the DetachPrincipalPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachPrincipalPolicyRequest {
     #[doc="<p>The name of the policy to detach.</p>"]
     #[serde(rename="policyName")]
@@ -714,7 +714,7 @@ pub struct DetachPrincipalPolicyRequest {
 }
 
 #[doc="<p>The input for the DetachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachThingPrincipalRequest {
     #[doc="<p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>"]
     #[serde(rename="principal")]
@@ -725,11 +725,11 @@ pub struct DetachThingPrincipalRequest {
 }
 
 #[doc="<p>The output from the DetachThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachThingPrincipalResponse;
 
 #[doc="<p>The input for the DisableTopicRuleRequest operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableTopicRuleRequest {
     #[doc="<p>The name of the rule to disable.</p>"]
     #[serde(rename="ruleName")]
@@ -811,7 +811,7 @@ pub struct ElasticsearchAction {
 }
 
 #[doc="<p>The input for the EnableTopicRuleRequest operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableTopicRuleRequest {
     #[doc="<p>The name of the topic rule to enable.</p>"]
     #[serde(rename="ruleName")]
@@ -834,11 +834,11 @@ pub struct FirehoseAction {
 }
 
 #[doc="<p>The input for the GetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLoggingOptionsRequest;
 
 #[doc="<p>The output from the GetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLoggingOptionsResponse {
     #[doc="<p>The logging level.</p>"]
     #[serde(rename="logLevel")]
@@ -851,7 +851,7 @@ pub struct GetLoggingOptionsResponse {
 }
 
 #[doc="<p>The input for the GetPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyRequest {
     #[doc="<p>The name of the policy.</p>"]
     #[serde(rename="policyName")]
@@ -859,7 +859,7 @@ pub struct GetPolicyRequest {
 }
 
 #[doc="<p>The output from the GetPolicy operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyResponse {
     #[doc="<p>The default policy version ID.</p>"]
     #[serde(rename="defaultVersionId")]
@@ -880,7 +880,7 @@ pub struct GetPolicyResponse {
 }
 
 #[doc="<p>The input for the GetPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyVersionRequest {
     #[doc="<p>The name of the policy.</p>"]
     #[serde(rename="policyName")]
@@ -891,7 +891,7 @@ pub struct GetPolicyVersionRequest {
 }
 
 #[doc="<p>The output from the GetPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyVersionResponse {
     #[doc="<p>Specifies whether the policy version is the default.</p>"]
     #[serde(rename="isDefaultVersion")]
@@ -916,11 +916,11 @@ pub struct GetPolicyVersionResponse {
 }
 
 #[doc="<p>The input to the GetRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRegistrationCodeRequest;
 
 #[doc="<p>The output from the GetRegistrationCode operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRegistrationCodeResponse {
     #[doc="<p>The CA certificate registration code.</p>"]
     #[serde(rename="registrationCode")]
@@ -929,7 +929,7 @@ pub struct GetRegistrationCodeResponse {
 }
 
 #[doc="<p>The input for the GetTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTopicRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
@@ -937,7 +937,7 @@ pub struct GetTopicRuleRequest {
 }
 
 #[doc="<p>The output from the GetTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTopicRuleResponse {
     #[doc="<p>The rule.</p>"]
     #[serde(rename="rule")]
@@ -950,7 +950,7 @@ pub struct GetTopicRuleResponse {
 }
 
 #[doc="<p>Describes a key pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyPair {
     #[doc="<p>The private key.</p>"]
     #[serde(rename="PrivateKey")]
@@ -986,7 +986,7 @@ pub struct LambdaAction {
 }
 
 #[doc="<p>Input for the ListCACertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCACertificatesRequest {
     #[doc="<p>Determines the order of the results.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1003,7 +1003,7 @@ pub struct ListCACertificatesRequest {
 }
 
 #[doc="<p>The output from the ListCACertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCACertificatesResponse {
     #[doc="<p>The CA certificates registered in your AWS account.</p>"]
     #[serde(rename="certificates")]
@@ -1016,7 +1016,7 @@ pub struct ListCACertificatesResponse {
 }
 
 #[doc="<p>The input to the ListCertificatesByCA operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCertificatesByCARequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1036,7 +1036,7 @@ pub struct ListCertificatesByCARequest {
 }
 
 #[doc="<p>The output of the ListCertificatesByCA operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCertificatesByCAResponse {
     #[doc="<p>The device certificates signed by the specified CA certificate.</p>"]
     #[serde(rename="certificates")]
@@ -1049,7 +1049,7 @@ pub struct ListCertificatesByCAResponse {
 }
 
 #[doc="<p>The input for the ListCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCertificatesRequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1066,7 +1066,7 @@ pub struct ListCertificatesRequest {
 }
 
 #[doc="<p>The output of the ListCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCertificatesResponse {
     #[doc="<p>The descriptions of the certificates.</p>"]
     #[serde(rename="certificates")]
@@ -1079,7 +1079,7 @@ pub struct ListCertificatesResponse {
 }
 
 #[doc="<p>The input to the ListOutgoingCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOutgoingCertificatesRequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1096,7 +1096,7 @@ pub struct ListOutgoingCertificatesRequest {
 }
 
 #[doc="<p>The output from the ListOutgoingCertificates operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOutgoingCertificatesResponse {
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="nextMarker")]
@@ -1109,7 +1109,7 @@ pub struct ListOutgoingCertificatesResponse {
 }
 
 #[doc="<p>The input for the ListPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPoliciesRequest {
     #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1126,7 +1126,7 @@ pub struct ListPoliciesRequest {
 }
 
 #[doc="<p>The output from the ListPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPoliciesResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
@@ -1139,7 +1139,7 @@ pub struct ListPoliciesResponse {
 }
 
 #[doc="<p>The input for the ListPolicyPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyPrincipalsRequest {
     #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1159,7 +1159,7 @@ pub struct ListPolicyPrincipalsRequest {
 }
 
 #[doc="<p>The output from the ListPolicyPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyPrincipalsResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
@@ -1172,7 +1172,7 @@ pub struct ListPolicyPrincipalsResponse {
 }
 
 #[doc="<p>The input for the ListPolicyVersions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyVersionsRequest {
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
@@ -1180,7 +1180,7 @@ pub struct ListPolicyVersionsRequest {
 }
 
 #[doc="<p>The output from the ListPolicyVersions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyVersionsResponse {
     #[doc="<p>The policy versions.</p>"]
     #[serde(rename="policyVersions")]
@@ -1189,7 +1189,7 @@ pub struct ListPolicyVersionsResponse {
 }
 
 #[doc="<p>The input for the ListPrincipalPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalPoliciesRequest {
     #[doc="<p>Specifies the order for results. If true, results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
@@ -1209,7 +1209,7 @@ pub struct ListPrincipalPoliciesRequest {
 }
 
 #[doc="<p>The output from the ListPrincipalPolicies operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalPoliciesResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
@@ -1222,7 +1222,7 @@ pub struct ListPrincipalPoliciesResponse {
 }
 
 #[doc="<p>The input for the ListPrincipalThings operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalThingsRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
@@ -1238,7 +1238,7 @@ pub struct ListPrincipalThingsRequest {
 }
 
 #[doc="<p>The output from the ListPrincipalThings operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalThingsResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
@@ -1251,7 +1251,7 @@ pub struct ListPrincipalThingsResponse {
 }
 
 #[doc="<p>The input for the ListThingPrincipal operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingPrincipalsRequest {
     #[doc="<p>The name of the thing.</p>"]
     #[serde(rename="thingName")]
@@ -1259,7 +1259,7 @@ pub struct ListThingPrincipalsRequest {
 }
 
 #[doc="<p>The output from the ListThingPrincipals operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingPrincipalsResponse {
     #[doc="<p>The principals associated with the thing.</p>"]
     #[serde(rename="principals")]
@@ -1268,7 +1268,7 @@ pub struct ListThingPrincipalsResponse {
 }
 
 #[doc="<p>The input for the ListThingTypes operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingTypesRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
@@ -1285,7 +1285,7 @@ pub struct ListThingTypesRequest {
 }
 
 #[doc="<p>The output for the ListThingTypes operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingTypesResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
@@ -1298,7 +1298,7 @@ pub struct ListThingTypesResponse {
 }
 
 #[doc="<p>The input for the ListThings operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingsRequest {
     #[doc="<p>The attribute name used to search for things.</p>"]
     #[serde(rename="attributeName")]
@@ -1323,7 +1323,7 @@ pub struct ListThingsRequest {
 }
 
 #[doc="<p>The output from the ListThings operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListThingsResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
@@ -1336,7 +1336,7 @@ pub struct ListThingsResponse {
 }
 
 #[doc="<p>The input for the ListTopicRules operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTopicRulesRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="maxResults")]
@@ -1357,7 +1357,7 @@ pub struct ListTopicRulesRequest {
 }
 
 #[doc="<p>The output from the ListTopicRules operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTopicRulesResponse {
     #[doc="<p>A token used to retrieve the next value.</p>"]
     #[serde(rename="nextToken")]
@@ -1370,7 +1370,7 @@ pub struct ListTopicRulesResponse {
 }
 
 #[doc="<p>Describes the logging options payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoggingOptionsPayload {
     #[doc="<p>The logging level.</p>"]
     #[serde(rename="logLevel")]
@@ -1382,7 +1382,7 @@ pub struct LoggingOptionsPayload {
 }
 
 #[doc="<p>A certificate that has been transfered but not yet accepted.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OutgoingCertificate {
     #[doc="<p>The certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
@@ -1411,7 +1411,7 @@ pub struct OutgoingCertificate {
 }
 
 #[doc="<p>Describes an AWS IoT policy.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Policy {
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
@@ -1424,7 +1424,7 @@ pub struct Policy {
 }
 
 #[doc="<p>Describes a policy version.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyVersion {
     #[doc="<p>The date and time the policy was created.</p>"]
     #[serde(rename="createDate")]
@@ -1449,7 +1449,7 @@ pub struct PutItemInput {
 }
 
 #[doc="<p>The input to the RegisterCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterCACertificateRequest {
     #[doc="<p>Allows this CA certificate to be used for auto registration of device certificates.</p>"]
     #[serde(rename="allowAutoRegistration")]
@@ -1468,7 +1468,7 @@ pub struct RegisterCACertificateRequest {
 }
 
 #[doc="<p>The output from the RegisterCACertificateResponse operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterCACertificateResponse {
     #[doc="<p>The CA certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
@@ -1481,7 +1481,7 @@ pub struct RegisterCACertificateResponse {
 }
 
 #[doc="<p>The input to the RegisterCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterCertificateRequest {
     #[doc="<p>The CA certificate used to sign the device certificate being registered.</p>"]
     #[serde(rename="caCertificatePem")]
@@ -1497,7 +1497,7 @@ pub struct RegisterCertificateRequest {
 }
 
 #[doc="<p>The output from the RegisterCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterCertificateResponse {
     #[doc="<p>The certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
@@ -1510,7 +1510,7 @@ pub struct RegisterCertificateResponse {
 }
 
 #[doc="<p>The input for the RejectCertificateTransfer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectCertificateTransferRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -1522,7 +1522,7 @@ pub struct RejectCertificateTransferRequest {
 }
 
 #[doc="<p>The input for the ReplaceTopicRule operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceTopicRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
@@ -1573,7 +1573,7 @@ pub struct SalesforceAction {
 }
 
 #[doc="<p>The input for the SetDefaultPolicyVersion operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetDefaultPolicyVersionRequest {
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
@@ -1584,7 +1584,7 @@ pub struct SetDefaultPolicyVersionRequest {
 }
 
 #[doc="<p>The input for the SetLoggingOptions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetLoggingOptionsRequest {
     #[doc="<p>The logging options payload.</p>"]
     #[serde(rename="loggingOptionsPayload")]
@@ -1622,7 +1622,7 @@ pub struct SqsAction {
 }
 
 #[doc="<p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ThingAttribute {
     #[doc="<p>A list of thing attributes which are name-value pairs.</p>"]
     #[serde(rename="attributes")]
@@ -1643,7 +1643,7 @@ pub struct ThingAttribute {
 }
 
 #[doc="<p>The definition of the thing type, including thing type name and description.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ThingTypeDefinition {
     #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
     #[serde(rename="thingTypeMetadata")]
@@ -1660,7 +1660,7 @@ pub struct ThingTypeDefinition {
 }
 
 #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ThingTypeMetadata {
     #[doc="<p>The date and time when the thing type was created.</p>"]
     #[serde(rename="creationDate")]
@@ -1690,7 +1690,7 @@ pub struct ThingTypeProperties {
 }
 
 #[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TopicRule {
     #[doc="<p>The actions associated with the rule.</p>"]
     #[serde(rename="actions")]
@@ -1723,7 +1723,7 @@ pub struct TopicRule {
 }
 
 #[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TopicRuleListItem {
     #[doc="<p>The date and time the rule was created.</p>"]
     #[serde(rename="createdAt")]
@@ -1748,7 +1748,7 @@ pub struct TopicRuleListItem {
 }
 
 #[doc="<p>Describes a rule.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TopicRulePayload {
     #[doc="<p>The actions associated with the rule.</p>"]
     #[serde(rename="actions")]
@@ -1771,7 +1771,7 @@ pub struct TopicRulePayload {
 }
 
 #[doc="<p>The input for the TransferCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TransferCertificateRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -1786,7 +1786,7 @@ pub struct TransferCertificateRequest {
 }
 
 #[doc="<p>The output from the TransferCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TransferCertificateResponse {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="transferredCertificateArn")]
@@ -1795,7 +1795,7 @@ pub struct TransferCertificateResponse {
 }
 
 #[doc="<p>Data used to transfer a certificate to an AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TransferData {
     #[doc="<p>The date the transfer was accepted.</p>"]
     #[serde(rename="acceptDate")]
@@ -1820,7 +1820,7 @@ pub struct TransferData {
 }
 
 #[doc="<p>The input to the UpdateCACertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCACertificateRequest {
     #[doc="<p>The CA certificate identifier.</p>"]
     #[serde(rename="certificateId")]
@@ -1836,7 +1836,7 @@ pub struct UpdateCACertificateRequest {
 }
 
 #[doc="<p>The input for the UpdateCertificate operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCertificateRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
@@ -1847,7 +1847,7 @@ pub struct UpdateCertificateRequest {
 }
 
 #[doc="<p>The input for the UpdateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateThingRequest {
     #[doc="<p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"name1\\\":\\\"value2\\\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>"]
     #[serde(rename="attributePayload")]
@@ -1871,7 +1871,7 @@ pub struct UpdateThingRequest {
 }
 
 #[doc="<p>The output from the UpdateThing operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateThingResponse;
 
 /// Errors returned by AcceptCertificateTransfer

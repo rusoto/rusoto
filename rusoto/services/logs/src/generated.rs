@@ -28,14 +28,14 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelExportTaskRequest {
     #[doc="<p>The ID of the export task.</p>"]
     #[serde(rename="taskId")]
     pub task_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateExportTaskRequest {
     #[doc="<p>The name of S3 bucket for the exported log data. The bucket must be in the same AWS region.</p>"]
     #[serde(rename="destination")]
@@ -63,7 +63,7 @@ pub struct CreateExportTaskRequest {
     pub to: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateExportTaskResponse {
     #[doc="<p>The ID of the export task.</p>"]
     #[serde(rename="taskId")]
@@ -71,7 +71,7 @@ pub struct CreateExportTaskResponse {
     pub task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLogGroupRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -82,7 +82,7 @@ pub struct CreateLogGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLogStreamRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -92,21 +92,21 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDestinationRequest {
     #[doc="<p>The name of the destination.</p>"]
     #[serde(rename="destinationName")]
     pub destination_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLogGroupRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLogStreamRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -116,7 +116,7 @@ pub struct DeleteLogStreamRequest {
     pub log_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteMetricFilterRequest {
     #[doc="<p>The name of the metric filter.</p>"]
     #[serde(rename="filterName")]
@@ -126,14 +126,14 @@ pub struct DeleteMetricFilterRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRetentionPolicyRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubscriptionFilterRequest {
     #[doc="<p>The name of the subscription filter.</p>"]
     #[serde(rename="filterName")]
@@ -143,7 +143,7 @@ pub struct DeleteSubscriptionFilterRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDestinationsRequest {
     #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
     #[serde(rename="DestinationNamePrefix")]
@@ -159,7 +159,7 @@ pub struct DescribeDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDestinationsResponse {
     #[doc="<p>The destinations.</p>"]
     #[serde(rename="destinations")]
@@ -170,7 +170,7 @@ pub struct DescribeDestinationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksRequest {
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
@@ -190,7 +190,7 @@ pub struct DescribeExportTasksRequest {
     pub task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksResponse {
     #[doc="<p>The export tasks.</p>"]
     #[serde(rename="exportTasks")]
@@ -201,7 +201,7 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLogGroupsRequest {
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
@@ -217,7 +217,7 @@ pub struct DescribeLogGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLogGroupsResponse {
     #[doc="<p>The log groups.</p>"]
     #[serde(rename="logGroups")]
@@ -228,7 +228,7 @@ pub struct DescribeLogGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLogStreamsRequest {
     #[doc="<p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>"]
     #[serde(rename="descending")]
@@ -255,7 +255,7 @@ pub struct DescribeLogStreamsRequest {
     pub order_by: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLogStreamsResponse {
     #[doc="<p>The log streams.</p>"]
     #[serde(rename="logStreams")]
@@ -266,7 +266,7 @@ pub struct DescribeLogStreamsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMetricFiltersRequest {
     #[doc="<p>The prefix to match.</p>"]
     #[serde(rename="filterNamePrefix")]
@@ -294,7 +294,7 @@ pub struct DescribeMetricFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMetricFiltersResponse {
     #[doc="<p>The metric filters.</p>"]
     #[serde(rename="metricFilters")]
@@ -305,7 +305,7 @@ pub struct DescribeMetricFiltersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubscriptionFiltersRequest {
     #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
     #[serde(rename="filterNamePrefix")]
@@ -324,7 +324,7 @@ pub struct DescribeSubscriptionFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubscriptionFiltersResponse {
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -336,7 +336,7 @@ pub struct DescribeSubscriptionFiltersResponse {
 }
 
 #[doc="<p>Represents a cross-account destination that receives subscription log events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Destination {
     #[doc="<p>An IAM policy document that governs which AWS accounts can create subscription filters against this destination.</p>"]
     #[serde(rename="accessPolicy")]
@@ -365,7 +365,7 @@ pub struct Destination {
 }
 
 #[doc="<p>Represents an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportTask {
     #[doc="<p>The name of Amazon S3 bucket to which the log data was exported.</p>"]
     #[serde(rename="destination")]
@@ -406,7 +406,7 @@ pub struct ExportTask {
 }
 
 #[doc="<p>Represents the status of an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportTaskExecutionInfo {
     #[doc="<p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="completionTime")]
@@ -419,7 +419,7 @@ pub struct ExportTaskExecutionInfo {
 }
 
 #[doc="<p>Represents the status of an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportTaskStatus {
     #[doc="<p>The status code of the export task.</p>"]
     #[serde(rename="code")]
@@ -431,7 +431,7 @@ pub struct ExportTaskStatus {
     pub message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FilterLogEventsRequest {
     #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>"]
     #[serde(rename="endTime")]
@@ -466,7 +466,7 @@ pub struct FilterLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FilterLogEventsResponse {
     #[doc="<p>The matched events.</p>"]
     #[serde(rename="events")]
@@ -483,7 +483,7 @@ pub struct FilterLogEventsResponse {
 }
 
 #[doc="<p>Represents a matched event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FilteredLogEvent {
     #[doc="<p>The ID of the event.</p>"]
     #[serde(rename="eventId")]
@@ -507,7 +507,7 @@ pub struct FilteredLogEvent {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLogEventsRequest {
     #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not included.</p>"]
     #[serde(rename="endTime")]
@@ -537,7 +537,7 @@ pub struct GetLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLogEventsResponse {
     #[doc="<p>The events.</p>"]
     #[serde(rename="events")]
@@ -554,7 +554,7 @@ pub struct GetLogEventsResponse {
 }
 
 #[doc="<p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InputLogEvent {
     #[doc="<p>The raw event message.</p>"]
     #[serde(rename="message")]
@@ -564,14 +564,14 @@ pub struct InputLogEvent {
     pub timestamp: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsLogGroupRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsLogGroupResponse {
     #[doc="<p>The tags.</p>"]
     #[serde(rename="tags")]
@@ -580,7 +580,7 @@ pub struct ListTagsLogGroupResponse {
 }
 
 #[doc="<p>Represents a log group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LogGroup {
     #[doc="<p>The Amazon Resource Name (ARN) of the log group.</p>"]
     #[serde(rename="arn")]
@@ -608,7 +608,7 @@ pub struct LogGroup {
 }
 
 #[doc="<p>Represents a log stream, which is a sequence of log events from a single emitter of logs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LogStream {
     #[doc="<p>The Amazon Resource Name (ARN) of the log stream.</p>"]
     #[serde(rename="arn")]
@@ -645,7 +645,7 @@ pub struct LogStream {
 }
 
 #[doc="<p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricFilter {
     #[doc="<p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
@@ -669,7 +669,7 @@ pub struct MetricFilter {
 }
 
 #[doc="<p>Represents a matched event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricFilterMatchRecord {
     #[doc="<p>The raw event data.</p>"]
     #[serde(rename="eventMessage")]
@@ -704,7 +704,7 @@ pub struct MetricTransformation {
 }
 
 #[doc="<p>Represents a log event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OutputLogEvent {
     #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="ingestionTime")]
@@ -720,7 +720,7 @@ pub struct OutputLogEvent {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDestinationPolicyRequest {
     #[doc="<p>An IAM policy document that authorizes cross-account users to deliver their log events to the associated destination.</p>"]
     #[serde(rename="accessPolicy")]
@@ -730,7 +730,7 @@ pub struct PutDestinationPolicyRequest {
     pub destination_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDestinationRequest {
     #[doc="<p>A name for the destination.</p>"]
     #[serde(rename="destinationName")]
@@ -743,7 +743,7 @@ pub struct PutDestinationRequest {
     pub target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDestinationResponse {
     #[doc="<p>The destination.</p>"]
     #[serde(rename="destination")]
@@ -751,7 +751,7 @@ pub struct PutDestinationResponse {
     pub destination: Option<Destination>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLogEventsRequest {
     #[doc="<p>The log events.</p>"]
     #[serde(rename="logEvents")]
@@ -768,7 +768,7 @@ pub struct PutLogEventsRequest {
     pub sequence_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLogEventsResponse {
     #[doc="<p>The next sequence token.</p>"]
     #[serde(rename="nextSequenceToken")]
@@ -780,7 +780,7 @@ pub struct PutLogEventsResponse {
     pub rejected_log_events_info: Option<RejectedLogEventsInfo>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutMetricFilterRequest {
     #[doc="<p>A name for the metric filter.</p>"]
     #[serde(rename="filterName")]
@@ -796,7 +796,7 @@ pub struct PutMetricFilterRequest {
     pub metric_transformations: Vec<MetricTransformation>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRetentionPolicyRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -805,7 +805,7 @@ pub struct PutRetentionPolicyRequest {
     pub retention_in_days: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutSubscriptionFilterRequest {
     #[doc="<p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul>"]
     #[serde(rename="destinationArn")]
@@ -830,7 +830,7 @@ pub struct PutSubscriptionFilterRequest {
 }
 
 #[doc="<p>Represents the rejected events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectedLogEventsInfo {
     #[doc="<p>The expired log events.</p>"]
     #[serde(rename="expiredLogEventEndIndex")]
@@ -847,7 +847,7 @@ pub struct RejectedLogEventsInfo {
 }
 
 #[doc="<p>Represents the search status of a log stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchedLogStream {
     #[doc="<p>The name of the log stream.</p>"]
     #[serde(rename="logStreamName")]
@@ -860,7 +860,7 @@ pub struct SearchedLogStream {
 }
 
 #[doc="<p>Represents a subscription filter.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscriptionFilter {
     #[doc="<p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
@@ -891,7 +891,7 @@ pub struct SubscriptionFilter {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagLogGroupRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -901,7 +901,7 @@ pub struct TagLogGroupRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestMetricFilterRequest {
     #[serde(rename="filterPattern")]
     pub filter_pattern: String,
@@ -910,7 +910,7 @@ pub struct TestMetricFilterRequest {
     pub log_event_messages: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestMetricFilterResponse {
     #[doc="<p>The matched events.</p>"]
     #[serde(rename="matches")]
@@ -918,7 +918,7 @@ pub struct TestMetricFilterResponse {
     pub matches: Option<Vec<MetricFilterMatchRecord>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagLogGroupRequest {
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]

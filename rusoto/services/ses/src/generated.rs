@@ -40,11 +40,13 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>When included in a receipt rule, this action adds a header to the received email.</p> <p>For information about adding a header using a receipt rule, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-add-header.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddHeaderAction {
     #[doc="<p>The name of the header to add. Must be between 1 and 50 characters, inclusive, and consist of alphanumeric (a-z, A-Z, 0-9) characters and dashes only.</p>"]
+    #[serde(rename="HeaderName")]
     pub header_name: String,
     #[doc="<p>Must be less than 2048 characters, and must not contain newline characters (\"\\r\" or \"\\n\").</p>"]
+    #[serde(rename="HeaderValue")]
     pub header_value: String,
 }
 
@@ -208,11 +210,15 @@ impl BehaviorOnMXFailureDeserializer {
     }
 }
 #[doc="<p>Represents the body of the message. You can specify text, HTML, or both. If you use both, then the message should display correctly in the widest variety of email clients.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Body {
     #[doc="<p>The content of the message, in HTML format. Use this for email clients that can process HTML. You can include clickable links, formatted text, and much more in an HTML message.</p>"]
+    #[serde(rename="Html")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub html: Option<Content>,
     #[doc="<p>The content of the message, in text format. Use this for text-based email clients, or clients on high-latency networks (such as mobile devices).</p>"]
+    #[serde(rename="Text")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub text: Option<Content>,
 }
 
@@ -237,17 +243,24 @@ impl BodySerializer {
 }
 
 #[doc="<p>When included in a receipt rule, this action rejects the received email by returning a bounce response to the sender and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>For information about sending a bounce message in response to a received email, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-bounce.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BounceAction {
     #[doc="<p>Human-readable text to include in the bounce message.</p>"]
+    #[serde(rename="Message")]
     pub message: String,
     #[doc="<p>The email address of the sender of the bounced email. This is the address from which the bounce message will be sent.</p>"]
+    #[serde(rename="Sender")]
     pub sender: String,
     #[doc="<p>The SMTP reply code, as defined by <a href=\"https://tools.ietf.org/html/rfc5321\">RFC 5321</a>.</p>"]
+    #[serde(rename="SmtpReplyCode")]
     pub smtp_reply_code: String,
     #[doc="<p>The SMTP enhanced status code, as defined by <a href=\"https://tools.ietf.org/html/rfc3463\">RFC 3463</a>.</p>"]
+    #[serde(rename="StatusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_code: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the bounce action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -382,15 +395,22 @@ impl BounceStatusCodeDeserializer {
     }
 }
 #[doc="<p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BouncedRecipientInfo {
     #[doc="<p>The reason for the bounce. You must provide either this parameter or <code>RecipientDsnFields</code>.</p>"]
+    #[serde(rename="BounceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bounce_type: Option<String>,
     #[doc="<p>The email address of the recipient of the bounced email.</p>"]
+    #[serde(rename="Recipient")]
     pub recipient: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to receive email for the recipient of the bounced email. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
+    #[serde(rename="RecipientArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recipient_arn: Option<String>,
     #[doc="<p>Recipient-related DSN fields, most of which would normally be filled in automatically when provided with a <code>BounceType</code>. You must provide either this parameter or <code>BounceType</code>.</p>"]
+    #[serde(rename="RecipientDsnFields")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recipient_dsn_fields: Option<RecipientDsnFields>,
 }
 
@@ -450,11 +470,13 @@ impl CidrDeserializer {
     }
 }
 #[doc="<p>Represents a request to create a receipt rule set by cloning an existing one. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloneReceiptRuleSetRequest {
     #[doc="<p>The name of the rule set to clone.</p>"]
+    #[serde(rename="OriginalRuleSetName")]
     pub original_rule_set_name: String,
     #[doc="<p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -477,7 +499,7 @@ impl CloneReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloneReceiptRuleSetResponse;
 
 struct CloneReceiptRuleSetResponseDeserializer;
@@ -497,9 +519,10 @@ impl CloneReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>Contains information associated with an Amazon CloudWatch event destination to which email sending events are published.</p> <p>Event destinations, such as Amazon CloudWatch, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloudWatchDestination {
     #[doc="<p>A list of dimensions upon which to categorize your emails when you publish email sending events to Amazon CloudWatch.</p>"]
+    #[serde(rename="DimensionConfigurations")]
     pub dimension_configurations: Vec<CloudWatchDimensionConfiguration>,
 }
 
@@ -564,13 +587,16 @@ impl CloudWatchDestinationSerializer {
 }
 
 #[doc="<p>Contains the dimension configuration to use when you publish email sending events to Amazon CloudWatch.</p> <p>For information about publishing email sending events to Amazon CloudWatch, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloudWatchDimensionConfiguration {
     #[doc="<p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
+    #[serde(rename="DefaultDimensionValue")]
     pub default_dimension_value: String,
     #[doc="<p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
+    #[serde(rename="DimensionName")]
     pub dimension_name: String,
     #[doc="<p>The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. If you want Amazon SES to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code>/<code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want Amazon SES to use your own email headers, choose <code>emailHeader</code>.</p>"]
+    #[serde(rename="DimensionValueSource")]
     pub dimension_value_source: String,
 }
 
@@ -703,9 +729,10 @@ impl CloudWatchDimensionConfigurationsSerializer {
 }
 
 #[doc="<p>The name of the configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigurationSet {
     #[doc="<p>The name of the configuration set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -835,11 +862,14 @@ impl ConfigurationSetsDeserializer {
     }
 }
 #[doc="<p>Represents textual data, plus an optional character set specification.</p> <p>By default, the text must be 7-bit ASCII, due to the constraints of the SMTP protocol. If the text must contain any other characters, then you must also specify a character set. Examples include UTF-8, ISO-8859-1, and Shift_JIS.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Content {
     #[doc="<p>The character set of the content.</p>"]
+    #[serde(rename="Charset")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub charset: Option<String>,
     #[doc="<p>The textual data of the content.</p>"]
+    #[serde(rename="Data")]
     pub data: String,
 }
 
@@ -878,11 +908,13 @@ impl CounterDeserializer {
     }
 }
 #[doc="<p>Represents a request to create a configuration set event destination. A configuration set event destination, which can be either Amazon CloudWatch or Amazon Kinesis Firehose, describes an AWS service in which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set to which to apply the event destination.</p>"]
+    #[serde(rename="ConfigurationSetName")]
     pub configuration_set_name: String,
     #[doc="<p>An object that describes the AWS service to which Amazon SES will publish the email sending events associated with the specified configuration set.</p>"]
+    #[serde(rename="EventDestination")]
     pub event_destination: EventDestination,
 }
 
@@ -908,7 +940,7 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConfigurationSetEventDestinationResponse;
 
 struct CreateConfigurationSetEventDestinationResponseDeserializer;
@@ -929,9 +961,10 @@ impl CreateConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to create a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConfigurationSetRequest {
     #[doc="<p>A data structure that contains the name of the configuration set.</p>"]
+    #[serde(rename="ConfigurationSet")]
     pub configuration_set: ConfigurationSet,
 }
 
@@ -953,7 +986,7 @@ impl CreateConfigurationSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConfigurationSetResponse;
 
 struct CreateConfigurationSetResponseDeserializer;
@@ -973,9 +1006,10 @@ impl CreateConfigurationSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to create a new IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptFilterRequest {
     #[doc="<p>A data structure that describes the IP address filter to create, which consists of a name, an IP address range, and whether to allow or block mail from it.</p>"]
+    #[serde(rename="Filter")]
     pub filter: ReceiptFilter,
 }
 
@@ -995,7 +1029,7 @@ impl CreateReceiptFilterRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptFilterResponse;
 
 struct CreateReceiptFilterResponseDeserializer;
@@ -1015,13 +1049,17 @@ impl CreateReceiptFilterResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to create a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptRuleRequest {
     #[doc="<p>The name of an existing rule after which the new rule will be placed. If this parameter is null, the new rule will be inserted at the beginning of the rule list.</p>"]
+    #[serde(rename="After")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub after: Option<String>,
     #[doc="<p>A data structure that contains the specified rule's name, actions, recipients, domains, enabled status, scan status, and TLS policy.</p>"]
+    #[serde(rename="Rule")]
     pub rule: ReceiptRule,
     #[doc="<p>The name of the rule set to which to add the rule.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1047,7 +1085,7 @@ impl CreateReceiptRuleRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptRuleResponse;
 
 struct CreateReceiptRuleResponseDeserializer;
@@ -1067,9 +1105,10 @@ impl CreateReceiptRuleResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to create an empty receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptRuleSetRequest {
     #[doc="<p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1090,7 +1129,7 @@ impl CreateReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReceiptRuleSetResponse;
 
 struct CreateReceiptRuleSetResponseDeserializer;
@@ -1138,11 +1177,13 @@ impl DefaultDimensionValueDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set from which to delete the event destination.</p>"]
+    #[serde(rename="ConfigurationSetName")]
     pub configuration_set_name: String,
     #[doc="<p>The name of the event destination to delete.</p>"]
+    #[serde(rename="EventDestinationName")]
     pub event_destination_name: String,
 }
 
@@ -1167,7 +1208,7 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigurationSetEventDestinationResponse;
 
 struct DeleteConfigurationSetEventDestinationResponseDeserializer;
@@ -1188,9 +1229,10 @@ impl DeleteConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigurationSetRequest {
     #[doc="<p>The name of the configuration set to delete.</p>"]
+    #[serde(rename="ConfigurationSetName")]
     pub configuration_set_name: String,
 }
 
@@ -1211,7 +1253,7 @@ impl DeleteConfigurationSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigurationSetResponse;
 
 struct DeleteConfigurationSetResponseDeserializer;
@@ -1231,11 +1273,13 @@ impl DeleteConfigurationSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIdentityPolicyRequest {
     #[doc="<p>The identity that is associated with the policy that you want to delete. You can specify the identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>The name of the policy to be deleted.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -1258,7 +1302,7 @@ impl DeleteIdentityPolicyRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIdentityPolicyResponse;
 
 struct DeleteIdentityPolicyResponseDeserializer;
@@ -1278,9 +1322,10 @@ impl DeleteIdentityPolicyResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete one of your Amazon SES identities (an email address or domain).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIdentityRequest {
     #[doc="<p>The identity to be removed from the list of identities for the AWS Account.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
 }
 
@@ -1301,7 +1346,7 @@ impl DeleteIdentityRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIdentityResponse;
 
 struct DeleteIdentityResponseDeserializer;
@@ -1321,9 +1366,10 @@ impl DeleteIdentityResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete an IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptFilterRequest {
     #[doc="<p>The name of the IP address filter to delete.</p>"]
+    #[serde(rename="FilterName")]
     pub filter_name: String,
 }
 
@@ -1344,7 +1390,7 @@ impl DeleteReceiptFilterRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptFilterResponse;
 
 struct DeleteReceiptFilterResponseDeserializer;
@@ -1364,11 +1410,13 @@ impl DeleteReceiptFilterResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptRuleRequest {
     #[doc="<p>The name of the receipt rule to delete.</p>"]
+    #[serde(rename="RuleName")]
     pub rule_name: String,
     #[doc="<p>The name of the receipt rule set that contains the receipt rule to delete.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1391,7 +1439,7 @@ impl DeleteReceiptRuleRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptRuleResponse;
 
 struct DeleteReceiptRuleResponseDeserializer;
@@ -1411,9 +1459,10 @@ impl DeleteReceiptRuleResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete a receipt rule set and all of the receipt rules it contains. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to delete.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1434,7 +1483,7 @@ impl DeleteReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReceiptRuleSetResponse;
 
 struct DeleteReceiptRuleSetResponseDeserializer;
@@ -1454,9 +1503,10 @@ impl DeleteReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to delete an email address from the list of email addresses you have attempted to verify under your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVerifiedEmailAddressRequest {
     #[doc="<p>An email address to be removed from the list of verified addresses.</p>"]
+    #[serde(rename="EmailAddress")]
     pub email_address: String,
 }
 
@@ -1477,7 +1527,7 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
 }
 
 #[doc="<p>Represents a request to return the metadata and receipt rules for the receipt rule set that is currently active. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeActiveReceiptRuleSetRequest;
 
 
@@ -1496,11 +1546,15 @@ impl DescribeActiveReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>Represents the metadata and receipt rules for the receipt rule set that is currently active.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeActiveReceiptRuleSetResponse {
     #[doc="<p>The metadata for the currently active receipt rule set. The metadata consists of the rule set name and a timestamp of when the rule set was created.</p>"]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<ReceiptRuleSetMetadata>,
     #[doc="<p>The receipt rules that belong to the active rule set.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<ReceiptRule>>,
 }
 
@@ -1554,11 +1608,14 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the details of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationSetRequest {
     #[doc="<p>A list of configuration set attributes to return.</p>"]
+    #[serde(rename="ConfigurationSetAttributeNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_set_attribute_names: Option<Vec<String>>,
     #[doc="<p>The name of the configuration set to describe.</p>"]
+    #[serde(rename="ConfigurationSetName")]
     pub configuration_set_name: String,
 }
 
@@ -1586,11 +1643,15 @@ impl DescribeConfigurationSetRequestSerializer {
 }
 
 #[doc="<p>Represents the details of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationSetResponse {
     #[doc="<p>The configuration set object associated with the specified configuration set.</p>"]
+    #[serde(rename="ConfigurationSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_set: Option<ConfigurationSet>,
     #[doc="<p>A list of event destinations associated with the configuration set. </p>"]
+    #[serde(rename="EventDestinations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_destinations: Option<Vec<EventDestination>>,
 }
 
@@ -1644,11 +1705,13 @@ impl DescribeConfigurationSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the details of a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReceiptRuleRequest {
     #[doc="<p>The name of the receipt rule.</p>"]
+    #[serde(rename="RuleName")]
     pub rule_name: String,
     #[doc="<p>The name of the receipt rule set to which the receipt rule belongs.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1671,9 +1734,11 @@ impl DescribeReceiptRuleRequestSerializer {
 }
 
 #[doc="<p>Represents the details of a receipt rule.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReceiptRuleResponse {
     #[doc="<p>A data structure that contains the specified receipt rule's name, actions, recipients, domains, enabled status, scan status, and Transport Layer Security (TLS) policy.</p>"]
+    #[serde(rename="Rule")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule: Option<ReceiptRule>,
 }
 
@@ -1720,9 +1785,10 @@ impl DescribeReceiptRuleResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the details of a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to describe.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -1743,11 +1809,15 @@ impl DescribeReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>Represents the details of the specified receipt rule set.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReceiptRuleSetResponse {
     #[doc="<p>The metadata for the receipt rule set, which consists of the rule set name and the timestamp of when the rule set was created.</p>"]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<ReceiptRuleSetMetadata>,
     #[doc="<p>A list of the receipt rules that belong to the specified receipt rule set.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<ReceiptRule>>,
 }
 
@@ -1800,13 +1870,19 @@ impl DescribeReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents the destination of the message, consisting of To:, CC:, and BCC: fields.</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href=\"http://tools.ietf.org/html/rfc2047\">RFC 2047</a>. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Destination {
     #[doc="<p>The BCC: field(s) of the message.</p>"]
+    #[serde(rename="BccAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bcc_addresses: Option<Vec<String>>,
     #[doc="<p>The CC: field(s) of the message.</p>"]
+    #[serde(rename="CcAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cc_addresses: Option<Vec<String>>,
     #[doc="<p>The To: field(s) of the message.</p>"]
+    #[serde(rename="ToAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_addresses: Option<Vec<String>>,
 }
 
@@ -1906,19 +1982,29 @@ impl EnabledDeserializer {
     }
 }
 #[doc="<p>Contains information about the event destination to which the specified email sending events are published.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventDestination {
     #[doc="<p>An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.</p>"]
+    #[serde(rename="CloudWatchDestination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_watch_destination: Option<CloudWatchDestination>,
     #[doc="<p>Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to <code>true</code> to enable publishing to this destination; set to <code>false</code> to prevent publishing to this destination. The default value is <code>false</code>.</p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
     #[doc="<p>An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p>"]
+    #[serde(rename="KinesisFirehoseDestination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     #[doc="<p>The type of email sending events to publish to the event destination.</p>"]
+    #[serde(rename="MatchingEventTypes")]
     pub matching_event_types: Vec<String>,
     #[doc="<p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>An object that contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p>"]
+    #[serde(rename="SNSDestination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_destination: Option<SNSDestination>,
 }
 
@@ -2151,11 +2237,13 @@ impl EventTypesSerializer {
 }
 
 #[doc="<p>Additional X-headers to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExtensionField {
     #[doc="<p>The name of the header to add. Must be between 1 and 50 characters, inclusive, and consist of alphanumeric (a-z, A-Z, 0-9) characters and dashes only.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The value of the header to add. Must be less than 2048 characters, and must not contain newline characters (\"\\r\" or \"\\n\").</p>"]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -2190,9 +2278,10 @@ impl ExtensionFieldListSerializer {
 }
 
 #[doc="<p>Represents a request for the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this request also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published. For more information about Easy DKIM, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityDkimAttributesRequest {
     #[doc="<p>A list of one or more verified identities - email addresses, domains, or both.</p>"]
+    #[serde(rename="Identities")]
     pub identities: Vec<String>,
 }
 
@@ -2214,9 +2303,10 @@ impl GetIdentityDkimAttributesRequestSerializer {
 }
 
 #[doc="<p>Represents the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this response also contains the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityDkimAttributesResponse {
     #[doc="<p>The DKIM attributes for an email address or a domain.</p>"]
+    #[serde(rename="DkimAttributes")]
     pub dkim_attributes: ::std::collections::HashMap<String, IdentityDkimAttributes>,
 }
 
@@ -2265,9 +2355,10 @@ impl GetIdentityDkimAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the Amazon SES custom MAIL FROM attributes for a list of identities. For information about using a custom MAIL FROM domain, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityMailFromDomainAttributesRequest {
     #[doc="<p>A list of one or more identities.</p>"]
+    #[serde(rename="Identities")]
     pub identities: Vec<String>,
 }
 
@@ -2291,9 +2382,10 @@ impl GetIdentityMailFromDomainAttributesRequestSerializer {
 }
 
 #[doc="<p>Represents the custom MAIL FROM attributes for a list of identities.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityMailFromDomainAttributesResponse {
     #[doc="<p>A map of identities to custom MAIL FROM attributes.</p>"]
+    #[serde(rename="MailFromDomainAttributes")]
     pub mail_from_domain_attributes:
         ::std::collections::HashMap<String, IdentityMailFromDomainAttributes>,
 }
@@ -2343,9 +2435,10 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the notification attributes for a list of identities you verified with Amazon SES. For information about Amazon SES notifications, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityNotificationAttributesRequest {
     #[doc="<p>A list of one or more identities. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>"]
+    #[serde(rename="Identities")]
     pub identities: Vec<String>,
 }
 
@@ -2367,9 +2460,10 @@ impl GetIdentityNotificationAttributesRequestSerializer {
 }
 
 #[doc="<p>Represents the notification attributes for a list of identities.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityNotificationAttributesResponse {
     #[doc="<p>A map of Identity to IdentityNotificationAttributes.</p>"]
+    #[serde(rename="NotificationAttributes")]
     pub notification_attributes:
         ::std::collections::HashMap<String, IdentityNotificationAttributes>,
 }
@@ -2419,11 +2513,13 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the requested sending authorization policies for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityPoliciesRequest {
     #[doc="<p>The identity for which the policies will be retrieved. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>A list of the names of policies to be retrieved. You can retrieve a maximum of 20 policies at a time. If you do not know the names of the policies that are attached to the identity, you can use <code>ListIdentityPolicies</code>.</p>"]
+    #[serde(rename="PolicyNames")]
     pub policy_names: Vec<String>,
 }
 
@@ -2447,9 +2543,10 @@ impl GetIdentityPoliciesRequestSerializer {
 }
 
 #[doc="<p>Represents the requested sending authorization policies.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityPoliciesResponse {
     #[doc="<p>A map of policy names to policies.</p>"]
+    #[serde(rename="Policies")]
     pub policies: ::std::collections::HashMap<String, String>,
 }
 
@@ -2496,9 +2593,10 @@ impl GetIdentityPoliciesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return the Amazon SES verification status of a list of identities. For domain identities, this request also returns the verification token. For information about verifying identities with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityVerificationAttributesRequest {
     #[doc="<p>A list of identities.</p>"]
+    #[serde(rename="Identities")]
     pub identities: Vec<String>,
 }
 
@@ -2520,9 +2618,10 @@ impl GetIdentityVerificationAttributesRequestSerializer {
 }
 
 #[doc="<p>The Amazon SES verification status of a list of identities. For domain identities, this response also contains the verification token.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityVerificationAttributesResponse {
     #[doc="<p>A map of Identities to IdentityVerificationAttributes objects.</p>"]
+    #[serde(rename="VerificationAttributes")]
     pub verification_attributes:
         ::std::collections::HashMap<String, IdentityVerificationAttributes>,
 }
@@ -2572,13 +2671,19 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Represents your Amazon SES daily sending quota, maximum send rate, and the number of emails you have sent in the last 24 hours.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSendQuotaResponse {
     #[doc="<p>The maximum number of emails the user is allowed to send in a 24-hour interval. A value of -1 signifies an unlimited quota.</p>"]
+    #[serde(rename="Max24HourSend")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_24_hour_send: Option<f64>,
     #[doc="<p>The maximum number of emails that Amazon SES can accept from the user's account per second.</p> <note> <p>The rate at which Amazon SES accepts the user's messages might be less than the maximum send rate.</p> </note>"]
+    #[serde(rename="MaxSendRate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_send_rate: Option<f64>,
     #[doc="<p>The number of emails sent during the previous 24 hours.</p>"]
+    #[serde(rename="SentLast24Hours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sent_last_24_hours: Option<f64>,
 }
 
@@ -2636,9 +2741,11 @@ impl GetSendQuotaResponseDeserializer {
     }
 }
 #[doc="<p>Represents a list of data points. This list contains aggregated data from the previous two weeks of your sending activity with Amazon SES.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSendStatisticsResponse {
     #[doc="<p>A list of data points, each of which represents 15 minutes of activity.</p>"]
+    #[serde(rename="SendDataPoints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub send_data_points: Option<Vec<SendDataPoint>>,
 }
 
@@ -2728,13 +2835,17 @@ impl IdentityDeserializer {
     }
 }
 #[doc="<p>Represents the DKIM attributes of a verified email address or a domain.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityDkimAttributes {
     #[doc="<p>True if DKIM signing is enabled for email sent from the identity; false otherwise. The default value is true.</p>"]
+    #[serde(rename="DkimEnabled")]
     pub dkim_enabled: bool,
     #[doc="<p>A set of character strings that represent the domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain. (This only applies to domain identities, not email address identities.)</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    #[serde(rename="DkimTokens")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dkim_tokens: Option<Vec<String>>,
     #[doc="<p>Describes whether Amazon SES has successfully verified the DKIM DNS records (tokens) published in the domain name's DNS. (This only applies to domain identities, not email address identities.)</p>"]
+    #[serde(rename="DkimVerificationStatus")]
     pub dkim_verification_status: String,
 }
 
@@ -2844,13 +2955,16 @@ impl IdentityListSerializer {
 }
 
 #[doc="<p>Represents the custom MAIL FROM domain attributes of a verified identity (email address or domain).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityMailFromDomainAttributes {
     #[doc="<p>The action that Amazon SES takes if it cannot successfully read the required MX record when you send an email. A value of <code>UseDefaultValue</code> indicates that if Amazon SES cannot read the required MX record, it uses amazonses.com (or a subdomain of that) as the MAIL FROM domain. A value of <code>RejectMessage</code> indicates that if Amazon SES cannot read the required MX record, Amazon SES returns a <code>MailFromDomainNotVerified</code> error and does not send the email.</p> <p>The custom MAIL FROM setup states that result in this behavior are <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code>.</p>"]
+    #[serde(rename="BehaviorOnMXFailure")]
     pub behavior_on_mx_failure: String,
     #[doc="<p>The custom MAIL FROM domain that the identity is configured to use.</p>"]
+    #[serde(rename="MailFromDomain")]
     pub mail_from_domain: String,
     #[doc="<p>The state that indicates whether Amazon SES has successfully read the MX record required for custom MAIL FROM domain setup. If the state is <code>Success</code>, Amazon SES uses the specified custom MAIL FROM domain when the verified identity sends an email. All other states indicate that Amazon SES takes the action described by <code>BehaviorOnMXFailure</code>.</p>"]
+    #[serde(rename="MailFromDomainStatus")]
     pub mail_from_domain_status: String,
 }
 
@@ -2909,21 +3023,31 @@ impl IdentityMailFromDomainAttributesDeserializer {
     }
 }
 #[doc="<p>Represents the notification attributes of an identity, including whether an identity has Amazon Simple Notification Service (Amazon SNS) topics set for bounce, complaint, and/or delivery notifications, and whether feedback forwarding is enabled for bounce and complaint notifications.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityNotificationAttributes {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish bounce notifications.</p>"]
+    #[serde(rename="BounceTopic")]
     pub bounce_topic: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish complaint notifications.</p>"]
+    #[serde(rename="ComplaintTopic")]
     pub complaint_topic: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish delivery notifications.</p>"]
+    #[serde(rename="DeliveryTopic")]
     pub delivery_topic: String,
     #[doc="<p>Describes whether Amazon SES will forward bounce and complaint notifications as email. <code>true</code> indicates that Amazon SES will forward bounce and complaint notifications as email, while <code>false</code> indicates that bounce and complaint notifications will be published only to the specified bounce and complaint Amazon SNS topics.</p>"]
+    #[serde(rename="ForwardingEnabled")]
     pub forwarding_enabled: bool,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Bounce</code>. A value of <code>true</code> specifies that Amazon SES will include headers in bounce notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in bounce notifications.</p>"]
+    #[serde(rename="HeadersInBounceNotificationsEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub headers_in_bounce_notifications_enabled: Option<bool>,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Complaint</code>. A value of <code>true</code> specifies that Amazon SES will include headers in complaint notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in complaint notifications.</p>"]
+    #[serde(rename="HeadersInComplaintNotificationsEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub headers_in_complaint_notifications_enabled: Option<bool>,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Delivery</code>. A value of <code>true</code> specifies that Amazon SES will include headers in delivery notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in delivery notifications.</p>"]
+    #[serde(rename="HeadersInDeliveryNotificationsEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub headers_in_delivery_notifications_enabled: Option<bool>,
 }
 
@@ -3000,11 +3124,14 @@ impl IdentityNotificationAttributesDeserializer {
     }
 }
 #[doc="<p>Represents the verification attributes of a single identity.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityVerificationAttributes {
     #[doc="<p>The verification status of the identity: \"Pending\", \"Success\", \"Failed\", or \"TemporaryFailure\".</p>"]
+    #[serde(rename="VerificationStatus")]
     pub verification_status: String,
     #[doc="<p>The verification token for a domain identity. Null for email address identities.</p>"]
+    #[serde(rename="VerificationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub verification_token: Option<String>,
 }
 
@@ -3071,11 +3198,13 @@ impl InvocationTypeDeserializer {
     }
 }
 #[doc="<p>Contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p> <p>Event destinations, such as Amazon Kinesis Firehose, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KinesisFirehoseDestination {
     #[doc="<p>The ARN of the Amazon Kinesis Firehose stream to which to publish email sending events.</p>"]
+    #[serde(rename="DeliveryStreamARN")]
     pub delivery_stream_arn: String,
     #[doc="<p>The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream.</p>"]
+    #[serde(rename="IAMRoleARN")]
     pub iam_role_arn: String,
 }
 
@@ -3146,13 +3275,18 @@ impl KinesisFirehoseDestinationSerializer {
 }
 
 #[doc="<p>When included in a receipt rule, this action calls an AWS Lambda function and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to call your AWS Lambda function or to publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> <p>For information about using AWS Lambda actions in receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-lambda.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LambdaAction {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS Lambda function. An example of an AWS Lambda function ARN is <code>arn:aws:lambda:us-west-2:account-id:function:MyFunction</code>. For more information about AWS Lambda, see the <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/welcome.html\">AWS Lambda Developer Guide</a>.</p>"]
+    #[serde(rename="FunctionArn")]
     pub function_arn: String,
     #[doc="<p>The invocation type of the AWS Lambda function. An invocation type of <code>RequestResponse</code> means that the execution of the function will immediately result in a response, and a value of <code>Event</code> means that the function will be invoked asynchronously. The default value is <code>Event</code>. For information about AWS Lambda invocation types, see the <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html\">AWS Lambda Developer Guide</a>.</p> <important> <p>There is a 30-second timeout on <code>RequestResponse</code> invocations. You should use <code>Event</code> invocation in most cases. Use <code>RequestResponse</code> only when you want to make a mail flow decision, such as whether to stop the receipt rule or the receipt rule set.</p> </important>"]
+    #[serde(rename="InvocationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub invocation_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the Lambda action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -3234,11 +3368,15 @@ impl LambdaActionSerializer {
 }
 
 #[doc="<p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConfigurationSetsRequest {
     #[doc="<p>The number of configuration sets to return.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>A token returned from a previous call to <code>ListConfigurationSets</code> to indicate the position of the configuration set in the configuration set list.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3265,11 +3403,15 @@ impl ListConfigurationSetsRequestSerializer {
 }
 
 #[doc="<p>A list of configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConfigurationSetsResponse {
     #[doc="<p>A list of configuration sets.</p>"]
+    #[serde(rename="ConfigurationSets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_sets: Option<Vec<ConfigurationSet>>,
     #[doc="<p>A token indicating that there are additional configuration sets available to be listed. Pass this token to successive calls of <code>ListConfigurationSets</code>. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3321,13 +3463,19 @@ impl ListConfigurationSetsResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return a list of all identities (email addresses and domains) that you have attempted to verify under your AWS account, regardless of verification status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentitiesRequest {
     #[doc="<p>The type of the identities to list. Possible values are \"EmailAddress\" and \"Domain\". If this parameter is omitted, then all identities will be listed.</p>"]
+    #[serde(rename="IdentityType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_type: Option<String>,
     #[doc="<p>The maximum number of identities per page. Possible values are 1-1000 inclusive.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The token to use for pagination.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3358,11 +3506,14 @@ impl ListIdentitiesRequestSerializer {
 }
 
 #[doc="<p>A list of all identities that you have attempted to verify under your AWS account, regardless of verification status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentitiesResponse {
     #[doc="<p>A list of identities.</p>"]
+    #[serde(rename="Identities")]
     pub identities: Vec<String>,
     #[doc="<p>The token used for pagination.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3413,9 +3564,10 @@ impl ListIdentitiesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to return a list of sending authorization policies that are attached to an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentityPoliciesRequest {
     #[doc="<p>The identity that is associated with the policy for which the policies will be listed. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
 }
 
@@ -3436,9 +3588,10 @@ impl ListIdentityPoliciesRequestSerializer {
 }
 
 #[doc="<p>A list of names of sending authorization policies that apply to an identity.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentityPoliciesResponse {
     #[doc="<p>A list of names of policies that apply to the specified identity.</p>"]
+    #[serde(rename="PolicyNames")]
     pub policy_names: Vec<String>,
 }
 
@@ -3485,7 +3638,7 @@ impl ListIdentityPoliciesResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to list the IP address filters that exist under your AWS account. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListReceiptFiltersRequest;
 
 
@@ -3504,9 +3657,11 @@ impl ListReceiptFiltersRequestSerializer {
 }
 
 #[doc="<p>A list of IP address filters that exist under your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListReceiptFiltersResponse {
     #[doc="<p>A list of IP address filter data structures, which each consist of a name, an IP address range, and whether to allow or block mail from it.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<ReceiptFilter>>,
 }
 
@@ -3554,9 +3709,11 @@ impl ListReceiptFiltersResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to list the receipt rule sets that exist under your AWS account. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListReceiptRuleSetsRequest {
     #[doc="<p>A token returned from a previous call to <code>ListReceiptRuleSets</code> to indicate the position in the receipt rule set list.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3579,11 +3736,15 @@ impl ListReceiptRuleSetsRequestSerializer {
 }
 
 #[doc="<p>A list of receipt rule sets that exist under your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListReceiptRuleSetsResponse {
     #[doc="<p>A token indicating that there are additional receipt rule sets available to be listed. Pass this token to successive calls of <code>ListReceiptRuleSets</code> to retrieve up to 100 receipt rule sets at a time.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The metadata for the currently active receipt rule set. The metadata consists of the rule set name and the timestamp of when the rule set was created.</p>"]
+    #[serde(rename="RuleSets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_sets: Option<Vec<ReceiptRuleSetMetadata>>,
 }
 
@@ -3635,9 +3796,11 @@ impl ListReceiptRuleSetsResponseDeserializer {
     }
 }
 #[doc="<p>A list of email addresses that you have verified with Amazon SES under your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVerifiedEmailAddressesResponse {
     #[doc="<p>A list of email addresses that have been verified.</p>"]
+    #[serde(rename="VerifiedEmailAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub verified_email_addresses: Option<Vec<String>>,
 }
 
@@ -3754,11 +3917,13 @@ impl MaxSendRateDeserializer {
     }
 }
 #[doc="<p>Represents the message to be sent, composed of a subject and a body.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Message {
     #[doc="<p>The message body.</p>"]
+    #[serde(rename="Body")]
     pub body: Body,
     #[doc="<p>The subject of the message: A short summary of the content, which will appear in the recipient's inbox.</p>"]
+    #[serde(rename="Subject")]
     pub subject: Content,
 }
 
@@ -3779,13 +3944,18 @@ impl MessageSerializer {
 }
 
 #[doc="<p>Message-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MessageDsn {
     #[doc="<p>When the message was received by the reporting mail transfer agent (MTA), in <a href=\"https://www.ietf.org/rfc/rfc0822.txt\">RFC 822</a> date-time format.</p>"]
+    #[serde(rename="ArrivalDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arrival_date: Option<String>,
     #[doc="<p>Additional X-headers to include in the DSN.</p>"]
+    #[serde(rename="ExtensionFields")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extension_fields: Option<Vec<ExtensionField>>,
     #[doc="<p>The reporting MTA that attempted to deliver the message, formatted as specified in <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a> (<code>mta-name-type; mta-name</code>). The default value is <code>dns; inbound-smtp.[region].amazonaws.com</code>.</p>"]
+    #[serde(rename="ReportingMta")]
     pub reporting_mta: String,
 }
 
@@ -3829,11 +3999,13 @@ impl MessageIdDeserializer {
     }
 }
 #[doc="<p>Contains the name and value of a tag that you can provide to <code>SendEmail</code> or <code>SendRawEmail</code> to apply to an email.</p> <p>Message tags, which you use with configuration sets, enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MessageTag {
     #[doc="<p>The name of the tag. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The value of the tag. The value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -4027,13 +4199,16 @@ impl PolicyNameListSerializer {
 }
 
 #[doc="<p>Represents a request to add or update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIdentityPolicyRequest {
     #[doc="<p>The identity to which the policy will apply. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>The text of the policy in JSON format. The policy cannot exceed 4 KB.</p> <p>For information about the syntax of sending authorization policies, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html\">Amazon SES Developer Guide</a>. </p>"]
+    #[serde(rename="Policy")]
     pub policy: String,
     #[doc="<p>The name of the policy.</p> <p>The policy name cannot exceed 64 characters and can only include alphanumeric characters, dashes, and underscores.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -4058,7 +4233,7 @@ impl PutIdentityPolicyRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIdentityPolicyResponse;
 
 struct PutIdentityPolicyResponseDeserializer;
@@ -4078,9 +4253,15 @@ impl PutIdentityPolicyResponseDeserializer {
     }
 }
 #[doc="<p>Represents the raw data of the message.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RawMessage {
     #[doc="<p>The raw data of the message. This data needs to base64-encoded if you are accessing Amazon SES directly through the HTTPS interface. If you are accessing Amazon SES using an AWS SDK, the SDK takes care of the base 64-encoding for you. In all cases, the client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, and MIME encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the \"Source,\" \"From,\" and \"Return-Path\" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html\">Amazon SES Developer Guide</a>. </p>"]
+    #[serde(rename="Data")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub data: Vec<u8>,
 }
 
@@ -4103,21 +4284,35 @@ impl RawMessageSerializer {
 }
 
 #[doc="<p>An action that Amazon SES can take when it receives an email on behalf of one or more email addresses or domains that you own. An instance of this data type can represent only one action.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReceiptAction {
     #[doc="<p>Adds a header to the received email.</p>"]
+    #[serde(rename="AddHeaderAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub add_header_action: Option<AddHeaderAction>,
     #[doc="<p>Rejects the received email by returning a bounce response to the sender and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p>"]
+    #[serde(rename="BounceAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bounce_action: Option<BounceAction>,
     #[doc="<p>Calls an AWS Lambda function, and optionally, publishes a notification to Amazon SNS.</p>"]
+    #[serde(rename="LambdaAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_action: Option<LambdaAction>,
     #[doc="<p>Saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon SNS.</p>"]
+    #[serde(rename="S3Action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_action: Option<S3Action>,
     #[doc="<p>Publishes the email content within a notification to Amazon SNS.</p>"]
+    #[serde(rename="SNSAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_action: Option<SNSAction>,
     #[doc="<p>Terminates the evaluation of the receipt rule set and optionally publishes a notification to Amazon SNS.</p>"]
+    #[serde(rename="StopAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stop_action: Option<StopAction>,
     #[doc="<p>Calls Amazon WorkMail and, optionally, publishes a notification to Amazon SNS.</p>"]
+    #[serde(rename="WorkmailAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workmail_action: Option<WorkmailAction>,
 }
 
@@ -4295,11 +4490,13 @@ impl ReceiptActionsListSerializer {
 }
 
 #[doc="<p>A receipt IP address filter enables you to specify whether to accept or reject mail originating from an IP address or range of IP addresses.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReceiptFilter {
     #[doc="<p>A structure that provides the IP addresses to block or allow, and whether to block or allow incoming mail from them.</p>"]
+    #[serde(rename="IpFilter")]
     pub ip_filter: ReceiptIpFilter,
     #[doc="<p>The name of the IP address filter. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -4438,11 +4635,13 @@ impl ReceiptFilterPolicyDeserializer {
     }
 }
 #[doc="<p>A receipt IP address filter enables you to specify whether to accept or reject mail originating from an IP address or range of IP addresses.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReceiptIpFilter {
     #[doc="<p>A single IP address or a range of IP addresses that you want to block or allow, specified in Classless Inter-Domain Routing (CIDR) notation. An example of a single email address is 10.0.0.1. An example of a range of IP addresses is 10.0.0.1/24. For more information about CIDR notation, see <a href=\"https://tools.ietf.org/html/rfc2317\">RFC 2317</a>.</p>"]
+    #[serde(rename="Cidr")]
     pub cidr: String,
     #[doc="<p>Indicates whether to block or allow incoming mail from the specified IP addresses.</p>"]
+    #[serde(rename="Policy")]
     pub policy: String,
 }
 
@@ -4510,19 +4709,30 @@ impl ReceiptIpFilterSerializer {
 }
 
 #[doc="<p>Receipt rules enable you to specify which actions Amazon SES should take when it receives mail on behalf of one or more email addresses or domains that you own.</p> <p>Each receipt rule defines a set of email addresses or domains to which it applies. If the email addresses or domains match at least one recipient address of the message, Amazon SES executes all of the receipt rule's actions on the message.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReceiptRule {
     #[doc="<p>An ordered list of actions to perform on messages that match at least one of the recipient email addresses or domains specified in the receipt rule.</p>"]
+    #[serde(rename="Actions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<Vec<ReceiptAction>>,
     #[doc="<p>If <code>true</code>, the receipt rule is active. The default value is <code>false</code>.</p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
     #[doc="<p>The name of the receipt rule. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The recipient domains and email addresses to which the receipt rule applies. If this field is not specified, this rule will match all recipients under all verified domains.</p>"]
+    #[serde(rename="Recipients")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recipients: Option<Vec<String>>,
     #[doc="<p>If <code>true</code>, then messages to which this receipt rule applies are scanned for spam and viruses. The default value is <code>false</code>.</p>"]
+    #[serde(rename="ScanEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scan_enabled: Option<bool>,
     #[doc="<p>Specifies whether Amazon SES should require that incoming email is delivered over a connection encrypted with Transport Layer Security (TLS). If this parameter is set to <code>Require</code>, Amazon SES will bounce emails that are not received over TLS. The default is <code>Optional</code>.</p>"]
+    #[serde(rename="TlsPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tls_policy: Option<String>,
 }
 
@@ -4655,11 +4865,15 @@ impl ReceiptRuleNamesListSerializer {
 }
 
 #[doc="<p>Information about a receipt rule set.</p> <p>A receipt rule set is a collection of rules that specify what Amazon SES should do with mail it receives on behalf of your account's verified domains.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReceiptRuleSetMetadata {
     #[doc="<p>The date and time the receipt rule set was created.</p>"]
+    #[serde(rename="CreatedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_timestamp: Option<String>,
     #[doc="<p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -4823,21 +5037,33 @@ impl RecipientDeserializer {
     }
 }
 #[doc="<p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecipientDsnFields {
     #[doc="<p>The action performed by the reporting mail transfer agent (MTA) as a result of its attempt to deliver the message to the recipient address. This is required by <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a>.</p>"]
+    #[serde(rename="Action")]
     pub action: String,
     #[doc="<p>An extended explanation of what went wrong; this is usually an SMTP response. See <a href=\"https://tools.ietf.org/html/rfc3463\">RFC 3463</a> for the correct formatting of this parameter.</p>"]
+    #[serde(rename="DiagnosticCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub diagnostic_code: Option<String>,
     #[doc="<p>Additional X-headers to include in the DSN.</p>"]
+    #[serde(rename="ExtensionFields")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extension_fields: Option<Vec<ExtensionField>>,
     #[doc="<p>The email address to which the message was ultimately delivered. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href=\"https://tools.ietf.org/html/rfc3798\">RFC 3798</a>.</p> </note>"]
+    #[serde(rename="FinalRecipient")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub final_recipient: Option<String>,
     #[doc="<p>The time the final delivery attempt was made, in <a href=\"https://www.ietf.org/rfc/rfc0822.txt\">RFC 822</a> date-time format.</p>"]
+    #[serde(rename="LastAttemptDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_attempt_date: Option<String>,
     #[doc="<p>The MTA to which the remote MTA attempted to deliver the message, formatted as specified in <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a> (<code>mta-name-type; mta-name</code>). This parameter typically applies only to propagating synchronous bounces.</p>"]
+    #[serde(rename="RemoteMta")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remote_mta: Option<String>,
     #[doc="<p>The status code that indicates what went wrong. This is required by <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a>.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
 }
 
@@ -4934,11 +5160,13 @@ impl RecipientsListSerializer {
 }
 
 #[doc="<p>Represents a request to reorder the receipt rules within a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReorderReceiptRuleSetRequest {
     #[doc="<p>A list of the specified receipt rule set's receipt rules in the order that you want to put them.</p>"]
+    #[serde(rename="RuleNames")]
     pub rule_names: Vec<String>,
     #[doc="<p>The name of the receipt rule set to reorder.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -4962,7 +5190,7 @@ impl ReorderReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReorderReceiptRuleSetResponse;
 
 struct ReorderReceiptRuleSetResponseDeserializer;
@@ -4982,15 +5210,22 @@ impl ReorderReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>When included in a receipt rule, this action saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to write emails to your Amazon S3 bucket, use an AWS KMS key to encrypt your emails, or publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> <note> <p>When you save your emails to an Amazon S3 bucket, the maximum email size (including headers) is 30 MB. Emails larger than that will bounce.</p> </note> <p>For information about specifying Amazon S3 actions in receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-s3.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3Action {
     #[doc="<p>The name of the Amazon S3 bucket to which to save the received email.</p>"]
+    #[serde(rename="BucketName")]
     pub bucket_name: String,
     #[doc="<p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don't need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key's policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html\">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href=\"http://aws.amazon.com/sdk-for-java/\">AWS Java SDK</a> and <a href=\"http://aws.amazon.com/sdk-for-ruby/\">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href=\"http://alpha-docs-aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html\">Amazon S3 Developer Guide</a>.</p> </important>"]
+    #[serde(rename="KmsKeyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_arn: Option<String>,
     #[doc="<p>The key prefix of the Amazon S3 bucket. The key prefix is similar to a directory name that enables you to store similar data under the same directory in a bucket.</p>"]
+    #[serde(rename="ObjectKeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub object_key_prefix: Option<String>,
     #[doc="<p>The ARN of the Amazon SNS topic to notify when the message is saved to the Amazon S3 bucket. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -5108,11 +5343,14 @@ impl S3KeyPrefixDeserializer {
     }
 }
 #[doc="<p>When included in a receipt rule, this action publishes a notification to Amazon Simple Notification Service (Amazon SNS). This action includes a complete copy of the email content in the Amazon SNS notifications. Amazon SNS notifications for all other actions simply provide information about the email. They do not include the email content itself.</p> <p>If you own the Amazon SNS topic, you don't need to do anything to give Amazon SES permission to publish emails to it. However, if you don't own the Amazon SNS topic, you need to attach a policy to the topic to give Amazon SES permissions to access it. For information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> <important> <p>You can only publish emails that are 150 KB or less (including the header) to Amazon SNS. Larger emails will bounce. If you anticipate emails larger than 150 KB, use the S3 action instead.</p> </important> <p>For information about using a receipt rule to publish an Amazon SNS notification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-sns.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SNSAction {
     #[doc="<p>The encoding to use for the email within the Amazon SNS notification. UTF-8 is easier to use, but may not preserve all special characters when a message was encoded with a different encoding format. Base64 preserves all special characters. The default value is UTF-8.</p>"]
+    #[serde(rename="Encoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -5199,9 +5437,10 @@ impl SNSActionEncodingDeserializer {
     }
 }
 #[doc="<p>Contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p> <p>Event destinations, such as Amazon SNS, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SNSDestination {
     #[doc="<p>The ARN of the Amazon SNS topic to which you want to publish email sending events. An example of an Amazon SNS topic ARN is arn:aws:sns:us-west-2:123456789012:MyTopic. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/http:/alpha-docs-aws.amazon.com/sns/latest/dg/CreateTopic.html\"> <i>Amazon SNS Developer Guide</i> </a>.</p>"]
+    #[serde(rename="TopicARN")]
     pub topic_arn: String,
 }
 
@@ -5265,19 +5504,28 @@ impl SNSDestinationSerializer {
 }
 
 #[doc="<p>Represents a request to send a bounce message to the sender of an email you received through Amazon SES.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendBounceRequest {
     #[doc="<p>The address to use in the \"From\" header of the bounce message. This must be an identity that you have verified with Amazon SES.</p>"]
+    #[serde(rename="BounceSender")]
     pub bounce_sender: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the address in the \"From\" header of the bounce. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
+    #[serde(rename="BounceSenderArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bounce_sender_arn: Option<String>,
     #[doc="<p>A list of recipients of the bounced message, including the information required to create the Delivery Status Notifications (DSNs) for the recipients. You must specify at least one <code>BouncedRecipientInfo</code> in the list.</p>"]
+    #[serde(rename="BouncedRecipientInfoList")]
     pub bounced_recipient_info_list: Vec<BouncedRecipientInfo>,
     #[doc="<p>Human-readable text for the bounce message to explain the failure. If not specified, the text will be auto-generated based on the bounced recipient information.</p>"]
+    #[serde(rename="Explanation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub explanation: Option<String>,
     #[doc="<p>Message-related DSN fields. If not specified, Amazon SES will choose the values.</p>"]
+    #[serde(rename="MessageDsn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_dsn: Option<MessageDsn>,
     #[doc="<p>The message ID of the message to be bounced.</p>"]
+    #[serde(rename="OriginalMessageId")]
     pub original_message_id: String,
 }
 
@@ -5318,9 +5566,11 @@ impl SendBounceRequestSerializer {
 }
 
 #[doc="<p>Represents a unique message ID.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendBounceResponse {
     #[doc="<p>The message ID of the bounce message.</p>"]
+    #[serde(rename="MessageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_id: Option<String>,
 }
 
@@ -5367,17 +5617,27 @@ impl SendBounceResponseDeserializer {
     }
 }
 #[doc="<p>Represents sending statistics data. Each <code>SendDataPoint</code> contains statistics for a 15-minute period of sending activity. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendDataPoint {
     #[doc="<p>Number of emails that have bounced.</p>"]
+    #[serde(rename="Bounces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bounces: Option<i64>,
     #[doc="<p>Number of unwanted emails that were rejected by recipients.</p>"]
+    #[serde(rename="Complaints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub complaints: Option<i64>,
     #[doc="<p>Number of emails that have been sent.</p>"]
+    #[serde(rename="DeliveryAttempts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delivery_attempts: Option<i64>,
     #[doc="<p>Number of emails rejected by Amazon SES.</p>"]
+    #[serde(rename="Rejects")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejects: Option<i64>,
     #[doc="<p>Time of the data point.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -5482,25 +5742,40 @@ impl SendDataPointListDeserializer {
     }
 }
 #[doc="<p>Represents a request to send a single formatted email using Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendEmailRequest {
     #[doc="<p>The name of the configuration set to use when you send an email using <code>SendEmail</code>.</p>"]
+    #[serde(rename="ConfigurationSetName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_set_name: Option<String>,
     #[doc="<p>The destination for this email, composed of To:, CC:, and BCC: fields.</p>"]
+    #[serde(rename="Destination")]
     pub destination: Destination,
     #[doc="<p>The message to be sent.</p>"]
+    #[serde(rename="Message")]
     pub message: Message,
     #[doc="<p>The reply-to email address(es) for the message. If the recipient replies to the message, each reply-to address will receive the reply.</p>"]
+    #[serde(rename="ReplyToAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reply_to_addresses: Option<Vec<String>>,
     #[doc="<p>The email address to which bounces and complaints are to be forwarded when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>"]
+    #[serde(rename="ReturnPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_path: Option<String>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>. </p>"]
+    #[serde(rename="ReturnPathArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_path_arn: Option<String>,
     #[doc="<p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p> In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href=\"http://tools.ietf.org/html/rfc2047\">RFC 2047</a>. </p>"]
+    #[serde(rename="Source")]
     pub source: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>. </p>"]
+    #[serde(rename="SourceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_arn: Option<String>,
     #[doc="<p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<MessageTag>>,
 }
 
@@ -5551,9 +5826,10 @@ impl SendEmailRequestSerializer {
 }
 
 #[doc="<p>Represents a unique message ID.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendEmailResponse {
     #[doc="<p>The unique message identifier returned from the <code>SendEmail</code> action. </p>"]
+    #[serde(rename="MessageId")]
     pub message_id: String,
 }
 
@@ -5600,23 +5876,38 @@ impl SendEmailResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to send a single raw email using Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendRawEmailRequest {
     #[doc="<p>The name of the configuration set to use when you send an email using <code>SendRawEmail</code>.</p>"]
+    #[serde(rename="ConfigurationSetName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_set_name: Option<String>,
     #[doc="<p>A list of destinations for the message, consisting of To:, CC:, and BCC: addresses.</p>"]
+    #[serde(rename="Destinations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destinations: Option<Vec<String>>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular \"From\" address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
+    #[serde(rename="FromArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_arn: Option<String>,
     #[doc="<p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> <li> <p>Per <a href=\"https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6\">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul>"]
+    #[serde(rename="RawMessage")]
     pub raw_message: RawMessage,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
+    #[serde(rename="ReturnPathArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_path_arn: Option<String>,
     #[doc="<p>The identity's email address. If you do not provide a value for this parameter, you must specify a \"From\" address in the raw text of the message. (You can also specify both.)</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href=\"http://tools.ietf.org/html/rfc2047\">RFC 2047</a>. </p> <note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any <i>Return-Path</i> header that you might include in the raw text of the message.</p> </note>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-SOURCE-ARN</code> in the raw message of the email. If you use both the <code>SourceArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>SourceArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
+    #[serde(rename="SourceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_arn: Option<String>,
     #[doc="<p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendRawEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<MessageTag>>,
 }
 
@@ -5668,9 +5959,10 @@ impl SendRawEmailRequestSerializer {
 }
 
 #[doc="<p>Represents a unique message ID.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SendRawEmailResponse {
     #[doc="<p>The unique message identifier returned from the <code>SendRawEmail</code> action. </p>"]
+    #[serde(rename="MessageId")]
     pub message_id: String,
 }
 
@@ -5731,9 +6023,11 @@ impl SentLast24HoursDeserializer {
     }
 }
 #[doc="<p>Represents a request to set a receipt rule set as the active receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetActiveReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to make active. Setting this value to null disables all email receiving.</p>"]
+    #[serde(rename="RuleSetName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_set_name: Option<String>,
 }
 
@@ -5756,7 +6050,7 @@ impl SetActiveReceiptRuleSetRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetActiveReceiptRuleSetResponse;
 
 struct SetActiveReceiptRuleSetResponseDeserializer;
@@ -5777,11 +6071,13 @@ impl SetActiveReceiptRuleSetResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to enable or disable Amazon SES Easy DKIM signing for an identity. For more information about setting up Easy DKIM, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityDkimEnabledRequest {
     #[doc="<p>Sets whether DKIM signing is enabled for an identity. Set to <code>true</code> to enable DKIM signing for this identity; <code>false</code> to disable it. </p>"]
+    #[serde(rename="DkimEnabled")]
     pub dkim_enabled: bool,
     #[doc="<p>The identity for which DKIM signing should be enabled or disabled.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
 }
 
@@ -5804,7 +6100,7 @@ impl SetIdentityDkimEnabledRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityDkimEnabledResponse;
 
 struct SetIdentityDkimEnabledResponseDeserializer;
@@ -5824,11 +6120,13 @@ impl SetIdentityDkimEnabledResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to enable or disable whether Amazon SES forwards you bounce and complaint notifications through email. For information about email feedback forwarding, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-email.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityFeedbackForwardingEnabledRequest {
     #[doc="<p>Sets whether Amazon SES will forward bounce and complaint notifications as email. <code>true</code> specifies that Amazon SES will forward bounce and complaint notifications as email, in addition to any Amazon SNS topic publishing otherwise specified. <code>false</code> specifies that Amazon SES will publish bounce and complaint notifications only through Amazon SNS. This value can only be set to <code>false</code> when Amazon SNS topics are set for both <code>Bounce</code> and <code>Complaint</code> notification types.</p>"]
+    #[serde(rename="ForwardingEnabled")]
     pub forwarding_enabled: bool,
     #[doc="<p>The identity for which to set bounce and complaint notification forwarding. Examples: <code>user@example.com</code>, <code>example.com</code>.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
 }
 
@@ -5853,7 +6151,7 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityFeedbackForwardingEnabledResponse;
 
 struct SetIdentityFeedbackForwardingEnabledResponseDeserializer;
@@ -5874,13 +6172,16 @@ impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to set whether Amazon SES includes the original email headers in the Amazon SNS notifications of a specified type. For information about notifications, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityHeadersInNotificationsEnabledRequest {
     #[doc="<p>Sets whether Amazon SES includes the original email headers in Amazon SNS notifications of the specified notification type. A value of <code>true</code> specifies that Amazon SES will include headers in notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in notifications.</p> <p>This value can only be set when <code>NotificationType</code> is already set to use a particular Amazon SNS topic.</p>"]
+    #[serde(rename="Enabled")]
     pub enabled: bool,
     #[doc="<p>The identity for which to enable or disable headers in notifications. Examples: <code>user@example.com</code>, <code>example.com</code>.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>The notification type for which to enable or disable headers in notifications. </p>"]
+    #[serde(rename="NotificationType")]
     pub notification_type: String,
 }
 
@@ -5907,7 +6208,7 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityHeadersInNotificationsEnabledResponse;
 
 struct SetIdentityHeadersInNotificationsEnabledResponseDeserializer;
@@ -5928,13 +6229,18 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to enable or disable the Amazon SES custom MAIL FROM domain setup for a verified identity. For information about using a custom MAIL FROM domain, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityMailFromDomainRequest {
     #[doc="<p>The action that you want Amazon SES to take if it cannot successfully read the required MX record when you send an email. If you choose <code>UseDefaultValue</code>, Amazon SES will use amazonses.com (or a subdomain of that) as the MAIL FROM domain. If you choose <code>RejectMessage</code>, Amazon SES will return a <code>MailFromDomainNotVerified</code> error and not send the email.</p> <p>The action specified in <code>BehaviorOnMXFailure</code> is taken when the custom MAIL FROM domain setup is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>"]
+    #[serde(rename="BehaviorOnMXFailure")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub behavior_on_mx_failure: Option<String>,
     #[doc="<p>The verified identity for which you want to enable or disable the specified custom MAIL FROM domain.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>The custom MAIL FROM domain that you want the verified identity to use. The MAIL FROM domain must 1) be a subdomain of the verified identity, 2) not be used in a \"From\" address if the MAIL FROM domain is the destination of email feedback forwarding (for more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html\">Amazon SES Developer Guide</a>), and 3) not be used to receive emails. A value of <code>null</code> disables the custom MAIL FROM setting for the identity.</p>"]
+    #[serde(rename="MailFromDomain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mail_from_domain: Option<String>,
 }
 
@@ -5963,7 +6269,7 @@ impl SetIdentityMailFromDomainRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityMailFromDomainResponse;
 
 struct SetIdentityMailFromDomainResponseDeserializer;
@@ -5984,13 +6290,17 @@ impl SetIdentityMailFromDomainResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to specify the Amazon SNS topic to which Amazon SES will publish bounce, complaint, or delivery notifications for emails sent with that identity as the Source. For information about Amazon SES notifications, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityNotificationTopicRequest {
     #[doc="<p>The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>"]
+    #[serde(rename="Identity")]
     pub identity: String,
     #[doc="<p>The type of notifications that will be published to the specified Amazon SNS topic.</p>"]
+    #[serde(rename="NotificationType")]
     pub notification_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic. If the parameter is omitted from the request or a null value is passed, <code>SnsTopic</code> is cleared and publishing is disabled.</p>"]
+    #[serde(rename="SnsTopic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_topic: Option<String>,
 }
 
@@ -6017,7 +6327,7 @@ impl SetIdentityNotificationTopicRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityNotificationTopicResponse;
 
 struct SetIdentityNotificationTopicResponseDeserializer;
@@ -6038,13 +6348,17 @@ impl SetIdentityNotificationTopicResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to set the position of a receipt rule in a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetReceiptRulePositionRequest {
     #[doc="<p>The name of the receipt rule after which to place the specified receipt rule.</p>"]
+    #[serde(rename="After")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub after: Option<String>,
     #[doc="<p>The name of the receipt rule to reposition.</p>"]
+    #[serde(rename="RuleName")]
     pub rule_name: String,
     #[doc="<p>The name of the receipt rule set that contains the receipt rule to reposition.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -6071,7 +6385,7 @@ impl SetReceiptRulePositionRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetReceiptRulePositionResponse;
 
 struct SetReceiptRulePositionResponseDeserializer;
@@ -6091,11 +6405,14 @@ impl SetReceiptRulePositionResponseDeserializer {
     }
 }
 #[doc="<p>When included in a receipt rule, this action terminates the evaluation of the receipt rule set and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>For information about setting a stop action in a receipt rule, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-stop.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopAction {
     #[doc="<p>The scope to which the Stop action applies. That is, what is being stopped.</p>"]
+    #[serde(rename="Scope")]
     pub scope: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the stop action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -6208,11 +6525,13 @@ impl TlsPolicyDeserializer {
     }
 }
 #[doc="<p>Represents a request to update the event destination of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set that you want to update.</p>"]
+    #[serde(rename="ConfigurationSetName")]
     pub configuration_set_name: String,
     #[doc="<p>The event destination object that you want to apply to the specified configuration set.</p>"]
+    #[serde(rename="EventDestination")]
     pub event_destination: EventDestination,
 }
 
@@ -6238,7 +6557,7 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConfigurationSetEventDestinationResponse;
 
 struct UpdateConfigurationSetEventDestinationResponseDeserializer;
@@ -6259,11 +6578,13 @@ impl UpdateConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to update a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateReceiptRuleRequest {
     #[doc="<p>A data structure that contains the updated receipt rule information.</p>"]
+    #[serde(rename="Rule")]
     pub rule: ReceiptRule,
     #[doc="<p>The name of the receipt rule set to which the receipt rule belongs.</p>"]
+    #[serde(rename="RuleSetName")]
     pub rule_set_name: String,
 }
 
@@ -6285,7 +6606,7 @@ impl UpdateReceiptRuleRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateReceiptRuleResponse;
 
 struct UpdateReceiptRuleResponseDeserializer;
@@ -6400,9 +6721,10 @@ impl VerificationTokenListDeserializer {
     }
 }
 #[doc="<p>Represents a request to generate the CNAME records needed to set up Easy DKIM with Amazon SES. For more information about setting up Easy DKIM, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyDomainDkimRequest {
     #[doc="<p>The name of the domain to be verified for Easy DKIM signing.</p>"]
+    #[serde(rename="Domain")]
     pub domain: String,
 }
 
@@ -6423,9 +6745,10 @@ impl VerifyDomainDkimRequestSerializer {
 }
 
 #[doc="<p>Returns CNAME records that you must publish to the DNS server of your domain to set up Easy DKIM with Amazon SES.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyDomainDkimResponse {
     #[doc="<p>A set of character strings that represent the domain's identity. If the identity is an email address, the tokens represent the domain of that address.</p> <p>Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign emails originating from that domain.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    #[serde(rename="DkimTokens")]
     pub dkim_tokens: Vec<String>,
 }
 
@@ -6473,9 +6796,10 @@ impl VerifyDomainDkimResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to begin Amazon SES domain verification and to generate the TXT records that you must publish to the DNS server of your domain to complete the verification. For information about domain verification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyDomainIdentityRequest {
     #[doc="<p>The domain to be verified.</p>"]
+    #[serde(rename="Domain")]
     pub domain: String,
 }
 
@@ -6496,9 +6820,10 @@ impl VerifyDomainIdentityRequestSerializer {
 }
 
 #[doc="<p>Returns a TXT record that you must publish to the DNS server of your domain to complete domain verification with Amazon SES.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyDomainIdentityResponse {
     #[doc="<p>A TXT record that you must place in the DNS settings of the domain to complete domain verification with Amazon SES.</p> <p>As Amazon SES searches for the TXT record, the domain's verification status is \"Pending\". When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p>"]
+    #[serde(rename="VerificationToken")]
     pub verification_token: String,
 }
 
@@ -6546,9 +6871,10 @@ impl VerifyDomainIdentityResponseDeserializer {
     }
 }
 #[doc="<p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyEmailAddressRequest {
     #[doc="<p>The email address to be verified.</p>"]
+    #[serde(rename="EmailAddress")]
     pub email_address: String,
 }
 
@@ -6569,9 +6895,10 @@ impl VerifyEmailAddressRequestSerializer {
 }
 
 #[doc="<p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyEmailIdentityRequest {
     #[doc="<p>The email address to be verified.</p>"]
+    #[serde(rename="EmailAddress")]
     pub email_address: String,
 }
 
@@ -6592,7 +6919,7 @@ impl VerifyEmailIdentityRequestSerializer {
 }
 
 #[doc="<p>An empty element returned on a successful request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VerifyEmailIdentityResponse;
 
 struct VerifyEmailIdentityResponseDeserializer;
@@ -6612,11 +6939,14 @@ impl VerifyEmailIdentityResponseDeserializer {
     }
 }
 #[doc="<p>When included in a receipt rule, this action calls Amazon WorkMail and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS). You will typically not use this action directly because Amazon WorkMail adds the rule automatically during its setup procedure.</p> <p>For information using a receipt rule to call Amazon WorkMail, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-workmail.html\">Amazon SES Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WorkmailAction {
     #[doc="<p>The ARN of the Amazon WorkMail organization. An example of an Amazon WorkMail organization ARN is <code>arn:aws:workmail:us-west-2:123456789012:organization/m-68755160c4cb4e29a2b2f8fb58f359d7</code>. For information about Amazon WorkMail organizations, see the <a href=\"http://docs.aws.amazon.com/workmail/latest/adminguide/organizations_overview.html\">Amazon WorkMail Administrator Guide</a>.</p>"]
+    #[serde(rename="OrganizationArn")]
     pub organization_arn: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the WorkMail action is called. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 

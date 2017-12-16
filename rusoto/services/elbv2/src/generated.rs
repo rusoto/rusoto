@@ -40,11 +40,13 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>Information about an action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Action {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
     #[doc="<p>The type of action.</p>"]
+    #[serde(rename="Type")]
     pub type_: String,
 }
 
@@ -180,11 +182,13 @@ impl ActionsSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
+    #[serde(rename="ResourceArns")]
     pub resource_arns: Vec<String>,
     #[doc="<p>The tags. Each resource can have a maximum of 10 tags.</p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -206,7 +210,7 @@ impl AddTagsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsOutput;
 
 struct AddTagsOutputDeserializer;
@@ -226,11 +230,15 @@ impl AddTagsOutputDeserializer {
     }
 }
 #[doc="<p>Information about an Availability Zone.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZone {
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The name of the Availability Zone.</p>"]
+    #[serde(rename="ZoneName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub zone_name: Option<String>,
 }
 
@@ -336,9 +344,11 @@ impl CanonicalHostedZoneIdDeserializer {
     }
 }
 #[doc="<p>Information about an SSL server certificate deployed on a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Certificate {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate.</p>"]
+    #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<String>,
 }
 
@@ -471,11 +481,15 @@ impl CertificateListSerializer {
 }
 
 #[doc="<p>Information about a cipher used in a policy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Cipher {
     #[doc="<p>The name of the cipher.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The priority of the cipher.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<i64>,
 }
 
@@ -609,19 +623,27 @@ impl ConditionFieldNameDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateListenerInput {
     #[doc="<p>The SSL server certificate. You must provide exactly one certificate if the protocol is HTTPS.</p>"]
+    #[serde(rename="Certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default action for the listener.</p>"]
+    #[serde(rename="DefaultActions")]
     pub default_actions: Vec<Action>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
     #[doc="<p>The port on which the load balancer is listening.</p>"]
+    #[serde(rename="Port")]
     pub port: i64,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
+    #[serde(rename="Protocol")]
     pub protocol: String,
     #[doc="<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>"]
+    #[serde(rename="SslPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssl_policy: Option<String>,
 }
 
@@ -657,9 +679,11 @@ impl CreateListenerInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateListenerOutput {
     #[doc="<p>Information about the listener.</p>"]
+    #[serde(rename="Listeners")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
 }
 
@@ -705,19 +729,29 @@ impl CreateListenerOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLoadBalancerInput {
     #[doc="<p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>"]
+    #[serde(rename="IpAddressType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address_type: Option<String>,
     #[doc="<p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>"]
+    #[serde(rename="Scheme")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheme: Option<String>,
     #[doc="<p>The IDs of the security groups to assign to the load balancer.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify subnets from at least two Availability Zones.</p>"]
+    #[serde(rename="Subnets")]
     pub subnets: Vec<String>,
     #[doc="<p>One or more tags to assign to the load balancer.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -754,9 +788,11 @@ impl CreateLoadBalancerInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLoadBalancerOutput {
     #[doc="<p>Information about the load balancer.</p>"]
+    #[serde(rename="LoadBalancers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
 }
 
@@ -803,15 +839,19 @@ impl CreateLoadBalancerOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRuleInput {
     #[doc="<p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>"]
+    #[serde(rename="Actions")]
     pub actions: Vec<Action>,
     #[doc="<p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"]
+    #[serde(rename="Conditions")]
     pub conditions: Vec<RuleCondition>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
+    #[serde(rename="ListenerArn")]
     pub listener_arn: String,
     #[doc="<p>The priority for the rule. A listener can't have multiple rules with the same priority.</p>"]
+    #[serde(rename="Priority")]
     pub priority: i64,
 }
 
@@ -837,9 +877,11 @@ impl CreateRuleInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRuleOutput {
     #[doc="<p>Information about the rule.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -884,31 +926,51 @@ impl CreateRuleOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTargetGroupInput {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target. The default is 30 seconds.</p>"]
+    #[serde(rename="HealthCheckIntervalSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The ping path that is the destination on the targets for health checks. The default is /.</p>"]
+    #[serde(rename="HealthCheckPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_path: Option<String>,
     #[doc="<p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which indicates the port on which each target receives traffic from the load balancer.</p>"]
+    #[serde(rename="HealthCheckPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_port: Option<String>,
     #[doc="<p>The protocol the load balancer uses when performing health checks on targets. The default is the HTTP protocol.</p>"]
+    #[serde(rename="HealthCheckProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response from a target means a failed health check. The default is 5 seconds.</p>"]
+    #[serde(rename="HealthCheckTimeoutSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy. The default is 5.</p>"]
+    #[serde(rename="HealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target. The default is 200.</p>"]
+    #[serde(rename="Matcher")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matcher: Option<Matcher>,
     #[doc="<p>The name of the target group.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target.</p>"]
+    #[serde(rename="Port")]
     pub port: i64,
     #[doc="<p>The protocol to use for routing traffic to the targets.</p>"]
+    #[serde(rename="Protocol")]
     pub protocol: String,
     #[doc="<p>The number of consecutive health check failures required before considering a target unhealthy. The default is 2.</p>"]
+    #[serde(rename="UnhealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unhealthy_threshold_count: Option<i64>,
     #[doc="<p>The identifier of the virtual private cloud (VPC).</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -965,9 +1027,11 @@ impl CreateTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTargetGroupOutput {
     #[doc="<p>Information about the target group.</p>"]
+    #[serde(rename="TargetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
@@ -1042,9 +1106,10 @@ impl DNSNameDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteListenerInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
+    #[serde(rename="ListenerArn")]
     pub listener_arn: String,
 }
 
@@ -1064,7 +1129,7 @@ impl DeleteListenerInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteListenerOutput;
 
 struct DeleteListenerOutputDeserializer;
@@ -1083,9 +1148,10 @@ impl DeleteListenerOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLoadBalancerInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
 }
 
@@ -1105,7 +1171,7 @@ impl DeleteLoadBalancerInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLoadBalancerOutput;
 
 struct DeleteLoadBalancerOutputDeserializer;
@@ -1124,9 +1190,10 @@ impl DeleteLoadBalancerOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRuleInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
+    #[serde(rename="RuleArn")]
     pub rule_arn: String,
 }
 
@@ -1146,7 +1213,7 @@ impl DeleteRuleInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRuleOutput;
 
 struct DeleteRuleOutputDeserializer;
@@ -1165,9 +1232,10 @@ impl DeleteRuleOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTargetGroupInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
 }
 
@@ -1187,7 +1255,7 @@ impl DeleteTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTargetGroupOutput;
 
 struct DeleteTargetGroupOutputDeserializer;
@@ -1206,11 +1274,13 @@ impl DeleteTargetGroupOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterTargetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
     #[doc="<p>The targets. If you specified a port override when you registered a target, you must specify both the target ID and the port when you deregister it.</p>"]
+    #[serde(rename="Targets")]
     pub targets: Vec<TargetDescription>,
 }
 
@@ -1233,7 +1303,7 @@ impl DeregisterTargetsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterTargetsOutput;
 
 struct DeregisterTargetsOutputDeserializer;
@@ -1252,11 +1322,15 @@ impl DeregisterTargetsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountLimitsInput {
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
 }
 
@@ -1282,11 +1356,15 @@ impl DescribeAccountLimitsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountLimitsOutput {
     #[doc="<p>Information about the limits.</p>"]
+    #[serde(rename="Limits")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limits: Option<Vec<Limit>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
 }
 
@@ -1336,15 +1414,23 @@ impl DescribeAccountLimitsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeListenersInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the listeners.</p>"]
+    #[serde(rename="ListenerArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listener_arns: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
 }
 
@@ -1379,11 +1465,15 @@ impl DescribeListenersInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeListenersOutput {
     #[doc="<p>Information about the listeners.</p>"]
+    #[serde(rename="Listeners")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
 }
 
@@ -1433,9 +1523,10 @@ impl DescribeListenersOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancerAttributesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
 }
 
@@ -1455,9 +1546,11 @@ impl DescribeLoadBalancerAttributesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancerAttributesOutput {
     #[doc="<p>Information about the load balancer attributes.</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
@@ -1505,15 +1598,23 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancersInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>"]
+    #[serde(rename="LoadBalancerArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arns: Option<Vec<String>>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The names of the load balancers.</p>"]
+    #[serde(rename="Names")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
 }
 
@@ -1549,11 +1650,15 @@ impl DescribeLoadBalancersInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancersOutput {
     #[doc="<p>Information about the load balancers.</p>"]
+    #[serde(rename="LoadBalancers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
 }
 
@@ -1604,15 +1709,23 @@ impl DescribeLoadBalancersOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRulesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
+    #[serde(rename="ListenerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listener_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the rules.</p>"]
+    #[serde(rename="RuleArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arns: Option<Vec<String>>,
 }
 
@@ -1647,11 +1760,15 @@ impl DescribeRulesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRulesOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
     #[doc="<p>Information about the rules.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -1700,13 +1817,19 @@ impl DescribeRulesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSSLPoliciesInput {
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The names of the policies.</p>"]
+    #[serde(rename="Names")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
 }
 
@@ -1737,11 +1860,15 @@ impl DescribeSSLPoliciesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSSLPoliciesOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
     #[doc="<p>Information about the policies.</p>"]
+    #[serde(rename="SslPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssl_policies: Option<Vec<SslPolicy>>,
 }
 
@@ -1792,9 +1919,10 @@ impl DescribeSSLPoliciesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the resources.</p>"]
+    #[serde(rename="ResourceArns")]
     pub resource_arns: Vec<String>,
 }
 
@@ -1815,9 +1943,11 @@ impl DescribeTagsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsOutput {
     #[doc="<p>Information about the tags.</p>"]
+    #[serde(rename="TagDescriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
@@ -1864,9 +1994,10 @@ impl DescribeTagsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetGroupAttributesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
 }
 
@@ -1886,9 +2017,11 @@ impl DescribeTargetGroupAttributesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetGroupAttributesOutput {
     #[doc="<p>Information about the target group attributes</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
@@ -1936,17 +2069,27 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetGroupsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The names of the target groups.</p>"]
+    #[serde(rename="Names")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
+    #[serde(rename="PageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
+    #[serde(rename="TargetGroupArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_arns: Option<Vec<String>>,
 }
 
@@ -1986,11 +2129,15 @@ impl DescribeTargetGroupsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetGroupsOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
     #[doc="<p>Information about the target groups.</p>"]
+    #[serde(rename="TargetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
@@ -2041,11 +2188,14 @@ impl DescribeTargetGroupsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetHealthInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
     #[doc="<p>The targets.</p>"]
+    #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Vec<TargetDescription>>,
 }
 
@@ -2070,9 +2220,11 @@ impl DescribeTargetHealthInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTargetHealthOutput {
     #[doc="<p>Information about the health of the targets.</p>"]
+    #[serde(rename="TargetHealthDescriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
 }
 
@@ -2230,11 +2382,15 @@ impl IsDefaultDeserializer {
     }
 }
 #[doc="<p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Limit {
     #[doc="<p>The maximum value of the limit.</p>"]
+    #[serde(rename="Max")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max: Option<String>,
     #[doc="<p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> </ul>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -2377,21 +2533,35 @@ impl ListOfStringSerializer {
 }
 
 #[doc="<p>Information about a listener.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Listener {
     #[doc="<p>The SSL server certificate. You must provide a certificate if the protocol is HTTPS.</p>"]
+    #[serde(rename="Certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default actions for the listener.</p>"]
+    #[serde(rename="DefaultActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_actions: Option<Vec<Action>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
+    #[serde(rename="ListenerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listener_arn: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arn: Option<String>,
     #[doc="<p>The port on which the load balancer is listening.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>"]
+    #[serde(rename="SslPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssl_policy: Option<String>,
 }
 
@@ -2533,31 +2703,55 @@ impl ListenersDeserializer {
     }
 }
 #[doc="<p>Information about a load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancer {
     #[doc="<p>The Availability Zones for the load balancer.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZone>>,
     #[doc="<p>The ID of the Amazon Route 53 hosted zone associated with the load balancer.</p>"]
+    #[serde(rename="CanonicalHostedZoneId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub canonical_hosted_zone_id: Option<String>,
     #[doc="<p>The date and time the load balancer was created.</p>"]
+    #[serde(rename="CreatedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_time: Option<String>,
     #[doc="<p>The public DNS name of the load balancer.</p>"]
+    #[serde(rename="DNSName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_name: Option<String>,
     #[doc="<p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses).</p>"]
+    #[serde(rename="IpAddressType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arn: Option<String>,
     #[doc="<p>The name of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_name: Option<String>,
     #[doc="<p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p>"]
+    #[serde(rename="Scheme")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheme: Option<String>,
     #[doc="<p>The IDs of the security groups for the load balancer.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>The state of the load balancer.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<LoadBalancerState>,
     #[doc="<p>The type of load balancer.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>The ID of the VPC for the load balancer.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -2724,11 +2918,15 @@ impl LoadBalancerArnsSerializer {
 }
 
 #[doc="<p>Information about a load balancer attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerAttribute {
     #[doc="<p>The name of the attribute.</p> <ul> <li> <p> <code>access_logs.s3.enabled</code> - Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access_logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access_logs.s3.prefix</code> - The prefix for the location in the S3 bucket. If you don't specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion_protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle_timeout.timeout_seconds</code> - The idle timeout value, in seconds. The valid range is 1-3600. The default is 60 seconds.</p> </li> </ul>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The value of the attribute.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -2921,11 +3119,15 @@ impl LoadBalancerSchemeEnumDeserializer {
     }
 }
 #[doc="<p>Information about the state of the load balancer.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerState {
     #[doc="<p>The state code. The initial state of the load balancer is <code>provisioning</code>. After the load balancer is fully set up and ready to route traffic, its state is <code>active</code>. If the load balancer could not be set up, its state is <code>failed</code>.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>A description of the state.</p>"]
+    #[serde(rename="Reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
 }
 
@@ -3060,9 +3262,10 @@ impl MarkerDeserializer {
     }
 }
 #[doc="<p>Information to use when checking for a successful response from a target.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Matcher {
     #[doc="<p>The HTTP codes. You can specify values between 200 and 499. The default value is 200. You can specify multiple values (for example, \"200,202\") or a range of values (for example, \"200-299\").</p>"]
+    #[serde(rename="HttpCode")]
     pub http_code: String,
 }
 
@@ -3138,19 +3341,30 @@ impl MaxDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyListenerInput {
     #[doc="<p>The SSL server certificate.</p>"]
+    #[serde(rename="Certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default actions.</p>"]
+    #[serde(rename="DefaultActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_actions: Option<Vec<Action>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
+    #[serde(rename="ListenerArn")]
     pub listener_arn: String,
     #[doc="<p>The port for connections from clients to the load balancer.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="<p>The security policy that defines which protocols and ciphers are supported. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>"]
+    #[serde(rename="SslPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssl_policy: Option<String>,
 }
 
@@ -3192,9 +3406,11 @@ impl ModifyListenerInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyListenerOutput {
     #[doc="<p>Information about the modified listeners.</p>"]
+    #[serde(rename="Listeners")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
 }
 
@@ -3240,11 +3456,13 @@ impl ModifyListenerOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyLoadBalancerAttributesInput {
     #[doc="<p>The load balancer attributes.</p>"]
+    #[serde(rename="Attributes")]
     pub attributes: Vec<LoadBalancerAttribute>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
 }
 
@@ -3267,9 +3485,11 @@ impl ModifyLoadBalancerAttributesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyLoadBalancerAttributesOutput {
     #[doc="<p>Information about the load balancer attributes.</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
@@ -3317,13 +3537,18 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyRuleInput {
     #[doc="<p>The actions.</p>"]
+    #[serde(rename="Actions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<Vec<Action>>,
     #[doc="<p>The conditions.</p>"]
+    #[serde(rename="Conditions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conditions: Option<Vec<RuleCondition>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
+    #[serde(rename="RuleArn")]
     pub rule_arn: String,
 }
 
@@ -3351,9 +3576,11 @@ impl ModifyRuleInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyRuleOutput {
     #[doc="<p>Information about the rule.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -3398,11 +3625,13 @@ impl ModifyRuleOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyTargetGroupAttributesInput {
     #[doc="<p>The attributes.</p>"]
+    #[serde(rename="Attributes")]
     pub attributes: Vec<TargetGroupAttribute>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
 }
 
@@ -3425,9 +3654,11 @@ impl ModifyTargetGroupAttributesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyTargetGroupAttributesOutput {
     #[doc="<p>Information about the attributes.</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
@@ -3475,25 +3706,42 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyTargetGroupInput {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target.</p>"]
+    #[serde(rename="HealthCheckIntervalSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The ping path that is the destination for the health check request.</p>"]
+    #[serde(rename="HealthCheckPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_path: Option<String>,
     #[doc="<p>The port to use to connect with the target.</p>"]
+    #[serde(rename="HealthCheckPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_port: Option<String>,
     #[doc="<p>The protocol to use to connect with the target.</p>"]
+    #[serde(rename="HealthCheckProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response means a failed health check.</p>"]
+    #[serde(rename="HealthCheckTimeoutSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>"]
+    #[serde(rename="HealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target.</p>"]
+    #[serde(rename="Matcher")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matcher: Option<Matcher>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
     #[doc="<p>The number of consecutive health check failures required before considering the target unhealthy.</p>"]
+    #[serde(rename="UnhealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unhealthy_threshold_count: Option<i64>,
 }
 
@@ -3544,9 +3792,11 @@ impl ModifyTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyTargetGroupOutput {
     #[doc="<p>Information about the target group.</p>"]
+    #[serde(rename="TargetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
@@ -3649,11 +3899,13 @@ impl ProtocolEnumDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterTargetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
     pub target_group_arn: String,
     #[doc="<p>The targets. The default port for a target is the port for the target group. You can specify a port override. If a target is already registered, you can register it again using a different port.</p>"]
+    #[serde(rename="Targets")]
     pub targets: Vec<TargetDescription>,
 }
 
@@ -3676,7 +3928,7 @@ impl RegisterTargetsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterTargetsOutput;
 
 struct RegisterTargetsOutputDeserializer;
@@ -3695,11 +3947,13 @@ impl RegisterTargetsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
+    #[serde(rename="ResourceArns")]
     pub resource_arns: Vec<String>,
     #[doc="<p>The tag keys for the tags to remove.</p>"]
+    #[serde(rename="TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
@@ -3721,7 +3975,7 @@ impl RemoveTagsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsOutput;
 
 struct RemoveTagsOutputDeserializer;
@@ -3767,17 +4021,27 @@ impl ResourceArnsSerializer {
 }
 
 #[doc="<p>Information about a rule.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Rule {
     #[doc="<p>The actions.</p>"]
+    #[serde(rename="Actions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<Vec<Action>>,
     #[doc="<p>The conditions.</p>"]
+    #[serde(rename="Conditions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conditions: Option<Vec<RuleCondition>>,
     #[doc="<p>Indicates whether this is the default rule.</p>"]
+    #[serde(rename="IsDefault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default: Option<bool>,
     #[doc="<p>The priority.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
+    #[serde(rename="RuleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arn: Option<String>,
 }
 
@@ -3867,11 +4131,15 @@ impl RuleArnsSerializer {
 }
 
 #[doc="<p>Information about a condition for a rule.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RuleCondition {
     #[doc="<p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>"]
+    #[serde(rename="Field")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub field: Option<String>,
     #[doc="<p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/*). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
@@ -4011,11 +4279,15 @@ impl RulePriorityListSerializer {
 }
 
 #[doc="<p>Information about the priorities for the rules for a listener.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RulePriorityPair {
     #[doc="<p>The rule priority.</p>"]
+    #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
+    #[serde(rename="RuleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arn: Option<String>,
 }
 
@@ -4149,11 +4421,13 @@ impl SecurityGroupsSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIpAddressTypeInput {
     #[doc="<p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>"]
+    #[serde(rename="IpAddressType")]
     pub ip_address_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
 }
 
@@ -4175,9 +4449,11 @@ impl SetIpAddressTypeInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIpAddressTypeOutput {
     #[doc="<p>The IP address type.</p>"]
+    #[serde(rename="IpAddressType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address_type: Option<String>,
 }
 
@@ -4224,9 +4500,10 @@ impl SetIpAddressTypeOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetRulePrioritiesInput {
     #[doc="<p>The rule priorities.</p>"]
+    #[serde(rename="RulePriorities")]
     pub rule_priorities: Vec<RulePriorityPair>,
 }
 
@@ -4247,9 +4524,11 @@ impl SetRulePrioritiesInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetRulePrioritiesOutput {
     #[doc="<p>Information about the rules.</p>"]
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -4294,11 +4573,13 @@ impl SetRulePrioritiesOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSecurityGroupsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
     #[doc="<p>The IDs of the security groups.</p>"]
+    #[serde(rename="SecurityGroups")]
     pub security_groups: Vec<String>,
 }
 
@@ -4321,9 +4602,11 @@ impl SetSecurityGroupsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSecurityGroupsOutput {
     #[doc="<p>The IDs of the security groups associated with the load balancer.</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
 }
 
@@ -4370,11 +4653,13 @@ impl SetSecurityGroupsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSubnetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerArn")]
     pub load_balancer_arn: String,
     #[doc="<p>The IDs of the subnets. You must specify at least two subnets. You can add only one subnet per Availability Zone.</p>"]
+    #[serde(rename="Subnets")]
     pub subnets: Vec<String>,
 }
 
@@ -4395,9 +4680,11 @@ impl SetSubnetsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSubnetsOutput {
     #[doc="<p>Information about the subnet and Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
@@ -4486,13 +4773,19 @@ impl SslPoliciesDeserializer {
     }
 }
 #[doc="<p>Information about a policy used for SSL negotiation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SslPolicy {
     #[doc="<p>The ciphers.</p>"]
+    #[serde(rename="Ciphers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ciphers: Option<Vec<Cipher>>,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The protocols.</p>"]
+    #[serde(rename="SslProtocols")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssl_protocols: Option<Vec<String>>,
 }
 
@@ -4697,11 +4990,14 @@ impl SubnetsSerializer {
 }
 
 #[doc="<p>Information about a tag.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="<p>The value of the tag.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -4771,11 +5067,15 @@ impl TagSerializer {
 }
 
 #[doc="<p>The tags associated with a resource.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagDescription {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
+    #[serde(rename="ResourceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arn: Option<String>,
     #[doc="<p>Information about the tags.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -4960,11 +5260,14 @@ impl TagValueDeserializer {
     }
 }
 #[doc="<p>Information about a target.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetDescription {
     #[doc="<p>The ID of the target.</p>"]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="<p>The port on which the target is listening.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
 }
 
@@ -5044,35 +5347,63 @@ impl TargetDescriptionsSerializer {
 }
 
 #[doc="<p>Information about a target group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetGroup {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target.</p>"]
+    #[serde(rename="HealthCheckIntervalSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The destination for the health check request.</p>"]
+    #[serde(rename="HealthCheckPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_path: Option<String>,
     #[doc="<p>The port to use to connect with the target.</p>"]
+    #[serde(rename="HealthCheckPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_port: Option<String>,
     #[doc="<p>The protocol to use to connect with the target.</p>"]
+    #[serde(rename="HealthCheckProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response means a failed health check.</p>"]
+    #[serde(rename="HealthCheckTimeoutSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>"]
+    #[serde(rename="HealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the load balancers that route traffic to this target group.</p>"]
+    #[serde(rename="LoadBalancerArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_arns: Option<Vec<String>>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target.</p>"]
+    #[serde(rename="Matcher")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matcher: Option<Matcher>,
     #[doc="<p>The port on which the targets are listening.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The protocol to use for routing traffic to the targets.</p>"]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="TargetGroupArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_arn: Option<String>,
     #[doc="<p>The name of the target group.</p>"]
+    #[serde(rename="TargetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_name: Option<String>,
     #[doc="<p>The number of consecutive health check failures required before considering the target unhealthy.</p>"]
+    #[serde(rename="UnhealthyThresholdCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unhealthy_threshold_count: Option<i64>,
     #[doc="<p>The ID of the VPC for the targets.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -5196,11 +5527,15 @@ impl TargetGroupArnsSerializer {
 }
 
 #[doc="<p>Information about a target group attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetGroupAttribute {
     #[doc="<p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration_delay.timeout_seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb_cookie</code>.</p> </li> <li> <p> <code>stickiness.lb_cookie.duration_seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The value of the attribute.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -5422,13 +5757,19 @@ impl TargetGroupsDeserializer {
     }
 }
 #[doc="<p>Information about the current health of a target.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetHealth {
     #[doc="<p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul>"]
+    #[serde(rename="Reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The state of the target.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -5486,13 +5827,19 @@ impl TargetHealthDeserializer {
     }
 }
 #[doc="<p>Information about the health of a target.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetHealthDescription {
     #[doc="<p>The port to use to connect with the target.</p>"]
+    #[serde(rename="HealthCheckPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_port: Option<String>,
     #[doc="<p>The description of the target.</p>"]
+    #[serde(rename="Target")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target: Option<TargetDescription>,
     #[doc="<p>The health information for the target.</p>"]
+    #[serde(rename="TargetHealth")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_health: Option<TargetHealth>,
 }
 

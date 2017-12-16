@@ -73,7 +73,7 @@ pub struct CostTypes {
 }
 
 #[doc="Request of CreateBudget"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBudgetRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -85,11 +85,11 @@ pub struct CreateBudgetRequest {
 }
 
 #[doc="Response of CreateBudget"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBudgetResponse;
 
 #[doc="Request of CreateNotification"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNotificationRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -102,11 +102,11 @@ pub struct CreateNotificationRequest {
 }
 
 #[doc="Response of CreateNotification"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNotificationResponse;
 
 #[doc="Request of CreateSubscriber"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubscriberRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -119,11 +119,11 @@ pub struct CreateSubscriberRequest {
 }
 
 #[doc="Response of CreateSubscriber"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubscriberResponse;
 
 #[doc="Request of DeleteBudget"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBudgetRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -132,11 +132,11 @@ pub struct DeleteBudgetRequest {
 }
 
 #[doc="Response of DeleteBudget"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBudgetResponse;
 
 #[doc="Request of DeleteNotification"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNotificationRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -147,11 +147,11 @@ pub struct DeleteNotificationRequest {
 }
 
 #[doc="Response of DeleteNotification"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNotificationResponse;
 
 #[doc="Request of DeleteSubscriber"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubscriberRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -164,11 +164,11 @@ pub struct DeleteSubscriberRequest {
 }
 
 #[doc="Response of DeleteSubscriber"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubscriberResponse;
 
 #[doc="Request of DescribeBudget"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBudgetRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -177,7 +177,7 @@ pub struct DescribeBudgetRequest {
 }
 
 #[doc="Response of DescribeBudget"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBudgetResponse {
     #[serde(rename="Budget")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -185,7 +185,7 @@ pub struct DescribeBudgetResponse {
 }
 
 #[doc="Request of DescribeBudgets"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBudgetsRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -198,7 +198,7 @@ pub struct DescribeBudgetsRequest {
 }
 
 #[doc="Response of DescribeBudgets"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBudgetsResponse {
     #[serde(rename="Budgets")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -209,7 +209,7 @@ pub struct DescribeBudgetsResponse {
 }
 
 #[doc="Request of DescribeNotificationsForBudget"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationsForBudgetRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -224,7 +224,7 @@ pub struct DescribeNotificationsForBudgetRequest {
 }
 
 #[doc="Response of GetNotificationsForBudget"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationsForBudgetResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -235,7 +235,7 @@ pub struct DescribeNotificationsForBudgetResponse {
 }
 
 #[doc="Request of DescribeSubscribersForNotification"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubscribersForNotificationRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -252,7 +252,7 @@ pub struct DescribeSubscribersForNotificationRequest {
 }
 
 #[doc="Response of DescribeSubscribersForNotification"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubscribersForNotificationResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -274,7 +274,7 @@ pub struct Notification {
 }
 
 #[doc="A structure to relate notification and a list of subscribers who belong to the notification."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotificationWithSubscribers {
     #[serde(rename="Notification")]
     pub notification: Notification,
@@ -310,7 +310,7 @@ pub struct TimePeriod {
 }
 
 #[doc="Request of UpdateBudget"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateBudgetRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -319,11 +319,11 @@ pub struct UpdateBudgetRequest {
 }
 
 #[doc="Response of UpdateBudget"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateBudgetResponse;
 
 #[doc="Request of UpdateNotification"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateNotificationRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -336,11 +336,11 @@ pub struct UpdateNotificationRequest {
 }
 
 #[doc="Response of UpdateNotification"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateNotificationResponse;
 
 #[doc="Request of UpdateSubscriber"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSubscriberRequest {
     #[serde(rename="AccountId")]
     pub account_id: String,
@@ -355,7 +355,7 @@ pub struct UpdateSubscriberRequest {
 }
 
 #[doc="Response of UpdateSubscriber"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSubscriberResponse;
 
 /// Errors returned by CreateBudget

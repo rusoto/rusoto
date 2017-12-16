@@ -38,7 +38,7 @@ pub struct Action {
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreatePartitionRequest {
     #[doc="<p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>"]
     #[serde(rename="CatalogId")]
@@ -55,7 +55,7 @@ pub struct BatchCreatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreatePartitionResponse {
     #[doc="<p>Errors encountered when trying to create the requested partitions.</p>"]
     #[serde(rename="Errors")]
@@ -63,7 +63,7 @@ pub struct BatchCreatePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteConnectionRequest {
     #[doc="<p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -74,7 +74,7 @@ pub struct BatchDeleteConnectionRequest {
     pub connection_name_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteConnectionResponse {
     #[doc="<p>A map of the names of connections that were not successfully deleted to error details.</p>"]
     #[serde(rename="Errors")]
@@ -86,7 +86,7 @@ pub struct BatchDeleteConnectionResponse {
     pub succeeded: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeletePartitionRequest {
     #[doc="<p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -103,7 +103,7 @@ pub struct BatchDeletePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeletePartitionResponse {
     #[doc="<p>Errors encountered when trying to delete the requested partitions.</p>"]
     #[serde(rename="Errors")]
@@ -111,7 +111,7 @@ pub struct BatchDeletePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteTableRequest {
     #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -125,7 +125,7 @@ pub struct BatchDeleteTableRequest {
     pub tables_to_delete: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteTableResponse {
     #[doc="<p>A list of errors encountered in attempting to delete the specified tables.</p>"]
     #[serde(rename="Errors")]
@@ -133,7 +133,7 @@ pub struct BatchDeleteTableResponse {
     pub errors: Option<Vec<TableError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetPartitionRequest {
     #[doc="<p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -150,7 +150,7 @@ pub struct BatchGetPartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetPartitionResponse {
     #[doc="<p>A list of the requested partitions.</p>"]
     #[serde(rename="Partitions")]
@@ -163,7 +163,7 @@ pub struct BatchGetPartitionResponse {
 }
 
 #[doc="<p>Specifies a table definition in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CatalogEntry {
     #[doc="<p>The database in which the table metadata resides.</p>"]
     #[serde(rename="DatabaseName")]
@@ -174,7 +174,7 @@ pub struct CatalogEntry {
 }
 
 #[doc="<p>A structure containing migration status information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CatalogImportStatus {
     #[doc="<p>True if the migration has completed, or False otherwise.</p>"]
     #[serde(rename="ImportCompleted")]
@@ -191,7 +191,7 @@ pub struct CatalogImportStatus {
 }
 
 #[doc="<p>Classifiers are written in Python and triggered during a Crawl Task. You can write your own Classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A Classifier first checks whether a given file is in a format it can handle, and then, if so, creates a schema in the form of a <code>StructType</code> object that matches that data format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Classifier {
     #[doc="<p>A GrokClassifier object.</p>"]
     #[serde(rename="GrokClassifier")]
@@ -277,7 +277,7 @@ pub struct Condition {
 }
 
 #[doc="<p>Defines a connection to a data source.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Connection {
     #[doc="<p>A list of key-value pairs used as parameters for this connection.</p>"]
     #[serde(rename="ConnectionProperties")]
@@ -318,7 +318,7 @@ pub struct Connection {
 }
 
 #[doc="<p>A structure used to specify a connection to create or update.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConnectionInput {
     #[doc="<p>A list of key-value pairs used as parameters for this connection.</p>"]
     #[serde(rename="ConnectionProperties")]
@@ -356,7 +356,7 @@ pub struct ConnectionsList {
 }
 
 #[doc="<p>Specifies a crawler program that examines a data source and uses classifiers to try to its schema. If successful, the crawler records metatdata concerning the data source in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Crawler {
     #[doc="<p>A list of custom <code>Classifier</code>s associated with this Crawler.</p>"]
     #[serde(rename="Classifiers")]
@@ -421,7 +421,7 @@ pub struct Crawler {
 }
 
 #[doc="<p>Metrics for a specified crawler.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CrawlerMetrics {
     #[doc="<p>The name of the crawler.</p>"]
     #[serde(rename="CrawlerName")]
@@ -470,7 +470,7 @@ pub struct CrawlerTargets {
     pub s3_targets: Option<Vec<S3Target>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClassifierRequest {
     #[doc="<p>A grok classifier to create.</p>"]
     #[serde(rename="GrokClassifier")]
@@ -478,10 +478,10 @@ pub struct CreateClassifierRequest {
     pub grok_classifier: Option<CreateGrokClassifierRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConnectionRequest {
     #[doc="<p>The ID of the Data Catalog in which to create the connection. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -492,10 +492,10 @@ pub struct CreateConnectionRequest {
     pub connection_input: ConnectionInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCrawlerRequest {
     #[doc="<p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"]
     #[serde(rename="Classifiers")]
@@ -531,10 +531,10 @@ pub struct CreateCrawlerRequest {
     pub targets: CrawlerTargets,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDatabaseRequest {
     #[doc="<p>The ID of the Data Catalog in which to create the database. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -545,10 +545,10 @@ pub struct CreateDatabaseRequest {
     pub database_input: DatabaseInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDevEndpointRequest {
     #[doc="<p>The name to be assigned to the new DevEndpoint.</p>"]
     #[serde(rename="EndpointName")]
@@ -580,7 +580,7 @@ pub struct CreateDevEndpointRequest {
     pub subnet_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDevEndpointResponse {
     #[doc="<p>The AWS availability zone where this DevEndpoint is located.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -637,7 +637,7 @@ pub struct CreateDevEndpointResponse {
 }
 
 #[doc="<p>Specifies a Grok classifier for CreateClassifier to create.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateGrokClassifierRequest {
     #[doc="<p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>"]
     #[serde(rename="Classification")]
@@ -654,7 +654,7 @@ pub struct CreateGrokClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobRequest {
     #[doc="<p>The number of capacity units allocated to this job.</p>"]
     #[serde(rename="AllocatedCapacity")]
@@ -695,7 +695,7 @@ pub struct CreateJobRequest {
     pub role: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobResponse {
     #[doc="<p>The unique name of the new job that has been created.</p>"]
     #[serde(rename="Name")]
@@ -703,7 +703,7 @@ pub struct CreateJobResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePartitionRequest {
     #[doc="<p>The ID of the catalog in which the partion is to be created. Currently, this should be the AWS account ID.</p>"]
     #[serde(rename="CatalogId")]
@@ -720,10 +720,10 @@ pub struct CreatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateScriptRequest {
     #[doc="<p>A list of the edges in the DAG.</p>"]
     #[serde(rename="DagEdges")]
@@ -735,7 +735,7 @@ pub struct CreateScriptRequest {
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateScriptResponse {
     #[doc="<p>The Python script generated from the DAG.</p>"]
     #[serde(rename="PythonScript")]
@@ -743,7 +743,7 @@ pub struct CreateScriptResponse {
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTableRequest {
     #[doc="<p>The ID of the Data Catalog in which to create the <code>Table</code>. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -757,10 +757,10 @@ pub struct CreateTableRequest {
     pub table_input: TableInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTriggerRequest {
     #[doc="<p>The actions initiated by this trigger when it fires.</p>"]
     #[serde(rename="Actions")]
@@ -785,7 +785,7 @@ pub struct CreateTriggerRequest {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTriggerResponse {
     #[doc="<p>The name assigned to the new trigger.</p>"]
     #[serde(rename="Name")]
@@ -793,7 +793,7 @@ pub struct CreateTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserDefinedFunctionRequest {
     #[doc="<p>The ID of the Data Catalog in which to create the function. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -807,11 +807,11 @@ pub struct CreateUserDefinedFunctionRequest {
     pub function_input: UserDefinedFunctionInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserDefinedFunctionResponse;
 
 #[doc="<p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Database {
     #[doc="<p>The time at which the metadata database was created in the catalog.</p>"]
     #[serde(rename="CreateTime")]
@@ -835,7 +835,7 @@ pub struct Database {
 }
 
 #[doc="<p>The structure used to create or updata a database.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DatabaseInput {
     #[doc="<p>Description of the database</p>"]
     #[serde(rename="Description")]
@@ -854,17 +854,17 @@ pub struct DatabaseInput {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClassifierRequest {
     #[doc="<p>Name of the <code>Classifier</code> to remove.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConnectionRequest {
     #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -875,20 +875,20 @@ pub struct DeleteConnectionRequest {
     pub connection_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCrawlerRequest {
     #[doc="<p>Name of the <code>Crawler</code> to remove.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDatabaseRequest {
     #[doc="<p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -899,27 +899,27 @@ pub struct DeleteDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDevEndpointRequest {
     #[doc="<p>The name of the DevEndpoint.</p>"]
     #[serde(rename="EndpointName")]
     pub endpoint_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDevEndpointResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteJobRequest {
     #[doc="<p>The name of the job to delete.</p>"]
     #[serde(rename="JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteJobResponse {
     #[doc="<p>The name of the job that was deleted.</p>"]
     #[serde(rename="JobName")]
@@ -927,7 +927,7 @@ pub struct DeleteJobResponse {
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePartitionRequest {
     #[doc="<p>The ID of the Data Catalog where the partition to be deleted resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -944,10 +944,10 @@ pub struct DeletePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTableRequest {
     #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -961,17 +961,17 @@ pub struct DeleteTableRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTriggerRequest {
     #[doc="<p>The name of the trigger to delete.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTriggerResponse {
     #[doc="<p>The name of the trigger that was deleted.</p>"]
     #[serde(rename="Name")]
@@ -979,7 +979,7 @@ pub struct DeleteTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserDefinedFunctionRequest {
     #[doc="<p>The ID of the Data Catalog where the function to be deleted is located. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -993,11 +993,11 @@ pub struct DeleteUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserDefinedFunctionResponse;
 
 #[doc="<p>A development endpoint where a developer can remotely debug ETL scripts.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DevEndpoint {
     #[doc="<p>The AWS availability zone where this DevEndpoint is located.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -1070,7 +1070,7 @@ pub struct DevEndpoint {
 }
 
 #[doc="<p>Custom libraries to be loaded into a DevEndpoint.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DevEndpointCustomLibraries {
     #[doc="<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>"]
     #[serde(rename="ExtraJarsS3Path")]
@@ -1083,7 +1083,7 @@ pub struct DevEndpointCustomLibraries {
 }
 
 #[doc="<p>Contains details about an error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ErrorDetail {
     #[doc="<p>The code associated with this error.</p>"]
     #[serde(rename="ErrorCode")]
@@ -1104,7 +1104,7 @@ pub struct ExecutionProperty {
     pub max_concurrent_runs: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCatalogImportStatusRequest {
     #[doc="<p>The ID of the catalog to migrate. Currently, this should be the AWS account ID.</p>"]
     #[serde(rename="CatalogId")]
@@ -1112,7 +1112,7 @@ pub struct GetCatalogImportStatusRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCatalogImportStatusResponse {
     #[doc="<p>The status of the specified catalog migration.</p>"]
     #[serde(rename="ImportStatus")]
@@ -1120,14 +1120,14 @@ pub struct GetCatalogImportStatusResponse {
     pub import_status: Option<CatalogImportStatus>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClassifierRequest {
     #[doc="<p>Name of the <code>Classifier</code> to retrieve.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClassifierResponse {
     #[doc="<p>The requested <code>Classifier</code>.</p>"]
     #[serde(rename="Classifier")]
@@ -1135,7 +1135,7 @@ pub struct GetClassifierResponse {
     pub classifier: Option<Classifier>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClassifiersRequest {
     #[doc="<p>Size of the list to return (optional).</p>"]
     #[serde(rename="MaxResults")]
@@ -1147,7 +1147,7 @@ pub struct GetClassifiersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClassifiersResponse {
     #[doc="<p>The requested list of <code>Classifier</code> objects.</p>"]
     #[serde(rename="Classifiers")]
@@ -1159,7 +1159,7 @@ pub struct GetClassifiersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConnectionRequest {
     #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1170,7 +1170,7 @@ pub struct GetConnectionRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConnectionResponse {
     #[doc="<p>The requested connection definition.</p>"]
     #[serde(rename="Connection")]
@@ -1179,7 +1179,7 @@ pub struct GetConnectionResponse {
 }
 
 #[doc="<p>Filters the connection definitions returned by the <code>GetConnections</code> API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConnectionsFilter {
     #[doc="<p>The type of connections to return.</p>"]
     #[serde(rename="ConnectionType")]
@@ -1191,7 +1191,7 @@ pub struct GetConnectionsFilter {
     pub match_criteria: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConnectionsRequest {
     #[doc="<p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1211,7 +1211,7 @@ pub struct GetConnectionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConnectionsResponse {
     #[doc="<p>A list of requested connection definitions.</p>"]
     #[serde(rename="ConnectionList")]
@@ -1223,7 +1223,7 @@ pub struct GetConnectionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlerMetricsRequest {
     #[doc="<p>A list of the names of crawlers about which to retrieve metrics.</p>"]
     #[serde(rename="CrawlerNameList")]
@@ -1239,7 +1239,7 @@ pub struct GetCrawlerMetricsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlerMetricsResponse {
     #[doc="<p>A list of metrics for the specified crawler.</p>"]
     #[serde(rename="CrawlerMetricsList")]
@@ -1251,14 +1251,14 @@ pub struct GetCrawlerMetricsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlerRequest {
     #[doc="<p>Name of the <code>Crawler</code> to retrieve metadata for.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlerResponse {
     #[doc="<p>The metadata for the specified <code>Crawler</code>.</p>"]
     #[serde(rename="Crawler")]
@@ -1266,7 +1266,7 @@ pub struct GetCrawlerResponse {
     pub crawler: Option<Crawler>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlersRequest {
     #[doc="<p>The number of Crawlers to return on each call.</p>"]
     #[serde(rename="MaxResults")]
@@ -1278,7 +1278,7 @@ pub struct GetCrawlersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCrawlersResponse {
     #[doc="<p>A list of <code>Crawler</code> metadata.</p>"]
     #[serde(rename="Crawlers")]
@@ -1290,7 +1290,7 @@ pub struct GetCrawlersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDatabaseRequest {
     #[doc="<p>The ID of the Data Catalog in which the database resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1301,7 +1301,7 @@ pub struct GetDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDatabaseResponse {
     #[doc="<p>The definition of the specified database in the catalog.</p>"]
     #[serde(rename="Database")]
@@ -1309,7 +1309,7 @@ pub struct GetDatabaseResponse {
     pub database: Option<Database>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDatabasesRequest {
     #[doc="<p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1325,7 +1325,7 @@ pub struct GetDatabasesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDatabasesResponse {
     #[doc="<p>A list of <code>Database</code> objects from the specified catalog.</p>"]
     #[serde(rename="DatabaseList")]
@@ -1336,7 +1336,7 @@ pub struct GetDatabasesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDataflowGraphRequest {
     #[doc="<p>The Python script to transform.</p>"]
     #[serde(rename="PythonScript")]
@@ -1344,7 +1344,7 @@ pub struct GetDataflowGraphRequest {
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDataflowGraphResponse {
     #[doc="<p>A list of the edges in the resulting DAG.</p>"]
     #[serde(rename="DagEdges")]
@@ -1356,14 +1356,14 @@ pub struct GetDataflowGraphResponse {
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDevEndpointRequest {
     #[doc="<p>Name of the DevEndpoint for which to retrieve information.</p>"]
     #[serde(rename="EndpointName")]
     pub endpoint_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDevEndpointResponse {
     #[doc="<p>A DevEndpoint definition.</p>"]
     #[serde(rename="DevEndpoint")]
@@ -1371,7 +1371,7 @@ pub struct GetDevEndpointResponse {
     pub dev_endpoint: Option<DevEndpoint>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDevEndpointsRequest {
     #[doc="<p>The maximum size of information to return.</p>"]
     #[serde(rename="MaxResults")]
@@ -1383,7 +1383,7 @@ pub struct GetDevEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDevEndpointsResponse {
     #[doc="<p>A list of DevEndpoint definitions.</p>"]
     #[serde(rename="DevEndpoints")]
@@ -1395,14 +1395,14 @@ pub struct GetDevEndpointsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobRequest {
     #[doc="<p>The name of the job to retrieve.</p>"]
     #[serde(rename="JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobResponse {
     #[doc="<p>The requested job definition.</p>"]
     #[serde(rename="Job")]
@@ -1410,7 +1410,7 @@ pub struct GetJobResponse {
     pub job: Option<Job>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobRunRequest {
     #[doc="<p>Name of the job being run.</p>"]
     #[serde(rename="JobName")]
@@ -1424,7 +1424,7 @@ pub struct GetJobRunRequest {
     pub run_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobRunResponse {
     #[doc="<p>The requested job-run metadata.</p>"]
     #[serde(rename="JobRun")]
@@ -1432,7 +1432,7 @@ pub struct GetJobRunResponse {
     pub job_run: Option<JobRun>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobRunsRequest {
     #[doc="<p>The name of the job for which to retrieve all job runs.</p>"]
     #[serde(rename="JobName")]
@@ -1447,7 +1447,7 @@ pub struct GetJobRunsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobRunsResponse {
     #[doc="<p>A list of job-run metatdata objects.</p>"]
     #[serde(rename="JobRuns")]
@@ -1459,7 +1459,7 @@ pub struct GetJobRunsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobsRequest {
     #[doc="<p>The maximum size of the response.</p>"]
     #[serde(rename="MaxResults")]
@@ -1471,7 +1471,7 @@ pub struct GetJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobsResponse {
     #[doc="<p>A list of jobs.</p>"]
     #[serde(rename="Jobs")]
@@ -1483,7 +1483,7 @@ pub struct GetJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMappingRequest {
     #[doc="<p>Parameters for the mapping.</p>"]
     #[serde(rename="Location")]
@@ -1498,14 +1498,14 @@ pub struct GetMappingRequest {
     pub source: CatalogEntry,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMappingResponse {
     #[doc="<p>A list of mappings to the specified targets.</p>"]
     #[serde(rename="Mapping")]
     pub mapping: Vec<MappingEntry>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPartitionRequest {
     #[doc="<p>The ID of the Data Catalog where the partition in question resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1522,7 +1522,7 @@ pub struct GetPartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPartitionResponse {
     #[doc="<p>The requested information, in the form of a <code>Partition</code> object.</p>"]
     #[serde(rename="Partition")]
@@ -1530,7 +1530,7 @@ pub struct GetPartitionResponse {
     pub partition: Option<Partition>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPartitionsRequest {
     #[doc="<p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1560,7 +1560,7 @@ pub struct GetPartitionsRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPartitionsResponse {
     #[doc="<p>A continuation token, if the returned list of partitions does not does not include the last one.</p>"]
     #[serde(rename="NextToken")]
@@ -1572,7 +1572,7 @@ pub struct GetPartitionsResponse {
     pub partitions: Option<Vec<Partition>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPlanRequest {
     #[doc="<p>Parameters for the mapping.</p>"]
     #[serde(rename="Location")]
@@ -1590,7 +1590,7 @@ pub struct GetPlanRequest {
     pub source: CatalogEntry,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPlanResponse {
     #[doc="<p>A python script to perform the mapping.</p>"]
     #[serde(rename="PythonScript")]
@@ -1598,7 +1598,7 @@ pub struct GetPlanResponse {
     pub python_script: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTableRequest {
     #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1612,7 +1612,7 @@ pub struct GetTableRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTableResponse {
     #[doc="<p>The <code>Table</code> object that defines the specified table.</p>"]
     #[serde(rename="Table")]
@@ -1620,7 +1620,7 @@ pub struct GetTableResponse {
     pub table: Option<Table>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTableVersionsRequest {
     #[doc="<p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1642,7 +1642,7 @@ pub struct GetTableVersionsRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTableVersionsResponse {
     #[doc="<p>A continuation token, if the list of available versions does not include the last one.</p>"]
     #[serde(rename="NextToken")]
@@ -1654,7 +1654,7 @@ pub struct GetTableVersionsResponse {
     pub table_versions: Option<Vec<TableVersion>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTablesRequest {
     #[doc="<p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1677,7 +1677,7 @@ pub struct GetTablesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTablesResponse {
     #[doc="<p>A continuation token, present if the current list segment is not the last.</p>"]
     #[serde(rename="NextToken")]
@@ -1689,14 +1689,14 @@ pub struct GetTablesResponse {
     pub table_list: Option<Vec<Table>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTriggerRequest {
     #[doc="<p>The name of the trigger to retrieve.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTriggerResponse {
     #[doc="<p>The requested trigger definition.</p>"]
     #[serde(rename="Trigger")]
@@ -1704,7 +1704,7 @@ pub struct GetTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTriggersRequest {
     #[doc="<p>The name of the job for which to retrieve triggers.</p>"]
     #[serde(rename="DependentJobName")]
@@ -1720,7 +1720,7 @@ pub struct GetTriggersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTriggersResponse {
     #[doc="<p>A continuation token, if not all the requested triggers have yet been returned.</p>"]
     #[serde(rename="NextToken")]
@@ -1732,7 +1732,7 @@ pub struct GetTriggersResponse {
     pub triggers: Option<Vec<Trigger>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserDefinedFunctionRequest {
     #[doc="<p>The ID of the Data Catalog where the function to be retrieved is located. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1746,7 +1746,7 @@ pub struct GetUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserDefinedFunctionResponse {
     #[doc="<p>The requested function definition.</p>"]
     #[serde(rename="UserDefinedFunction")]
@@ -1754,7 +1754,7 @@ pub struct GetUserDefinedFunctionResponse {
     pub user_defined_function: Option<UserDefinedFunction>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserDefinedFunctionsRequest {
     #[doc="<p>The ID of the Data Catalog where the functions to be retrieved are located. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -1776,7 +1776,7 @@ pub struct GetUserDefinedFunctionsRequest {
     pub pattern: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserDefinedFunctionsResponse {
     #[doc="<p>A continuation token, if the list of functions returned does not include the last requested function.</p>"]
     #[serde(rename="NextToken")]
@@ -1789,7 +1789,7 @@ pub struct GetUserDefinedFunctionsResponse {
 }
 
 #[doc="<p>A classifier that uses <code>grok</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GrokClassifier {
     #[doc="<p>The data form that the classifier matches, such as Twitter, JSON, Omniture Logs, and so forth.</p>"]
     #[serde(rename="Classification")]
@@ -1818,7 +1818,7 @@ pub struct GrokClassifier {
     pub version: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportCatalogToGlueRequest {
     #[doc="<p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>"]
     #[serde(rename="CatalogId")]
@@ -1826,7 +1826,7 @@ pub struct ImportCatalogToGlueRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportCatalogToGlueResponse;
 
 #[doc="<p>Specifies a JDBC target for a crawl.</p>"]
@@ -1847,7 +1847,7 @@ pub struct JdbcTarget {
 }
 
 #[doc="<p>Specifies a job in the Data Catalog.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Job {
     #[doc="<p>The number of capacity units allocated to this job.</p>"]
     #[serde(rename="AllocatedCapacity")]
@@ -1900,7 +1900,7 @@ pub struct Job {
 }
 
 #[doc="<p>Defines a point which a job can resume processing.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobBookmarkEntry {
     #[doc="<p>The attempt ID number.</p>"]
     #[serde(rename="Attempt")]
@@ -1938,7 +1938,7 @@ pub struct JobCommand {
 }
 
 #[doc="<p>Contains information about a job run.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobRun {
     #[doc="<p>The amount of infrastructure capacity allocated to this job run.</p>"]
     #[serde(rename="AllocatedCapacity")]
@@ -1995,7 +1995,7 @@ pub struct JobRun {
 }
 
 #[doc="<p>Specifies information used to update an existing job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobUpdate {
     #[doc="<p>The number of capacity units allocated to this job.</p>"]
     #[serde(rename="AllocatedCapacity")]
@@ -2036,7 +2036,7 @@ pub struct JobUpdate {
 }
 
 #[doc="<p>Status and error information about the most recent crawl.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LastCrawlInfo {
     #[doc="<p>Error information about the last crawl, if an error occurred.</p>"]
     #[serde(rename="ErrorMessage")]
@@ -2065,7 +2065,7 @@ pub struct LastCrawlInfo {
 }
 
 #[doc="<p>The location of resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Location {
     #[doc="<p>A JDBC location.</p>"]
     #[serde(rename="Jdbc")]
@@ -2118,7 +2118,7 @@ pub struct Order {
 }
 
 #[doc="<p>Represents a slice of table data.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Partition {
     #[doc="<p>The time at which the partition was created.</p>"]
     #[serde(rename="CreationTime")]
@@ -2155,7 +2155,7 @@ pub struct Partition {
 }
 
 #[doc="<p>Contains information about a partition error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PartitionError {
     #[doc="<p>Details about the partition error.</p>"]
     #[serde(rename="ErrorDetail")]
@@ -2168,7 +2168,7 @@ pub struct PartitionError {
 }
 
 #[doc="<p>The structure used to create and update a partion.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PartitionInput {
     #[doc="<p>The last time at which the partition was accessed.</p>"]
     #[serde(rename="LastAccessTime")]
@@ -2216,7 +2216,7 @@ pub struct PhysicalConnectionRequirements {
 }
 
 #[doc="<p>A job run that preceded this one.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Predecessor {
     #[doc="<p>The name of the predecessor job.</p>"]
     #[serde(rename="JobName")]
@@ -2241,14 +2241,14 @@ pub struct Predicate {
     pub logical: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetJobBookmarkRequest {
     #[doc="<p>The name of the job in question.</p>"]
     #[serde(rename="JobName")]
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetJobBookmarkResponse {
     #[doc="<p>The reset bookmark entry.</p>"]
     #[serde(rename="JobBookmarkEntry")]
@@ -2283,7 +2283,7 @@ pub struct S3Target {
 }
 
 #[doc="<p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Schedule {
     #[doc="<p>A <code>cron</code> expression that can be used as a Cloudwatch event to schedule something (see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html\">CloudWatch Schedule Expression Syntax</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>"]
     #[serde(rename="ScheduleExpression")]
@@ -2309,7 +2309,7 @@ pub struct SchemaChangePolicy {
 }
 
 #[doc="<p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Segment {
     #[doc="<p>The zero-based index number of the this segment. For example, if the total number of segments is 4, SegmentNumber values will range from zero through three.</p>"]
     #[serde(rename="SegmentNumber")]
@@ -2353,27 +2353,27 @@ pub struct SkewedInfo {
     pub skewed_column_values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartCrawlerRequest {
     #[doc="<p>Name of the <code>Crawler</code> to start.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartCrawlerScheduleRequest {
     #[doc="<p>Name of the crawler to schedule.</p>"]
     #[serde(rename="CrawlerName")]
     pub crawler_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartJobRunRequest {
     #[doc="<p>The infrastructure capacity to allocate to this job.</p>"]
     #[serde(rename="AllocatedCapacity")]
@@ -2392,7 +2392,7 @@ pub struct StartJobRunRequest {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartJobRunResponse {
     #[doc="<p>The ID assigned to this job run.</p>"]
     #[serde(rename="JobRunId")]
@@ -2400,14 +2400,14 @@ pub struct StartJobRunResponse {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartTriggerRequest {
     #[doc="<p>The name of the trigger to start.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartTriggerResponse {
     #[doc="<p>The name of the trigger that was started.</p>"]
     #[serde(rename="Name")]
@@ -2415,34 +2415,34 @@ pub struct StartTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopCrawlerRequest {
     #[doc="<p>Name of the <code>Crawler</code> to stop.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopCrawlerScheduleRequest {
     #[doc="<p>Name of the crawler whose schedule state to set.</p>"]
     #[serde(rename="CrawlerName")]
     pub crawler_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopTriggerRequest {
     #[doc="<p>The name of the trigger to stop.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopTriggerResponse {
     #[doc="<p>The name of the trigger that was stopped.</p>"]
     #[serde(rename="Name")]
@@ -2504,7 +2504,7 @@ pub struct StorageDescriptor {
 }
 
 #[doc="<p>Represents a collection of related data organized in columns and rows.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Table {
     #[doc="<p>Time when the table definition was created in the Data Catalog.</p>"]
     #[serde(rename="CreateTime")]
@@ -2572,7 +2572,7 @@ pub struct Table {
 }
 
 #[doc="<p>An error record for table operations.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableError {
     #[doc="<p>Detail about the error.</p>"]
     #[serde(rename="ErrorDetail")]
@@ -2585,7 +2585,7 @@ pub struct TableError {
 }
 
 #[doc="<p>Structure used to create or update the table.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableInput {
     #[doc="<p>Description of the table.</p>"]
     #[serde(rename="Description")]
@@ -2636,7 +2636,7 @@ pub struct TableInput {
     pub view_original_text: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableVersion {
     #[serde(rename="Table")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2647,7 +2647,7 @@ pub struct TableVersion {
 }
 
 #[doc="<p>Information about a specific trigger.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Trigger {
     #[doc="<p>The actions initiated by this trigger.</p>"]
     #[serde(rename="Actions")]
@@ -2684,7 +2684,7 @@ pub struct Trigger {
 }
 
 #[doc="<p>A structure used to provide information used to updata a trigger.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TriggerUpdate {
     #[doc="<p>The actions initiated by this trigger.</p>"]
     #[serde(rename="Actions")]
@@ -2708,7 +2708,7 @@ pub struct TriggerUpdate {
     pub schedule: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClassifierRequest {
     #[doc="<p>A <code>GrokClassifier</code> object with updated fields.</p>"]
     #[serde(rename="GrokClassifier")]
@@ -2716,10 +2716,10 @@ pub struct UpdateClassifierRequest {
     pub grok_classifier: Option<UpdateGrokClassifierRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClassifierResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConnectionRequest {
     #[doc="<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -2733,10 +2733,10 @@ pub struct UpdateConnectionRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConnectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCrawlerRequest {
     #[doc="<p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"]
     #[serde(rename="Classifiers")]
@@ -2775,10 +2775,10 @@ pub struct UpdateCrawlerRequest {
     pub targets: Option<CrawlerTargets>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCrawlerResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCrawlerScheduleRequest {
     #[doc="<p>Name of the crawler whose schedule to update.</p>"]
     #[serde(rename="CrawlerName")]
@@ -2789,10 +2789,10 @@ pub struct UpdateCrawlerScheduleRequest {
     pub schedule: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCrawlerScheduleResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDatabaseRequest {
     #[doc="<p>The ID of the Data Catalog in which the metadata database resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -2806,10 +2806,10 @@ pub struct UpdateDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDatabaseResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDevEndpointRequest {
     #[doc="<p>Custom Python or Java custom libraries to be loaded in the DevEndpoint.</p>"]
     #[serde(rename="CustomLibraries")]
@@ -2824,11 +2824,11 @@ pub struct UpdateDevEndpointRequest {
     pub public_key: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDevEndpointResponse;
 
 #[doc="<p>Specifies a Grok classifier to update when passed to UpdateClassifier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateGrokClassifierRequest {
     #[doc="<p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>"]
     #[serde(rename="Classification")]
@@ -2847,7 +2847,7 @@ pub struct UpdateGrokClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobRequest {
     #[doc="<p>Name of the job definition to update.</p>"]
     #[serde(rename="JobName")]
@@ -2857,7 +2857,7 @@ pub struct UpdateJobRequest {
     pub job_update: JobUpdate,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobResponse {
     #[doc="<p>Returns the name of the updated job.</p>"]
     #[serde(rename="JobName")]
@@ -2865,7 +2865,7 @@ pub struct UpdateJobResponse {
     pub job_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePartitionRequest {
     #[doc="<p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -2885,10 +2885,10 @@ pub struct UpdatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePartitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTableRequest {
     #[doc="<p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -2902,10 +2902,10 @@ pub struct UpdateTableRequest {
     pub table_input: TableInput,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTableResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTriggerRequest {
     #[doc="<p>The name of the trigger to update.</p>"]
     #[serde(rename="Name")]
@@ -2915,7 +2915,7 @@ pub struct UpdateTriggerRequest {
     pub trigger_update: TriggerUpdate,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTriggerResponse {
     #[doc="<p>The resulting trigger definition.</p>"]
     #[serde(rename="Trigger")]
@@ -2923,7 +2923,7 @@ pub struct UpdateTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserDefinedFunctionRequest {
     #[doc="<p>The ID of the Data Catalog where the function to be updated is located. If none is supplied, the AWS account ID is used by default.</p>"]
     #[serde(rename="CatalogId")]
@@ -2940,11 +2940,11 @@ pub struct UpdateUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserDefinedFunctionResponse;
 
 #[doc="<p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserDefinedFunction {
     #[doc="<p>The Java class that contains the function code.</p>"]
     #[serde(rename="ClassName")]
@@ -2973,7 +2973,7 @@ pub struct UserDefinedFunction {
 }
 
 #[doc="<p>A structure used to create or updata a user-defined function.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserDefinedFunctionInput {
     #[doc="<p>The Java class that contains the function code.</p>"]
     #[serde(rename="ClassName")]

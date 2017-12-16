@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>An object representing authorization data for an Amazon ECR registry.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizationData {
     #[doc="<p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>"]
     #[serde(rename="authorizationToken")]
@@ -45,7 +45,7 @@ pub struct AuthorizationData {
     pub proxy_endpoint: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCheckLayerAvailabilityRequest {
     #[doc="<p>The digests of the image layers to check.</p>"]
     #[serde(rename="layerDigests")]
@@ -59,7 +59,7 @@ pub struct BatchCheckLayerAvailabilityRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCheckLayerAvailabilityResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -72,7 +72,7 @@ pub struct BatchCheckLayerAvailabilityResponse {
 }
 
 #[doc="<p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteImageRequest {
     #[doc="<p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>"]
     #[serde(rename="imageIds")]
@@ -86,7 +86,7 @@ pub struct BatchDeleteImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteImageResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -98,7 +98,7 @@ pub struct BatchDeleteImageResponse {
     pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetImageRequest {
     #[doc="<p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>"]
     #[serde(rename="acceptedMediaTypes")]
@@ -116,7 +116,7 @@ pub struct BatchGetImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetImageResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -128,7 +128,7 @@ pub struct BatchGetImageResponse {
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteLayerUploadRequest {
     #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
     #[serde(rename="layerDigests")]
@@ -145,7 +145,7 @@ pub struct CompleteLayerUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteLayerUploadResponse {
     #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
     #[serde(rename="layerDigest")]
@@ -165,14 +165,14 @@ pub struct CompleteLayerUploadResponse {
     pub upload_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRepositoryRequest {
     #[doc="<p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>"]
     #[serde(rename="repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRepositoryResponse {
     #[doc="<p>The repository that was created.</p>"]
     #[serde(rename="repository")]
@@ -180,7 +180,7 @@ pub struct CreateRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryPolicyRequest {
     #[doc="<p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
@@ -191,7 +191,7 @@ pub struct DeleteRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy that was deleted from the repository.</p>"]
     #[serde(rename="policyText")]
@@ -207,7 +207,7 @@ pub struct DeleteRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryRequest {
     #[doc="<p>Force the deletion of the repository if it contains images.</p>"]
     #[serde(rename="force")]
@@ -222,7 +222,7 @@ pub struct DeleteRepositoryRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryResponse {
     #[doc="<p>The repository that was deleted.</p>"]
     #[serde(rename="repository")]
@@ -231,7 +231,7 @@ pub struct DeleteRepositoryResponse {
 }
 
 #[doc="<p>An object representing a filter on a <a>DescribeImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImagesFilter {
     #[doc="<p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
     #[serde(rename="tagStatus")]
@@ -239,7 +239,7 @@ pub struct DescribeImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImagesRequest {
     #[doc="<p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>"]
     #[serde(rename="filter")]
@@ -266,7 +266,7 @@ pub struct DescribeImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImagesResponse {
     #[doc="<p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>"]
     #[serde(rename="imageDetails")]
@@ -278,7 +278,7 @@ pub struct DescribeImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRepositoriesRequest {
     #[doc="<p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
     #[serde(rename="maxResults")]
@@ -298,7 +298,7 @@ pub struct DescribeRepositoriesRequest {
     pub repository_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRepositoriesResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
@@ -310,7 +310,7 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAuthorizationTokenRequest {
     #[doc="<p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryIds")]
@@ -318,7 +318,7 @@ pub struct GetAuthorizationTokenRequest {
     pub registry_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAuthorizationTokenResponse {
     #[doc="<p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>"]
     #[serde(rename="authorizationData")]
@@ -326,7 +326,7 @@ pub struct GetAuthorizationTokenResponse {
     pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDownloadUrlForLayerRequest {
     #[doc="<p>The digest of the image layer to download.</p>"]
     #[serde(rename="layerDigest")]
@@ -340,7 +340,7 @@ pub struct GetDownloadUrlForLayerRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDownloadUrlForLayerResponse {
     #[doc="<p>The pre-signed Amazon S3 download URL for the requested layer.</p>"]
     #[serde(rename="downloadUrl")]
@@ -352,7 +352,7 @@ pub struct GetDownloadUrlForLayerResponse {
     pub layer_digest: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryPolicyRequest {
     #[doc="<p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
@@ -363,7 +363,7 @@ pub struct GetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy text associated with the repository.</p>"]
     #[serde(rename="policyText")]
@@ -380,7 +380,7 @@ pub struct GetRepositoryPolicyResponse {
 }
 
 #[doc="<p>An object representing an Amazon ECR image.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Image {
     #[doc="<p>An object containing the image tag and image digest associated with an image.</p>"]
     #[serde(rename="imageId")]
@@ -401,7 +401,7 @@ pub struct Image {
 }
 
 #[doc="<p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageDetail {
     #[doc="<p>The <code>sha256</code> digest of the image manifest.</p>"]
     #[serde(rename="imageDigest")]
@@ -430,7 +430,7 @@ pub struct ImageDetail {
 }
 
 #[doc="<p>An object representing an Amazon ECR image failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageFailure {
     #[doc="<p>The code associated with the failure.</p>"]
     #[serde(rename="failureCode")]
@@ -459,7 +459,7 @@ pub struct ImageIdentifier {
     pub image_tag: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateLayerUploadRequest {
     #[doc="<p>The AWS account ID associated with the registry that you intend to upload layers to. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
@@ -470,7 +470,7 @@ pub struct InitiateLayerUploadRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateLayerUploadResponse {
     #[doc="<p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>"]
     #[serde(rename="partSize")]
@@ -483,7 +483,7 @@ pub struct InitiateLayerUploadResponse {
 }
 
 #[doc="<p>An object representing an Amazon ECR image layer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Layer {
     #[doc="<p>The availability status of the image layer.</p>"]
     #[serde(rename="layerAvailability")]
@@ -504,7 +504,7 @@ pub struct Layer {
 }
 
 #[doc="<p>An object representing an Amazon ECR image layer failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LayerFailure {
     #[doc="<p>The failure code associated with the failure.</p>"]
     #[serde(rename="failureCode")]
@@ -521,7 +521,7 @@ pub struct LayerFailure {
 }
 
 #[doc="<p>An object representing a filter on a <a>ListImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListImagesFilter {
     #[doc="<p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
     #[serde(rename="tagStatus")]
@@ -529,7 +529,7 @@ pub struct ListImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListImagesRequest {
     #[doc="<p>The filter key and value with which to filter your <code>ListImages</code> results.</p>"]
     #[serde(rename="filter")]
@@ -552,7 +552,7 @@ pub struct ListImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListImagesResponse {
     #[doc="<p>The list of image IDs for the requested repository.</p>"]
     #[serde(rename="imageIds")]
@@ -564,7 +564,7 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutImageRequest {
     #[doc="<p>The image manifest corresponding to the image to be uploaded.</p>"]
     #[serde(rename="imageManifest")]
@@ -582,7 +582,7 @@ pub struct PutImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutImageResponse {
     #[doc="<p>Details of the image uploaded.</p>"]
     #[serde(rename="image")]
@@ -591,7 +591,7 @@ pub struct PutImageResponse {
 }
 
 #[doc="<p>An object representing a repository.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Repository {
     #[doc="<p>The date and time, in JavaScript date/time format, when the repository was created.</p>"]
     #[serde(rename="createdAt")]
@@ -615,7 +615,7 @@ pub struct Repository {
     pub repository_uri: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetRepositoryPolicyRequest {
     #[doc="<p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>"]
     #[serde(rename="force")]
@@ -633,7 +633,7 @@ pub struct SetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy text applied to the repository.</p>"]
     #[serde(rename="policyText")]
@@ -649,7 +649,7 @@ pub struct SetRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadLayerPartRequest {
     #[doc="<p>The base64-encoded layer part payload.</p>"]
     #[serde(rename="layerPartBlob")]
@@ -677,7 +677,7 @@ pub struct UploadLayerPartRequest {
     pub upload_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadLayerPartResponse {
     #[doc="<p>The integer value of the last byte received in the request.</p>"]
     #[serde(rename="lastByteReceived")]

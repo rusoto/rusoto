@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>Provides options to abort a multipart upload identified by the upload ID.</p> <p>For information about the underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html\">Abort Multipart Upload</a>. For conceptual information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html\">Working with Archives in Amazon Glacier</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AbortMultipartUploadInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -44,7 +44,7 @@ pub struct AbortMultipartUploadInput {
 }
 
 #[doc="<p>The input values for <code>AbortVaultLock</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AbortVaultLockInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -55,7 +55,7 @@ pub struct AbortVaultLockInput {
 }
 
 #[doc="<p>The input values for <code>AddTagsToVault</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToVaultInput {
     #[doc="<p>The tags to add to the vault. Each tag is composed of a key and a value. The value can be an empty string.</p>"]
     #[serde(rename="Tags")]
@@ -70,7 +70,7 @@ pub struct AddTagsToVaultInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html\">Upload Archive</a>. For conceptual information, see <a href=\"http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html\">Working with Archives in Amazon Glacier</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ArchiveCreationOutput {
     #[doc="<p>The ID of the archive. This value is also included as part of the location.</p>"]
     #[serde(rename="archiveId")]
@@ -87,7 +87,7 @@ pub struct ArchiveCreationOutput {
 }
 
 #[doc="<p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteMultipartUploadInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -109,7 +109,7 @@ pub struct CompleteMultipartUploadInput {
 }
 
 #[doc="<p>The input values for <code>CompleteVaultLock</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteVaultLockInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -123,7 +123,7 @@ pub struct CompleteVaultLockInput {
 }
 
 #[doc="<p>Provides options to create a vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVaultInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -134,7 +134,7 @@ pub struct CreateVaultInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVaultOutput {
     #[doc="<p>The URI of the vault that was created.</p>"]
     #[serde(rename="location")]
@@ -165,7 +165,7 @@ pub struct DataRetrievalRule {
 }
 
 #[doc="<p>Provides options for deleting an archive from an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteArchiveInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -179,7 +179,7 @@ pub struct DeleteArchiveInput {
 }
 
 #[doc="<p>DeleteVaultAccessPolicy input.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVaultAccessPolicyInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -190,7 +190,7 @@ pub struct DeleteVaultAccessPolicyInput {
 }
 
 #[doc="<p>Provides options for deleting a vault from Amazon Glacier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVaultInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -201,7 +201,7 @@ pub struct DeleteVaultInput {
 }
 
 #[doc="<p>Provides options for deleting a vault notification configuration from an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVaultNotificationsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -212,7 +212,7 @@ pub struct DeleteVaultNotificationsInput {
 }
 
 #[doc="<p>Provides options for retrieving a job description.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -226,7 +226,7 @@ pub struct DescribeJobInput {
 }
 
 #[doc="<p>Provides options for retrieving metadata for a specific vault in Amazon Glacier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVaultInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -237,7 +237,7 @@ pub struct DescribeVaultInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVaultOutput {
     #[doc="<p>The Universal Coordinated Time (UTC) date when the vault was created. This value should be a string in the ISO 8601 date format, for example <code>2012-03-20T17:03:43.221Z</code>.</p>"]
     #[serde(rename="CreationDate")]
@@ -266,7 +266,7 @@ pub struct DescribeVaultOutput {
 }
 
 #[doc="<p>Input for GetDataRetrievalPolicy.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDataRetrievalPolicyInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -274,7 +274,7 @@ pub struct GetDataRetrievalPolicyInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to the <code>GetDataRetrievalPolicy</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDataRetrievalPolicyOutput {
     #[doc="<p>Contains the returned data retrieval policy in JSON format.</p>"]
     #[serde(rename="Policy")]
@@ -283,7 +283,7 @@ pub struct GetDataRetrievalPolicyOutput {
 }
 
 #[doc="<p>Provides options for downloading output of an Amazon Glacier job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobOutputInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -301,26 +301,44 @@ pub struct GetJobOutputInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetJobOutputOutput {
     #[doc="<p>Indicates the range units accepted. For more information, see <a href=\"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html\">RFC2616</a>. </p>"]
+    #[serde(rename="acceptRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accept_ranges: Option<String>,
     #[doc="<p>The description of an archive.</p>"]
+    #[serde(rename="archiveDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub archive_description: Option<String>,
     #[doc="<p>The job data, either archive data or inventory data.</p>"]
+    #[serde(rename="body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<Vec<u8>>,
     #[doc="<p>The checksum of the data in the response. This header is returned only when retrieving the output for an archive retrieval job. Furthermore, this header appears only under the following conditions:</p> <ul> <li> <p>You get the entire range of the archive.</p> </li> <li> <p>You request a range to return of the archive that starts and ends on a multiple of 1 MB. For example, if you have an 3.1 MB archive and you specify a range to return that starts at 1 MB and ends at 2 MB, then the x-amz-sha256-tree-hash is returned as a response header.</p> </li> <li> <p>You request a range of the archive to return that starts on a multiple of 1 MB and goes to the end of the archive. For example, if you have a 3.1 MB archive and you specify a range that starts at 2 MB and ends at 3.1 MB (the end of the archive), then the x-amz-sha256-tree-hash is returned as a response header.</p> </li> </ul>"]
+    #[serde(rename="checksum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub checksum: Option<String>,
     #[doc="<p>The range of bytes returned by Amazon Glacier. If only partial output is downloaded, the response provides the range of bytes Amazon Glacier returned. For example, bytes 0-1048575/8388608 returns the first 1 MB from 8 MB.</p>"]
+    #[serde(rename="contentRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_range: Option<String>,
     #[doc="<p>The Content-Type depends on whether the job output is an archive or a vault inventory. For archive data, the Content-Type is application/octet-stream. For vault inventory, if you requested CSV format when you initiated the job, the Content-Type is text/csv. Otherwise, by default, vault inventory is returned as JSON, and the Content-Type is application/json.</p>"]
+    #[serde(rename="contentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="<p>The HTTP response code for a job output request. The value depends on whether a range was specified in the request.</p>"]
+    #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<i64>,
 }
 
 #[doc="<p>Input for GetVaultAccessPolicy.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultAccessPolicyInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -331,7 +349,7 @@ pub struct GetVaultAccessPolicyInput {
 }
 
 #[doc="<p>Output for GetVaultAccessPolicy.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultAccessPolicyOutput {
     #[doc="<p>Contains the returned vault access policy as a JSON string.</p>"]
     #[serde(rename="policy")]
@@ -340,7 +358,7 @@ pub struct GetVaultAccessPolicyOutput {
 }
 
 #[doc="<p>The input values for <code>GetVaultLock</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultLockInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -351,7 +369,7 @@ pub struct GetVaultLockInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultLockOutput {
     #[doc="<p>The UTC date and time at which the vault lock was put into the <code>InProgress</code> state.</p>"]
     #[serde(rename="CreationDate")]
@@ -372,7 +390,7 @@ pub struct GetVaultLockOutput {
 }
 
 #[doc="<p>Provides options for retrieving the notification configuration set on an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultNotificationsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -383,7 +401,7 @@ pub struct GetVaultNotificationsInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetVaultNotificationsOutput {
     #[doc="<p>Returns the notification configuration set on the vault.</p>"]
     #[serde(rename="vaultNotificationConfig")]
@@ -392,7 +410,7 @@ pub struct GetVaultNotificationsOutput {
 }
 
 #[doc="<p>Describes an Amazon Glacier job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GlacierJobDescription {
     #[doc="<p>The job type. It is either ArchiveRetrieval or InventoryRetrieval.</p>"]
     #[serde(rename="Action")]
@@ -469,7 +487,7 @@ pub struct GlacierJobDescription {
 }
 
 #[doc="<p>Provides options for initiating an Amazon Glacier job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateJobInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -484,7 +502,7 @@ pub struct InitiateJobInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateJobOutput {
     #[doc="<p>The ID of the job.</p>"]
     #[serde(rename="jobId")]
@@ -497,7 +515,7 @@ pub struct InitiateJobOutput {
 }
 
 #[doc="<p>Provides options for initiating a multipart upload to an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateMultipartUploadInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -516,7 +534,7 @@ pub struct InitiateMultipartUploadInput {
 }
 
 #[doc="<p>The Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateMultipartUploadOutput {
     #[doc="<p>The relative URI path of the multipart upload ID Amazon Glacier created.</p>"]
     #[serde(rename="location")]
@@ -529,7 +547,7 @@ pub struct InitiateMultipartUploadOutput {
 }
 
 #[doc="<p>The input values for <code>InitiateVaultLock</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateVaultLockInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -544,7 +562,7 @@ pub struct InitiateVaultLockInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateVaultLockOutput {
     #[doc="<p>The lock ID, which is used to complete the vault locking process.</p>"]
     #[serde(rename="lockId")]
@@ -553,7 +571,7 @@ pub struct InitiateVaultLockOutput {
 }
 
 #[doc="<p>Describes the options for a range inventory retrieval job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InventoryRetrievalJobDescription {
     #[doc="<p>The end of the date range in UTC for vault inventory retrieval that includes archives created before this date. This value should be a string in the ISO 8601 date format, for example <code>2013-03-20T17:03:43Z</code>.</p>"]
     #[serde(rename="EndDate")]
@@ -578,7 +596,7 @@ pub struct InventoryRetrievalJobDescription {
 }
 
 #[doc="<p>Provides options for specifying a range inventory retrieval job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InventoryRetrievalJobInput {
     #[doc="<p>The end of the date range in UTC for vault inventory retrieval that includes archives created before this date. This value should be a string in the ISO 8601 date format, for example <code>2013-03-20T17:03:43Z</code>.</p>"]
     #[serde(rename="EndDate")]
@@ -599,7 +617,7 @@ pub struct InventoryRetrievalJobInput {
 }
 
 #[doc="<p>Provides options for defining a job.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobParameters {
     #[doc="<p>The ID of the archive that you want to retrieve. This field is required only if <code>Type</code> is set to archive-retrieval. An error occurs if you specify this request parameter for an inventory retrieval job request. </p>"]
     #[serde(rename="ArchiveId")]
@@ -636,7 +654,7 @@ pub struct JobParameters {
 }
 
 #[doc="<p>Provides options for retrieving a job list for an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -663,7 +681,7 @@ pub struct ListJobsInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsOutput {
     #[doc="<p>A list of job objects. Each job object contains metadata describing the job.</p>"]
     #[serde(rename="JobList")]
@@ -676,7 +694,7 @@ pub struct ListJobsOutput {
 }
 
 #[doc="<p>Provides options for retrieving list of in-progress multipart uploads for an Amazon Glacier vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMultipartUploadsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -695,7 +713,7 @@ pub struct ListMultipartUploadsInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMultipartUploadsOutput {
     #[doc="<p>An opaque string that represents where to continue pagination of the results. You use the marker in a new List Multipart Uploads request to obtain more uploads in the list. If there are no more uploads, this value is <code>null</code>.</p>"]
     #[serde(rename="Marker")]
@@ -708,7 +726,7 @@ pub struct ListMultipartUploadsOutput {
 }
 
 #[doc="<p>Provides options for retrieving a list of parts of an archive that have been uploaded in a specific multipart upload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPartsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -730,7 +748,7 @@ pub struct ListPartsInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPartsOutput {
     #[doc="<p>The description of the archive that was specified in the Initiate Multipart Upload request.</p>"]
     #[serde(rename="ArchiveDescription")]
@@ -762,14 +780,14 @@ pub struct ListPartsOutput {
     pub vault_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProvisionedCapacityInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
     pub account_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProvisionedCapacityOutput {
     #[doc="<p>The response body contains the following JSON fields.</p>"]
     #[serde(rename="ProvisionedCapacityList")]
@@ -778,7 +796,7 @@ pub struct ListProvisionedCapacityOutput {
 }
 
 #[doc="<p>The input value for <code>ListTagsForVaultInput</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForVaultInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -789,7 +807,7 @@ pub struct ListTagsForVaultInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForVaultOutput {
     #[doc="<p>The tags attached to the vault. Each tag is composed of a key and a value.</p>"]
     #[serde(rename="Tags")]
@@ -798,7 +816,7 @@ pub struct ListTagsForVaultOutput {
 }
 
 #[doc="<p>Provides options to retrieve the vault list owned by the calling user's account. The list provides metadata information for each vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVaultsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID. This value must match the AWS account ID associated with the credentials used to sign the request. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you specify your account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -814,7 +832,7 @@ pub struct ListVaultsInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVaultsOutput {
     #[doc="<p>The vault ARN at which to continue pagination of the results. You use the marker in another List Vaults request to obtain more vaults in the list.</p>"]
     #[serde(rename="Marker")]
@@ -827,7 +845,7 @@ pub struct ListVaultsOutput {
 }
 
 #[doc="<p>A list of the part sizes of the multipart upload.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PartListElement {
     #[doc="<p>The byte range of a part, inclusive of the upper value of the range.</p>"]
     #[serde(rename="RangeInBytes")]
@@ -840,7 +858,7 @@ pub struct PartListElement {
 }
 
 #[doc="<p>The definition for a provisioned capacity unit.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisionedCapacityDescription {
     #[doc="<p>The ID that identifies the provisioned capacity unit.</p>"]
     #[serde(rename="CapacityId")]
@@ -856,14 +874,14 @@ pub struct ProvisionedCapacityDescription {
     pub start_date: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseProvisionedCapacityInput {
     #[doc="<p>The AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
     pub account_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseProvisionedCapacityOutput {
     #[doc="<p>The ID that identifies the provisioned capacity unit.</p>"]
     #[serde(rename="capacityId")]
@@ -872,7 +890,7 @@ pub struct PurchaseProvisionedCapacityOutput {
 }
 
 #[doc="<p>The input value for <code>RemoveTagsFromVaultInput</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromVaultInput {
     #[doc="<p>A list of tag keys. Each corresponding tag is removed from the vault.</p>"]
     #[serde(rename="TagKeys")]
@@ -887,7 +905,7 @@ pub struct RemoveTagsFromVaultInput {
 }
 
 #[doc="<p>SetDataRetrievalPolicy input.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetDataRetrievalPolicyInput {
     #[doc="<p>The data retrieval policy in JSON format.</p>"]
     #[serde(rename="Policy")]
@@ -899,7 +917,7 @@ pub struct SetDataRetrievalPolicyInput {
 }
 
 #[doc="<p>SetVaultAccessPolicy input.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetVaultAccessPolicyInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -914,7 +932,7 @@ pub struct SetVaultAccessPolicyInput {
 }
 
 #[doc="<p>Provides options to configure notifications that will be sent when specific events happen to a vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetVaultNotificationsInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
@@ -929,7 +947,7 @@ pub struct SetVaultNotificationsInput {
 }
 
 #[doc="<p>Provides options to add an archive to a vault.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadArchiveInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -956,7 +974,7 @@ pub struct UploadArchiveInput {
 }
 
 #[doc="<p>A list of in-progress multipart uploads for a vault.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadListElement {
     #[doc="<p>The description of the archive that was specified in the Initiate Multipart Upload request.</p>"]
     #[serde(rename="ArchiveDescription")]
@@ -981,7 +999,7 @@ pub struct UploadListElement {
 }
 
 #[doc="<p>Provides options to upload a part of an archive in a multipart upload operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadMultipartPartInput {
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID. </p>"]
     #[serde(rename="accountId")]
@@ -1011,7 +1029,7 @@ pub struct UploadMultipartPartInput {
 }
 
 #[doc="<p>Contains the Amazon Glacier response to your request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadMultipartPartOutput {
     #[doc="<p>The SHA256 tree hash that Amazon Glacier computed for the uploaded part.</p>"]
     #[serde(rename="checksum")]
@@ -1029,7 +1047,7 @@ pub struct VaultAccessPolicy {
 }
 
 #[doc="<p>Contains the vault lock policy.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VaultLockPolicy {
     #[doc="<p>The vault lock policy.</p>"]
     #[serde(rename="Policy")]

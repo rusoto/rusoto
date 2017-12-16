@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentConfigurationStatus {
     #[doc="<p>The agent/connector ID.</p>"]
     #[serde(rename="agentId")]
@@ -46,7 +46,7 @@ pub struct AgentConfigurationStatus {
 }
 
 #[doc="<p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentInfo {
     #[doc="<p>The agent or connector ID.</p>"]
     #[serde(rename="agentId")]
@@ -91,7 +91,7 @@ pub struct AgentInfo {
 }
 
 #[doc="<p>Network details about the host where the agent/connector resides.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentNetworkInfo {
     #[doc="<p>The IP address for the host where the agent/connector resides.</p>"]
     #[serde(rename="ipAddress")]
@@ -103,7 +103,7 @@ pub struct AgentNetworkInfo {
     pub mac_address: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateConfigurationItemsToApplicationRequest {
     #[doc="<p>The configuration ID of an application with which items are to be associated.</p>"]
     #[serde(rename="applicationConfigurationId")]
@@ -113,11 +113,11 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateConfigurationItemsToApplicationResponse;
 
 #[doc="<p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigurationTag {
     #[doc="<p>The configuration ID for the item to tag. You can specify a list of keys and values.</p>"]
     #[serde(rename="configurationId")]
@@ -141,7 +141,7 @@ pub struct ConfigurationTag {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateApplicationRequest {
     #[doc="<p>Description of the application to be created.</p>"]
     #[serde(rename="description")]
@@ -152,7 +152,7 @@ pub struct CreateApplicationRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateApplicationResponse {
     #[doc="<p>Configuration ID of an application to be created.</p>"]
     #[serde(rename="configurationId")]
@@ -160,7 +160,7 @@ pub struct CreateApplicationResponse {
     pub configuration_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsRequest {
     #[doc="<p>A list of configuration items that you want to tag.</p>"]
     #[serde(rename="configurationIds")]
@@ -170,11 +170,11 @@ pub struct CreateTagsRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsResponse;
 
 #[doc="<p>Inventory data for installed discovery agents.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CustomerAgentInfo {
     #[doc="<p>Number of active discovery agents.</p>"]
     #[serde(rename="activeAgents")]
@@ -200,7 +200,7 @@ pub struct CustomerAgentInfo {
 }
 
 #[doc="<p>Inventory data for installed discovery connectors.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CustomerConnectorInfo {
     #[doc="<p>Number of active discovery connectors.</p>"]
     #[serde(rename="activeConnectors")]
@@ -225,17 +225,17 @@ pub struct CustomerConnectorInfo {
     pub unknown_connectors: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteApplicationsRequest {
     #[doc="<p>Configuration ID of an application to be deleted.</p>"]
     #[serde(rename="configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteApplicationsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsRequest {
     #[doc="<p>A list of configuration items with tags that you want to delete.</p>"]
     #[serde(rename="configurationIds")]
@@ -246,10 +246,10 @@ pub struct DeleteTagsRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAgentsRequest {
     #[doc="<p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>"]
     #[serde(rename="agentIds")]
@@ -269,7 +269,7 @@ pub struct DescribeAgentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAgentsResponse {
     #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>"]
     #[serde(rename="agentsInfo")]
@@ -281,14 +281,14 @@ pub struct DescribeAgentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationsRequest {
     #[doc="<p>One or more configuration IDs.</p>"]
     #[serde(rename="configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationsResponse {
     #[doc="<p>A key in the response map. The value is an array of data.</p>"]
     #[serde(rename="configurations")]
@@ -296,7 +296,7 @@ pub struct DescribeConfigurationsResponse {
     pub configurations: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportConfigurationsRequest {
     #[doc="<p>A unique identifier that you can use to query the export status.</p>"]
     #[serde(rename="exportIds")]
@@ -312,7 +312,7 @@ pub struct DescribeExportConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportConfigurationsResponse {
     #[doc="<p>Returns export details. When the status is complete, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>"]
     #[serde(rename="exportsInfo")]
@@ -324,7 +324,7 @@ pub struct DescribeExportConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksRequest {
     #[doc="<p>One or more unique identifiers used to query the status of an export request.</p>"]
     #[serde(rename="exportIds")]
@@ -344,7 +344,7 @@ pub struct DescribeExportTasksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksResponse {
     #[doc="<p>Contains one or more sets of export request details. When the status of a request is <code>SUCCEEDED</code>, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>"]
     #[serde(rename="exportsInfo")]
@@ -356,7 +356,7 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsRequest {
     #[doc="<p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>"]
     #[serde(rename="filters")]
@@ -372,7 +372,7 @@ pub struct DescribeTagsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsResponse {
     #[doc="<p>The call returns a token. Use this token to get the next set of results.</p>"]
     #[serde(rename="nextToken")]
@@ -384,7 +384,7 @@ pub struct DescribeTagsResponse {
     pub tags: Option<Vec<ConfigurationTag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateConfigurationItemsFromApplicationRequest {
     #[doc="<p>Configuration ID of an application from which each item is disassociated.</p>"]
     #[serde(rename="applicationConfigurationId")]
@@ -394,10 +394,10 @@ pub struct DisassociateConfigurationItemsFromApplicationRequest {
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateConfigurationItemsFromApplicationResponse;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportConfigurationsResponse {
     #[doc="<p>A unique identifier that you can use to query the export status.</p>"]
     #[serde(rename="exportId")]
@@ -406,7 +406,7 @@ pub struct ExportConfigurationsResponse {
 }
 
 #[doc="<p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html\">StartExportTask</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportFilter {
     #[doc="<p>Supported condition: <code>EQUALS</code> </p>"]
     #[serde(rename="condition")]
@@ -420,7 +420,7 @@ pub struct ExportFilter {
 }
 
 #[doc="<p>Information regarding the export status of discovered data. The value is an array of objects.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportInfo {
     #[doc="<p>A URL for an Amazon S3 bucket where you can review the exported data. The URL is displayed only if the export succeeded.</p>"]
     #[serde(rename="configurationsDownloadUrl")]
@@ -453,7 +453,7 @@ pub struct ExportInfo {
 }
 
 #[doc="<p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html\">Querying Discovered Configuration Items</a>. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Filter {
     #[doc="<p>A conditional operator. The following operators are valid: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS. If you specify multiple filters, the system utilizes all filters as though concatenated by <i>AND</i>. If you specify multiple values for a particular filter, the system differentiates the values using <i>OR</i>. Calling either <i>DescribeConfigurations</i> or <i>ListConfigurations</i> returns attributes of matching configuration items.</p>"]
     #[serde(rename="condition")]
@@ -466,10 +466,10 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDiscoverySummaryRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDiscoverySummaryResponse {
     #[doc="<p>Details about discovered agents, including agent status and health.</p>"]
     #[serde(rename="agentSummary")]
@@ -497,7 +497,7 @@ pub struct GetDiscoverySummaryResponse {
     pub servers_mappedto_tags: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConfigurationsRequest {
     #[doc="<p>A valid configuration identified by Application Discovery Service. </p>"]
     #[serde(rename="configurationType")]
@@ -520,7 +520,7 @@ pub struct ListConfigurationsRequest {
     pub order_by: Option<Vec<OrderByElement>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConfigurationsResponse {
     #[doc="<p>Returns configuration details, including the configuration ID, attribute names, and attribute values.</p>"]
     #[serde(rename="configurations")]
@@ -532,7 +532,7 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServerNeighborsRequest {
     #[doc="<p>Configuration ID of the server for which neighbors are being listed.</p>"]
     #[serde(rename="configurationId")]
@@ -555,7 +555,7 @@ pub struct ListServerNeighborsRequest {
     pub port_information_needed: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServerNeighborsResponse {
     #[doc="<p>Count of distinct servers that are one hop away from the given server.</p>"]
     #[serde(rename="knownDependencyCount")]
@@ -571,7 +571,7 @@ pub struct ListServerNeighborsResponse {
 }
 
 #[doc="<p>Details about neighboring servers.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NeighborConnectionDetail {
     #[doc="<p>The number of open network connections with the neighboring server.</p>"]
     #[serde(rename="connectionsCount")]
@@ -593,7 +593,7 @@ pub struct NeighborConnectionDetail {
 }
 
 #[doc="<p>A field and direction for ordered output.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OrderByElement {
     #[doc="<p>The field on which to order.</p>"]
     #[serde(rename="fieldName")]
@@ -604,14 +604,14 @@ pub struct OrderByElement {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartDataCollectionByAgentIdsRequest {
     #[doc="<p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>"]
     #[serde(rename="agentIds")]
     pub agent_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartDataCollectionByAgentIdsResponse {
     #[doc="<p>Information about agents or the connector that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>"]
     #[serde(rename="agentsConfigurationStatus")]
@@ -619,7 +619,7 @@ pub struct StartDataCollectionByAgentIdsResponse {
     pub agents_configuration_status: Option<Vec<AgentConfigurationStatus>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartExportTaskRequest {
     #[doc="<p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>"]
     #[serde(rename="endTime")]
@@ -639,7 +639,7 @@ pub struct StartExportTaskRequest {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartExportTaskResponse {
     #[doc="<p>A unique identifier used to query the status of an export request.</p>"]
     #[serde(rename="exportId")]
@@ -647,14 +647,14 @@ pub struct StartExportTaskResponse {
     pub export_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopDataCollectionByAgentIdsRequest {
     #[doc="<p>The IDs of the agents or connectors from which to stop collecting data.</p>"]
     #[serde(rename="agentIds")]
     pub agent_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopDataCollectionByAgentIdsResponse {
     #[doc="<p>Information about the agents or connector that were instructed to stop collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>"]
     #[serde(rename="agentsConfigurationStatus")]
@@ -663,7 +663,7 @@ pub struct StopDataCollectionByAgentIdsResponse {
 }
 
 #[doc="<p>Metadata that help you categorize IT assets.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The type of tag on which to filter.</p>"]
     #[serde(rename="key")]
@@ -674,7 +674,7 @@ pub struct Tag {
 }
 
 #[doc="<p>The tag filter. Valid names are: <code>tagKey</code>, <code>tagValue</code>, <code>configurationId</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagFilter {
     #[doc="<p>A name of the tag filter.</p>"]
     #[serde(rename="name")]
@@ -684,7 +684,7 @@ pub struct TagFilter {
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateApplicationRequest {
     #[doc="<p>Configuration ID of the application to be updated.</p>"]
     #[serde(rename="configurationId")]
@@ -699,7 +699,7 @@ pub struct UpdateApplicationRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateApplicationResponse;
 
 /// Errors returned by AssociateConfigurationItemsToApplication

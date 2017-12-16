@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>An object representing the details of a container that is part of a job attempt.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttemptContainerDetail {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon ECS container instance that hosts the job attempt.</p>"]
     #[serde(rename="containerInstanceArn")]
@@ -53,7 +53,7 @@ pub struct AttemptContainerDetail {
 }
 
 #[doc="<p>An object representing a job attempt.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttemptDetail {
     #[doc="<p>Details about the container in this job attempt.</p>"]
     #[serde(rename="container")]
@@ -73,7 +73,7 @@ pub struct AttemptDetail {
     pub stopped_at: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobRequest {
     #[doc="<p>A list of up to 100 job IDs to cancel.</p>"]
     #[serde(rename="jobId")]
@@ -83,11 +83,11 @@ pub struct CancelJobRequest {
     pub reason: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobResponse;
 
 #[doc="<p>An object representing an AWS Batch compute environment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComputeEnvironmentDetail {
     #[doc="<p>The Amazon Resource Name (ARN) of the compute environment. </p>"]
     #[serde(rename="computeEnvironmentArn")]
@@ -186,7 +186,7 @@ pub struct ComputeResource {
 }
 
 #[doc="<p>An object representing the attributes of a compute environment that can be updated.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComputeResourceUpdate {
     #[doc="<p>The desired number of EC2 vCPUS in the compute environment.</p>"]
     #[serde(rename="desiredvCpus")]
@@ -203,7 +203,7 @@ pub struct ComputeResourceUpdate {
 }
 
 #[doc="<p>An object representing the details of a container that is part of a job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ContainerDetail {
     #[doc="<p>The command that is passed to the container. </p>"]
     #[serde(rename="command")]
@@ -275,7 +275,7 @@ pub struct ContainerDetail {
 }
 
 #[doc="<p>The overrides that should be sent to a container.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ContainerOverrides {
     #[doc="<p>The command to send to the container that overrides the default command from the Docker image or the job definition.</p>"]
     #[serde(rename="command")]
@@ -345,7 +345,7 @@ pub struct ContainerProperties {
     pub volumes: Option<Vec<Volume>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateComputeEnvironmentRequest {
     #[doc="<p>The name for your compute environment. Up to 128 letters (uppercase and lowercase), numbers, and underscores are allowed.</p>"]
     #[serde(rename="computeEnvironmentName")]
@@ -366,7 +366,7 @@ pub struct CreateComputeEnvironmentRequest {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateComputeEnvironmentResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the compute environment. </p>"]
     #[serde(rename="computeEnvironmentArn")]
@@ -378,7 +378,7 @@ pub struct CreateComputeEnvironmentResponse {
     pub compute_environment_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobQueueRequest {
     #[doc="<p>The set of compute environments mapped to a job queue and their order relative to each other. The job scheduler uses this parameter to determine which compute environment should execute a given job. Compute environments must be in the <code>VALID</code> state before you can associate them with a job queue. You can associate up to 3 compute environments with a job queue.</p>"]
     #[serde(rename="computeEnvironmentOrder")]
@@ -395,7 +395,7 @@ pub struct CreateJobQueueRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobQueueResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the job queue.</p>"]
     #[serde(rename="jobQueueArn")]
@@ -405,37 +405,37 @@ pub struct CreateJobQueueResponse {
     pub job_queue_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteComputeEnvironmentRequest {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the compute environment to delete. </p>"]
     #[serde(rename="computeEnvironment")]
     pub compute_environment: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteComputeEnvironmentResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteJobQueueRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the queue to delete. </p>"]
     #[serde(rename="jobQueue")]
     pub job_queue: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteJobQueueResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterJobDefinitionRequest {
     #[doc="<p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister. </p>"]
     #[serde(rename="jobDefinition")]
     pub job_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterJobDefinitionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComputeEnvironmentsRequest {
     #[doc="<p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>"]
     #[serde(rename="computeEnvironments")]
@@ -451,7 +451,7 @@ pub struct DescribeComputeEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComputeEnvironmentsResponse {
     #[doc="<p>The list of compute environments.</p>"]
     #[serde(rename="computeEnvironments")]
@@ -463,7 +463,7 @@ pub struct DescribeComputeEnvironmentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobDefinitionsRequest {
     #[doc="<p>The name of the job definition to describe.</p>"]
     #[serde(rename="jobDefinitionName")]
@@ -487,7 +487,7 @@ pub struct DescribeJobDefinitionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobDefinitionsResponse {
     #[doc="<p>The list of job definitions. </p>"]
     #[serde(rename="jobDefinitions")]
@@ -499,7 +499,7 @@ pub struct DescribeJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobQueuesRequest {
     #[doc="<p>A list of up to 100 queue names or full queue Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="jobQueues")]
@@ -515,7 +515,7 @@ pub struct DescribeJobQueuesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobQueuesResponse {
     #[doc="<p>The list of job queues. </p>"]
     #[serde(rename="jobQueues")]
@@ -527,14 +527,14 @@ pub struct DescribeJobQueuesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobsRequest {
     #[doc="<p>A space-separated list of up to 100 job IDs.</p>"]
     #[serde(rename="jobs")]
     pub jobs: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeJobsResponse {
     #[doc="<p>The list of jobs. </p>"]
     #[serde(rename="jobs")]
@@ -552,7 +552,7 @@ pub struct Host {
 }
 
 #[doc="<p>An object representing an AWS Batch job definition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobDefinition {
     #[doc="<p>An object with various properties specific to container-based jobs. </p>"]
     #[serde(rename="containerProperties")]
@@ -594,7 +594,7 @@ pub struct JobDependency {
 }
 
 #[doc="<p>An object representing an AWS Batch job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobDetail {
     #[doc="<p>A list of job attempts associated with this job.</p>"]
     #[serde(rename="attempts")]
@@ -649,7 +649,7 @@ pub struct JobDetail {
 }
 
 #[doc="<p>An object representing the details of an AWS Batch job queue.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobQueueDetail {
     #[doc="<p>The compute environments that are attached to the job queue and the order in which job placement is preferred. Compute environments are selected for job placement in ascending order.</p>"]
     #[serde(rename="computeEnvironmentOrder")]
@@ -677,7 +677,7 @@ pub struct JobQueueDetail {
 }
 
 #[doc="<p>An object representing summary details of a job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobSummary {
     #[doc="<p>The ID of the job.</p>"]
     #[serde(rename="jobId")]
@@ -700,7 +700,7 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsRequest {
     #[doc="<p>The name or full Amazon Resource Name (ARN) of the job queue with which to list jobs.</p>"]
     #[serde(rename="jobQueue")]
@@ -719,7 +719,7 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsResponse {
     #[doc="<p>A list of job summaries that match the request.</p>"]
     #[serde(rename="jobSummaryList")]
@@ -747,7 +747,7 @@ pub struct MountPoint {
     pub source_volume: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterJobDefinitionRequest {
     #[doc="<p>An object with various properties specific for container-based jobs. This parameter is required if the <code>type</code> parameter is <code>container</code>.</p>"]
     #[serde(rename="containerProperties")]
@@ -769,7 +769,7 @@ pub struct RegisterJobDefinitionRequest {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterJobDefinitionResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the job definition. </p>"]
     #[serde(rename="jobDefinitionArn")]
@@ -791,7 +791,7 @@ pub struct RetryStrategy {
     pub attempts: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitJobRequest {
     #[doc="<p>A list of container overrides in JSON format that specify the name of a container in the specified job definition and the overrides it should receive. You can override the default command for a container (that is specified in the job definition or the Docker image) with a <code>command</code> override. You can also override existing environment variables (that are specified in the job definition or Docker image) on a container or add new environment variables to it with an <code>environment</code> override.</p>"]
     #[serde(rename="containerOverrides")]
@@ -820,7 +820,7 @@ pub struct SubmitJobRequest {
     pub retry_strategy: Option<RetryStrategy>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitJobResponse {
     #[doc="<p>The unique identifier for the job.</p>"]
     #[serde(rename="jobId")]
@@ -830,7 +830,7 @@ pub struct SubmitJobResponse {
     pub job_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateJobRequest {
     #[doc="<p>Job IDs to be terminated. Up to 100 jobs can be specified.</p>"]
     #[serde(rename="jobId")]
@@ -840,7 +840,7 @@ pub struct TerminateJobRequest {
     pub reason: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateJobResponse;
 
 #[doc="<p>The <code>ulimit</code> settings to pass to the container.</p>"]
@@ -857,7 +857,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateComputeEnvironmentRequest {
     #[doc="<p>The name or full Amazon Resource Name (ARN) of the compute environment to update.</p>"]
     #[serde(rename="computeEnvironment")]
@@ -876,7 +876,7 @@ pub struct UpdateComputeEnvironmentRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateComputeEnvironmentResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the compute environment. </p>"]
     #[serde(rename="computeEnvironmentArn")]
@@ -888,7 +888,7 @@ pub struct UpdateComputeEnvironmentResponse {
     pub compute_environment_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobQueueRequest {
     #[doc="<p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>"]
     #[serde(rename="computeEnvironmentOrder")]
@@ -907,7 +907,7 @@ pub struct UpdateJobQueueRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobQueueResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the job queue.</p>"]
     #[serde(rename="jobQueueArn")]

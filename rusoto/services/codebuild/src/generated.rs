@@ -28,14 +28,14 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetBuildsInput {
     #[doc="<p>The IDs of the builds.</p>"]
     #[serde(rename="ids")]
     pub ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetBuildsOutput {
     #[doc="<p>Information about the requested builds.</p>"]
     #[serde(rename="builds")]
@@ -47,14 +47,14 @@ pub struct BatchGetBuildsOutput {
     pub builds_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetProjectsInput {
     #[doc="<p>The names of the build projects.</p>"]
     #[serde(rename="names")]
     pub names: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetProjectsOutput {
     #[doc="<p>Information about the requested build projects.</p>"]
     #[serde(rename="projects")]
@@ -67,7 +67,7 @@ pub struct BatchGetProjectsOutput {
 }
 
 #[doc="<p>Information about a build.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Build {
     #[doc="<p>The Amazon Resource Name (ARN) of the build.</p>"]
     #[serde(rename="arn")]
@@ -136,7 +136,7 @@ pub struct Build {
 }
 
 #[doc="<p>Information about build output artifacts.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BuildArtifacts {
     #[doc="<p>Information about the location of the build artifacts.</p>"]
     #[serde(rename="location")]
@@ -153,7 +153,7 @@ pub struct BuildArtifacts {
 }
 
 #[doc="<p>Information about a stage for a build.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BuildPhase {
     #[doc="<p>Additional information about a build phase, especially to help troubleshoot a failed build.</p>"]
     #[serde(rename="contexts")]
@@ -181,7 +181,7 @@ pub struct BuildPhase {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProjectInput {
     #[doc="<p>Information about the build output artifacts for the build project.</p>"]
     #[serde(rename="artifacts")]
@@ -217,7 +217,7 @@ pub struct CreateProjectInput {
     pub timeout_in_minutes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProjectOutput {
     #[doc="<p>Information about the build project that was created.</p>"]
     #[serde(rename="project")]
@@ -225,18 +225,18 @@ pub struct CreateProjectOutput {
     pub project: Option<Project>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProjectInput {
     #[doc="<p>The name of the build project.</p>"]
     #[serde(rename="name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProjectOutput;
 
 #[doc="<p>Information about a Docker image that is managed by AWS CodeBuild.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentImage {
     #[doc="<p>The description of the Docker image.</p>"]
     #[serde(rename="description")]
@@ -249,7 +249,7 @@ pub struct EnvironmentImage {
 }
 
 #[doc="<p>A set of Docker images that are related by programming language and are managed by AWS CodeBuild.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentLanguage {
     #[doc="<p>The list of Docker images that are related by the specified programming language.</p>"]
     #[serde(rename="images")]
@@ -262,7 +262,7 @@ pub struct EnvironmentLanguage {
 }
 
 #[doc="<p>A set of Docker images that are related by platform and are managed by AWS CodeBuild.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentPlatform {
     #[doc="<p>The list of programming languages that are available for the specified platform.</p>"]
     #[serde(rename="languages")]
@@ -285,7 +285,7 @@ pub struct EnvironmentVariable {
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBuildsForProjectInput {
     #[doc="<p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>"]
     #[serde(rename="nextToken")]
@@ -300,7 +300,7 @@ pub struct ListBuildsForProjectInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBuildsForProjectOutput {
     #[doc="<p>A list of build IDs for the specified build project, with each build ID representing a single build.</p>"]
     #[serde(rename="ids")]
@@ -312,7 +312,7 @@ pub struct ListBuildsForProjectOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBuildsInput {
     #[doc="<p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>"]
     #[serde(rename="nextToken")]
@@ -324,7 +324,7 @@ pub struct ListBuildsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBuildsOutput {
     #[doc="<p>A list of build IDs, with each build ID representing a single build.</p>"]
     #[serde(rename="ids")]
@@ -336,10 +336,10 @@ pub struct ListBuildsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCuratedEnvironmentImagesInput;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCuratedEnvironmentImagesOutput {
     #[doc="<p>Information about supported platforms for Docker images that are managed by AWS CodeBuild.</p>"]
     #[serde(rename="platforms")]
@@ -347,7 +347,7 @@ pub struct ListCuratedEnvironmentImagesOutput {
     pub platforms: Option<Vec<EnvironmentPlatform>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProjectsInput {
     #[doc="<p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>"]
     #[serde(rename="nextToken")]
@@ -363,7 +363,7 @@ pub struct ListProjectsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProjectsOutput {
     #[doc="<p>If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call.</p>"]
     #[serde(rename="nextToken")]
@@ -376,7 +376,7 @@ pub struct ListProjectsOutput {
 }
 
 #[doc="<p>Information about build logs in Amazon CloudWatch Logs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LogsLocation {
     #[doc="<p>The URL to an individual build log in Amazon CloudWatch Logs.</p>"]
     #[serde(rename="deepLink")]
@@ -393,7 +393,7 @@ pub struct LogsLocation {
 }
 
 #[doc="<p>Additional information about a build phase that has an error. You can use this information to help troubleshoot a failed build.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PhaseContext {
     #[doc="<p>An explanation of the build phase's context. This explanation might include a command ID and an exit code.</p>"]
     #[serde(rename="message")]
@@ -406,7 +406,7 @@ pub struct PhaseContext {
 }
 
 #[doc="<p>Information about a build project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Project {
     #[doc="<p>The Amazon Resource Name (ARN) of the build project.</p>"]
     #[serde(rename="arn")]
@@ -540,7 +540,7 @@ pub struct SourceAuth {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartBuildInput {
     #[doc="<p>Build output artifact settings that override, for this build only, the latest ones already defined in the build project.</p>"]
     #[serde(rename="artifactsOverride")]
@@ -567,7 +567,7 @@ pub struct StartBuildInput {
     pub timeout_in_minutes_override: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartBuildOutput {
     #[doc="<p>Information about the build to be run.</p>"]
     #[serde(rename="build")]
@@ -575,14 +575,14 @@ pub struct StartBuildOutput {
     pub build: Option<Build>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopBuildInput {
     #[doc="<p>The ID of the build.</p>"]
     #[serde(rename="id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopBuildOutput {
     #[doc="<p>Information about the build.</p>"]
     #[serde(rename="build")]
@@ -603,7 +603,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProjectInput {
     #[doc="<p>Information to be changed about the build output artifacts for the build project.</p>"]
     #[serde(rename="artifacts")]
@@ -642,7 +642,7 @@ pub struct UpdateProjectInput {
     pub timeout_in_minutes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProjectOutput {
     #[doc="<p>Information about the build project that was changed.</p>"]
     #[serde(rename="project")]

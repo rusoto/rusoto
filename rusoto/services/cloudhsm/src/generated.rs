@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource to tag.</p>"]
     #[serde(rename="ResourceArn")]
@@ -38,7 +38,7 @@ pub struct AddTagsToResourceRequest {
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToResourceResponse {
     #[doc="<p>The status of the operation.</p>"]
     #[serde(rename="Status")]
@@ -46,7 +46,7 @@ pub struct AddTagsToResourceResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHapgRequest {
     #[doc="<p>The label of the new high-availability partition group.</p>"]
     #[serde(rename="Label")]
@@ -54,7 +54,7 @@ pub struct CreateHapgRequest {
 }
 
 #[doc="<p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
@@ -63,7 +63,7 @@ pub struct CreateHapgResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmRequest {
     #[doc="<p>A user-defined token to ensure idempotence. Subsequent calls to this operation with the same token will be ignored.</p>"]
     #[serde(rename="ClientToken")]
@@ -95,7 +95,7 @@ pub struct CreateHsmRequest {
 }
 
 #[doc="<p>Contains the output of the <a>CreateHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmResponse {
     #[doc="<p>The ARN of the HSM.</p>"]
     #[serde(rename="HsmArn")]
@@ -104,7 +104,7 @@ pub struct CreateHsmResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateLunaClient</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLunaClientRequest {
     #[doc="<p>The contents of a Base64-Encoded X.509 v3 certificate to be installed on the HSMs used by this client.</p>"]
     #[serde(rename="Certificate")]
@@ -116,7 +116,7 @@ pub struct CreateLunaClientRequest {
 }
 
 #[doc="<p>Contains the output of the <a>CreateLunaClient</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLunaClientResponse {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
@@ -125,7 +125,7 @@ pub struct CreateLunaClientResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>DeleteHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to delete.</p>"]
     #[serde(rename="HapgArn")]
@@ -133,7 +133,7 @@ pub struct DeleteHapgRequest {
 }
 
 #[doc="<p>Contains the output of the <a>DeleteHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHapgResponse {
     #[doc="<p>The status of the action.</p>"]
     #[serde(rename="Status")]
@@ -141,7 +141,7 @@ pub struct DeleteHapgResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>DeleteHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmRequest {
     #[doc="<p>The ARN of the HSM to delete.</p>"]
     #[serde(rename="HsmArn")]
@@ -149,21 +149,21 @@ pub struct DeleteHsmRequest {
 }
 
 #[doc="<p>Contains the output of the <a>DeleteHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmResponse {
     #[doc="<p>The status of the operation.</p>"]
     #[serde(rename="Status")]
     pub status: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLunaClientRequest {
     #[doc="<p>The ARN of the client to delete.</p>"]
     #[serde(rename="ClientArn")]
     pub client_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLunaClientResponse {
     #[doc="<p>The status of the action.</p>"]
     #[serde(rename="Status")]
@@ -171,7 +171,7 @@ pub struct DeleteLunaClientResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to describe.</p>"]
     #[serde(rename="HapgArn")]
@@ -179,7 +179,7 @@ pub struct DescribeHapgRequest {
 }
 
 #[doc="<p>Contains the output of the <a>DescribeHapg</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
@@ -217,7 +217,7 @@ pub struct DescribeHapgResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeHsm</a> operation. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHsmRequest {
     #[doc="<p>The ARN of the HSM. Either the <i>HsmArn</i> or the <i>SerialNumber</i> parameter must be specified.</p>"]
     #[serde(rename="HsmArn")]
@@ -230,7 +230,7 @@ pub struct DescribeHsmRequest {
 }
 
 #[doc="<p>Contains the output of the <a>DescribeHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHsmResponse {
     #[doc="<p>The Availability Zone that the HSM is in.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -317,7 +317,7 @@ pub struct DescribeHsmResponse {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLunaClientRequest {
     #[doc="<p>The certificate fingerprint.</p>"]
     #[serde(rename="CertificateFingerprint")]
@@ -329,7 +329,7 @@ pub struct DescribeLunaClientRequest {
     pub client_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLunaClientResponse {
     #[doc="<p>The certificate installed on the HSMs used by this client.</p>"]
     #[serde(rename="Certificate")]
@@ -353,7 +353,7 @@ pub struct DescribeLunaClientResponse {
     pub last_modified_timestamp: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConfigRequest {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
@@ -366,7 +366,7 @@ pub struct GetConfigRequest {
     pub hapg_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConfigResponse {
     #[doc="<p>The certificate file containing the server.pem files of the HSMs.</p>"]
     #[serde(rename="ConfigCred")]
@@ -383,10 +383,10 @@ pub struct GetConfigResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAvailableZonesRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAvailableZonesResponse {
     #[doc="<p>The list of Availability Zones that have available AWS CloudHSM capacity.</p>"]
     #[serde(rename="AZList")]
@@ -394,7 +394,7 @@ pub struct ListAvailableZonesResponse {
     pub az_list: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListHapgsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHapgs</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
@@ -402,7 +402,7 @@ pub struct ListHapgsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListHapgsResponse {
     #[doc="<p>The list of high-availability partition groups.</p>"]
     #[serde(rename="HapgList")]
@@ -413,7 +413,7 @@ pub struct ListHapgsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListHsmsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHsms</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
@@ -422,7 +422,7 @@ pub struct ListHsmsRequest {
 }
 
 #[doc="<p>Contains the output of the <a>ListHsms</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListHsmsResponse {
     #[doc="<p>The list of ARNs that identify the HSMs.</p>"]
     #[serde(rename="HsmList")]
@@ -434,7 +434,7 @@ pub struct ListHsmsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLunaClientsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListLunaClients</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
@@ -442,7 +442,7 @@ pub struct ListLunaClientsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLunaClientsResponse {
     #[doc="<p>The list of clients.</p>"]
     #[serde(rename="ClientList")]
@@ -453,21 +453,21 @@ pub struct ListLunaClientsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>"]
     #[serde(rename="ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>One or more tags.</p>"]
     #[serde(rename="TagList")]
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to modify.</p>"]
     #[serde(rename="HapgArn")]
@@ -482,7 +482,7 @@ pub struct ModifyHapgRequest {
     pub partition_serial_list: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
@@ -491,7 +491,7 @@ pub struct ModifyHapgResponse {
 }
 
 #[doc="<p>Contains the inputs for the <a>ModifyHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHsmRequest {
     #[doc="<p>The new IP address for the elastic network interface (ENI) attached to the HSM.</p> <p>If the HSM is moved to a different subnet, and an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the new subnet.</p>"]
     #[serde(rename="EniIp")]
@@ -519,7 +519,7 @@ pub struct ModifyHsmRequest {
 }
 
 #[doc="<p>Contains the output of the <a>ModifyHsm</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHsmResponse {
     #[doc="<p>The ARN of the HSM.</p>"]
     #[serde(rename="HsmArn")]
@@ -527,7 +527,7 @@ pub struct ModifyHsmResponse {
     pub hsm_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyLunaClientRequest {
     #[doc="<p>The new certificate for the client.</p>"]
     #[serde(rename="Certificate")]
@@ -537,7 +537,7 @@ pub struct ModifyLunaClientRequest {
     pub client_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyLunaClientResponse {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
@@ -545,7 +545,7 @@ pub struct ModifyLunaClientResponse {
     pub client_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>"]
     #[serde(rename="ResourceArn")]
@@ -555,7 +555,7 @@ pub struct RemoveTagsFromResourceRequest {
     pub tag_key_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromResourceResponse {
     #[doc="<p>The status of the operation.</p>"]
     #[serde(rename="Status")]

@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddAttributesToFindingsRequest {
     #[doc="<p>The array of attributes that you want to assign to specified findings.</p>"]
     #[serde(rename="attributes")]
@@ -38,7 +38,7 @@ pub struct AddAttributesToFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddAttributesToFindingsResponse {
     #[doc="<p>Attribute details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
@@ -46,16 +46,18 @@ pub struct AddAttributesToFindingsResponse {
 }
 
 #[doc="<p>Used in the exception error that is thrown if you start an assessment run for an assessment target that includes an EC2 instance that is already participating in another started assessment run.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentAlreadyRunningAssessment {
     #[doc="<p>ID of the agent that is running on an EC2 instance that is already participating in another started assessment run.</p>"]
+    #[serde(rename="agentId")]
     pub agent_id: String,
     #[doc="<p>The ARN of the assessment run that has already been started.</p>"]
+    #[serde(rename="assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
 #[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentFilter {
     #[doc="<p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>"]
     #[serde(rename="agentHealthCodes")]
@@ -66,7 +68,7 @@ pub struct AgentFilter {
 }
 
 #[doc="<p>Used as a response element in the <a>PreviewAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentPreview {
     #[doc="<p>The ID of the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="agentId")]
@@ -78,7 +80,7 @@ pub struct AgentPreview {
 }
 
 #[doc="<p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentRun {
     #[doc="<p>The ARN of the assessment run.</p>"]
     #[serde(rename="arn")]
@@ -130,7 +132,7 @@ pub struct AssessmentRun {
 }
 
 #[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentRunAgent {
     #[doc="<p>The current health state of the agent.</p>"]
     #[serde(rename="agentHealth")]
@@ -158,7 +160,7 @@ pub struct AssessmentRunAgent {
 }
 
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentRunFilter {
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="completionTimeRange")]
@@ -191,7 +193,7 @@ pub struct AssessmentRunFilter {
 }
 
 #[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentRunNotification {
     #[doc="<p>The date of the notification.</p>"]
     #[serde(rename="date")]
@@ -217,7 +219,7 @@ pub struct AssessmentRunNotification {
 }
 
 #[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentRunStateChange {
     #[doc="<p>The assessment run state.</p>"]
     #[serde(rename="state")]
@@ -228,7 +230,7 @@ pub struct AssessmentRunStateChange {
 }
 
 #[doc="<p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentTarget {
     #[doc="<p>The ARN that specifies the Amazon Inspector assessment target.</p>"]
     #[serde(rename="arn")]
@@ -248,7 +250,7 @@ pub struct AssessmentTarget {
 }
 
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentTargetFilter {
     #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>"]
     #[serde(rename="assessmentTargetNamePattern")]
@@ -257,7 +259,7 @@ pub struct AssessmentTargetFilter {
 }
 
 #[doc="<p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentTemplate {
     #[doc="<p>The ARN of the assessment template.</p>"]
     #[serde(rename="arn")]
@@ -283,7 +285,7 @@ pub struct AssessmentTemplate {
 }
 
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssessmentTemplateFilter {
     #[doc="<p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="durationRange")]
@@ -300,7 +302,7 @@ pub struct AssessmentTemplateFilter {
 }
 
 #[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssetAttributes {
     #[doc="<p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="agentId")]
@@ -339,7 +341,7 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssessmentTargetRequest {
     #[doc="<p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>"]
     #[serde(rename="assessmentTargetName")]
@@ -349,14 +351,14 @@ pub struct CreateAssessmentTargetRequest {
     pub resource_group_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssessmentTargetResponse {
     #[doc="<p>The ARN that specifies the assessment target that is created.</p>"]
     #[serde(rename="assessmentTargetArn")]
     pub assessment_target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssessmentTemplateRequest {
     #[doc="<p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>"]
     #[serde(rename="assessmentTargetArn")]
@@ -376,56 +378,56 @@ pub struct CreateAssessmentTemplateRequest {
     pub user_attributes_for_findings: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssessmentTemplateResponse {
     #[doc="<p>The ARN that specifies the assessment template that is created.</p>"]
     #[serde(rename="assessmentTemplateArn")]
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateResourceGroupRequest {
     #[doc="<p>A collection of keys and an array of possible values, '[{\"key\":\"key1\",\"values\":[\"Value1\",\"Value2\"]},{\"key\":\"Key2\",\"values\":[\"Value3\"]}]'.</p> <p>For example,'[{\"key\":\"Name\",\"values\":[\"TestEC2Instance\"]}]'.</p>"]
     #[serde(rename="resourceGroupTags")]
     pub resource_group_tags: Vec<ResourceGroupTag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateResourceGroupResponse {
     #[doc="<p>The ARN that specifies the resource group that is created.</p>"]
     #[serde(rename="resourceGroupArn")]
     pub resource_group_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAssessmentRunRequest {
     #[doc="<p>The ARN that specifies the assessment run that you want to delete.</p>"]
     #[serde(rename="assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAssessmentTargetRequest {
     #[doc="<p>The ARN that specifies the assessment target that you want to delete.</p>"]
     #[serde(rename="assessmentTargetArn")]
     pub assessment_target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAssessmentTemplateRequest {
     #[doc="<p>The ARN that specifies the assessment template that you want to delete.</p>"]
     #[serde(rename="assessmentTemplateArn")]
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentRunsRequest {
     #[doc="<p>The ARN that specifies the assessment run that you want to describe.</p>"]
     #[serde(rename="assessmentRunArns")]
     pub assessment_run_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentRunsResponse {
     #[doc="<p>Information about the assessment run.</p>"]
     #[serde(rename="assessmentRuns")]
@@ -435,14 +437,14 @@ pub struct DescribeAssessmentRunsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentTargetsRequest {
     #[doc="<p>The ARNs that specifies the assessment targets that you want to describe.</p>"]
     #[serde(rename="assessmentTargetArns")]
     pub assessment_target_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentTargetsResponse {
     #[doc="<p>Information about the assessment targets.</p>"]
     #[serde(rename="assessmentTargets")]
@@ -452,13 +454,13 @@ pub struct DescribeAssessmentTargetsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentTemplatesRequest {
     #[serde(rename="assessmentTemplateArns")]
     pub assessment_template_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAssessmentTemplatesResponse {
     #[doc="<p>Information about the assessment templates.</p>"]
     #[serde(rename="assessmentTemplates")]
@@ -468,7 +470,7 @@ pub struct DescribeAssessmentTemplatesResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCrossAccountAccessRoleResponse {
     #[doc="<p>The date when the cross-account access role was registered.</p>"]
     #[serde(rename="registeredAt")]
@@ -481,7 +483,7 @@ pub struct DescribeCrossAccountAccessRoleResponse {
     pub valid: bool,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFindingsRequest {
     #[doc="<p>The ARN that specifies the finding that you want to describe.</p>"]
     #[serde(rename="findingArns")]
@@ -492,7 +494,7 @@ pub struct DescribeFindingsRequest {
     pub locale: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFindingsResponse {
     #[doc="<p>Finding details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
@@ -502,14 +504,14 @@ pub struct DescribeFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeResourceGroupsRequest {
     #[doc="<p>The ARN that specifies the resource group that you want to describe.</p>"]
     #[serde(rename="resourceGroupArns")]
     pub resource_group_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeResourceGroupsResponse {
     #[doc="<p>Resource group details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
@@ -519,7 +521,7 @@ pub struct DescribeResourceGroupsResponse {
     pub resource_groups: Vec<ResourceGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRulesPackagesRequest {
     #[doc="<p>The locale that you want to translate a rules package description into.</p>"]
     #[serde(rename="locale")]
@@ -530,7 +532,7 @@ pub struct DescribeRulesPackagesRequest {
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRulesPackagesResponse {
     #[doc="<p>Rules package details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
@@ -541,7 +543,7 @@ pub struct DescribeRulesPackagesResponse {
 }
 
 #[doc="<p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DurationRange {
     #[doc="<p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>"]
     #[serde(rename="maxSeconds")]
@@ -554,7 +556,7 @@ pub struct DurationRange {
 }
 
 #[doc="<p>This data type is used in the <a>Subscription</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventSubscription {
     #[doc="<p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>"]
     #[serde(rename="event")]
@@ -565,7 +567,7 @@ pub struct EventSubscription {
 }
 
 #[doc="<p>Includes details about the failed items.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FailedItemDetails {
     #[doc="<p>The status code of a failed item.</p>"]
     #[serde(rename="failureCode")]
@@ -576,7 +578,7 @@ pub struct FailedItemDetails {
 }
 
 #[doc="<p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Finding {
     #[doc="<p>The ARN that specifies the finding.</p>"]
     #[serde(rename="arn")]
@@ -648,7 +650,7 @@ pub struct Finding {
 }
 
 #[doc="<p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FindingFilter {
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="agentIds")]
@@ -684,7 +686,7 @@ pub struct FindingFilter {
     pub user_attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAssessmentReportRequest {
     #[doc="<p>The ARN that specifies the assessment run for which you want to generate a report.</p>"]
     #[serde(rename="assessmentRunArn")]
@@ -697,7 +699,7 @@ pub struct GetAssessmentReportRequest {
     pub report_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAssessmentReportResponse {
     #[doc="<p>Specifies the status of the request to generate an assessment report. </p>"]
     #[serde(rename="status")]
@@ -708,14 +710,14 @@ pub struct GetAssessmentReportResponse {
     pub url: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTelemetryMetadataRequest {
     #[doc="<p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>"]
     #[serde(rename="assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTelemetryMetadataResponse {
     #[doc="<p>Telemetry details.</p>"]
     #[serde(rename="telemetryMetadata")]
@@ -723,7 +725,7 @@ pub struct GetTelemetryMetadataResponse {
 }
 
 #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InspectorServiceAttributes {
     #[doc="<p>The ARN of the assessment run during which the finding is generated.</p>"]
     #[serde(rename="assessmentRunArn")]
@@ -738,7 +740,7 @@ pub struct InspectorServiceAttributes {
     pub schema_version: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentRunAgentsRequest {
     #[doc="<p>The ARN that specifies the assessment run whose agents you want to list.</p>"]
     #[serde(rename="assessmentRunArn")]
@@ -757,7 +759,7 @@ pub struct ListAssessmentRunAgentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentRunAgentsResponse {
     #[doc="<p>A list of ARNs that specifies the agents returned by the action.</p>"]
     #[serde(rename="assessmentRunAgents")]
@@ -768,7 +770,7 @@ pub struct ListAssessmentRunAgentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentRunsRequest {
     #[doc="<p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>"]
     #[serde(rename="assessmentTemplateArns")]
@@ -788,7 +790,7 @@ pub struct ListAssessmentRunsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentRunsResponse {
     #[doc="<p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>"]
     #[serde(rename="assessmentRunArns")]
@@ -799,7 +801,7 @@ pub struct ListAssessmentRunsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentTargetsRequest {
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
@@ -815,7 +817,7 @@ pub struct ListAssessmentTargetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentTargetsResponse {
     #[doc="<p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>"]
     #[serde(rename="assessmentTargetArns")]
@@ -826,7 +828,7 @@ pub struct ListAssessmentTargetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentTemplatesRequest {
     #[doc="<p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>"]
     #[serde(rename="assessmentTargetArns")]
@@ -846,7 +848,7 @@ pub struct ListAssessmentTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAssessmentTemplatesResponse {
     #[doc="<p>A list of ARNs that specifies the assessment templates returned by the action.</p>"]
     #[serde(rename="assessmentTemplateArns")]
@@ -857,7 +859,7 @@ pub struct ListAssessmentTemplatesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEventSubscriptionsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
@@ -873,7 +875,7 @@ pub struct ListEventSubscriptionsRequest {
     pub resource_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEventSubscriptionsResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
@@ -884,7 +886,7 @@ pub struct ListEventSubscriptionsResponse {
     pub subscriptions: Vec<Subscription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFindingsRequest {
     #[doc="<p>The ARNs of the assessment runs that generate the findings that you want to list.</p>"]
     #[serde(rename="assessmentRunArns")]
@@ -904,7 +906,7 @@ pub struct ListFindingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFindingsResponse {
     #[doc="<p>A list of ARNs that specifies the findings returned by the action.</p>"]
     #[serde(rename="findingArns")]
@@ -915,7 +917,7 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesPackagesRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
@@ -927,7 +929,7 @@ pub struct ListRulesPackagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesPackagesResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
@@ -938,21 +940,21 @@ pub struct ListRulesPackagesResponse {
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The ARN that specifies the assessment template whose tags you want to list.</p>"]
     #[serde(rename="resourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>A collection of key and value pairs.</p>"]
     #[serde(rename="tags")]
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PreviewAgentsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
@@ -967,7 +969,7 @@ pub struct PreviewAgentsRequest {
     pub preview_agents_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PreviewAgentsResponse {
     #[doc="<p>The resulting list of agents.</p>"]
     #[serde(rename="agentPreviews")]
@@ -978,14 +980,14 @@ pub struct PreviewAgentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterCrossAccountAccessRoleRequest {
     #[doc="<p>The ARN of the IAM role that Amazon Inspector uses to list your EC2 instances during the assessment run or when you call the <a>PreviewAgents</a> action. </p>"]
     #[serde(rename="roleArn")]
     pub role_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveAttributesFromFindingsRequest {
     #[doc="<p>The array of attribute keys that you want to remove from specified findings.</p>"]
     #[serde(rename="attributeKeys")]
@@ -995,7 +997,7 @@ pub struct RemoveAttributesFromFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveAttributesFromFindingsResponse {
     #[doc="<p>Attributes details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
@@ -1003,7 +1005,7 @@ pub struct RemoveAttributesFromFindingsResponse {
 }
 
 #[doc="<p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceGroup {
     #[doc="<p>The ARN of the resource group.</p>"]
     #[serde(rename="arn")]
@@ -1029,7 +1031,7 @@ pub struct ResourceGroupTag {
 }
 
 #[doc="<p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RulesPackage {
     #[doc="<p>The ARN of the rules package.</p>"]
     #[serde(rename="arn")]
@@ -1049,7 +1051,7 @@ pub struct RulesPackage {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetTagsForResourceRequest {
     #[doc="<p>The ARN of the assessment template that you want to set tags to.</p>"]
     #[serde(rename="resourceArn")]
@@ -1060,7 +1062,7 @@ pub struct SetTagsForResourceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartAssessmentRunRequest {
     #[doc="<p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>"]
     #[serde(rename="assessmentRunName")]
@@ -1071,14 +1073,14 @@ pub struct StartAssessmentRunRequest {
     pub assessment_template_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartAssessmentRunResponse {
     #[doc="<p>The ARN of the assessment run that has been started.</p>"]
     #[serde(rename="assessmentRunArn")]
     pub assessment_run_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopAssessmentRunRequest {
     #[doc="<p>The ARN of the assessment run that you want to stop.</p>"]
     #[serde(rename="assessmentRunArn")]
@@ -1089,7 +1091,7 @@ pub struct StopAssessmentRunRequest {
     pub stop_action: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscribeToEventRequest {
     #[doc="<p>The event for which you want to receive SNS notifications.</p>"]
     #[serde(rename="event")]
@@ -1103,7 +1105,7 @@ pub struct SubscribeToEventRequest {
 }
 
 #[doc="<p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subscription {
     #[doc="<p>The list of existing event subscriptions.</p>"]
     #[serde(rename="eventSubscriptions")]
@@ -1129,7 +1131,7 @@ pub struct Tag {
 }
 
 #[doc="<p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TelemetryMetadata {
     #[doc="<p>The count of messages that the agent sends to the Amazon Inspector service.</p>"]
     #[serde(rename="count")]
@@ -1144,7 +1146,7 @@ pub struct TelemetryMetadata {
 }
 
 #[doc="<p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TimestampRange {
     #[doc="<p>The minimum value of the timestamp range.</p>"]
     #[serde(rename="beginDate")]
@@ -1156,7 +1158,7 @@ pub struct TimestampRange {
     pub end_date: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsubscribeFromEventRequest {
     #[doc="<p>The event for which you want to stop receiving SNS notifications.</p>"]
     #[serde(rename="event")]
@@ -1169,7 +1171,7 @@ pub struct UnsubscribeFromEventRequest {
     pub topic_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAssessmentTargetRequest {
     #[doc="<p>The ARN of the assessment target that you want to update.</p>"]
     #[serde(rename="assessmentTargetArn")]

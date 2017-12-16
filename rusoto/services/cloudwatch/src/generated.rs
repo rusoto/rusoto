@@ -82,17 +82,27 @@ impl AlarmDescriptionDeserializer {
     }
 }
 #[doc="<p>Represents the history of a specific alarm.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AlarmHistoryItem {
     #[doc="<p>The descriptive name for the alarm.</p>"]
+    #[serde(rename="AlarmName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_name: Option<String>,
     #[doc="<p>Data about the alarm, in JSON format.</p>"]
+    #[serde(rename="HistoryData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub history_data: Option<String>,
     #[doc="<p>The type of alarm history item.</p>"]
+    #[serde(rename="HistoryItemType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub history_item_type: Option<String>,
     #[doc="<p>A summary of the alarm history, in text format.</p>"]
+    #[serde(rename="HistorySummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub history_summary: Option<String>,
     #[doc="<p>The time stamp for the alarm history item.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -308,15 +318,23 @@ impl DashboardEntriesDeserializer {
     }
 }
 #[doc="<p>Represents a specific dashboard.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DashboardEntry {
     #[doc="<p>The Amazon Resource Name (ARN) of the dashboard.</p>"]
+    #[serde(rename="DashboardArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_arn: Option<String>,
     #[doc="<p>The name of the dashboard.</p>"]
+    #[serde(rename="DashboardName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_name: Option<String>,
     #[doc="<p>The time stamp of when the dashboard was last modified, either by an API call or through the console. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
     #[doc="<p>The size of the dashboard, in bytes.</p>"]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
 }
 
@@ -403,11 +421,15 @@ impl DashboardNamesSerializer {
 }
 
 #[doc="<p>An error or warning for the operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DashboardValidationMessage {
     #[doc="<p>The data path related to the message.</p>"]
+    #[serde(rename="DataPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_path: Option<String>,
     #[doc="<p>A message describing the error or warning.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -515,23 +537,39 @@ impl DataPathDeserializer {
     }
 }
 #[doc="<p>Encapsulates the statistical data that CloudWatch computes from metric data.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Datapoint {
     #[doc="<p>The average of the metric values that correspond to the data point.</p>"]
+    #[serde(rename="Average")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub average: Option<f64>,
     #[doc="<p>The percentile statistic for the data point.</p>"]
+    #[serde(rename="ExtendedStatistics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extended_statistics: Option<::std::collections::HashMap<String, f64>>,
     #[doc="<p>The maximum metric value for the data point.</p>"]
+    #[serde(rename="Maximum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum: Option<f64>,
     #[doc="<p>The minimum metric value for the data point.</p>"]
+    #[serde(rename="Minimum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum: Option<f64>,
     #[doc="<p>The number of metric values that contributed to the aggregate value of this data point.</p>"]
+    #[serde(rename="SampleCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sample_count: Option<f64>,
     #[doc="<p>The sum of the metric values for the data point.</p>"]
+    #[serde(rename="Sum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sum: Option<f64>,
     #[doc="<p>The time stamp used for the data point.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
     #[doc="<p>The standard unit for the data point.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -689,9 +727,10 @@ impl DatapointsDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAlarmsInput {
     #[doc="<p>The alarms to be deleted.</p>"]
+    #[serde(rename="AlarmNames")]
     pub alarm_names: Vec<String>,
 }
 
@@ -712,9 +751,11 @@ impl DeleteAlarmsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDashboardsInput {
     #[doc="<p>The dashboards to be deleted.</p>"]
+    #[serde(rename="DashboardNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_names: Option<Vec<String>>,
 }
 
@@ -737,7 +778,7 @@ impl DeleteDashboardsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDashboardsOutput;
 
 struct DeleteDashboardsOutputDeserializer;
@@ -756,19 +797,31 @@ impl DeleteDashboardsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmHistoryInput {
     #[doc="<p>The name of the alarm.</p>"]
+    #[serde(rename="AlarmName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_name: Option<String>,
     #[doc="<p>The ending date to retrieve alarm history.</p>"]
+    #[serde(rename="EndDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date: Option<String>,
     #[doc="<p>The type of alarm histories to retrieve.</p>"]
+    #[serde(rename="HistoryItemType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub history_item_type: Option<String>,
     #[doc="<p>The maximum number of alarm history records to retrieve.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The starting date to retrieve alarm history.</p>"]
+    #[serde(rename="StartDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date: Option<String>,
 }
 
@@ -810,11 +863,15 @@ impl DescribeAlarmHistoryInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmHistoryOutput {
     #[doc="<p>The alarm histories, in JSON format.</p>"]
+    #[serde(rename="AlarmHistoryItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_history_items: Option<Vec<AlarmHistoryItem>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -865,21 +922,33 @@ impl DescribeAlarmHistoryOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmsForMetricInput {
     #[doc="<p>The dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the call to succeed.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The percentile statistic for the metric. Specify a value between p0.0 and p100.</p>"]
+    #[serde(rename="ExtendedStatistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extended_statistic: Option<String>,
     #[doc="<p>The name of the metric.</p>"]
+    #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The namespace of the metric.</p>"]
+    #[serde(rename="Namespace")]
     pub namespace: String,
     #[doc="<p>The period, in seconds, over which the statistic is applied.</p>"]
+    #[serde(rename="Period")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub period: Option<i64>,
     #[doc="<p>The statistic for the metric, other than percentiles. For percentile statistics, use <code>ExtendedStatistics</code>.</p>"]
+    #[serde(rename="Statistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistic: Option<String>,
     #[doc="<p>The unit for the metric.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -922,9 +991,11 @@ impl DescribeAlarmsForMetricInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmsForMetricOutput {
     #[doc="<p>The information for each alarm with the specified metric.</p>"]
+    #[serde(rename="MetricAlarms")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_alarms: Option<Vec<MetricAlarm>>,
 }
 
@@ -971,19 +1042,31 @@ impl DescribeAlarmsForMetricOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmsInput {
     #[doc="<p>The action name prefix.</p>"]
+    #[serde(rename="ActionPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_prefix: Option<String>,
     #[doc="<p>The alarm name prefix. If this parameter is specified, you cannot specify <code>AlarmNames</code>.</p>"]
+    #[serde(rename="AlarmNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_name_prefix: Option<String>,
     #[doc="<p>The names of the alarms.</p>"]
+    #[serde(rename="AlarmNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of alarm descriptions to retrieve.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The state value to be used in matching alarms.</p>"]
+    #[serde(rename="StateValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_value: Option<String>,
 }
 
@@ -1026,11 +1109,15 @@ impl DescribeAlarmsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAlarmsOutput {
     #[doc="<p>The information for the specified alarms.</p>"]
+    #[serde(rename="MetricAlarms")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_alarms: Option<Vec<MetricAlarm>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1082,11 +1169,13 @@ impl DescribeAlarmsOutputDeserializer {
     }
 }
 #[doc="<p>Expands the identity of a metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Dimension {
     #[doc="<p>The name of the dimension.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The value representing the dimension measurement.</p>"]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -1154,11 +1243,14 @@ impl DimensionSerializer {
 }
 
 #[doc="<p>Represents filters for a dimension.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DimensionFilter {
     #[doc="<p>The dimension name to be matched.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The value of the dimension to be matched.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -1275,9 +1367,10 @@ impl DimensionsSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableAlarmActionsInput {
     #[doc="<p>The names of the alarms.</p>"]
+    #[serde(rename="AlarmNames")]
     pub alarm_names: Vec<String>,
 }
 
@@ -1298,9 +1391,10 @@ impl DisableAlarmActionsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableAlarmActionsInput {
     #[doc="<p>The names of the alarms.</p>"]
+    #[serde(rename="AlarmNames")]
     pub alarm_names: Vec<String>,
 }
 
@@ -1375,9 +1469,11 @@ impl ExtendedStatisticsSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDashboardInput {
     #[doc="<p>The name of the dashboard to be described.</p>"]
+    #[serde(rename="DashboardName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_name: Option<String>,
 }
 
@@ -1399,13 +1495,19 @@ impl GetDashboardInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDashboardOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the dashboard.</p>"]
+    #[serde(rename="DashboardArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_arn: Option<String>,
     #[doc="<p>The detailed information about the dashboard, including what widgets are included and their location on the dashboard. For more information about the <code>DashboardBody</code> syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>. </p>"]
+    #[serde(rename="DashboardBody")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_body: Option<String>,
     #[doc="<p>The name of the dashboard.</p>"]
+    #[serde(rename="DashboardName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_name: Option<String>,
 }
 
@@ -1462,25 +1564,38 @@ impl GetDashboardOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMetricStatisticsInput {
     #[doc="<p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations\">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>"]
+    #[serde(rename="EndTime")]
     pub end_time: String,
     #[doc="<p>The percentile statistics. Specify values between p0.0 and p100. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>"]
+    #[serde(rename="ExtendedStatistics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extended_statistics: Option<Vec<String>>,
     #[doc="<p>The name of the metric, with or without spaces.</p>"]
+    #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The namespace of the metric, with or without spaces.</p>"]
+    #[serde(rename="Namespace")]
     pub namespace: String,
     #[doc="<p>The granularity, in seconds, of the returned data points. For metrics with regular resolution, a period can be as short as one minute (60 seconds) and must be a multiple of 60. For high-resolution metrics that are collected at intervals of less than one minute, the period can be 1, 5, 10, 30, 60, or any multiple of 60. High-resolution metrics are those metrics stored by a <code>PutMetricData</code> call that includes a <code>StorageResolution</code> of 1 second.</p> <p>If the <code>StartTime</code> parameter specifies a time stamp that is greater than 3 hours ago, you must specify the period as follows or no data points in that time range is returned:</p> <ul> <li> <p>Start time between 3 hours and 15 days ago - Use a multiple of 60 seconds (1 minute).</p> </li> <li> <p>Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).</p> </li> <li> <p>Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).</p> </li> </ul>"]
+    #[serde(rename="Period")]
     pub period: i64,
     #[doc="<p>The time stamp that determines the first data point to return. Start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p>"]
+    #[serde(rename="StartTime")]
     pub start_time: String,
     #[doc="<p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistics</code>. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>"]
+    #[serde(rename="Statistics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistics: Option<Vec<String>>,
     #[doc="<p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If the metric only ever reports one unit, specifying a unit has no effect.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -1527,11 +1642,15 @@ impl GetMetricStatisticsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMetricStatisticsOutput {
     #[doc="<p>The data points for the specified metric.</p>"]
+    #[serde(rename="Datapoints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub datapoints: Option<Vec<Datapoint>>,
     #[doc="<p>A label for the specified metric.</p>"]
+    #[serde(rename="Label")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub label: Option<String>,
 }
 
@@ -1637,11 +1756,15 @@ impl LastModifiedDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDashboardsInput {
     #[doc="<p>If you specify this parameter, only the dashboards with names starting with the specified string are listed. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, \".\", \"-\", and \"_\". </p>"]
+    #[serde(rename="DashboardNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_name_prefix: Option<String>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1667,11 +1790,15 @@ impl ListDashboardsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDashboardsOutput {
     #[doc="<p>The list of matching dashboards.</p>"]
+    #[serde(rename="DashboardEntries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_entries: Option<Vec<DashboardEntry>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1722,15 +1849,23 @@ impl ListDashboardsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMetricsInput {
     #[doc="<p>The dimensions to filter against.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<DimensionFilter>>,
     #[doc="<p>The name of the metric to filter against.</p>"]
+    #[serde(rename="MetricName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_name: Option<String>,
     #[doc="<p>The namespace to filter against.</p>"]
+    #[serde(rename="Namespace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub namespace: Option<String>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1765,11 +1900,15 @@ impl ListMetricsInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMetricsOutput {
     #[doc="<p>The metrics.</p>"]
+    #[serde(rename="Metrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics: Option<Vec<Metric>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1834,13 +1973,19 @@ impl MessageDeserializer {
     }
 }
 #[doc="<p>Represents a specific metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Metric {
     #[doc="<p>The dimensions for the metric.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The name of the metric.</p>"]
+    #[serde(rename="MetricName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_name: Option<String>,
     #[doc="<p>The namespace of the metric.</p>"]
+    #[serde(rename="Namespace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub namespace: Option<String>,
 }
 
@@ -1896,55 +2041,103 @@ impl MetricDeserializer {
     }
 }
 #[doc="<p>Represents an alarm.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricAlarm {
     #[doc="<p>Indicates whether actions should be executed during any changes to the alarm state.</p>"]
+    #[serde(rename="ActionsEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions_enabled: Option<bool>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
+    #[serde(rename="AlarmActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_actions: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the alarm.</p>"]
+    #[serde(rename="AlarmArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_arn: Option<String>,
     #[doc="<p>The time stamp of the last update to the alarm configuration.</p>"]
+    #[serde(rename="AlarmConfigurationUpdatedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_configuration_updated_timestamp: Option<String>,
     #[doc="<p>The description of the alarm.</p>"]
+    #[serde(rename="AlarmDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_description: Option<String>,
     #[doc="<p>The name of the alarm.</p>"]
+    #[serde(rename="AlarmName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_name: Option<String>,
     #[doc="<p>The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>"]
+    #[serde(rename="ComparisonOperator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comparison_operator: Option<String>,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>Used only for alarms based on percentiles. If <code>ignore</code>, the alarm state does not change during periods with too few data points to be statistically significant. If <code>evaluate</code> or this parameter is not used, the alarm is always evaluated and possibly changes state no matter how many data points are available.</p>"]
+    #[serde(rename="EvaluateLowSampleCountPercentile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub evaluate_low_sample_count_percentile: Option<String>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold.</p>"]
+    #[serde(rename="EvaluationPeriods")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub evaluation_periods: Option<i64>,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
+    #[serde(rename="ExtendedStatistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extended_statistic: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
+    #[serde(rename="InsufficientDataActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub insufficient_data_actions: Option<Vec<String>>,
     #[doc="<p>The name of the metric associated with the alarm.</p>"]
+    #[serde(rename="MetricName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_name: Option<String>,
     #[doc="<p>The namespace of the metric associated with the alarm.</p>"]
+    #[serde(rename="Namespace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub namespace: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
+    #[serde(rename="OKActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ok_actions: Option<Vec<String>>,
     #[doc="<p>The period, in seconds, over which the statistic is applied.</p>"]
+    #[serde(rename="Period")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub period: Option<i64>,
     #[doc="<p>An explanation for the alarm state, in text format.</p>"]
+    #[serde(rename="StateReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_reason: Option<String>,
     #[doc="<p>An explanation for the alarm state, in JSON format.</p>"]
+    #[serde(rename="StateReasonData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_reason_data: Option<String>,
     #[doc="<p>The time stamp of the last update to the alarm state.</p>"]
+    #[serde(rename="StateUpdatedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_updated_timestamp: Option<String>,
     #[doc="<p>The state value for the alarm.</p>"]
+    #[serde(rename="StateValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_value: Option<String>,
     #[doc="<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"]
+    #[serde(rename="Statistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistic: Option<String>,
     #[doc="<p>The value to compare with the specified statistic.</p>"]
+    #[serde(rename="Threshold")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub threshold: Option<f64>,
     #[doc="<p>Sets how this alarm is to handle missing data points. If this parameter is omitted, the default behavior of <code>missing</code> is used.</p>"]
+    #[serde(rename="TreatMissingData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub treat_missing_data: Option<String>,
     #[doc="<p>The unit of the metric associated with the alarm.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -2150,21 +2343,34 @@ impl MetricDataSerializer {
 }
 
 #[doc="<p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricDatum {
     #[doc="<p>The dimensions associated with the metric.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The name of the metric.</p>"]
+    #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The statistical values for the metric.</p>"]
+    #[serde(rename="StatisticValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistic_values: Option<StatisticSet>,
     #[doc="<p>Valid values are 1 and 60. Setting this to 1 specifies this metric as a high-resolution metric, so that CloudWatch stores the metric with sub-minute resolution down to one second. Setting this to 60 specifies this metric as a regular-resolution metric, which CloudWatch stores at 1-minute resolution. Currently, high resolution is available only for custom metrics. For more information about high-resolution metrics, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html#high-resolution-metrics\">High-Resolution Metrics</a> in the <i>Amazon CloudWatch User Guide</i>. </p> <p>This field is optional, if you do not specify it the default of 60 is used.</p>"]
+    #[serde(rename="StorageResolution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_resolution: Option<i64>,
     #[doc="<p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
     #[doc="<p>The unit of the metric.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
     #[doc="<p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<f64>,
 }
 
@@ -2321,11 +2527,15 @@ impl PeriodDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDashboardInput {
     #[doc="<p>The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard.</p> <p>For more information about the syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>.</p>"]
+    #[serde(rename="DashboardBody")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_body: Option<String>,
     #[doc="<p>The name of the dashboard. If a dashboard with this name already exists, this call modifies that dashboard, replacing its current contents. Otherwise, a new dashboard is created. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, \"-\", and \"_\".</p>"]
+    #[serde(rename="DashboardName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_name: Option<String>,
 }
 
@@ -2351,9 +2561,11 @@ impl PutDashboardInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDashboardOutput {
     #[doc="<p>If the input for <code>PutDashboard</code> was correct and the dashboard was successfully created or modified, this result is empty.</p> <p>If this result includes only warning messages, then the input was valid enough for the dashboard to be created or modified, but some elements of the dashboard may not render.</p> <p>If this result includes error messages, the input was not valid and the operation failed.</p>"]
+    #[serde(rename="DashboardValidationMessages")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dashboard_validation_messages: Option<Vec<DashboardValidationMessage>>,
 }
 
@@ -2398,43 +2610,72 @@ impl PutDashboardOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutMetricAlarmInput {
     #[doc="<p>Indicates whether actions should be executed during any changes to the alarm state.</p>"]
+    #[serde(rename="ActionsEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions_enabled: Option<bool>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
+    #[serde(rename="AlarmActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_actions: Option<Vec<String>>,
     #[doc="<p>The description for the alarm.</p>"]
+    #[serde(rename="AlarmDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_description: Option<String>,
     #[doc="<p>The name for the alarm. This name must be unique within the AWS account.</p>"]
+    #[serde(rename="AlarmName")]
     pub alarm_name: String,
     #[doc="<p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>"]
+    #[serde(rename="ComparisonOperator")]
     pub comparison_operator: String,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state does not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm is always evaluated and possibly changes state no matter how many data points are available. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples\">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>"]
+    #[serde(rename="EvaluateLowSampleCountPercentile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub evaluate_low_sample_count_percentile: Option<String>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold. An alarm's total current evaluation period can be no longer than one day, so this number multiplied by <code>Period</code> cannot be more than 86,400 seconds.</p>"]
+    #[serde(rename="EvaluationPeriods")]
     pub evaluation_periods: i64,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
+    #[serde(rename="ExtendedStatistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extended_statistic: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
+    #[serde(rename="InsufficientDataActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub insufficient_data_actions: Option<Vec<String>>,
     #[doc="<p>The name for the metric associated with the alarm.</p>"]
+    #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The namespace for the metric associated with the alarm.</p>"]
+    #[serde(rename="Namespace")]
     pub namespace: String,
     #[doc="<p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
+    #[serde(rename="OKActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ok_actions: Option<Vec<String>>,
     #[doc="<p>The period, in seconds, over which the specified statistic is applied. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a Period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href=\"https://aws.amazon.com/cloudwatch/pricing/\">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>"]
+    #[serde(rename="Period")]
     pub period: i64,
     #[doc="<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"]
+    #[serde(rename="Statistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistic: Option<String>,
     #[doc="<p>The value against which the specified statistic is compared.</p>"]
+    #[serde(rename="Threshold")]
     pub threshold: f64,
     #[doc="<p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data\">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>"]
+    #[serde(rename="TreatMissingData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub treat_missing_data: Option<String>,
     #[doc="<p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -2514,11 +2755,13 @@ impl PutMetricAlarmInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutMetricDataInput {
     #[doc="<p>The data for the metric.</p>"]
+    #[serde(rename="MetricData")]
     pub metric_data: Vec<MetricDatum>,
     #[doc="<p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with \"AWS/\". Namespaces that begin with \"AWS/\" are reserved for use by Amazon Web Services products.</p>"]
+    #[serde(rename="Namespace")]
     pub namespace: String,
 }
 
@@ -2608,15 +2851,20 @@ impl ResourceNameDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetAlarmStateInput {
     #[doc="<p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>"]
+    #[serde(rename="AlarmName")]
     pub alarm_name: String,
     #[doc="<p>The reason that this alarm is set to this specific state, in text format.</p>"]
+    #[serde(rename="StateReason")]
     pub state_reason: String,
     #[doc="<p>The reason that this alarm is set to this specific state, in JSON format.</p>"]
+    #[serde(rename="StateReasonData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_reason_data: Option<String>,
     #[doc="<p>The value of the state.</p>"]
+    #[serde(rename="StateValue")]
     pub state_value: String,
 }
 
@@ -2729,15 +2977,19 @@ impl StatisticDeserializer {
     }
 }
 #[doc="<p>Represents a set of statistics that describes a specific metric. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StatisticSet {
     #[doc="<p>The maximum value of the sample set.</p>"]
+    #[serde(rename="Maximum")]
     pub maximum: f64,
     #[doc="<p>The minimum value of the sample set.</p>"]
+    #[serde(rename="Minimum")]
     pub minimum: f64,
     #[doc="<p>The number of samples used for the statistic set.</p>"]
+    #[serde(rename="SampleCount")]
     pub sample_count: f64,
     #[doc="<p>The sum of values for the sample set.</p>"]
+    #[serde(rename="Sum")]
     pub sum: f64,
 }
 

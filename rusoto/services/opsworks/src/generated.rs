@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Describes an agent version.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgentVersion {
     #[doc="<p>The configuration manager.</p>"]
     #[serde(rename="ConfigurationManager")]
@@ -42,7 +42,7 @@ pub struct AgentVersion {
 }
 
 #[doc="<p>A description of the app.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct App {
     #[doc="<p>The app ID.</p>"]
     #[serde(rename="AppId")]
@@ -102,7 +102,7 @@ pub struct App {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssignInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -112,7 +112,7 @@ pub struct AssignInstanceRequest {
     pub layer_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssignVolumeRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -123,7 +123,7 @@ pub struct AssignVolumeRequest {
     pub volume_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateElasticIpRequest {
     #[doc="<p>The Elastic IP address.</p>"]
     #[serde(rename="ElasticIp")]
@@ -134,7 +134,7 @@ pub struct AssociateElasticIpRequest {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachElasticLoadBalancerRequest {
     #[doc="<p>The Elastic Load Balancing instance's name.</p>"]
     #[serde(rename="ElasticLoadBalancerName")]
@@ -211,7 +211,7 @@ pub struct ChefConfiguration {
     pub manage_berkshelf: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloneStackRequest {
     #[doc="<p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack's instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack's instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack's default setting.</p> </note>"]
     #[serde(rename="AgentVersion")]
@@ -301,7 +301,7 @@ pub struct CloneStackRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CloneStack</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloneStackResult {
     #[doc="<p>The cloned stack ID.</p>"]
     #[serde(rename="StackId")]
@@ -372,7 +372,7 @@ pub struct CloudWatchLogsLogStream {
 }
 
 #[doc="<p>Describes a command.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Command {
     #[doc="<p>Date and time when the command was acknowledged.</p>"]
     #[serde(rename="AcknowledgedAt")]
@@ -416,7 +416,7 @@ pub struct Command {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAppRequest {
     #[doc="<p>A <code>Source</code> object that specifies the app repository.</p>"]
     #[serde(rename="AppSource")]
@@ -466,7 +466,7 @@ pub struct CreateAppRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateApp</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAppResult {
     #[doc="<p>The app ID.</p>"]
     #[serde(rename="AppId")]
@@ -474,7 +474,7 @@ pub struct CreateAppResult {
     pub app_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentRequest {
     #[doc="<p>The app ID. This parameter is required for app deployments, but not for other deployment commands.</p>"]
     #[serde(rename="AppId")]
@@ -505,7 +505,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateDeployment</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentResult {
     #[doc="<p>The deployment ID, which can be used with other requests to identify the deployment.</p>"]
     #[serde(rename="DeploymentId")]
@@ -513,7 +513,7 @@ pub struct CreateDeploymentResult {
     pub deployment_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceRequest {
     #[doc="<p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p>"]
     #[serde(rename="AgentVersion")]
@@ -587,7 +587,7 @@ pub struct CreateInstanceRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateInstance</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceResult {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -595,7 +595,7 @@ pub struct CreateInstanceResult {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLayerRequest {
     #[doc="<p>One or more user-defined key-value pairs to be added to the stack attributes.</p> <p>To create a cluster layer, set the <code>EcsClusterArn</code> attribute to the cluster's ARN.</p>"]
     #[serde(rename="Attributes")]
@@ -668,7 +668,7 @@ pub struct CreateLayerRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateLayer</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLayerResult {
     #[doc="<p>The layer ID.</p>"]
     #[serde(rename="LayerId")]
@@ -676,7 +676,7 @@ pub struct CreateLayerResult {
     pub layer_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateStackRequest {
     #[doc="<p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack's instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack's instances.</p> </li> </ul> <p>The default setting is the most recent release of the agent. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack's default setting.</p> </note>"]
     #[serde(rename="AgentVersion")]
@@ -752,7 +752,7 @@ pub struct CreateStackRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateStack</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateStackResult {
     #[doc="<p>The stack ID, which is an opaque string that you use to identify the stack when performing actions such as <code>DescribeStacks</code>.</p>"]
     #[serde(rename="StackId")]
@@ -760,7 +760,7 @@ pub struct CreateStackResult {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserProfileRequest {
     #[doc="<p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html\">Setting an IAM User's Public SSH Key</a>.</p>"]
     #[serde(rename="AllowSelfManagement")]
@@ -780,7 +780,7 @@ pub struct CreateUserProfileRequest {
 }
 
 #[doc="<p>Contains the response to a <code>CreateUserProfile</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserProfileResult {
     #[doc="<p>The user's IAM ARN.</p>"]
     #[serde(rename="IamUserArn")]
@@ -805,14 +805,14 @@ pub struct DataSource {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAppRequest {
     #[doc="<p>The app ID.</p>"]
     #[serde(rename="AppId")]
     pub app_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteInstanceRequest {
     #[doc="<p>Whether to delete the instance Elastic IP address.</p>"]
     #[serde(rename="DeleteElasticIp")]
@@ -827,21 +827,21 @@ pub struct DeleteInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLayerRequest {
     #[doc="<p>The layer ID.</p>"]
     #[serde(rename="LayerId")]
     pub layer_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteStackRequest {
     #[doc="<p>The stack ID.</p>"]
     #[serde(rename="StackId")]
     pub stack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserProfileRequest {
     #[doc="<p>The user's IAM ARN. This can also be a federated user's ARN.</p>"]
     #[serde(rename="IamUserArn")]
@@ -849,7 +849,7 @@ pub struct DeleteUserProfileRequest {
 }
 
 #[doc="<p>Describes a deployment of a stack or app.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Deployment {
     #[doc="<p>The app ID.</p>"]
     #[serde(rename="AppId")]
@@ -912,42 +912,42 @@ pub struct DeploymentCommand {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterEcsClusterRequest {
     #[doc="<p>The cluster's ARN.</p>"]
     #[serde(rename="EcsClusterArn")]
     pub ecs_cluster_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterElasticIpRequest {
     #[doc="<p>The Elastic IP address.</p>"]
     #[serde(rename="ElasticIp")]
     pub elastic_ip: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterRdsDbInstanceRequest {
     #[doc="<p>The Amazon RDS instance's ARN.</p>"]
     #[serde(rename="RdsDbInstanceArn")]
     pub rds_db_instance_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterVolumeRequest {
     #[doc="<p>The AWS OpsWorks Stacks volume ID, which is the GUID that AWS OpsWorks Stacks assigned to the instance when you registered the volume with the stack, not the Amazon EC2 volume ID.</p>"]
     #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAgentVersionsRequest {
     #[doc="<p>The configuration manager.</p>"]
     #[serde(rename="ConfigurationManager")]
@@ -960,7 +960,7 @@ pub struct DescribeAgentVersionsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeAgentVersions</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAgentVersionsResult {
     #[doc="<p>The agent versions for the specified stack or configuration manager. Note that this value is the complete version number, not the abbreviated number used by the console.</p>"]
     #[serde(rename="AgentVersions")]
@@ -968,7 +968,7 @@ pub struct DescribeAgentVersionsResult {
     pub agent_versions: Option<Vec<AgentVersion>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAppsRequest {
     #[doc="<p>An array of app IDs for the apps to be described. If you use this parameter, <code>DescribeApps</code> returns a description of the specified apps. Otherwise, it returns a description of every app.</p>"]
     #[serde(rename="AppIds")]
@@ -981,7 +981,7 @@ pub struct DescribeAppsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeApps</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAppsResult {
     #[doc="<p>An array of <code>App</code> objects that describe the specified apps. </p>"]
     #[serde(rename="Apps")]
@@ -989,7 +989,7 @@ pub struct DescribeAppsResult {
     pub apps: Option<Vec<App>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommandsRequest {
     #[doc="<p>An array of command IDs. If you include this parameter, <code>DescribeCommands</code> returns a description of the specified commands. Otherwise, it returns a description of every command.</p>"]
     #[serde(rename="CommandIds")]
@@ -1006,7 +1006,7 @@ pub struct DescribeCommandsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeCommands</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommandsResult {
     #[doc="<p>An array of <code>Command</code> objects that describe each of the specified commands.</p>"]
     #[serde(rename="Commands")]
@@ -1014,7 +1014,7 @@ pub struct DescribeCommandsResult {
     pub commands: Option<Vec<Command>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeploymentsRequest {
     #[doc="<p>The app ID. If you include this parameter, <code>DescribeDeployments</code> returns a description of the commands associated with the specified app.</p>"]
     #[serde(rename="AppId")]
@@ -1031,7 +1031,7 @@ pub struct DescribeDeploymentsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeDeployments</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeploymentsResult {
     #[doc="<p>An array of <code>Deployment</code> objects that describe the deployments.</p>"]
     #[serde(rename="Deployments")]
@@ -1039,7 +1039,7 @@ pub struct DescribeDeploymentsResult {
     pub deployments: Option<Vec<Deployment>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEcsClustersRequest {
     #[doc="<p>A list of ARNs, one for each cluster to be described.</p>"]
     #[serde(rename="EcsClusterArns")]
@@ -1060,7 +1060,7 @@ pub struct DescribeEcsClustersRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeEcsClusters</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEcsClustersResult {
     #[doc="<p>A list of <code>EcsCluster</code> objects containing the cluster descriptions.</p>"]
     #[serde(rename="EcsClusters")]
@@ -1072,7 +1072,7 @@ pub struct DescribeEcsClustersResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticIpsRequest {
     #[doc="<p>The instance ID. If you include this parameter, <code>DescribeElasticIps</code> returns a description of the Elastic IP addresses associated with the specified instance.</p>"]
     #[serde(rename="InstanceId")]
@@ -1089,7 +1089,7 @@ pub struct DescribeElasticIpsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeElasticIps</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticIpsResult {
     #[doc="<p>An <code>ElasticIps</code> object that describes the specified Elastic IP addresses.</p>"]
     #[serde(rename="ElasticIps")]
@@ -1097,7 +1097,7 @@ pub struct DescribeElasticIpsResult {
     pub elastic_ips: Option<Vec<ElasticIp>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticLoadBalancersRequest {
     #[doc="<p>A list of layer IDs. The action describes the Elastic Load Balancing instances for the specified layers.</p>"]
     #[serde(rename="LayerIds")]
@@ -1110,7 +1110,7 @@ pub struct DescribeElasticLoadBalancersRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeElasticLoadBalancers</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticLoadBalancersResult {
     #[doc="<p>A list of <code>ElasticLoadBalancer</code> objects that describe the specified Elastic Load Balancing instances.</p>"]
     #[serde(rename="ElasticLoadBalancers")]
@@ -1118,7 +1118,7 @@ pub struct DescribeElasticLoadBalancersResult {
     pub elastic_load_balancers: Option<Vec<ElasticLoadBalancer>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstancesRequest {
     #[doc="<p>An array of instance IDs to be described. If you use this parameter, <code>DescribeInstances</code> returns a description of the specified instances. Otherwise, it returns a description of every instance.</p>"]
     #[serde(rename="InstanceIds")]
@@ -1135,7 +1135,7 @@ pub struct DescribeInstancesRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeInstances</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstancesResult {
     #[doc="<p>An array of <code>Instance</code> objects that describe the instances.</p>"]
     #[serde(rename="Instances")]
@@ -1143,7 +1143,7 @@ pub struct DescribeInstancesResult {
     pub instances: Option<Vec<Instance>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLayersRequest {
     #[doc="<p>An array of layer IDs that specify the layers to be described. If you omit this parameter, <code>DescribeLayers</code> returns a description of every layer in the specified stack.</p>"]
     #[serde(rename="LayerIds")]
@@ -1156,7 +1156,7 @@ pub struct DescribeLayersRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeLayers</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLayersResult {
     #[doc="<p>An array of <code>Layer</code> objects that describe the layers.</p>"]
     #[serde(rename="Layers")]
@@ -1164,7 +1164,7 @@ pub struct DescribeLayersResult {
     pub layers: Option<Vec<Layer>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBasedAutoScalingRequest {
     #[doc="<p>An array of layer IDs.</p>"]
     #[serde(rename="LayerIds")]
@@ -1172,7 +1172,7 @@ pub struct DescribeLoadBasedAutoScalingRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeLoadBasedAutoScaling</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBasedAutoScalingResult {
     #[doc="<p>An array of <code>LoadBasedAutoScalingConfiguration</code> objects that describe each layer's configuration.</p>"]
     #[serde(rename="LoadBasedAutoScalingConfigurations")]
@@ -1181,7 +1181,7 @@ pub struct DescribeLoadBasedAutoScalingResult {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeMyUserProfile</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMyUserProfileResult {
     #[doc="<p>A <code>UserProfile</code> object that describes the user's SSH information.</p>"]
     #[serde(rename="UserProfile")]
@@ -1189,7 +1189,7 @@ pub struct DescribeMyUserProfileResult {
     pub user_profile: Option<SelfUserProfile>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePermissionsRequest {
     #[doc="<p>The user's IAM ARN. This can also be a federated user's ARN. For more information about IAM ARNs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">Using Identifiers</a>.</p>"]
     #[serde(rename="IamUserArn")]
@@ -1202,7 +1202,7 @@ pub struct DescribePermissionsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribePermissions</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePermissionsResult {
     #[doc="<p>An array of <code>Permission</code> objects that describe the stack permissions.</p> <ul> <li> <p>If the request object contains only a stack ID, the array contains a <code>Permission</code> object with permissions for each of the stack IAM ARNs.</p> </li> <li> <p>If the request object contains only an IAM ARN, the array contains a <code>Permission</code> object with permissions for each of the user's stack IDs.</p> </li> <li> <p>If the request contains a stack ID and an IAM ARN, the array contains a single <code>Permission</code> object with permissions for the specified stack and IAM ARN.</p> </li> </ul>"]
     #[serde(rename="Permissions")]
@@ -1210,7 +1210,7 @@ pub struct DescribePermissionsResult {
     pub permissions: Option<Vec<Permission>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRaidArraysRequest {
     #[doc="<p>The instance ID. If you use this parameter, <code>DescribeRaidArrays</code> returns descriptions of the RAID arrays associated with the specified instance. </p>"]
     #[serde(rename="InstanceId")]
@@ -1227,7 +1227,7 @@ pub struct DescribeRaidArraysRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeRaidArrays</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRaidArraysResult {
     #[doc="<p>A <code>RaidArrays</code> object that describes the specified RAID arrays.</p>"]
     #[serde(rename="RaidArrays")]
@@ -1235,7 +1235,7 @@ pub struct DescribeRaidArraysResult {
     pub raid_arrays: Option<Vec<RaidArray>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRdsDbInstancesRequest {
     #[doc="<p>An array containing the ARNs of the instances to be described.</p>"]
     #[serde(rename="RdsDbInstanceArns")]
@@ -1247,7 +1247,7 @@ pub struct DescribeRdsDbInstancesRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeRdsDbInstances</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRdsDbInstancesResult {
     #[doc="<p>An a array of <code>RdsDbInstance</code> objects that describe the instances.</p>"]
     #[serde(rename="RdsDbInstances")]
@@ -1255,7 +1255,7 @@ pub struct DescribeRdsDbInstancesResult {
     pub rds_db_instances: Option<Vec<RdsDbInstance>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServiceErrorsRequest {
     #[doc="<p>The instance ID. If you use this parameter, <code>DescribeServiceErrors</code> returns descriptions of the errors associated with the specified instance.</p>"]
     #[serde(rename="InstanceId")]
@@ -1272,7 +1272,7 @@ pub struct DescribeServiceErrorsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeServiceErrors</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServiceErrorsResult {
     #[doc="<p>An array of <code>ServiceError</code> objects that describe the specified service errors.</p>"]
     #[serde(rename="ServiceErrors")]
@@ -1280,7 +1280,7 @@ pub struct DescribeServiceErrorsResult {
     pub service_errors: Option<Vec<ServiceError>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStackProvisioningParametersRequest {
     #[doc="<p>The stack ID</p>"]
     #[serde(rename="StackId")]
@@ -1288,7 +1288,7 @@ pub struct DescribeStackProvisioningParametersRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeStackProvisioningParameters</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStackProvisioningParametersResult {
     #[doc="<p>The AWS OpsWorks Stacks agent installer's URL.</p>"]
     #[serde(rename="AgentInstallerUrl")]
@@ -1300,7 +1300,7 @@ pub struct DescribeStackProvisioningParametersResult {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStackSummaryRequest {
     #[doc="<p>The stack ID.</p>"]
     #[serde(rename="StackId")]
@@ -1308,7 +1308,7 @@ pub struct DescribeStackSummaryRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeStackSummary</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStackSummaryResult {
     #[doc="<p>A <code>StackSummary</code> object that contains the results.</p>"]
     #[serde(rename="StackSummary")]
@@ -1316,7 +1316,7 @@ pub struct DescribeStackSummaryResult {
     pub stack_summary: Option<StackSummary>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStacksRequest {
     #[doc="<p>An array of stack IDs that specify the stacks to be described. If you omit this parameter, <code>DescribeStacks</code> returns a description of every stack.</p>"]
     #[serde(rename="StackIds")]
@@ -1325,7 +1325,7 @@ pub struct DescribeStacksRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeStacks</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStacksResult {
     #[doc="<p>An array of <code>Stack</code> objects that describe the stacks.</p>"]
     #[serde(rename="Stacks")]
@@ -1333,7 +1333,7 @@ pub struct DescribeStacksResult {
     pub stacks: Option<Vec<Stack>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTimeBasedAutoScalingRequest {
     #[doc="<p>An array of instance IDs.</p>"]
     #[serde(rename="InstanceIds")]
@@ -1341,7 +1341,7 @@ pub struct DescribeTimeBasedAutoScalingRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeTimeBasedAutoScaling</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTimeBasedAutoScalingResult {
     #[doc="<p>An array of <code>TimeBasedAutoScalingConfiguration</code> objects that describe the configuration for the specified instances.</p>"]
     #[serde(rename="TimeBasedAutoScalingConfigurations")]
@@ -1349,7 +1349,7 @@ pub struct DescribeTimeBasedAutoScalingResult {
     pub time_based_auto_scaling_configurations: Option<Vec<TimeBasedAutoScalingConfiguration>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUserProfilesRequest {
     #[doc="<p>An array of IAM or federated user ARNs that identify the users to be described.</p>"]
     #[serde(rename="IamUserArns")]
@@ -1358,7 +1358,7 @@ pub struct DescribeUserProfilesRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeUserProfiles</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUserProfilesResult {
     #[doc="<p>A <code>Users</code> object that describes the specified users.</p>"]
     #[serde(rename="UserProfiles")]
@@ -1366,7 +1366,7 @@ pub struct DescribeUserProfilesResult {
     pub user_profiles: Option<Vec<UserProfile>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesRequest {
     #[doc="<p>The instance ID. If you use this parameter, <code>DescribeVolumes</code> returns descriptions of the volumes associated with the specified instance.</p>"]
     #[serde(rename="InstanceId")]
@@ -1387,7 +1387,7 @@ pub struct DescribeVolumesRequest {
 }
 
 #[doc="<p>Contains the response to a <code>DescribeVolumes</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesResult {
     #[doc="<p>An array of volume IDs.</p>"]
     #[serde(rename="Volumes")]
@@ -1395,7 +1395,7 @@ pub struct DescribeVolumesResult {
     pub volumes: Option<Vec<Volume>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachElasticLoadBalancerRequest {
     #[doc="<p>The Elastic Load Balancing instance's name.</p>"]
     #[serde(rename="ElasticLoadBalancerName")]
@@ -1405,7 +1405,7 @@ pub struct DetachElasticLoadBalancerRequest {
     pub layer_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateElasticIpRequest {
     #[doc="<p>The Elastic IP address.</p>"]
     #[serde(rename="ElasticIp")]
@@ -1438,7 +1438,7 @@ pub struct EbsBlockDevice {
 }
 
 #[doc="<p>Describes a registered Amazon ECS cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EcsCluster {
     #[doc="<p>The cluster's ARN.</p>"]
     #[serde(rename="EcsClusterArn")]
@@ -1459,7 +1459,7 @@ pub struct EcsCluster {
 }
 
 #[doc="<p>Describes an Elastic IP address.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticIp {
     #[doc="<p>The domain.</p>"]
     #[serde(rename="Domain")]
@@ -1484,7 +1484,7 @@ pub struct ElasticIp {
 }
 
 #[doc="<p>Describes an Elastic Load Balancing instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticLoadBalancer {
     #[doc="<p>A list of Availability Zones.</p>"]
     #[serde(rename="AvailabilityZones")]
@@ -1539,7 +1539,7 @@ pub struct EnvironmentVariable {
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetHostnameSuggestionRequest {
     #[doc="<p>The layer ID.</p>"]
     #[serde(rename="LayerId")]
@@ -1547,7 +1547,7 @@ pub struct GetHostnameSuggestionRequest {
 }
 
 #[doc="<p>Contains the response to a <code>GetHostnameSuggestion</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetHostnameSuggestionResult {
     #[doc="<p>The generated host name.</p>"]
     #[serde(rename="Hostname")]
@@ -1559,7 +1559,7 @@ pub struct GetHostnameSuggestionResult {
     pub layer_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GrantAccessRequest {
     #[doc="<p>The instance's AWS OpsWorks Stacks ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -1571,7 +1571,7 @@ pub struct GrantAccessRequest {
 }
 
 #[doc="<p>Contains the response to a <code>GrantAccess</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GrantAccessResult {
     #[doc="<p>A <code>TemporaryCredential</code> object that contains the data needed to log in to the instance by RDP clients, such as the Microsoft Remote Desktop Connection.</p>"]
     #[serde(rename="TemporaryCredential")]
@@ -1580,7 +1580,7 @@ pub struct GrantAccessResult {
 }
 
 #[doc="<p>Describes an instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Instance {
     #[doc="<p>The agent version. This parameter is set to <code>INHERIT</code> if the instance inherits the default stack setting or to a a version number for a fixed agent version.</p>"]
     #[serde(rename="AgentVersion")]
@@ -1748,7 +1748,7 @@ pub struct Instance {
 }
 
 #[doc="<p>Contains a description of an Amazon EC2 instance from the Amazon EC2 metadata service. For more information, see <a href=\"http://docs.aws.amazon.com/sdkfornet/latest/apidocs/Index.html\">Instance Metadata and User Data</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceIdentity {
     #[doc="<p>A JSON document that contains the metadata.</p>"]
     #[serde(rename="Document")]
@@ -1761,7 +1761,7 @@ pub struct InstanceIdentity {
 }
 
 #[doc="<p>Describes how many instances a stack has for each status.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstancesCount {
     #[doc="<p>The number of instances in the Assigning state.</p>"]
     #[serde(rename="Assigning")]
@@ -1842,7 +1842,7 @@ pub struct InstancesCount {
 }
 
 #[doc="<p>Describes a layer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Layer {
     #[serde(rename="Arn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1945,7 +1945,7 @@ pub struct LifecycleEventConfiguration {
     pub shutdown: Option<ShutdownEventConfiguration>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsRequest {
     #[doc="<p>Do not use. A validation exception occurs if you add a <code>MaxResults</code> parameter to a <code>ListTagsRequest</code> call. </p>"]
     #[serde(rename="MaxResults")]
@@ -1961,7 +1961,7 @@ pub struct ListTagsRequest {
 }
 
 #[doc="<p>Contains the response to a <code>ListTags</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsResult {
     #[doc="<p>If a paginated request does not return all of the remaining results, this parameter is set to a token that you can assign to the request object's <code>NextToken</code> parameter to get the next set of results. If the previous paginated request returned all of the remaining results, this parameter is set to <code>null</code>. </p>"]
     #[serde(rename="NextToken")]
@@ -1974,7 +1974,7 @@ pub struct ListTagsResult {
 }
 
 #[doc="<p>Describes a layer's load-based auto scaling configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBasedAutoScalingConfiguration {
     #[doc="<p>An <code>AutoScalingThresholds</code> object that describes the downscaling configuration, which defines how and when AWS OpsWorks Stacks reduces the number of instances.</p>"]
     #[serde(rename="DownScaling")]
@@ -1995,7 +1995,7 @@ pub struct LoadBasedAutoScalingConfiguration {
 }
 
 #[doc="<p>Describes stack or user permissions.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Permission {
     #[doc="<p>Whether the user can use SSH.</p>"]
     #[serde(rename="AllowSsh")]
@@ -2020,7 +2020,7 @@ pub struct Permission {
 }
 
 #[doc="<p>Describes an instance's RAID array.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RaidArray {
     #[doc="<p>The array's Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -2077,7 +2077,7 @@ pub struct RaidArray {
 }
 
 #[doc="<p>Describes an Amazon RDS instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RdsDbInstance {
     #[doc="<p>The instance's address.</p>"]
     #[serde(rename="Address")]
@@ -2117,7 +2117,7 @@ pub struct RdsDbInstance {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -2149,7 +2149,7 @@ pub struct Recipes {
     pub undeploy: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterEcsClusterRequest {
     #[doc="<p>The cluster's ARN.</p>"]
     #[serde(rename="EcsClusterArn")]
@@ -2160,7 +2160,7 @@ pub struct RegisterEcsClusterRequest {
 }
 
 #[doc="<p>Contains the response to a <code>RegisterEcsCluster</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterEcsClusterResult {
     #[doc="<p>The cluster's ARN.</p>"]
     #[serde(rename="EcsClusterArn")]
@@ -2168,7 +2168,7 @@ pub struct RegisterEcsClusterResult {
     pub ecs_cluster_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterElasticIpRequest {
     #[doc="<p>The Elastic IP address.</p>"]
     #[serde(rename="ElasticIp")]
@@ -2179,7 +2179,7 @@ pub struct RegisterElasticIpRequest {
 }
 
 #[doc="<p>Contains the response to a <code>RegisterElasticIp</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterElasticIpResult {
     #[doc="<p>The Elastic IP address.</p>"]
     #[serde(rename="ElasticIp")]
@@ -2187,7 +2187,7 @@ pub struct RegisterElasticIpResult {
     pub elastic_ip: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterInstanceRequest {
     #[doc="<p>The instance's hostname.</p>"]
     #[serde(rename="Hostname")]
@@ -2219,7 +2219,7 @@ pub struct RegisterInstanceRequest {
 }
 
 #[doc="<p>Contains the response to a <code>RegisterInstanceResult</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterInstanceResult {
     #[doc="<p>The registered instance's AWS OpsWorks Stacks ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -2227,7 +2227,7 @@ pub struct RegisterInstanceResult {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterRdsDbInstanceRequest {
     #[doc="<p>The database password.</p>"]
     #[serde(rename="DbPassword")]
@@ -2243,7 +2243,7 @@ pub struct RegisterRdsDbInstanceRequest {
     pub stack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterVolumeRequest {
     #[doc="<p>The Amazon EBS volume ID.</p>"]
     #[serde(rename="Ec2VolumeId")]
@@ -2255,7 +2255,7 @@ pub struct RegisterVolumeRequest {
 }
 
 #[doc="<p>Contains the response to a <code>RegisterVolume</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterVolumeResult {
     #[doc="<p>The volume ID.</p>"]
     #[serde(rename="VolumeId")]
@@ -2264,7 +2264,7 @@ pub struct RegisterVolumeResult {
 }
 
 #[doc="<p>A registered instance's reported operating system.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportedOs {
     #[doc="<p>The operating system family.</p>"]
     #[serde(rename="Family")]
@@ -2281,7 +2281,7 @@ pub struct ReportedOs {
 }
 
 #[doc="<p>Describes a user's SSH information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SelfUserProfile {
     #[doc="<p>The user's IAM ARN.</p>"]
     #[serde(rename="IamUserArn")]
@@ -2302,7 +2302,7 @@ pub struct SelfUserProfile {
 }
 
 #[doc="<p>Describes an AWS OpsWorks Stacks service error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServiceError {
     #[doc="<p>When the error occurred.</p>"]
     #[serde(rename="CreatedAt")]
@@ -2330,7 +2330,7 @@ pub struct ServiceError {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetLoadBasedAutoScalingRequest {
     #[doc="<p>An <code>AutoScalingThresholds</code> object with the downscaling threshold configuration. If the load falls below these thresholds for a specified amount of time, AWS OpsWorks Stacks stops a specified number of instances.</p>"]
     #[serde(rename="DownScaling")]
@@ -2349,7 +2349,7 @@ pub struct SetLoadBasedAutoScalingRequest {
     pub up_scaling: Option<AutoScalingThresholds>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetPermissionRequest {
     #[doc="<p>The user is allowed to use SSH to communicate with the instance.</p>"]
     #[serde(rename="AllowSsh")]
@@ -2371,7 +2371,7 @@ pub struct SetPermissionRequest {
     pub stack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetTimeBasedAutoScalingRequest {
     #[doc="<p>An <code>AutoScalingSchedule</code> with the instance schedule.</p>"]
     #[serde(rename="AutoScalingSchedule")]
@@ -2440,7 +2440,7 @@ pub struct SslConfiguration {
 }
 
 #[doc="<p>Describes a stack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Stack {
     #[doc="<p>The agent version. This parameter is set to <code>LATEST</code> for auto-update. or a version number for a fixed agent version.</p>"]
     #[serde(rename="AgentVersion")]
@@ -2545,7 +2545,7 @@ pub struct StackConfigurationManager {
 }
 
 #[doc="<p>Summarizes the number of layers, instances, and apps in a stack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StackSummary {
     #[doc="<p>The number of apps.</p>"]
     #[serde(rename="AppsCount")]
@@ -2573,35 +2573,35 @@ pub struct StackSummary {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartStackRequest {
     #[doc="<p>The stack ID.</p>"]
     #[serde(rename="StackId")]
     pub stack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopStackRequest {
     #[doc="<p>The stack ID.</p>"]
     #[serde(rename="StackId")]
     pub stack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The stack or layer's Amazon Resource Number (ARN).</p>"]
     #[serde(rename="ResourceArn")]
@@ -2612,7 +2612,7 @@ pub struct TagResourceRequest {
 }
 
 #[doc="<p>Contains the data needed by RDP clients such as the Microsoft Remote Desktop Connection to log in to the instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TemporaryCredential {
     #[doc="<p>The instance's AWS OpsWorks Stacks ID.</p>"]
     #[serde(rename="InstanceId")]
@@ -2633,7 +2633,7 @@ pub struct TemporaryCredential {
 }
 
 #[doc="<p>Describes an instance's time-based auto scaling configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TimeBasedAutoScalingConfiguration {
     #[doc="<p>A <code>WeeklyAutoScalingSchedule</code> object with the instance schedule.</p>"]
     #[serde(rename="AutoScalingSchedule")]
@@ -2645,21 +2645,21 @@ pub struct TimeBasedAutoScalingConfiguration {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnassignInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnassignVolumeRequest {
     #[doc="<p>The volume ID.</p>"]
     #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The stack or layer's Amazon Resource Number (ARN).</p>"]
     #[serde(rename="ResourceArn")]
@@ -2669,7 +2669,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAppRequest {
     #[doc="<p>The app ID.</p>"]
     #[serde(rename="AppId")]
@@ -2716,7 +2716,7 @@ pub struct UpdateAppRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateElasticIpRequest {
     #[doc="<p>The address.</p>"]
     #[serde(rename="ElasticIp")]
@@ -2727,7 +2727,7 @@ pub struct UpdateElasticIpRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateInstanceRequest {
     #[doc="<p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, you must edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>.</p> <p>AgentVersion cannot be set to Chef 12.2.</p>"]
     #[serde(rename="AgentVersion")]
@@ -2778,7 +2778,7 @@ pub struct UpdateInstanceRequest {
     pub ssh_key_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateLayerRequest {
     #[doc="<p>One or more user-defined key/value pairs to be added to the stack attributes.</p>"]
     #[serde(rename="Attributes")]
@@ -2849,7 +2849,7 @@ pub struct UpdateLayerRequest {
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateMyUserProfileRequest {
     #[doc="<p>The user's SSH public key.</p>"]
     #[serde(rename="SshPublicKey")]
@@ -2857,7 +2857,7 @@ pub struct UpdateMyUserProfileRequest {
     pub ssh_public_key: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRdsDbInstanceRequest {
     #[doc="<p>The database password.</p>"]
     #[serde(rename="DbPassword")]
@@ -2872,7 +2872,7 @@ pub struct UpdateRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateStackRequest {
     #[doc="<p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack's instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack's instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack's default setting.</p> </note>"]
     #[serde(rename="AgentVersion")]
@@ -2946,7 +2946,7 @@ pub struct UpdateStackRequest {
     pub use_opsworks_security_groups: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserProfileRequest {
     #[doc="<p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html\">Managing User Permissions</a>.</p>"]
     #[serde(rename="AllowSelfManagement")]
@@ -2965,7 +2965,7 @@ pub struct UpdateUserProfileRequest {
     pub ssh_username: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateVolumeRequest {
     #[doc="<p>The new mount point.</p>"]
     #[serde(rename="MountPoint")]
@@ -2981,7 +2981,7 @@ pub struct UpdateVolumeRequest {
 }
 
 #[doc="<p>Describes a user's SSH information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserProfile {
     #[doc="<p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html\">Managing User Permissions</a>.</p>"]
     #[serde(rename="AllowSelfManagement")]
@@ -3006,7 +3006,7 @@ pub struct UserProfile {
 }
 
 #[doc="<p>Describes an instance's Amazon EBS volume.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Volume {
     #[doc="<p>The volume Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p>"]
     #[serde(rename="AvailabilityZone")]

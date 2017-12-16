@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateCreatedArtifactRequest {
     #[doc="<p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>"]
     #[serde(rename="CreatedArtifact")]
@@ -45,10 +45,10 @@ pub struct AssociateCreatedArtifactRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateCreatedArtifactResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateDiscoveredResourceRequest {
     #[doc="<p>Object representing a Resource.</p>"]
     #[serde(rename="DiscoveredResource")]
@@ -65,10 +65,10 @@ pub struct AssociateDiscoveredResourceRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateDiscoveredResourceResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProgressUpdateStreamRequest {
     #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
     #[serde(rename="DryRun")]
@@ -79,7 +79,7 @@ pub struct CreateProgressUpdateStreamRequest {
     pub progress_update_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProgressUpdateStreamResult;
 
 #[doc="<p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>"]
@@ -94,7 +94,7 @@ pub struct CreatedArtifact {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProgressUpdateStreamRequest {
     #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
     #[serde(rename="DryRun")]
@@ -105,17 +105,17 @@ pub struct DeleteProgressUpdateStreamRequest {
     pub progress_update_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProgressUpdateStreamResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeApplicationStateRequest {
     #[doc="<p>The configurationId in ADS that uniquely identifies the grouped application.</p>"]
     #[serde(rename="ApplicationId")]
     pub application_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeApplicationStateResult {
     #[doc="<p>Status of the application - Not Started, In-Progress, Complete.</p>"]
     #[serde(rename="ApplicationStatus")]
@@ -127,7 +127,7 @@ pub struct DescribeApplicationStateResult {
     pub last_updated_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMigrationTaskRequest {
     #[doc="<p>The identifier given to the MigrationTask.</p>"]
     #[serde(rename="MigrationTaskName")]
@@ -137,7 +137,7 @@ pub struct DescribeMigrationTaskRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMigrationTaskResult {
     #[doc="<p>Object encapsulating information about the migration task.</p>"]
     #[serde(rename="MigrationTask")]
@@ -145,7 +145,7 @@ pub struct DescribeMigrationTaskResult {
     pub migration_task: Option<MigrationTask>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateCreatedArtifactRequest {
     #[doc="<p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.)</p>"]
     #[serde(rename="CreatedArtifactName")]
@@ -162,10 +162,10 @@ pub struct DisassociateCreatedArtifactRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateCreatedArtifactResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateDiscoveredResourceRequest {
     #[doc="<p>ConfigurationId of the ADS resource to be disassociated.</p>"]
     #[serde(rename="ConfigurationId")]
@@ -182,7 +182,7 @@ pub struct DisassociateDiscoveredResourceRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateDiscoveredResourceResult;
 
 #[doc="<p>Object representing the on-premises resource being migrated.</p>"]
@@ -197,7 +197,7 @@ pub struct DiscoveredResource {
     pub description: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportMigrationTaskRequest {
     #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
     #[serde(rename="DryRun")]
@@ -211,10 +211,10 @@ pub struct ImportMigrationTaskRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportMigrationTaskResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCreatedArtifactsRequest {
     #[doc="<p>Maximum number of results to be returned per page.</p>"]
     #[serde(rename="MaxResults")]
@@ -232,7 +232,7 @@ pub struct ListCreatedArtifactsRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCreatedArtifactsResult {
     #[doc="<p>List of created artifacts up to the maximum number of results specified in the request.</p>"]
     #[serde(rename="CreatedArtifactList")]
@@ -244,7 +244,7 @@ pub struct ListCreatedArtifactsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDiscoveredResourcesRequest {
     #[doc="<p>The maximum number of results returned per page.</p>"]
     #[serde(rename="MaxResults")]
@@ -262,7 +262,7 @@ pub struct ListDiscoveredResourcesRequest {
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDiscoveredResourcesResult {
     #[doc="<p>Returned list of discovered resources associated with the given MigrationTask.</p>"]
     #[serde(rename="DiscoveredResourceList")]
@@ -274,7 +274,7 @@ pub struct ListDiscoveredResourcesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMigrationTasksRequest {
     #[doc="<p>Value to specify how many results are returned per page.</p>"]
     #[serde(rename="MaxResults")]
@@ -290,7 +290,7 @@ pub struct ListMigrationTasksRequest {
     pub resource_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMigrationTasksResult {
     #[doc="<p>Lists the migration task's summary which includes: <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and the <code>UpdateDateTime</code> for each task.</p>"]
     #[serde(rename="MigrationTaskSummaryList")]
@@ -302,7 +302,7 @@ pub struct ListMigrationTasksResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProgressUpdateStreamsRequest {
     #[doc="<p>Filter to limit the maximum number of results to list per page.</p>"]
     #[serde(rename="MaxResults")]
@@ -314,7 +314,7 @@ pub struct ListProgressUpdateStreamsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProgressUpdateStreamsResult {
     #[doc="<p>If there are more streams created than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>"]
     #[serde(rename="NextToken")]
@@ -327,7 +327,7 @@ pub struct ListProgressUpdateStreamsResult {
 }
 
 #[doc="<p>Represents a migration task in a migration tool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MigrationTask {
     #[doc="<p>Unique identifier that references the migration task.</p>"]
     #[serde(rename="MigrationTaskName")]
@@ -352,7 +352,7 @@ pub struct MigrationTask {
 }
 
 #[doc="<p>MigrationTaskSummary includes <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and <code>UpdateDateTime</code> for each task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MigrationTaskSummary {
     #[doc="<p>Unique identifier that references the migration task.</p>"]
     #[serde(rename="MigrationTaskName")]
@@ -380,7 +380,7 @@ pub struct MigrationTaskSummary {
     pub update_date_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotifyApplicationStateRequest {
     #[doc="<p>The configurationId in ADS that uniquely identifies the grouped application.</p>"]
     #[serde(rename="ApplicationId")]
@@ -394,10 +394,10 @@ pub struct NotifyApplicationStateRequest {
     pub status: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotifyApplicationStateResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotifyMigrationTaskStateRequest {
     #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
     #[serde(rename="DryRun")]
@@ -420,11 +420,11 @@ pub struct NotifyMigrationTaskStateRequest {
     pub update_date_time: f64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotifyMigrationTaskStateResult;
 
 #[doc="<p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProgressUpdateStreamSummary {
     #[doc="<p>The name of the ProgressUpdateStream. </p>"]
     #[serde(rename="ProgressUpdateStreamName")]
@@ -432,7 +432,7 @@ pub struct ProgressUpdateStreamSummary {
     pub progress_update_stream_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutResourceAttributesRequest {
     #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
     #[serde(rename="DryRun")]
@@ -449,7 +449,7 @@ pub struct PutResourceAttributesRequest {
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutResourceAttributesResult;
 
 #[doc="<p>Attribute associated with a resource.</p>"]

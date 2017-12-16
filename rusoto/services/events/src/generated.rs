@@ -28,17 +28,17 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventBusRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventBusResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>"]
     #[serde(rename="Arn")]
@@ -54,14 +54,14 @@ pub struct DescribeEventBusResponse {
     pub policy: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRuleResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="Arn")]
@@ -93,7 +93,7 @@ pub struct DescribeRuleResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
@@ -112,7 +112,7 @@ pub struct EcsParameters {
     pub task_definition_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableRuleRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
@@ -139,7 +139,7 @@ pub struct KinesisParameters {
     pub partition_key_path: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRuleNamesByTargetRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
@@ -154,7 +154,7 @@ pub struct ListRuleNamesByTargetRequest {
     pub target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRuleNamesByTargetResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
@@ -166,7 +166,7 @@ pub struct ListRuleNamesByTargetResponse {
     pub rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
@@ -182,7 +182,7 @@ pub struct ListRulesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
@@ -194,7 +194,7 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<Rule>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTargetsByRuleRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
@@ -209,7 +209,7 @@ pub struct ListTargetsByRuleRequest {
     pub rule: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTargetsByRuleResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
@@ -221,7 +221,7 @@ pub struct ListTargetsByRuleResponse {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEventsRequest {
     #[doc="<p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>"]
     #[serde(rename="Entries")]
@@ -229,7 +229,7 @@ pub struct PutEventsRequest {
 }
 
 #[doc="<p>Represents an event to be submitted.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEventsRequestEntry {
     #[doc="<p>In the JSON sense, an object containing fields, which may also contain nested subobjects. No constraints are imposed on its contents.</p>"]
     #[serde(rename="Detail")]
@@ -253,7 +253,7 @@ pub struct PutEventsRequestEntry {
     pub time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEventsResponse {
     #[doc="<p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>"]
     #[serde(rename="Entries")]
@@ -266,7 +266,7 @@ pub struct PutEventsResponse {
 }
 
 #[doc="<p>Represents an event that failed to be submitted.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEventsResultEntry {
     #[doc="<p>The error code that indicates why the event submission failed.</p>"]
     #[serde(rename="ErrorCode")]
@@ -282,7 +282,7 @@ pub struct PutEventsResultEntry {
     pub event_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutPermissionRequest {
     #[doc="<p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>"]
     #[serde(rename="Action")]
@@ -295,7 +295,7 @@ pub struct PutPermissionRequest {
     pub statement_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRuleRequest {
     #[doc="<p>A description of the rule.</p>"]
     #[serde(rename="Description")]
@@ -322,7 +322,7 @@ pub struct PutRuleRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRuleResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="RuleArn")]
@@ -330,7 +330,7 @@ pub struct PutRuleResponse {
     pub rule_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutTargetsRequest {
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Rule")]
@@ -340,7 +340,7 @@ pub struct PutTargetsRequest {
     pub targets: Vec<Target>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutTargetsResponse {
     #[doc="<p>The failed target entries.</p>"]
     #[serde(rename="FailedEntries")]
@@ -353,7 +353,7 @@ pub struct PutTargetsResponse {
 }
 
 #[doc="<p>Represents a target that failed to be added to a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutTargetsResultEntry {
     #[doc="<p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
     #[serde(rename="ErrorCode")]
@@ -369,14 +369,14 @@ pub struct PutTargetsResultEntry {
     pub target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemovePermissionRequest {
     #[doc="<p>The statement ID corresponding to the account that is no longer allowed to put events to the default event bus.</p>"]
     #[serde(rename="StatementId")]
     pub statement_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTargetsRequest {
     #[doc="<p>The IDs of the targets to remove from the rule.</p>"]
     #[serde(rename="Ids")]
@@ -386,7 +386,7 @@ pub struct RemoveTargetsRequest {
     pub rule: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTargetsResponse {
     #[doc="<p>The failed target entries.</p>"]
     #[serde(rename="FailedEntries")]
@@ -399,7 +399,7 @@ pub struct RemoveTargetsResponse {
 }
 
 #[doc="<p>Represents a target that failed to be removed from a rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTargetsResultEntry {
     #[doc="<p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
     #[serde(rename="ErrorCode")]
@@ -416,7 +416,7 @@ pub struct RemoveTargetsResultEntry {
 }
 
 #[doc="<p>Contains information about a rule in Amazon CloudWatch Events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Rule {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="Arn")]
@@ -506,7 +506,7 @@ pub struct Target {
     pub run_command_parameters: Option<RunCommandParameters>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestEventPatternRequest {
     #[doc="<p>The event, in JSON format, to test against the event pattern.</p>"]
     #[serde(rename="Event")]
@@ -516,7 +516,7 @@ pub struct TestEventPatternRequest {
     pub event_pattern: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestEventPatternResponse {
     #[doc="<p>Indicates whether the event matches the event pattern.</p>"]
     #[serde(rename="Result")]

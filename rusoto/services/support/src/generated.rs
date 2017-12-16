@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddAttachmentsToSetRequest {
     #[doc="<p>The ID of the attachment set. If an <code>attachmentSetId</code> is not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> is specified, the attachments are added to the specified set, if it exists.</p>"]
     #[serde(rename="attachmentSetId")]
@@ -41,7 +41,7 @@ pub struct AddAttachmentsToSetRequest {
 }
 
 #[doc="<p>The ID and expiry time of the attachment set returned by the <a>AddAttachmentsToSet</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddAttachmentsToSetResponse {
     #[doc="<p>The ID of the attachment set. If an <code>attachmentSetId</code> was not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> was specified, the attachments are added to the specified set, if it exists.</p>"]
     #[serde(rename="attachmentSetId")]
@@ -54,7 +54,7 @@ pub struct AddAttachmentsToSetResponse {
 }
 
 #[doc="<p>To be written.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddCommunicationToCaseRequest {
     #[doc="<p>The ID of a set of one or more attachments for the communication to add to the case. Create the set by calling <a>AddAttachmentsToSet</a> </p>"]
     #[serde(rename="attachmentSetId")]
@@ -74,7 +74,7 @@ pub struct AddCommunicationToCaseRequest {
 }
 
 #[doc="<p>The result of the <a>AddCommunicationToCase</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddCommunicationToCaseResponse {
     #[doc="<p>True if <a>AddCommunicationToCase</a> succeeds. Otherwise, returns an error.</p>"]
     #[serde(rename="result")]
@@ -100,7 +100,7 @@ pub struct Attachment {
 }
 
 #[doc="<p>The file name and ID of an attachment to a case communication. You can use the ID to retrieve the attachment with the <a>DescribeAttachment</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachmentDetails {
     #[doc="<p>The ID of the attachment.</p>"]
     #[serde(rename="attachmentId")]
@@ -113,7 +113,7 @@ pub struct AttachmentDetails {
 }
 
 #[doc="<p>A JSON-formatted object that contains the metadata for a support case. It is contained the response from a <a>DescribeCases</a> request. <b>CaseDetails</b> contains the following fields:</p> <ul> <li> <p> <b>caseId.</b> The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i>.</p> </li> <li> <p> <b>categoryCode.</b> The category of problem for the AWS Support case. Corresponds to the CategoryCode values returned by a call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>displayId.</b> The identifier for the case on pages in the AWS Support Center.</p> </li> <li> <p> <b>language.</b> The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p> </li> <li> <p> <b>recentCommunications.</b> One or more <a>Communication</a> objects. Fields of these objects are <code>attachments</code>, <code>body</code>, <code>caseId</code>, <code>submittedBy</code>, and <code>timeCreated</code>.</p> </li> <li> <p> <b>nextToken.</b> A resumption point for pagination.</p> </li> <li> <p> <b>serviceCode.</b> The identifier for the AWS service that corresponds to the service code defined in the call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>severityCode. </b>The severity code assigned to the case. Contains one of the values returned by the call to <a>DescribeSeverityLevels</a>.</p> </li> <li> <p> <b>status.</b> The status of the case in the AWS Support Center.</p> </li> <li> <p> <b>subject.</b> The subject line of the case.</p> </li> <li> <p> <b>submittedBy.</b> The email address of the account that submitted the case.</p> </li> <li> <p> <b>timeCreated.</b> The time the case was created, in ISO-8601 format.</p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CaseDetails {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
@@ -166,7 +166,7 @@ pub struct CaseDetails {
 }
 
 #[doc="<p>A JSON-formatted name/value pair that represents the category name and category code of the problem, selected from the <a>DescribeServices</a> response for each AWS service.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Category {
     #[doc="<p>The category code for the support case.</p>"]
     #[serde(rename="code")]
@@ -179,7 +179,7 @@ pub struct Category {
 }
 
 #[doc="<p>A communication associated with an AWS Support case. The communication consists of the case ID, the message body, attachment information, the account email address, and the date and time of the communication.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Communication {
     #[doc="<p>Information about the attachments to the case communication.</p>"]
     #[serde(rename="attachmentSet")]
@@ -204,7 +204,7 @@ pub struct Communication {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCaseRequest {
     #[doc="<p>The ID of a set of one or more attachments for the case. Create the set by using <a>AddAttachmentsToSet</a>.</p>"]
     #[serde(rename="attachmentSetId")]
@@ -243,7 +243,7 @@ pub struct CreateCaseRequest {
 }
 
 #[doc="<p>The AWS Support case ID returned by a successful completion of the <a>CreateCase</a> operation. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCaseResponse {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
@@ -251,7 +251,7 @@ pub struct CreateCaseResponse {
     pub case_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAttachmentRequest {
     #[doc="<p>The ID of the attachment to return. Attachment IDs are returned by the <a>DescribeCommunications</a> operation.</p>"]
     #[serde(rename="attachmentId")]
@@ -259,7 +259,7 @@ pub struct DescribeAttachmentRequest {
 }
 
 #[doc="<p>The content and file name of the attachment returned by the <a>DescribeAttachment</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAttachmentResponse {
     #[doc="<p>The attachment content and file name.</p>"]
     #[serde(rename="attachment")]
@@ -268,7 +268,7 @@ pub struct DescribeAttachmentResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCasesRequest {
     #[doc="<p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="afterTime")]
@@ -309,7 +309,7 @@ pub struct DescribeCasesRequest {
 }
 
 #[doc="<p>Returns an array of <a>CaseDetails</a> objects and a <code>nextToken</code> that defines a point for pagination in the result set.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCasesResponse {
     #[doc="<p>The details for the cases that match the request.</p>"]
     #[serde(rename="cases")]
@@ -322,7 +322,7 @@ pub struct DescribeCasesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommunicationsRequest {
     #[doc="<p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="afterTime")]
@@ -346,7 +346,7 @@ pub struct DescribeCommunicationsRequest {
 }
 
 #[doc="<p>The communications returned by the <a>DescribeCommunications</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommunicationsResponse {
     #[doc="<p>The communications for the case.</p>"]
     #[serde(rename="communications")]
@@ -359,7 +359,7 @@ pub struct DescribeCommunicationsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServicesRequest {
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
@@ -372,7 +372,7 @@ pub struct DescribeServicesRequest {
 }
 
 #[doc="<p>The list of AWS services returned by the <a>DescribeServices</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServicesResponse {
     #[doc="<p>A JSON-formatted list of AWS services.</p>"]
     #[serde(rename="services")]
@@ -381,7 +381,7 @@ pub struct DescribeServicesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSeverityLevelsRequest {
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
@@ -390,7 +390,7 @@ pub struct DescribeSeverityLevelsRequest {
 }
 
 #[doc="<p>The list of severity levels returned by the <a>DescribeSeverityLevels</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSeverityLevelsResponse {
     #[doc="<p>The available severity levels for the support case. Available severity levels are defined by your service level agreement with AWS.</p>"]
     #[serde(rename="severityLevels")]
@@ -399,7 +399,7 @@ pub struct DescribeSeverityLevelsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
     #[doc="<p>The IDs of the Trusted Advisor checks to get the status of. <b>Note:</b> Specifying the check ID of a check that is automatically refreshed causes an <code>InvalidParameterValue</code> error.</p>"]
     #[serde(rename="checkIds")]
@@ -407,7 +407,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
 }
 
 #[doc="<p>The statuses of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckRefreshStatuses</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
     #[doc="<p>The refresh status of the specified Trusted Advisor checks.</p>"]
     #[serde(rename="statuses")]
@@ -415,7 +415,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckResultRequest {
     #[doc="<p>The unique identifier for the Trusted Advisor check.</p>"]
     #[serde(rename="checkId")]
@@ -427,7 +427,7 @@ pub struct DescribeTrustedAdvisorCheckResultRequest {
 }
 
 #[doc="<p>The result of the Trusted Advisor check returned by the <a>DescribeTrustedAdvisorCheckResult</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckResultResponse {
     #[doc="<p>The detailed results of the Trusted Advisor check.</p>"]
     #[serde(rename="result")]
@@ -436,7 +436,7 @@ pub struct DescribeTrustedAdvisorCheckResultResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckSummariesRequest {
     #[doc="<p>The IDs of the Trusted Advisor checks.</p>"]
     #[serde(rename="checkIds")]
@@ -444,7 +444,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesRequest {
 }
 
 #[doc="<p>The summaries of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckSummaries</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorCheckSummariesResponse {
     #[doc="<p>The summary information for the requested Trusted Advisor checks.</p>"]
     #[serde(rename="summaries")]
@@ -452,7 +452,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorChecksRequest {
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
@@ -460,7 +460,7 @@ pub struct DescribeTrustedAdvisorChecksRequest {
 }
 
 #[doc="<p>Information about the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorChecks</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTrustedAdvisorChecksResponse {
     #[doc="<p>Information about all available Trusted Advisor checks.</p>"]
     #[serde(rename="checks")]
@@ -468,7 +468,7 @@ pub struct DescribeTrustedAdvisorChecksResponse {
 }
 
 #[doc="<p>The five most recent communications associated with the case.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecentCaseCommunications {
     #[doc="<p>The five most recent communications associated with the case.</p>"]
     #[serde(rename="communications")]
@@ -481,7 +481,7 @@ pub struct RecentCaseCommunications {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RefreshTrustedAdvisorCheckRequest {
     #[doc="<p>The unique identifier for the Trusted Advisor check to refresh. <b>Note:</b> Specifying the check ID of a check that is automatically refreshed causes an <code>InvalidParameterValue</code> error.</p>"]
     #[serde(rename="checkId")]
@@ -489,7 +489,7 @@ pub struct RefreshTrustedAdvisorCheckRequest {
 }
 
 #[doc="<p>The current refresh status of a Trusted Advisor check.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RefreshTrustedAdvisorCheckResponse {
     #[doc="<p>The current refresh status for a check, including the amount of time until the check is eligible for refresh.</p>"]
     #[serde(rename="status")]
@@ -497,7 +497,7 @@ pub struct RefreshTrustedAdvisorCheckResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResolveCaseRequest {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
@@ -506,7 +506,7 @@ pub struct ResolveCaseRequest {
 }
 
 #[doc="<p>The status of the case returned by the <a>ResolveCase</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResolveCaseResponse {
     #[doc="<p>The status of the case after the <a>ResolveCase</a> request was processed.</p>"]
     #[serde(rename="finalCaseStatus")]
@@ -519,7 +519,7 @@ pub struct ResolveCaseResponse {
 }
 
 #[doc="<p>Information about an AWS service returned by the <a>DescribeServices</a> operation. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Service {
     #[doc="<p>A list of categories that describe the type of support issue a case describes. Categories consist of a category name and a category code. Category names and codes are passed to AWS Support when you call <a>CreateCase</a>.</p>"]
     #[serde(rename="categories")]
@@ -536,7 +536,7 @@ pub struct Service {
 }
 
 #[doc="<p>A code and name pair that represent a severity level that can be applied to a support case.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SeverityLevel {
     #[doc="<p>One of four values: \"low,\" \"medium,\" \"high,\" and \"urgent\". These values correspond to response times returned to the caller in <code>severityLevel.name</code>. </p>"]
     #[serde(rename="code")]
@@ -549,7 +549,7 @@ pub struct SeverityLevel {
 }
 
 #[doc="<p>The container for summary information that relates to the category of the Trusted Advisor check.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCategorySpecificSummary {
     #[doc="<p>The summary information about cost savings for a Trusted Advisor check that is in the Cost Optimizing category.</p>"]
     #[serde(rename="costOptimizing")]
@@ -558,7 +558,7 @@ pub struct TrustedAdvisorCategorySpecificSummary {
 }
 
 #[doc="<p>The description and metadata for a Trusted Advisor check.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCheckDescription {
     #[doc="<p>The category of the Trusted Advisor check.</p>"]
     #[serde(rename="category")]
@@ -578,7 +578,7 @@ pub struct TrustedAdvisorCheckDescription {
 }
 
 #[doc="<p>The refresh status of a Trusted Advisor check.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCheckRefreshStatus {
     #[doc="<p>The unique identifier for the Trusted Advisor check.</p>"]
     #[serde(rename="checkId")]
@@ -592,7 +592,7 @@ pub struct TrustedAdvisorCheckRefreshStatus {
 }
 
 #[doc="<p>The results of a Trusted Advisor check returned by <a>DescribeTrustedAdvisorCheckResult</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCheckResult {
     #[doc="<p>Summary information that relates to the category of the check. Cost Optimizing is the only category that is currently supported.</p>"]
     #[serde(rename="categorySpecificSummary")]
@@ -614,7 +614,7 @@ pub struct TrustedAdvisorCheckResult {
 }
 
 #[doc="<p>A summary of a Trusted Advisor check result, including the alert status, last refresh, and number of resources examined.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCheckSummary {
     #[doc="<p>Summary information that relates to the category of the check. Cost Optimizing is the only category that is currently supported.</p>"]
     #[serde(rename="categorySpecificSummary")]
@@ -637,7 +637,7 @@ pub struct TrustedAdvisorCheckSummary {
 }
 
 #[doc="<p>The estimated cost savings that might be realized if the recommended actions are taken.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorCostOptimizingSummary {
     #[doc="<p>The estimated monthly savings that might be realized if the recommended actions are taken.</p>"]
     #[serde(rename="estimatedMonthlySavings")]
@@ -648,7 +648,7 @@ pub struct TrustedAdvisorCostOptimizingSummary {
 }
 
 #[doc="<p>Contains information about a resource identified by a Trusted Advisor check.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorResourceDetail {
     #[doc="<p>Specifies whether the AWS resource was ignored by Trusted Advisor because it was marked as suppressed by the user.</p>"]
     #[serde(rename="isSuppressed")]
@@ -670,7 +670,7 @@ pub struct TrustedAdvisorResourceDetail {
 }
 
 #[doc="<p>Details about AWS resources that were analyzed in a call to Trusted Advisor <a>DescribeTrustedAdvisorCheckSummaries</a>. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TrustedAdvisorResourcesSummary {
     #[doc="<p>The number of AWS resources that were flagged (listed) by the Trusted Advisor check.</p>"]
     #[serde(rename="resourcesFlagged")]

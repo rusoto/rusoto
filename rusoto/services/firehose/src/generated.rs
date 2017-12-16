@@ -74,7 +74,7 @@ pub struct CopyCommand {
     pub data_table_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream. This name must be unique per AWS account in the same region. If the delivery streams are in different accounts or different regions, you can have multiple delivery streams with the same name.</p>"]
     #[serde(rename="DeliveryStreamName")]
@@ -101,7 +101,7 @@ pub struct CreateDeliveryStreamInput {
     pub redshift_destination_configuration: Option<RedshiftDestinationConfiguration>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeliveryStreamOutput {
     #[doc="<p>The ARN of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamARN")]
@@ -109,18 +109,18 @@ pub struct CreateDeliveryStreamOutput {
     pub delivery_stream_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
     pub delivery_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeliveryStreamOutput;
 
 #[doc="<p>Contains information about a delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeliveryStreamDescription {
     #[doc="<p>The date and time that the delivery stream was created.</p>"]
     #[serde(rename="CreateTimestamp")]
@@ -157,7 +157,7 @@ pub struct DeliveryStreamDescription {
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
@@ -172,7 +172,7 @@ pub struct DescribeDeliveryStreamInput {
     pub limit: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryStreamOutput {
     #[doc="<p>Information about the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamDescription")]
@@ -180,7 +180,7 @@ pub struct DescribeDeliveryStreamOutput {
 }
 
 #[doc="<p>Describes the destination for a delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DestinationDescription {
     #[doc="<p>The ID of the destination.</p>"]
     #[serde(rename="DestinationId")]
@@ -217,7 +217,7 @@ pub struct ElasticsearchBufferingHints {
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon ES.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchDestinationConfiguration {
     #[doc="<p>The buffering options. If no value is specified, the default values for <b>ElasticsearchBufferingHints</b> are used.</p>"]
     #[serde(rename="BufferingHints")]
@@ -261,7 +261,7 @@ pub struct ElasticsearchDestinationConfiguration {
 }
 
 #[doc="<p>The destination description in Amazon ES.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchDestinationDescription {
     #[doc="<p>The buffering options.</p>"]
     #[serde(rename="BufferingHints")]
@@ -310,7 +310,7 @@ pub struct ElasticsearchDestinationDescription {
 }
 
 #[doc="<p>Describes an update for a destination in Amazon ES.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchDestinationUpdate {
     #[doc="<p>The buffering options. If no value is specified, <b>ElasticsearchBufferingHints</b> object default values are used. </p>"]
     #[serde(rename="BufferingHints")]
@@ -377,7 +377,7 @@ pub struct EncryptionConfiguration {
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExtendedS3DestinationConfiguration {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -420,7 +420,7 @@ pub struct ExtendedS3DestinationConfiguration {
 }
 
 #[doc="<p>Describes a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExtendedS3DestinationDescription {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -460,7 +460,7 @@ pub struct ExtendedS3DestinationDescription {
 }
 
 #[doc="<p>Describes an update for a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExtendedS3DestinationUpdate {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -504,13 +504,13 @@ pub struct ExtendedS3DestinationUpdate {
     pub s3_backup_update: Option<S3DestinationUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKinesisStreamInput {
     #[serde(rename="DeliveryStreamARN")]
     pub delivery_stream_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKinesisStreamOutput {
     #[serde(rename="CredentialsForReadingKinesisStream")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -529,7 +529,7 @@ pub struct KMSEncryptionConfig {
 }
 
 #[doc="<p>The stream and role ARNs for a Kinesis stream used as the source for a delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KinesisStreamSourceConfiguration {
     #[doc="<p>The ARN of the source Kinesis stream.</p>"]
     #[serde(rename="KinesisStreamARN")]
@@ -540,7 +540,7 @@ pub struct KinesisStreamSourceConfiguration {
 }
 
 #[doc="<p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KinesisStreamSourceDescription {
     #[doc="<p>Kinesis Firehose starts retrieving records from the Kinesis stream starting with this time stamp.</p>"]
     #[serde(rename="DeliveryStartTimestamp")]
@@ -556,7 +556,7 @@ pub struct KinesisStreamSourceDescription {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeliveryStreamsInput {
     #[doc="<p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis stream as a source.</p> </li> </ul> <p>This parameter is optional. If this parameter is omitted, delivery streams of all types are returned.</p>"]
     #[serde(rename="DeliveryStreamType")]
@@ -572,7 +572,7 @@ pub struct ListDeliveryStreamsInput {
     pub limit: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeliveryStreamsOutput {
     #[doc="<p>The names of the delivery streams.</p>"]
     #[serde(rename="DeliveryStreamNames")]
@@ -618,7 +618,7 @@ pub struct ProcessorParameter {
     pub parameter_value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRecordBatchInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
@@ -628,7 +628,7 @@ pub struct PutRecordBatchInput {
     pub records: Vec<Record>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRecordBatchOutput {
     #[doc="<p>The number of records that might have failed processing.</p>"]
     #[serde(rename="FailedPutCount")]
@@ -639,7 +639,7 @@ pub struct PutRecordBatchOutput {
 }
 
 #[doc="<p>Contains the result for an individual record from a <a>PutRecordBatch</a> request. If the record is successfully added to your delivery stream, it receives a record ID. If the record fails to be added to your delivery stream, the result includes an error code and an error message.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRecordBatchResponseEntry {
     #[doc="<p>The error code for an individual record result.</p>"]
     #[serde(rename="ErrorCode")]
@@ -655,7 +655,7 @@ pub struct PutRecordBatchResponseEntry {
     pub record_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRecordInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
@@ -665,7 +665,7 @@ pub struct PutRecordInput {
     pub record: Record,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRecordOutput {
     #[doc="<p>The ID of the record.</p>"]
     #[serde(rename="RecordId")]
@@ -673,7 +673,7 @@ pub struct PutRecordOutput {
 }
 
 #[doc="<p>The unit of data in a delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Record {
     #[doc="<p>The data blob, which is base64-encoded when the blob is serialized. The maximum size of the data blob, before base64-encoding, is 1,000 KB.</p>"]
     #[serde(rename="Data")]
@@ -686,7 +686,7 @@ pub struct Record {
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon Redshift.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftDestinationConfiguration {
     #[doc="<p>The CloudWatch logging options for your delivery stream.</p>"]
     #[serde(rename="CloudWatchLoggingOptions")]
@@ -729,7 +729,7 @@ pub struct RedshiftDestinationConfiguration {
 }
 
 #[doc="<p>Describes a destination in Amazon Redshift.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftDestinationDescription {
     #[doc="<p>The CloudWatch logging options for your delivery stream.</p>"]
     #[serde(rename="CloudWatchLoggingOptions")]
@@ -769,7 +769,7 @@ pub struct RedshiftDestinationDescription {
 }
 
 #[doc="<p>Describes an update for a destination in Amazon Redshift.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftDestinationUpdate {
     #[doc="<p>The CloudWatch logging options for your delivery stream.</p>"]
     #[serde(rename="CloudWatchLoggingOptions")]
@@ -827,7 +827,7 @@ pub struct RedshiftRetryOptions {
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3DestinationConfiguration {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -858,7 +858,7 @@ pub struct S3DestinationConfiguration {
 }
 
 #[doc="<p>Describes a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3DestinationDescription {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -886,7 +886,7 @@ pub struct S3DestinationDescription {
 }
 
 #[doc="<p>Describes an update for a destination in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3DestinationUpdate {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
@@ -918,7 +918,7 @@ pub struct S3DestinationUpdate {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SessionCredentials {
     #[serde(rename="AccessKeyId")]
     pub access_key_id: String,
@@ -931,7 +931,7 @@ pub struct SessionCredentials {
 }
 
 #[doc="<p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SourceDescription {
     #[doc="<p>The <a>KinesisStreamSourceDescription</a> value for the source Kinesis stream.</p>"]
     #[serde(rename="KinesisStreamSourceDescription")]
@@ -939,7 +939,7 @@ pub struct SourceDescription {
     pub kinesis_stream_source_description: Option<KinesisStreamSourceDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDestinationInput {
     #[doc="<p>Obtain this value from the <b>VersionId</b> result of <a>DeliveryStreamDescription</a>. This value is required, and helps the service to perform conditional operations. For example, if there is an interleaving update and this value is null, then the update destination fails. After the update is successful, the <b>VersionId</b> value is updated. The service then performs a merge of the old configuration with the new configuration.</p>"]
     #[serde(rename="CurrentDeliveryStreamVersionId")]
@@ -964,7 +964,7 @@ pub struct UpdateDestinationInput {
     pub redshift_destination_update: Option<RedshiftDestinationUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDestinationOutput;
 
 /// Errors returned by CreateDeliveryStream

@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateTeamMemberRequest {
     #[doc="<p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request. </p>"]
     #[serde(rename="clientRequestToken")]
@@ -49,7 +49,7 @@ pub struct AssociateTeamMemberRequest {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateTeamMemberResult {
     #[doc="<p>The user- or system-generated token from the initial request that can be used to repeat the request. </p>"]
     #[serde(rename="clientRequestToken")]
@@ -57,7 +57,7 @@ pub struct AssociateTeamMemberResult {
     pub client_request_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProjectRequest {
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="clientRequestToken")]
@@ -75,7 +75,7 @@ pub struct CreateProjectRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProjectResult {
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="arn")]
@@ -93,7 +93,7 @@ pub struct CreateProjectResult {
     pub project_template_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserProfileRequest {
     #[doc="<p>The name that will be displayed as the friendly name for the user in AWS CodeStar. </p>"]
     #[serde(rename="displayName")]
@@ -110,7 +110,7 @@ pub struct CreateUserProfileRequest {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserProfileResult {
     #[doc="<p>The date the user profile was created, in timestamp format.</p>"]
     #[serde(rename="createdTimestamp")]
@@ -137,7 +137,7 @@ pub struct CreateUserProfileResult {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProjectRequest {
     #[doc="<p>A user- or system-generated token that identifies the entity that requested project deletion. This token can be used to repeat the request. </p>"]
     #[serde(rename="clientRequestToken")]
@@ -152,7 +152,7 @@ pub struct DeleteProjectRequest {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProjectResult {
     #[doc="<p>The Amazon Resource Name (ARN) of the deleted project.</p>"]
     #[serde(rename="projectArn")]
@@ -164,28 +164,28 @@ pub struct DeleteProjectResult {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserProfileRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the user to delete from AWS CodeStar.</p>"]
     #[serde(rename="userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserProfileResult {
     #[doc="<p>The Amazon Resource Name (ARN) of the user deleted from AWS CodeStar.</p>"]
     #[serde(rename="userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProjectRequest {
     #[doc="<p>The ID of the project.</p>"]
     #[serde(rename="id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProjectResult {
     #[doc="<p>The Amazon Resource Name (ARN) for the project.</p>"]
     #[serde(rename="arn")]
@@ -221,14 +221,14 @@ pub struct DescribeProjectResult {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUserProfileRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the user.</p>"]
     #[serde(rename="userArn")]
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUserProfileResult {
     #[doc="<p>The date and time when the user profile was created in AWS CodeStar, in timestamp format.</p>"]
     #[serde(rename="createdTimestamp")]
@@ -253,7 +253,7 @@ pub struct DescribeUserProfileResult {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateTeamMemberRequest {
     #[doc="<p>The ID of the AWS CodeStar project from which you want to remove a team member.</p>"]
     #[serde(rename="projectId")]
@@ -263,10 +263,10 @@ pub struct DisassociateTeamMemberRequest {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateTeamMemberResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProjectsRequest {
     #[doc="<p>The maximum amount of data that can be contained in a single set of results.</p>"]
     #[serde(rename="maxResults")]
@@ -278,7 +278,7 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProjectsResult {
     #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
     #[serde(rename="nextToken")]
@@ -289,7 +289,7 @@ pub struct ListProjectsResult {
     pub projects: Vec<ProjectSummary>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourcesRequest {
     #[doc="<p>he maximum amount of data that can be contained in a single set of results.</p>"]
     #[serde(rename="maxResults")]
@@ -304,7 +304,7 @@ pub struct ListResourcesRequest {
     pub project_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourcesResult {
     #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
     #[serde(rename="nextToken")]
@@ -316,7 +316,7 @@ pub struct ListResourcesResult {
     pub resources: Option<Vec<Resource>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTeamMembersRequest {
     #[doc="<p>The maximum number of team members you want returned in a response.</p>"]
     #[serde(rename="maxResults")]
@@ -331,7 +331,7 @@ pub struct ListTeamMembersRequest {
     pub project_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTeamMembersResult {
     #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
     #[serde(rename="nextToken")]
@@ -342,7 +342,7 @@ pub struct ListTeamMembersResult {
     pub team_members: Vec<TeamMember>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUserProfilesRequest {
     #[doc="<p>The maximum number of results to return in a response.</p>"]
     #[serde(rename="maxResults")]
@@ -354,7 +354,7 @@ pub struct ListUserProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUserProfilesResult {
     #[doc="<p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>"]
     #[serde(rename="nextToken")]
@@ -366,7 +366,7 @@ pub struct ListUserProfilesResult {
 }
 
 #[doc="<p>Information about the metadata for a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProjectSummary {
     #[doc="<p>The Amazon Resource Name (ARN) of the project.</p>"]
     #[serde(rename="projectArn")]
@@ -379,7 +379,7 @@ pub struct ProjectSummary {
 }
 
 #[doc="<p>Information about a resource for a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Resource {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
     #[serde(rename="id")]
@@ -387,7 +387,7 @@ pub struct Resource {
 }
 
 #[doc="<p>Information about a team member in a project.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TeamMember {
     #[doc="<p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href=\"http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html\">Working with Teams</a> in the AWS CodeStar User Guide. </p>"]
     #[serde(rename="projectRole")]
@@ -401,7 +401,7 @@ pub struct TeamMember {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProjectRequest {
     #[doc="<p>The description of the project, if any.</p>"]
     #[serde(rename="description")]
@@ -416,10 +416,10 @@ pub struct UpdateProjectRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProjectResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTeamMemberRequest {
     #[doc="<p>The ID of the project.</p>"]
     #[serde(rename="projectId")]
@@ -437,7 +437,7 @@ pub struct UpdateTeamMemberRequest {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTeamMemberResult {
     #[doc="<p>The project role granted to the user.</p>"]
     #[serde(rename="projectRole")]
@@ -453,7 +453,7 @@ pub struct UpdateTeamMemberResult {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserProfileRequest {
     #[doc="<p>The name that is displayed as the friendly name for the user in AWS CodeStar.</p>"]
     #[serde(rename="displayName")]
@@ -472,7 +472,7 @@ pub struct UpdateUserProfileRequest {
     pub user_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserProfileResult {
     #[doc="<p>The date the user profile was created, in timestamp format.</p>"]
     #[serde(rename="createdTimestamp")]
@@ -500,7 +500,7 @@ pub struct UpdateUserProfileResult {
 }
 
 #[doc="<p>Information about a user's profile in AWS CodeStar.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserProfileSummary {
     #[doc="<p>The display name of a user in AWS CodeStar. For example, this could be set to both first and last name (\"Mary Major\") or a single name (\"Mary\"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example \"Mary Jane Major\") would generate an initial icon using the first character and the first character after the space (\"MJ\", not \"MM\").</p>"]
     #[serde(rename="displayName")]

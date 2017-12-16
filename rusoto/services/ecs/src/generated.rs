@@ -49,7 +49,7 @@ pub struct Attribute {
 }
 
 #[doc="<p>A regional grouping of one or more container instances on which you can run task requests. Each account receives a default cluster the first time you use the Amazon ECS service, but you may also create other clusters. Clusters may contain more than one instance type simultaneously.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Cluster {
     #[doc="<p>The number of services that are running on the cluster in an <code>ACTIVE</code> state. You can view these services with <a>ListServices</a>.</p>"]
     #[serde(rename="activeServicesCount")]
@@ -82,7 +82,7 @@ pub struct Cluster {
 }
 
 #[doc="<p>A Docker container that is part of a task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Container {
     #[doc="<p>The Amazon Resource Name (ARN) of the container.</p>"]
     #[serde(rename="containerArn")]
@@ -224,7 +224,7 @@ pub struct ContainerDefinition {
 }
 
 #[doc="<p>An EC2 instance that is running the Amazon ECS agent and has been registered with a cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ContainerInstance {
     #[doc="<p>This parameter returns <code>true</code> if the agent is actually connected to Amazon ECS. Registered instances with an agent that may be unhealthy or stopped return <code>false</code>, and instances without a connected agent cannot accept placement requests.</p>"]
     #[serde(rename="agentConnected")]
@@ -309,7 +309,7 @@ pub struct ContainerOverride {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterRequest {
     #[doc="<p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>"]
     #[serde(rename="clusterName")]
@@ -317,7 +317,7 @@ pub struct CreateClusterRequest {
     pub cluster_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterResponse {
     #[doc="<p>The full description of your new cluster.</p>"]
     #[serde(rename="cluster")]
@@ -325,7 +325,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.</p>"]
     #[serde(rename="clientToken")]
@@ -366,7 +366,7 @@ pub struct CreateServiceRequest {
     pub task_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceResponse {
     #[doc="<p>The full description of your service following the create call.</p>"]
     #[serde(rename="service")]
@@ -374,7 +374,7 @@ pub struct CreateServiceResponse {
     pub service: Option<Service>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAttributesRequest {
     #[doc="<p>The attributes to delete from your resource. You can specify up to 10 attributes per request. For custom attributes, specify the attribute name and target ID, but do not specify the value. If you specify the target ID using the short form, you must also specify the target type.</p>"]
     #[serde(rename="attributes")]
@@ -385,7 +385,7 @@ pub struct DeleteAttributesRequest {
     pub cluster: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAttributesResponse {
     #[doc="<p>A list of attribute objects that were successfully deleted from your resource.</p>"]
     #[serde(rename="attributes")]
@@ -393,14 +393,14 @@ pub struct DeleteAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster to delete.</p>"]
     #[serde(rename="cluster")]
     pub cluster: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterResponse {
     #[doc="<p>The full description of the deleted cluster.</p>"]
     #[serde(rename="cluster")]
@@ -408,7 +408,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteServiceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service to delete. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -419,7 +419,7 @@ pub struct DeleteServiceRequest {
     pub service: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteServiceResponse {
     #[doc="<p>The full description of the deleted service.</p>"]
     #[serde(rename="service")]
@@ -428,7 +428,7 @@ pub struct DeleteServiceResponse {
 }
 
 #[doc="<p>The details of an Amazon ECS service deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Deployment {
     #[doc="<p>The Unix timestamp for when the service was created.</p>"]
     #[serde(rename="createdAt")]
@@ -477,7 +477,7 @@ pub struct DeploymentConfiguration {
     pub minimum_healthy_percent: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterContainerInstanceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to deregister. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -492,7 +492,7 @@ pub struct DeregisterContainerInstanceRequest {
     pub force: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterContainerInstanceResponse {
     #[doc="<p>The container instance that was deregistered.</p>"]
     #[serde(rename="containerInstance")]
@@ -500,14 +500,14 @@ pub struct DeregisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterTaskDefinitionRequest {
     #[doc="<p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to deregister. You must specify a <code>revision</code>.</p>"]
     #[serde(rename="taskDefinition")]
     pub task_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterTaskDefinitionResponse {
     #[doc="<p>The full description of the deregistered task.</p>"]
     #[serde(rename="taskDefinition")]
@@ -515,7 +515,7 @@ pub struct DeregisterTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersRequest {
     #[doc="<p>A list of up to 100 cluster names or full cluster Amazon Resource Name (ARN) entries. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="clusters")]
@@ -523,7 +523,7 @@ pub struct DescribeClustersRequest {
     pub clusters: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersResponse {
     #[doc="<p>The list of clusters.</p>"]
     #[serde(rename="clusters")]
@@ -535,7 +535,7 @@ pub struct DescribeClustersResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeContainerInstancesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -546,7 +546,7 @@ pub struct DescribeContainerInstancesRequest {
     pub container_instances: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeContainerInstancesResponse {
     #[doc="<p>The list of container instances.</p>"]
     #[serde(rename="containerInstances")]
@@ -558,7 +558,7 @@ pub struct DescribeContainerInstancesResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServicesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN)the cluster that hosts the service to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -569,7 +569,7 @@ pub struct DescribeServicesRequest {
     pub services: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeServicesResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -581,14 +581,14 @@ pub struct DescribeServicesResponse {
     pub services: Option<Vec<Service>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTaskDefinitionRequest {
     #[doc="<p>The <code>family</code> for the latest <code>ACTIVE</code> revision, <code>family</code> and <code>revision</code> (<code>family:revision</code>) for a specific revision in the family, or full Amazon Resource Name (ARN) of the task definition to describe.</p>"]
     #[serde(rename="taskDefinition")]
     pub task_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTaskDefinitionResponse {
     #[doc="<p>The full task definition description.</p>"]
     #[serde(rename="taskDefinition")]
@@ -596,7 +596,7 @@ pub struct DescribeTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTasksRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -607,7 +607,7 @@ pub struct DescribeTasksRequest {
     pub tasks: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTasksResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -619,7 +619,7 @@ pub struct DescribeTasksResponse {
     pub tasks: Option<Vec<Task>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiscoverPollEndpointRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that the container instance belongs to.</p>"]
     #[serde(rename="cluster")]
@@ -631,7 +631,7 @@ pub struct DiscoverPollEndpointRequest {
     pub container_instance: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiscoverPollEndpointResponse {
     #[doc="<p>The endpoint for the Amazon ECS agent to poll.</p>"]
     #[serde(rename="endpoint")]
@@ -644,7 +644,7 @@ pub struct DiscoverPollEndpointResponse {
 }
 
 #[doc="<p>A failed resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Failure {
     #[doc="<p>The Amazon Resource Name (ARN) of the failed resource.</p>"]
     #[serde(rename="arn")]
@@ -689,7 +689,7 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttributesRequest {
     #[doc="<p>The name of the attribute with which to filter the results. </p>"]
     #[serde(rename="attributeName")]
@@ -716,7 +716,7 @@ pub struct ListAttributesRequest {
     pub target_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttributesResponse {
     #[doc="<p>A list of attribute objects that meet the criteria of the request.</p>"]
     #[serde(rename="attributes")]
@@ -728,7 +728,7 @@ pub struct ListAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClustersRequest {
     #[doc="<p>The maximum number of cluster results returned by <code>ListClusters</code> in paginated output. When this parameter is used, <code>ListClusters</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListClusters</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListClusters</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
@@ -740,7 +740,7 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListClustersResponse {
     #[doc="<p>The list of full Amazon Resource Name (ARN) entries for each cluster associated with your account.</p>"]
     #[serde(rename="clusterArns")]
@@ -752,7 +752,7 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListContainerInstancesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -776,7 +776,7 @@ pub struct ListContainerInstancesRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListContainerInstancesResponse {
     #[doc="<p>The list of container instances with full Amazon Resource Name (ARN) entries for each container instance associated with the specified cluster.</p>"]
     #[serde(rename="containerInstanceArns")]
@@ -788,7 +788,7 @@ pub struct ListContainerInstancesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServicesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the services to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -804,7 +804,7 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServicesResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListServices</code> request. When the results of a <code>ListServices</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
@@ -816,7 +816,7 @@ pub struct ListServicesResponse {
     pub service_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTaskDefinitionFamiliesRequest {
     #[doc="<p>The <code>familyPrefix</code> is a string that is used to filter the results of <code>ListTaskDefinitionFamilies</code>. If you specify a <code>familyPrefix</code>, only task definition family names that begin with the <code>familyPrefix</code> string are returned.</p>"]
     #[serde(rename="familyPrefix")]
@@ -836,7 +836,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTaskDefinitionFamiliesResponse {
     #[doc="<p>The list of task definition family names that match the <code>ListTaskDefinitionFamilies</code> request.</p>"]
     #[serde(rename="families")]
@@ -848,7 +848,7 @@ pub struct ListTaskDefinitionFamiliesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTaskDefinitionsRequest {
     #[doc="<p>The full family name with which to filter the <code>ListTaskDefinitions</code> results. Specifying a <code>familyPrefix</code> limits the listed task definitions to task definition revisions that belong to that family.</p>"]
     #[serde(rename="familyPrefix")]
@@ -872,7 +872,7 @@ pub struct ListTaskDefinitionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTaskDefinitionsResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListTaskDefinitions</code> request. When the results of a <code>ListTaskDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
@@ -884,7 +884,7 @@ pub struct ListTaskDefinitionsResponse {
     pub task_definition_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTasksRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the tasks to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -920,7 +920,7 @@ pub struct ListTasksRequest {
     pub started_by: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTasksResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListTasks</code> request. When the results of a <code>ListTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
@@ -1046,7 +1046,7 @@ pub struct PortMapping {
     pub protocol: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutAttributesRequest {
     #[doc="<p>The attributes to apply to your resource. You can specify up to 10 custom attributes per resource. You can specify up to 10 attributes in a single call.</p>"]
     #[serde(rename="attributes")]
@@ -1057,7 +1057,7 @@ pub struct PutAttributesRequest {
     pub cluster: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutAttributesResponse {
     #[doc="<p>The attributes applied to your resource.</p>"]
     #[serde(rename="attributes")]
@@ -1065,7 +1065,7 @@ pub struct PutAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterContainerInstanceRequest {
     #[doc="<p>The container instance attributes that this container instance supports.</p>"]
     #[serde(rename="attributes")]
@@ -1097,7 +1097,7 @@ pub struct RegisterContainerInstanceRequest {
     pub version_info: Option<VersionInfo>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterContainerInstanceResponse {
     #[doc="<p>The container instance that was registered.</p>"]
     #[serde(rename="containerInstance")]
@@ -1105,7 +1105,7 @@ pub struct RegisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterTaskDefinitionRequest {
     #[doc="<p>A list of container definitions in JSON format that describe the different containers that make up your task.</p>"]
     #[serde(rename="containerDefinitions")]
@@ -1131,7 +1131,7 @@ pub struct RegisterTaskDefinitionRequest {
     pub volumes: Option<Vec<Volume>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterTaskDefinitionResponse {
     #[doc="<p>The full description of the registered task definition.</p>"]
     #[serde(rename="taskDefinition")]
@@ -1168,7 +1168,7 @@ pub struct Resource {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to run your task. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1203,7 +1203,7 @@ pub struct RunTaskRequest {
     pub task_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunTaskResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -1216,7 +1216,7 @@ pub struct RunTaskResponse {
 }
 
 #[doc="<p>Details on a service within a cluster</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Service {
     #[doc="<p>The Amazon Resource Name (ARN) of the cluster that hosts the service.</p>"]
     #[serde(rename="clusterArn")]
@@ -1285,7 +1285,7 @@ pub struct Service {
 }
 
 #[doc="<p>Details on an event associated with a service.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServiceEvent {
     #[doc="<p>The Unix timestamp for when the event was triggered.</p>"]
     #[serde(rename="createdAt")]
@@ -1301,7 +1301,7 @@ pub struct ServiceEvent {
     pub message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to start your task. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1327,7 +1327,7 @@ pub struct StartTaskRequest {
     pub task_definition: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartTaskResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
@@ -1339,7 +1339,7 @@ pub struct StartTaskResponse {
     pub tasks: Option<Vec<Task>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to stop. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1354,7 +1354,7 @@ pub struct StopTaskRequest {
     pub task: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopTaskResponse {
     #[doc="<p>The task that was stopped.</p>"]
     #[serde(rename="task")]
@@ -1362,7 +1362,7 @@ pub struct StopTaskResponse {
     pub task: Option<Task>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitContainerStateChangeRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container.</p>"]
     #[serde(rename="cluster")]
@@ -1394,7 +1394,7 @@ pub struct SubmitContainerStateChangeRequest {
     pub task: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitContainerStateChangeResponse {
     #[doc="<p>Acknowledgement of the state change.</p>"]
     #[serde(rename="acknowledgment")]
@@ -1402,7 +1402,7 @@ pub struct SubmitContainerStateChangeResponse {
     pub acknowledgment: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitTaskStateChangeRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task.</p>"]
     #[serde(rename="cluster")]
@@ -1422,7 +1422,7 @@ pub struct SubmitTaskStateChangeRequest {
     pub task: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubmitTaskStateChangeResponse {
     #[doc="<p>Acknowledgement of the state change.</p>"]
     #[serde(rename="acknowledgment")]
@@ -1431,7 +1431,7 @@ pub struct SubmitTaskStateChangeResponse {
 }
 
 #[doc="<p>Details on a task in a cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Task {
     #[doc="<p>The Amazon Resource Name (ARN) of the cluster that hosts the task.</p>"]
     #[serde(rename="clusterArn")]
@@ -1496,7 +1496,7 @@ pub struct Task {
 }
 
 #[doc="<p>Details of a task definition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TaskDefinition {
     #[doc="<p>A list of container definitions in JSON format that describe the different containers that make up your task. For more information about container definition parameters and defaults, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html\">Amazon ECS Task Definitions</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="containerDefinitions")]
@@ -1580,7 +1580,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateContainerAgentRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that your container instance is running on. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1591,7 +1591,7 @@ pub struct UpdateContainerAgentRequest {
     pub container_instance: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateContainerAgentResponse {
     #[doc="<p>The container instance for which the container agent was updated.</p>"]
     #[serde(rename="containerInstance")]
@@ -1599,7 +1599,7 @@ pub struct UpdateContainerAgentResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateContainerInstancesStateRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to update. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1613,7 +1613,7 @@ pub struct UpdateContainerInstancesStateRequest {
     pub status: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateContainerInstancesStateResponse {
     #[doc="<p>The list of container instances.</p>"]
     #[serde(rename="containerInstances")]
@@ -1625,7 +1625,7 @@ pub struct UpdateContainerInstancesStateResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateServiceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that your service is running on. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
@@ -1648,7 +1648,7 @@ pub struct UpdateServiceRequest {
     pub task_definition: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateServiceResponse {
     #[doc="<p>The full description of your service following the update call.</p>"]
     #[serde(rename="service")]

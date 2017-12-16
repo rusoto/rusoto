@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="The input for the BulkPublish operation."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BulkPublishRequest {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityPoolId")]
@@ -38,7 +38,7 @@ pub struct BulkPublishRequest {
 }
 
 #[doc="The output for the BulkPublish operation."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BulkPublishResponse {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityPoolId")]
@@ -64,7 +64,7 @@ pub struct CognitoStreams {
 }
 
 #[doc="A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Dataset {
     #[doc="Date on which the dataset was created."]
     #[serde(rename="CreationDate")]
@@ -97,7 +97,7 @@ pub struct Dataset {
 }
 
 #[doc="A request to delete the specific dataset."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDatasetRequest {
     #[doc="A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot)."]
     #[serde(rename="DatasetName")]
@@ -111,7 +111,7 @@ pub struct DeleteDatasetRequest {
 }
 
 #[doc="Response to a successful DeleteDataset request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDatasetResponse {
     #[doc="A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs."]
     #[serde(rename="Dataset")]
@@ -120,7 +120,7 @@ pub struct DeleteDatasetResponse {
 }
 
 #[doc="A request for meta data about a dataset (creation date, number of records, size) by owner and dataset name."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDatasetRequest {
     #[doc="A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot)."]
     #[serde(rename="DatasetName")]
@@ -134,7 +134,7 @@ pub struct DescribeDatasetRequest {
 }
 
 #[doc="Response to a successful DescribeDataset request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDatasetResponse {
     #[doc="Meta data for a collection of data for an identity. An identity can have multiple datasets. A dataset can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs."]
     #[serde(rename="Dataset")]
@@ -143,7 +143,7 @@ pub struct DescribeDatasetResponse {
 }
 
 #[doc="A request for usage information about the identity pool."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityPoolUsageRequest {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityPoolId")]
@@ -151,7 +151,7 @@ pub struct DescribeIdentityPoolUsageRequest {
 }
 
 #[doc="Response to a successful DescribeIdentityPoolUsage request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityPoolUsageResponse {
     #[doc="Information about the usage of the identity pool."]
     #[serde(rename="IdentityPoolUsage")]
@@ -160,7 +160,7 @@ pub struct DescribeIdentityPoolUsageResponse {
 }
 
 #[doc="A request for information about the usage of an identity pool."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityUsageRequest {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityId")]
@@ -171,7 +171,7 @@ pub struct DescribeIdentityUsageRequest {
 }
 
 #[doc="The response to a successful DescribeIdentityUsage request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityUsageResponse {
     #[doc="Usage information for the identity."]
     #[serde(rename="IdentityUsage")]
@@ -180,7 +180,7 @@ pub struct DescribeIdentityUsageResponse {
 }
 
 #[doc="The input for the GetBulkPublishDetails operation."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBulkPublishDetailsRequest {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityPoolId")]
@@ -188,7 +188,7 @@ pub struct GetBulkPublishDetailsRequest {
 }
 
 #[doc="The output for the GetBulkPublishDetails operation."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBulkPublishDetailsResponse {
     #[doc="If BulkPublishStatus is SUCCEEDED, the time the last bulk publish operation completed."]
     #[serde(rename="BulkPublishCompleteTime")]
@@ -213,7 +213,7 @@ pub struct GetBulkPublishDetailsResponse {
 }
 
 #[doc="<p>A request for a list of the configured Cognito Events</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCognitoEventsRequest {
     #[doc="<p>The Cognito Identity Pool ID for the request</p>"]
     #[serde(rename="IdentityPoolId")]
@@ -221,7 +221,7 @@ pub struct GetCognitoEventsRequest {
 }
 
 #[doc="<p>The response from the GetCognitoEvents request</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCognitoEventsResponse {
     #[doc="<p>The Cognito Events returned from the GetCognitoEvents request</p>"]
     #[serde(rename="Events")]
@@ -230,7 +230,7 @@ pub struct GetCognitoEventsResponse {
 }
 
 #[doc="<p>The input for the GetIdentityPoolConfiguration operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityPoolConfigurationRequest {
     #[doc="<p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. This is the ID of the pool for which to return a configuration.</p>"]
     #[serde(rename="IdentityPoolId")]
@@ -238,7 +238,7 @@ pub struct GetIdentityPoolConfigurationRequest {
 }
 
 #[doc="<p>The output for the GetIdentityPoolConfiguration operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIdentityPoolConfigurationResponse {
     #[doc="Options to apply to this identity pool for Amazon Cognito streams."]
     #[serde(rename="CognitoStreams")]
@@ -255,7 +255,7 @@ pub struct GetIdentityPoolConfigurationResponse {
 }
 
 #[doc="Usage information for the identity pool."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityPoolUsage {
     #[doc="Data storage information for the identity pool."]
     #[serde(rename="DataStorage")]
@@ -276,7 +276,7 @@ pub struct IdentityPoolUsage {
 }
 
 #[doc="Usage information for the identity."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdentityUsage {
     #[doc="Total data storage for this identity."]
     #[serde(rename="DataStorage")]
@@ -301,7 +301,7 @@ pub struct IdentityUsage {
 }
 
 #[doc="Request for a list of datasets for an identity."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDatasetsRequest {
     #[doc="A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region."]
     #[serde(rename="IdentityId")]
@@ -320,7 +320,7 @@ pub struct ListDatasetsRequest {
 }
 
 #[doc="Returned for a successful ListDatasets request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDatasetsResponse {
     #[doc="Number of datasets returned."]
     #[serde(rename="Count")]
@@ -337,7 +337,7 @@ pub struct ListDatasetsResponse {
 }
 
 #[doc="A request for usage information on an identity pool."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentityPoolUsageRequest {
     #[doc="The maximum number of results to be returned."]
     #[serde(rename="MaxResults")]
@@ -350,7 +350,7 @@ pub struct ListIdentityPoolUsageRequest {
 }
 
 #[doc="Returned for a successful ListIdentityPoolUsage request."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIdentityPoolUsageResponse {
     #[doc="Total number of identities for the identity pool."]
     #[serde(rename="Count")]
@@ -371,7 +371,7 @@ pub struct ListIdentityPoolUsageResponse {
 }
 
 #[doc="A request for a list of records."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRecordsRequest {
     #[doc="A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot)."]
     #[serde(rename="DatasetName")]
@@ -401,7 +401,7 @@ pub struct ListRecordsRequest {
 }
 
 #[doc="Returned for a successful ListRecordsRequest."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRecordsResponse {
     #[doc="Total number of records."]
     #[serde(rename="Count")]
@@ -455,7 +455,7 @@ pub struct PushSync {
 }
 
 #[doc="The basic data structure of a dataset."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Record {
     #[doc="The last modified date of the client device."]
     #[serde(rename="DeviceLastModifiedDate")]
@@ -484,7 +484,7 @@ pub struct Record {
 }
 
 #[doc="An update operation for a record."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordPatch {
     #[doc="The last modified date of the client device."]
     #[serde(rename="DeviceLastModifiedDate")]
@@ -506,7 +506,7 @@ pub struct RecordPatch {
 }
 
 #[doc="<p>A request to RegisterDevice.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterDeviceRequest {
     #[doc="<p>The unique ID for this identity.</p>"]
     #[serde(rename="IdentityId")]
@@ -523,7 +523,7 @@ pub struct RegisterDeviceRequest {
 }
 
 #[doc="<p>Response to a RegisterDevice request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterDeviceResponse {
     #[doc="<p>The unique ID generated for this device by Cognito.</p>"]
     #[serde(rename="DeviceId")]
@@ -532,7 +532,7 @@ pub struct RegisterDeviceResponse {
 }
 
 #[doc="<p>A request to configure Cognito Events\"</p>\""]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetCognitoEventsRequest {
     #[doc="<p>The events to configure</p>"]
     #[serde(rename="Events")]
@@ -543,7 +543,7 @@ pub struct SetCognitoEventsRequest {
 }
 
 #[doc="<p>The input for the SetIdentityPoolConfiguration operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityPoolConfigurationRequest {
     #[doc="Options to apply to this identity pool for Amazon Cognito streams."]
     #[serde(rename="CognitoStreams")]
@@ -559,7 +559,7 @@ pub struct SetIdentityPoolConfigurationRequest {
 }
 
 #[doc="<p>The output for the SetIdentityPoolConfiguration operation</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetIdentityPoolConfigurationResponse {
     #[doc="Options to apply to this identity pool for Amazon Cognito streams."]
     #[serde(rename="CognitoStreams")]
@@ -576,7 +576,7 @@ pub struct SetIdentityPoolConfigurationResponse {
 }
 
 #[doc="<p>A request to SubscribeToDatasetRequest.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscribeToDatasetRequest {
     #[doc="<p>The name of the dataset to subcribe to.</p>"]
     #[serde(rename="DatasetName")]
@@ -593,11 +593,11 @@ pub struct SubscribeToDatasetRequest {
 }
 
 #[doc="<p>Response to a SubscribeToDataset request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscribeToDatasetResponse;
 
 #[doc="<p>A request to UnsubscribeFromDataset.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsubscribeFromDatasetRequest {
     #[doc="<p>The name of the dataset from which to unsubcribe.</p>"]
     #[serde(rename="DatasetName")]
@@ -614,11 +614,11 @@ pub struct UnsubscribeFromDatasetRequest {
 }
 
 #[doc="<p>Response to an UnsubscribeFromDataset request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsubscribeFromDatasetResponse;
 
 #[doc="A request to post updates to records or add and delete records for a dataset and user."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRecordsRequest {
     #[doc="Intended to supply a device ID that will populate the lastModifiedBy field referenced in other methods. The ClientContext field is not yet implemented."]
     #[serde(rename="ClientContext")]
@@ -647,7 +647,7 @@ pub struct UpdateRecordsRequest {
 }
 
 #[doc="Returned for a successful UpdateRecordsRequest."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRecordsResponse {
     #[doc="A list of records that have been updated."]
     #[serde(rename="Records")]

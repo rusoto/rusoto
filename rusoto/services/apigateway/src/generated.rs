@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>Represents an AWS account that is associated with Amazon API Gateway.</p> <div class=\"remarks\"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href=\"http://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes\">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html\", \"name\": \"account\", \"templated\": true }, \"self\": { \"href\": \"/account\" }, \"account:update\": { \"href\": \"/account\" } }, \"cloudwatchRoleArn\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"throttleSettings\": { \"rateLimit\": 500, \"burstLimit\": 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html\">API Gateway Limits</a> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html\">Developer Guide</a>, <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html\">AWS CLI</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Account {
     #[doc="<p>The version of the API keys used for the account.</p>"]
     #[serde(rename="apiKeyVersion")]
@@ -51,7 +51,7 @@ pub struct Account {
 }
 
 #[doc="<p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html\">Use API Keys</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApiKey {
     #[doc="<p>The timestamp when the API Key was created.</p>"]
     #[serde(rename="createdDate")]
@@ -92,7 +92,7 @@ pub struct ApiKey {
 }
 
 #[doc="<p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApiKeyIds {
     #[doc="<p>A list of all the <a>ApiKey</a> identifiers.</p>"]
     #[serde(rename="ids")]
@@ -105,7 +105,7 @@ pub struct ApiKeyIds {
 }
 
 #[doc="<p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html\">Use API Keys</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApiKeys {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -134,7 +134,7 @@ pub struct ApiStage {
 }
 
 #[doc="<p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorization</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Authorizer {
     #[doc="<p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>"]
     #[serde(rename="authType")]
@@ -179,7 +179,7 @@ pub struct Authorizer {
 }
 
 #[doc="<p>Represents a collection of <a>Authorizer</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorization</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Authorizers {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -191,7 +191,7 @@ pub struct Authorizers {
 }
 
 #[doc="<p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class=\"remarks\">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Custom Domain Names</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BasePathMapping {
     #[doc="<p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>"]
     #[serde(rename="basePath")]
@@ -208,7 +208,7 @@ pub struct BasePathMapping {
 }
 
 #[doc="<p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Custom Domain Names</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BasePathMappings {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -220,7 +220,7 @@ pub struct BasePathMappings {
 }
 
 #[doc="<p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class=\"remarks\">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html\">Use Client-Side Certificate</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClientCertificate {
     #[doc="<p>The identifier of the client certificate.</p>"]
     #[serde(rename="clientCertificateId")]
@@ -245,7 +245,7 @@ pub struct ClientCertificate {
 }
 
 #[doc="<p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html\">Use Client-Side Certificate</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClientCertificates {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -257,7 +257,7 @@ pub struct ClientCertificates {
 }
 
 #[doc="<p>Request to create an <a>ApiKey</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateApiKeyRequest {
     #[doc="<p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>"]
     #[serde(rename="customerId")]
@@ -290,7 +290,7 @@ pub struct CreateApiKeyRequest {
 }
 
 #[doc="<p>Request to add a new <a>Authorizer</a> to an existing <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAuthorizerRequest {
     #[doc="<p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>"]
     #[serde(rename="authType")]
@@ -331,7 +331,7 @@ pub struct CreateAuthorizerRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a new <a>BasePathMapping</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBasePathMappingRequest {
     #[doc="<p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify a base path name after the domain name.</p>"]
     #[serde(rename="basePath")]
@@ -350,7 +350,7 @@ pub struct CreateBasePathMappingRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a <a>Deployment</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentRequest {
     #[doc="<p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>"]
     #[serde(rename="cacheClusterEnabled")]
@@ -382,7 +382,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[doc="<p>Creates a new documentation part of a given API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDocumentationPartRequest {
     #[doc="<p>[Required] The location of the targeted API entity of the to-be-created documentation part.</p>"]
     #[serde(rename="location")]
@@ -396,7 +396,7 @@ pub struct CreateDocumentationPartRequest {
 }
 
 #[doc="<p>Creates a new documentation version of a given API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDocumentationVersionRequest {
     #[doc="<p>A description about the new documentation snapshot.</p>"]
     #[serde(rename="description")]
@@ -415,7 +415,7 @@ pub struct CreateDocumentationVersionRequest {
 }
 
 #[doc="<p>A request to create a new domain name.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDomainNameRequest {
     #[doc="<p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>"]
     #[serde(rename="certificateArn")]
@@ -443,7 +443,7 @@ pub struct CreateDomainNameRequest {
 }
 
 #[doc="<p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateModelRequest {
     #[doc="<p>The content-type for the model.</p>"]
     #[serde(rename="contentType")]
@@ -465,7 +465,7 @@ pub struct CreateModelRequest {
 }
 
 #[doc="<p>Creates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRequestValidatorRequest {
     #[doc="<p>The name of the to-be-created <a>RequestValidator</a>.</p>"]
     #[serde(rename="name")]
@@ -485,7 +485,7 @@ pub struct CreateRequestValidatorRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a <a>Resource</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateResourceRequest {
     #[doc="<p>The parent resource's identifier.</p>"]
     #[serde(rename="parentId")]
@@ -499,7 +499,7 @@ pub struct CreateResourceRequest {
 }
 
 #[doc="<p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRestApiRequest {
     #[doc="<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>"]
     #[serde(rename="binaryMediaTypes")]
@@ -523,7 +523,7 @@ pub struct CreateRestApiRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a <a>Stage</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateStageRequest {
     #[doc="<p>Whether cache clustering is enabled for the stage.</p>"]
     #[serde(rename="cacheClusterEnabled")]
@@ -557,7 +557,7 @@ pub struct CreateStageRequest {
 }
 
 #[doc="<p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUsagePlanKeyRequest {
     #[doc="<p>The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>"]
     #[serde(rename="keyId")]
@@ -571,7 +571,7 @@ pub struct CreateUsagePlanKeyRequest {
 }
 
 #[doc="<p>The POST request to create a usage plan with the name, description, throttle limits and quota limits, as well as the associated API stages, specified in the payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUsagePlanRequest {
     #[doc="<p>The associated API stages of the usage plan.</p>"]
     #[serde(rename="apiStages")]
@@ -595,7 +595,7 @@ pub struct CreateUsagePlanRequest {
 }
 
 #[doc="<p>A request to delete the <a>ApiKey</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteApiKeyRequest {
     #[doc="<p>The identifier of the <a>ApiKey</a> resource to be deleted.</p>"]
     #[serde(rename="apiKey")]
@@ -603,7 +603,7 @@ pub struct DeleteApiKeyRequest {
 }
 
 #[doc="<p>Request to delete an existing <a>Authorizer</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAuthorizerRequest {
     #[doc="<p>The identifier of the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="authorizerId")]
@@ -614,7 +614,7 @@ pub struct DeleteAuthorizerRequest {
 }
 
 #[doc="<p>A request to delete the <a>BasePathMapping</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBasePathMappingRequest {
     #[doc="<p>The base path name of the <a>BasePathMapping</a> resource to delete.</p>"]
     #[serde(rename="basePath")]
@@ -625,7 +625,7 @@ pub struct DeleteBasePathMappingRequest {
 }
 
 #[doc="<p>A request to delete the <a>ClientCertificate</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClientCertificateRequest {
     #[doc="<p>The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>"]
     #[serde(rename="clientCertificateId")]
@@ -633,7 +633,7 @@ pub struct DeleteClientCertificateRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to delete a <a>Deployment</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeploymentRequest {
     #[doc="<p>The identifier of the <a>Deployment</a> resource to delete.</p>"]
     #[serde(rename="deploymentId")]
@@ -644,7 +644,7 @@ pub struct DeleteDeploymentRequest {
 }
 
 #[doc="<p>Deletes an existing documentation part of an API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDocumentationPartRequest {
     #[doc="<p>[Required] The identifier of the to-be-deleted documentation part.</p>"]
     #[serde(rename="documentationPartId")]
@@ -655,7 +655,7 @@ pub struct DeleteDocumentationPartRequest {
 }
 
 #[doc="<p>Deletes an existing documentation version of an API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of a to-be-deleted documentation snapshot.</p>"]
     #[serde(rename="documentationVersion")]
@@ -666,7 +666,7 @@ pub struct DeleteDocumentationVersionRequest {
 }
 
 #[doc="<p>A request to delete the <a>DomainName</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDomainNameRequest {
     #[doc="<p>The name of the <a>DomainName</a> resource to be deleted.</p>"]
     #[serde(rename="domainName")]
@@ -674,7 +674,7 @@ pub struct DeleteDomainNameRequest {
 }
 
 #[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteGatewayResponseRequest {
     #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
     #[serde(rename="responseType")]
@@ -685,7 +685,7 @@ pub struct DeleteGatewayResponseRequest {
 }
 
 #[doc="<p>Represents a delete integration request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIntegrationRequest {
     #[doc="<p>Specifies a delete integration request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -699,7 +699,7 @@ pub struct DeleteIntegrationRequest {
 }
 
 #[doc="<p>Represents a delete integration response request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIntegrationResponseRequest {
     #[doc="<p>Specifies a delete integration response request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -716,7 +716,7 @@ pub struct DeleteIntegrationResponseRequest {
 }
 
 #[doc="<p>Request to delete an existing <a>Method</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteMethodRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -730,7 +730,7 @@ pub struct DeleteMethodRequest {
 }
 
 #[doc="<p>A request to delete an existing <a>MethodResponse</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteMethodResponseRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -747,7 +747,7 @@ pub struct DeleteMethodResponseRequest {
 }
 
 #[doc="<p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteModelRequest {
     #[doc="<p>The name of the model to delete.</p>"]
     #[serde(rename="modelName")]
@@ -758,7 +758,7 @@ pub struct DeleteModelRequest {
 }
 
 #[doc="<p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRequestValidatorRequest {
     #[doc="<p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>"]
     #[serde(rename="requestValidatorId")]
@@ -769,7 +769,7 @@ pub struct DeleteRequestValidatorRequest {
 }
 
 #[doc="<p>Request to delete a <a>Resource</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteResourceRequest {
     #[doc="<p>The identifier of the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
@@ -780,7 +780,7 @@ pub struct DeleteResourceRequest {
 }
 
 #[doc="<p>Request to delete the specified API from your collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRestApiRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -788,7 +788,7 @@ pub struct DeleteRestApiRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to delete a <a>Stage</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteStageRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -799,7 +799,7 @@ pub struct DeleteStageRequest {
 }
 
 #[doc="<p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUsagePlanKeyRequest {
     #[doc="<p>The Id of the <a>UsagePlanKey</a> resource to be deleted.</p>"]
     #[serde(rename="keyId")]
@@ -810,7 +810,7 @@ pub struct DeleteUsagePlanKeyRequest {
 }
 
 #[doc="<p>The DELETE request to delete a usage plan of a given plan Id.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUsagePlanRequest {
     #[doc="<p>The Id of the to-be-deleted usage plan.</p>"]
     #[serde(rename="usagePlanId")]
@@ -818,7 +818,7 @@ pub struct DeleteUsagePlanRequest {
 }
 
 #[doc="<p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class=\"remarks\">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi_id}/deployments/{deployment_id}</code>).</div> <div class=\"seeAlso\"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html\">AWS CLI</a>, <a href=\"https://aws.amazon.com/tools/\">AWS SDKs</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Deployment {
     #[doc="<p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>"]
     #[serde(rename="apiSummary")]
@@ -841,7 +841,7 @@ pub struct Deployment {
 }
 
 #[doc="<p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class=\"remarks\">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html\">Deploying an API</a>, <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html\">AWS CLI</a>, <a href=\"https://aws.amazon.com/tools/\">AWS SDKs</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Deployments {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -853,7 +853,7 @@ pub struct Deployments {
 }
 
 #[doc="<p>A documentation part for a targeted API entity.</p> <div class=\"remarks\"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the Swagger-compliant documentation fields will be injected into the associated API entity definition in the exported Swagger definition file.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationParts</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentationPart {
     #[doc="<p>The <a>DocumentationPart</a> identifier, generated by Amazon API Gateway when the <code>DocumentationPart</code> is created.</p>"]
     #[serde(rename="id")]
@@ -870,7 +870,7 @@ pub struct DocumentationPart {
 }
 
 #[doc="<p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class=\"remarks\">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into Amazon API Gateway</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a href=\"http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/\">documentationpart:import</a>, <a>DocumentationPart</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentationPartIds {
     #[doc="<p>A list of the returned documentation part identifiers.</p>"]
     #[serde(rename="ids")]
@@ -907,7 +907,7 @@ pub struct DocumentationPartLocation {
 }
 
 #[doc="<p>The collection of documentation parts of an API.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentationParts {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -919,7 +919,7 @@ pub struct DocumentationParts {
 }
 
 #[doc="<p>A snapshot of the documentation of an API.</p> <div class=\"remarks\"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., Swagger) file.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentationVersion {
     #[doc="<p>The date when the API documentation snapshot is created.</p>"]
     #[serde(rename="createdDate")]
@@ -936,7 +936,7 @@ pub struct DocumentationVersion {
 }
 
 #[doc="<p>The collection of documentation snapshots of an API. </p> <div class=\"remarks\"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentationVersions {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -948,7 +948,7 @@ pub struct DocumentationVersions {
 }
 
 #[doc="<p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Client-Side Certificate</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainName {
     #[doc="<p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>"]
     #[serde(rename="certificateArn")]
@@ -973,7 +973,7 @@ pub struct DomainName {
 }
 
 #[doc="<p>Represents a collection of <a>DomainName</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html\">Use Client-Side Certificate</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainNames {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -985,18 +985,28 @@ pub struct DomainNames {
 }
 
 #[doc="<p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportResponse {
     #[doc="<p>The binary blob response to <a>GetExport</a>, which contains the export.</p>"]
+    #[serde(rename="body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<Vec<u8>>,
     #[doc="<p>The content-disposition header value in the HTTP response.</p>"]
+    #[serde(rename="contentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="<p>The content-type header value in the HTTP response. This will correspond to a valid 'accept' type in the request.</p>"]
+    #[serde(rename="contentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
 }
 
 #[doc="<p>Request to flush authorizer cache entries on a specified stage.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FlushStageAuthorizersCacheRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -1007,7 +1017,7 @@ pub struct FlushStageAuthorizersCacheRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to flush a stage's cache.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FlushStageCacheRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -1018,7 +1028,7 @@ pub struct FlushStageCacheRequest {
 }
 
 #[doc="<p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class=\"remarks\"> For more information about valid gateway response types, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html\">Gateway Response Types Supported by Amazon API Gateway</a> <div class=\"example\"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING_AUTHNETICATION_TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html\", \"name\": \"gatewayresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:delete\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" } }, \"defaultResponse\": false, \"responseParameters\": { \"gatewayresponse.header.x-request-path\": \"method.request.path.petId\", \"gatewayresponse.header.Access-Control-Allow-Origin\": \"&apos;a.b.c&apos;\", \"gatewayresponse.header.x-request-query\": \"method.request.querystring.q\", \"gatewayresponse.header.x-request-header\": \"method.request.header.Accept\" }, \"responseTemplates\": { \"application/json\": \"{\\n \\\"message\\\": $context.error.messageString,\\n \\\"type\\\": \\\"$context.error.responseType\\\",\\n \\\"stage\\\": \\\"$context.stage\\\",\\n \\\"resourcePath\\\": \\\"$context.resourcePath\\\",\\n \\\"stageVariables.a\\\": \\\"$stageVariables.a\\\",\\n \\\"statusCode\\\": \\\"&apos;404&apos;\\\"\\n}\" }, \"responseType\": \"MISSING_AUTHENTICATION_TOKEN\", \"statusCode\": \"404\" }</code></pre> <p></p> </div> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html\">Customize Gateway Responses</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GatewayResponse {
     #[doc="<p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by Amazon API Gateway without any customization by an API developer. </p>"]
     #[serde(rename="defaultResponse")]
@@ -1043,7 +1053,7 @@ pub struct GatewayResponse {
 }
 
 #[doc="<p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class=\"remarks\"> For more information about valid gateway response types, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html\">Gateway Response Types Supported by Amazon API Gateway</a> <div class=\"example\"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html\", \"name\": \"gatewayresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"first\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"gatewayresponse:by-type\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"item\": [ { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } ] }, \"_embedded\": { \"item\": [ { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_FAILURE\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"RESOURCE_NOT_FOUND\", \"statusCode\": \"404\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"REQUEST_TOO_LARGE\", \"statusCode\": \"413\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"THROTTLED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNSUPPORTED_MEDIA_TYPE\", \"statusCode\": \"415\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_5XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_4XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_PARAMETERS\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_BODY\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"EXPIRED_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"ACCESS_DENIED\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_API_KEY\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNAUTHORIZED\", \"statusCode\": \"401\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"API_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"QUOTA_EXCEEDED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_TIMEOUT\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"MISSING_AUTHENTICATION_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_SIGNATURE\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_FAILURE\", \"statusCode\": \"500\" } ] } }</code></pre> <p></p> </div> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html\">Customize Gateway Responses</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GatewayResponses {
     #[doc="<p>Returns the entire collection, because of no pagination support.</p>"]
     #[serde(rename="items")]
@@ -1055,7 +1065,7 @@ pub struct GatewayResponses {
 }
 
 #[doc="<p>A request to generate a <a>ClientCertificate</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateClientCertificateRequest {
     #[doc="<p>The description of the <a>ClientCertificate</a>.</p>"]
     #[serde(rename="description")]
@@ -1064,11 +1074,11 @@ pub struct GenerateClientCertificateRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to get information about the current <a>Account</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountRequest;
 
 #[doc="<p>A request to get information about the current <a>ApiKey</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApiKeyRequest {
     #[doc="<p>The identifier of the <a>ApiKey</a> resource.</p>"]
     #[serde(rename="apiKey")]
@@ -1080,7 +1090,7 @@ pub struct GetApiKeyRequest {
 }
 
 #[doc="<p>A request to get information about the current <a>ApiKeys</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApiKeysRequest {
     #[doc="<p>The identifier of a customer in AWS Marketplace or an external system, such as a developer portal.</p>"]
     #[serde(rename="customerId")]
@@ -1105,7 +1115,7 @@ pub struct GetApiKeysRequest {
 }
 
 #[doc="<p>Request to describe an existing <a>Authorizer</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAuthorizerRequest {
     #[doc="<p>The identifier of the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="authorizerId")]
@@ -1116,7 +1126,7 @@ pub struct GetAuthorizerRequest {
 }
 
 #[doc="<p>Request to describe an existing <a>Authorizers</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAuthorizersRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1132,7 +1142,7 @@ pub struct GetAuthorizersRequest {
 }
 
 #[doc="<p>Request to describe a <a>BasePathMapping</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBasePathMappingRequest {
     #[doc="<p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify any base path name after the domain name.</p>"]
     #[serde(rename="basePath")]
@@ -1143,7 +1153,7 @@ pub struct GetBasePathMappingRequest {
 }
 
 #[doc="<p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBasePathMappingsRequest {
     #[doc="<p>The domain name of a <a>BasePathMapping</a> resource.</p>"]
     #[serde(rename="domainName")]
@@ -1159,7 +1169,7 @@ pub struct GetBasePathMappingsRequest {
 }
 
 #[doc="<p>A request to get information about the current <a>ClientCertificate</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClientCertificateRequest {
     #[doc="<p>The identifier of the <a>ClientCertificate</a> resource to be described.</p>"]
     #[serde(rename="clientCertificateId")]
@@ -1167,7 +1177,7 @@ pub struct GetClientCertificateRequest {
 }
 
 #[doc="<p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetClientCertificatesRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
@@ -1180,7 +1190,7 @@ pub struct GetClientCertificatesRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to get information about a <a>Deployment</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentRequest {
     #[doc="<p>The identifier of the <a>Deployment</a> resource to get information about.</p>"]
     #[serde(rename="deploymentId")]
@@ -1195,7 +1205,7 @@ pub struct GetDeploymentRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to get information about a <a>Deployments</a> collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentsRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
@@ -1211,7 +1221,7 @@ pub struct GetDeploymentsRequest {
 }
 
 #[doc="<p>Gets a specified documentation part of a given API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentationPartRequest {
     #[doc="<p>[Required] The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="documentationPartId")]
@@ -1222,7 +1232,7 @@ pub struct GetDocumentationPartRequest {
 }
 
 #[doc="<p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentationPartsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1250,7 +1260,7 @@ pub struct GetDocumentationPartsRequest {
 }
 
 #[doc="<p>Gets a documentation snapshot of an API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>"]
     #[serde(rename="documentationVersion")]
@@ -1261,7 +1271,7 @@ pub struct GetDocumentationVersionRequest {
 }
 
 #[doc="<p>Gets the documentation versions of an API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentationVersionsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1277,7 +1287,7 @@ pub struct GetDocumentationVersionsRequest {
 }
 
 #[doc="<p>Request to get the name of a <a>DomainName</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainNameRequest {
     #[doc="<p>The name of the <a>DomainName</a> resource.</p>"]
     #[serde(rename="domainName")]
@@ -1285,7 +1295,7 @@ pub struct GetDomainNameRequest {
 }
 
 #[doc="<p>Request to describe a collection of <a>DomainName</a> resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainNamesRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
@@ -1298,7 +1308,7 @@ pub struct GetDomainNamesRequest {
 }
 
 #[doc="<p>Request a new export of a <a>RestApi</a> for a particular <a>Stage</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetExportRequest {
     #[doc="<p>The content-type of the export, for example <code>application/json</code>. Currently <code>application/json</code> and <code>application/yaml</code> are supported for <code>exportType</code> of <code>swagger</code>. This should be specified in the <code>Accept</code> header for direct API requests.</p>"]
     #[serde(rename="accepts")]
@@ -1320,7 +1330,7 @@ pub struct GetExportRequest {
 }
 
 #[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGatewayResponseRequest {
     #[doc="<p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>"]
     #[serde(rename="responseType")]
@@ -1331,7 +1341,7 @@ pub struct GetGatewayResponseRequest {
 }
 
 #[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGatewayResponsesRequest {
     #[doc="<p>The maximum number of returned results per page. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>"]
     #[serde(rename="limit")]
@@ -1347,7 +1357,7 @@ pub struct GetGatewayResponsesRequest {
 }
 
 #[doc="<p>Represents a get integration request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntegrationRequest {
     #[doc="<p>Specifies a get integration request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -1361,7 +1371,7 @@ pub struct GetIntegrationRequest {
 }
 
 #[doc="<p>Represents a get integration response request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntegrationResponseRequest {
     #[doc="<p>Specifies a get integration response request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -1378,7 +1388,7 @@ pub struct GetIntegrationResponseRequest {
 }
 
 #[doc="<p>Request to describe an existing <a>Method</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMethodRequest {
     #[doc="<p>Specifies the method request's HTTP method type.</p>"]
     #[serde(rename="httpMethod")]
@@ -1392,7 +1402,7 @@ pub struct GetMethodRequest {
 }
 
 #[doc="<p>Request to describe a <a>MethodResponse</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetMethodResponseRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -1409,7 +1419,7 @@ pub struct GetMethodResponseRequest {
 }
 
 #[doc="<p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetModelRequest {
     #[doc="<p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>"]
     #[serde(rename="flatten")]
@@ -1424,7 +1434,7 @@ pub struct GetModelRequest {
 }
 
 #[doc="<p>Request to generate a sample mapping template used to transform the payload.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetModelTemplateRequest {
     #[doc="<p>The name of the model for which to generate a template.</p>"]
     #[serde(rename="modelName")]
@@ -1435,7 +1445,7 @@ pub struct GetModelTemplateRequest {
 }
 
 #[doc="<p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetModelsRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
@@ -1451,7 +1461,7 @@ pub struct GetModelsRequest {
 }
 
 #[doc="<p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRequestValidatorRequest {
     #[doc="<p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>"]
     #[serde(rename="requestValidatorId")]
@@ -1462,7 +1472,7 @@ pub struct GetRequestValidatorRequest {
 }
 
 #[doc="<p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRequestValidatorsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1478,7 +1488,7 @@ pub struct GetRequestValidatorsRequest {
 }
 
 #[doc="<p>Request to list information about a resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetResourceRequest {
     #[doc="<p>A query parameter to retrieve the specified resources embedded in the returned <a>Resource</a> representation in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code>.</p>"]
     #[serde(rename="embed")]
@@ -1493,7 +1503,7 @@ pub struct GetResourceRequest {
 }
 
 #[doc="<p>Request to list information about a collection of resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetResourcesRequest {
     #[doc="<p>A query parameter used to retrieve the specified resources embedded in the returned <a>Resources</a> resource in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources?embed=methods</code>.</p>"]
     #[serde(rename="embed")]
@@ -1513,7 +1523,7 @@ pub struct GetResourcesRequest {
 }
 
 #[doc="<p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRestApiRequest {
     #[doc="<p>The identifier of the <a>RestApi</a> resource.</p>"]
     #[serde(rename="restApiId")]
@@ -1521,7 +1531,7 @@ pub struct GetRestApiRequest {
 }
 
 #[doc="<p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRestApisRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
@@ -1534,7 +1544,7 @@ pub struct GetRestApisRequest {
 }
 
 #[doc="<p>Request a new generated client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSdkRequest {
     #[doc="<p>A key-value map of query string parameters that specify properties of the SDK, depending on the requested <code>sdkType</code>. For <code>sdkType</code> of <code>objectivec</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required.</p>"]
     #[serde(rename="parameters")]
@@ -1552,7 +1562,7 @@ pub struct GetSdkRequest {
 }
 
 #[doc="<p>Get an <a>SdkType</a> instance.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSdkTypeRequest {
     #[doc="<p>The identifier of the queried <a>SdkType</a> instance.</p>"]
     #[serde(rename="id")]
@@ -1560,7 +1570,7 @@ pub struct GetSdkTypeRequest {
 }
 
 #[doc="<p>Get the <a>SdkTypes</a> collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSdkTypesRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1573,7 +1583,7 @@ pub struct GetSdkTypesRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to get information about a <a>Stage</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetStageRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -1584,7 +1594,7 @@ pub struct GetStageRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to get information about one or more <a>Stage</a> resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetStagesRequest {
     #[doc="<p>The stages' deployment identifiers.</p>"]
     #[serde(rename="deploymentId")]
@@ -1596,7 +1606,7 @@ pub struct GetStagesRequest {
 }
 
 #[doc="<p>The GET request to get a usage plan key of a given key identifier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUsagePlanKeyRequest {
     #[doc="<p>The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>"]
     #[serde(rename="keyId")]
@@ -1607,7 +1617,7 @@ pub struct GetUsagePlanKeyRequest {
 }
 
 #[doc="<p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUsagePlanKeysRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
@@ -1627,7 +1637,7 @@ pub struct GetUsagePlanKeysRequest {
 }
 
 #[doc="<p>The GET request to get a usage plan of a given plan identifier.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUsagePlanRequest {
     #[doc="<p>The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>"]
     #[serde(rename="usagePlanId")]
@@ -1635,7 +1645,7 @@ pub struct GetUsagePlanRequest {
 }
 
 #[doc="<p>The GET request to get all the usage plans of the caller's account.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUsagePlansRequest {
     #[doc="<p>The identifier of the API key associated with the usage plans.</p>"]
     #[serde(rename="keyId")]
@@ -1652,7 +1662,7 @@ pub struct GetUsagePlansRequest {
 }
 
 #[doc="<p>The GET request to get the usage data of a usage plan in a specified time interval.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUsageRequest {
     #[doc="<p>The ending date (e.g., 2016-12-31) of the usage data.</p>"]
     #[serde(rename="endDate")]
@@ -1678,7 +1688,7 @@ pub struct GetUsageRequest {
 }
 
 #[doc="<p>The POST request to import API keys from an external source, such as a CSV-formatted file.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportApiKeysRequest {
     #[doc="<p>The payload of the POST request to import API keys. For the payload format, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-file-format.html\">API Key File Format</a>.</p>"]
     #[serde(rename="body")]
@@ -1698,7 +1708,7 @@ pub struct ImportApiKeysRequest {
 }
 
 #[doc="<p>Import documentation parts from an external (e.g., Swagger) definition file. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportDocumentationPartsRequest {
     #[doc="<p>[Required] Raw byte array representing the to-be-imported documentation parts. To import from a Swagger file, this is a JSON object.</p>"]
     #[serde(rename="body")]
@@ -1722,7 +1732,7 @@ pub struct ImportDocumentationPartsRequest {
 }
 
 #[doc="<p>A POST request to import an API to Amazon API Gateway using an input of an API definition file.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportRestApiRequest {
     #[doc="<p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>"]
     #[serde(rename="body")]
@@ -1743,7 +1753,7 @@ pub struct ImportRestApiRequest {
 }
 
 #[doc="<p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Integration {
     #[doc="<p>Specifies the integration's cache key parameters.</p>"]
     #[serde(rename="cacheKeyParameters")]
@@ -1792,7 +1802,7 @@ pub struct Integration {
 }
 
 #[doc="<p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IntegrationResponse {
     #[doc="<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>"]
     #[serde(rename="contentHandling")]
@@ -1817,7 +1827,7 @@ pub struct IntegrationResponse {
 }
 
 #[doc="<p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class=\"remarks\"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": true, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E\\\")\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference\">$util.urlDecode()</a> helper function.</p> </div> <div class=\"seeAlso\"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html\">Set up an API's method</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Method {
     #[doc="<p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>"]
     #[serde(rename="apiKeyRequired")]
@@ -1862,7 +1872,7 @@ pub struct Method {
 }
 
 #[doc="<p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class=\"remarks\"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" }</code></pre> <p/> </div> <div class=\"seeAlso\"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MethodResponse {
     #[doc="<p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>"]
     #[serde(rename="responseModels")]
@@ -1879,7 +1889,7 @@ pub struct MethodResponse {
 }
 
 #[doc="<p>Specifies the method setting properties.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MethodSetting {
     #[doc="<p>Specifies whether the cached responses are encrypted. The PATCH path for this setting is <code>/{method_setting_key}/caching/dataEncrypted</code>, and the value is a Boolean.</p>"]
     #[serde(rename="cacheDataEncrypted")]
@@ -1924,7 +1934,7 @@ pub struct MethodSetting {
 }
 
 #[doc="<p>Represents a summary of a <a>Method</a> resource, given a particular date and time.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MethodSnapshot {
     #[doc="<p>Specifies whether the method requires a valid <a>ApiKey</a>.</p>"]
     #[serde(rename="apiKeyRequired")]
@@ -1937,7 +1947,7 @@ pub struct MethodSnapshot {
 }
 
 #[doc="<p>Represents the data structure of a method's request or response payload.</p> <div class=\"remarks\"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API's SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class=\"seeAlso\"> <a>Method</a>, <a>MethodResponse</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html\">Models and Mappings</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Model {
     #[doc="<p>The content-type for the model.</p>"]
     #[serde(rename="contentType")]
@@ -1962,7 +1972,7 @@ pub struct Model {
 }
 
 #[doc="<p>Represents a collection of <a>Model</a> resources.</p> <div class=\"seeAlso\"> <a>Method</a>, <a>MethodResponse</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html\">Models and Mappings</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Models {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -1974,7 +1984,7 @@ pub struct Models {
 }
 
 #[doc="A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PatchOperation {
     #[doc="<p> Not supported.</p>"]
     #[serde(rename="from")]
@@ -1995,7 +2005,7 @@ pub struct PatchOperation {
 }
 
 #[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutGatewayResponseRequest {
     #[doc="<p><p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p></p>"]
     #[serde(rename="responseParameters")]
@@ -2018,7 +2028,7 @@ pub struct PutGatewayResponseRequest {
 }
 
 #[doc="<p>Sets up a method's integration.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIntegrationRequest {
     #[doc="<p>Specifies a put integration input's cache key parameters.</p>"]
     #[serde(rename="cacheKeyParameters")]
@@ -2071,7 +2081,7 @@ pub struct PutIntegrationRequest {
 }
 
 #[doc="<p>Represents a put integration response request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIntegrationResponseRequest {
     #[doc="<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>"]
     #[serde(rename="contentHandling")]
@@ -2104,7 +2114,7 @@ pub struct PutIntegrationResponseRequest {
 }
 
 #[doc="<p>Request to add a method to an existing <a>Resource</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutMethodRequest {
     #[doc="<p>Specifies whether the method required a valid <a>ApiKey</a>.</p>"]
     #[serde(rename="apiKeyRequired")]
@@ -2145,7 +2155,7 @@ pub struct PutMethodRequest {
 }
 
 #[doc="<p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutMethodResponseRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -2170,7 +2180,7 @@ pub struct PutMethodResponseRequest {
 }
 
 #[doc="<p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRestApiRequest {
     #[doc="<p>The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>"]
     #[serde(rename="body")]
@@ -2215,7 +2225,7 @@ pub struct QuotaSettings {
 }
 
 #[doc="<p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class=\"remarks\"> <p>In Swagger, a <a>RequestValidator</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html\">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator\">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestValidator {
     #[doc="<p>The identifier of this <a>RequestValidator</a>.</p>"]
     #[serde(rename="id")]
@@ -2236,7 +2246,7 @@ pub struct RequestValidator {
 }
 
 #[doc="<p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class=\"remarks\"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html\">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestValidators {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -2248,7 +2258,7 @@ pub struct RequestValidators {
 }
 
 #[doc="<p>Represents an API resource.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Resource {
     #[doc="<p>The resource's identifier.</p>"]
     #[serde(rename="id")]
@@ -2273,7 +2283,7 @@ pub struct Resource {
 }
 
 #[doc="<p>Represents a collection of <a>Resource</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Resources {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -2285,7 +2295,7 @@ pub struct Resources {
 }
 
 #[doc="<p>Represents a REST API.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestApi {
     #[doc="<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>"]
     #[serde(rename="binaryMediaTypes")]
@@ -2318,7 +2328,7 @@ pub struct RestApi {
 }
 
 #[doc="<p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestApis {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -2330,7 +2340,7 @@ pub struct RestApis {
 }
 
 #[doc="<p>A configuration property of an SDK type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SdkConfigurationProperty {
     #[doc="<p>The default value of an <a>SdkType</a> configuration property.</p>"]
     #[serde(rename="defaultValue")]
@@ -2355,18 +2365,28 @@ pub struct SdkConfigurationProperty {
 }
 
 #[doc="<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SdkResponse {
     #[doc="<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>"]
+    #[serde(rename="body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<Vec<u8>>,
     #[doc="<p>The content-disposition header value in the HTTP response.</p>"]
+    #[serde(rename="contentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="<p>The content-type header value in the HTTP response.</p>"]
+    #[serde(rename="contentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
 }
 
 #[doc="<p>A type of SDK that API Gateway can generate.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SdkType {
     #[doc="<p>A list of configuration properties of an <a>SdkType</a>.</p>"]
     #[serde(rename="configurationProperties")]
@@ -2387,7 +2407,7 @@ pub struct SdkType {
 }
 
 #[doc="<p>The collection of <a>SdkType</a> instances.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SdkTypes {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -2399,7 +2419,7 @@ pub struct SdkTypes {
 }
 
 #[doc="<p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html\">Deploy an API</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Stage {
     #[doc="<p>Specifies whether a cache cluster is enabled for the stage.</p>"]
     #[serde(rename="cacheClusterEnabled")]
@@ -2452,7 +2472,7 @@ pub struct Stage {
 }
 
 #[doc="<p>A reference to a unique stage identified in the format <code>{restApiId}/{stage}</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StageKey {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
@@ -2465,7 +2485,7 @@ pub struct StageKey {
 }
 
 #[doc="<p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html\">Deploying API in Stages</a></div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Stages {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="item")]
@@ -2474,7 +2494,7 @@ pub struct Stages {
 }
 
 #[doc="<p>Represents a mapping template used to transform a payload.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings\">Mapping Templates</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Template {
     #[doc="<p>The Apache <a href=\"http://velocity.apache.org/engine/devel/vtl-reference-guide.html\" target=\"_blank\">Velocity Template Language (VTL)</a> template content used for the template resource.</p>"]
     #[serde(rename="value")]
@@ -2483,7 +2503,7 @@ pub struct Template {
 }
 
 #[doc="<p>Make a request to simulate the execution of an <a>Authorizer</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestInvokeAuthorizerRequest {
     #[doc="<p>[Optional] A key-value map of additional context variables.</p>"]
     #[serde(rename="additionalContext")]
@@ -2514,7 +2534,7 @@ pub struct TestInvokeAuthorizerRequest {
 }
 
 #[doc="<p>Represents the response of the test invoke request for a custom <a>Authorizer</a></p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestInvokeAuthorizerResponse {
     #[serde(rename="authorization")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2546,7 +2566,7 @@ pub struct TestInvokeAuthorizerResponse {
 }
 
 #[doc="<p>Make a request to simulate the execution of a <a>Method</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestInvokeMethodRequest {
     #[doc="<p>The simulated request body of an incoming invocation request.</p>"]
     #[serde(rename="body")]
@@ -2580,7 +2600,7 @@ pub struct TestInvokeMethodRequest {
 }
 
 #[doc="<p>Represents the response of the test invoke request in the HTTP method.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console\">Test API using the API Gateway console</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestInvokeMethodResponse {
     #[doc="<p>The body of the HTTP response.</p>"]
     #[serde(rename="body")]
@@ -2618,7 +2638,7 @@ pub struct ThrottleSettings {
 }
 
 #[doc="<p>Requests Amazon API Gateway to change information about the current <a>Account</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAccountRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2627,7 +2647,7 @@ pub struct UpdateAccountRequest {
 }
 
 #[doc="<p>A request to change information about an <a>ApiKey</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateApiKeyRequest {
     #[doc="<p>The identifier of the <a>ApiKey</a> resource to be updated.</p>"]
     #[serde(rename="apiKey")]
@@ -2639,7 +2659,7 @@ pub struct UpdateApiKeyRequest {
 }
 
 #[doc="<p>Request to update an existing <a>Authorizer</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAuthorizerRequest {
     #[doc="<p>The identifier of the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="authorizerId")]
@@ -2654,7 +2674,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 #[doc="<p>A request to change information about the <a>BasePathMapping</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateBasePathMappingRequest {
     #[doc="<p>The base path of the <a>BasePathMapping</a> resource to change.</p>"]
     #[serde(rename="basePath")]
@@ -2669,7 +2689,7 @@ pub struct UpdateBasePathMappingRequest {
 }
 
 #[doc="<p>A request to change information about an <a>ClientCertificate</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClientCertificateRequest {
     #[doc="<p>The identifier of the <a>ClientCertificate</a> resource to be updated.</p>"]
     #[serde(rename="clientCertificateId")]
@@ -2681,7 +2701,7 @@ pub struct UpdateClientCertificateRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to change information about a <a>Deployment</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDeploymentRequest {
     #[doc="<p>The replacement identifier for the <a>Deployment</a> resource to change information about.</p>"]
     #[serde(rename="deploymentId")]
@@ -2696,7 +2716,7 @@ pub struct UpdateDeploymentRequest {
 }
 
 #[doc="<p>Updates an existing documentation part of a given API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDocumentationPartRequest {
     #[doc="<p>[Required] The identifier of the to-be-updated documentation part.</p>"]
     #[serde(rename="documentationPartId")]
@@ -2711,7 +2731,7 @@ pub struct UpdateDocumentationPartRequest {
 }
 
 #[doc="<p>Updates an existing documentation version of an API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDocumentationVersionRequest {
     #[doc="<p>[Required] The version identifier of the to-be-updated documentation version.</p>"]
     #[serde(rename="documentationVersion")]
@@ -2726,7 +2746,7 @@ pub struct UpdateDocumentationVersionRequest {
 }
 
 #[doc="<p>A request to change information about the <a>DomainName</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainNameRequest {
     #[doc="<p>The name of the <a>DomainName</a> resource to be changed.</p>"]
     #[serde(rename="domainName")]
@@ -2738,7 +2758,7 @@ pub struct UpdateDomainNameRequest {
 }
 
 #[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateGatewayResponseRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2753,7 +2773,7 @@ pub struct UpdateGatewayResponseRequest {
 }
 
 #[doc="<p>Represents an update integration request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateIntegrationRequest {
     #[doc="<p>Represents an update integration request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -2771,7 +2791,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 #[doc="<p>Represents an update integration response request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateIntegrationResponseRequest {
     #[doc="<p>Specifies an update integration response request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
@@ -2792,7 +2812,7 @@ pub struct UpdateIntegrationResponseRequest {
 }
 
 #[doc="<p>Request to update an existing <a>Method</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateMethodRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -2810,7 +2830,7 @@ pub struct UpdateMethodRequest {
 }
 
 #[doc="<p>A request to update an existing <a>MethodResponse</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateMethodResponseRequest {
     #[doc="<p>The HTTP verb of the <a>Method</a> resource.</p>"]
     #[serde(rename="httpMethod")]
@@ -2831,7 +2851,7 @@ pub struct UpdateMethodResponseRequest {
 }
 
 #[doc="<p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateModelRequest {
     #[doc="<p>The name of the model to update.</p>"]
     #[serde(rename="modelName")]
@@ -2846,7 +2866,7 @@ pub struct UpdateModelRequest {
 }
 
 #[doc="<p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRequestValidatorRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2861,7 +2881,7 @@ pub struct UpdateRequestValidatorRequest {
 }
 
 #[doc="<p>Request to change information about a <a>Resource</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateResourceRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2876,7 +2896,7 @@ pub struct UpdateResourceRequest {
 }
 
 #[doc="<p>Request to update an existing <a>RestApi</a> resource in your collection.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRestApiRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2888,7 +2908,7 @@ pub struct UpdateRestApiRequest {
 }
 
 #[doc="<p>Requests Amazon API Gateway to change information about a <a>Stage</a> resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateStageRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2903,7 +2923,7 @@ pub struct UpdateStageRequest {
 }
 
 #[doc="<p>The PATCH request to update a usage plan of a given plan Id.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUsagePlanRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
@@ -2915,7 +2935,7 @@ pub struct UpdateUsagePlanRequest {
 }
 
 #[doc="<p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUsageRequest {
     #[doc="<p>The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>"]
     #[serde(rename="keyId")]
@@ -2930,7 +2950,7 @@ pub struct UpdateUsageRequest {
 }
 
 #[doc="<p>Represents the usage data of a usage plan.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage\">Manage Usage in a Usage Plan</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Usage {
     #[doc="<p>The ending date of the usage data.</p>"]
     #[serde(rename="endDate")]
@@ -2954,7 +2974,7 @@ pub struct Usage {
 }
 
 #[doc="<p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class=\"remarks\"> <p>In a usage plan, you associate an API by specifying the API's Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsagePlan {
     #[doc="<p>The associated API stages of a usage plan.</p>"]
     #[serde(rename="apiStages")]
@@ -2987,7 +3007,7 @@ pub struct UsagePlan {
 }
 
 #[doc="<p>Represents a usage plan key to identify a plan customer.</p> <div class=\"remarks\"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>\" <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsagePlanKey {
     #[doc="<p>The Id of a usage plan key.</p>"]
     #[serde(rename="id")]
@@ -3008,7 +3028,7 @@ pub struct UsagePlanKey {
 }
 
 #[doc="<p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsagePlanKeys {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]
@@ -3020,7 +3040,7 @@ pub struct UsagePlanKeys {
 }
 
 #[doc="<p>Represents a collection of usage plans for an AWS account.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html\">Create and Use Usage Plans</a> </div>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsagePlans {
     #[doc="<p>The current page of elements from this collection.</p>"]
     #[serde(rename="items")]

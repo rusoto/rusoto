@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>Provides information about a bot alias.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BotAliasMetadata {
     #[doc="<p>The name of the bot to which the alias points.</p>"]
     #[serde(rename="botName")]
@@ -63,7 +63,7 @@ pub struct BotAliasMetadata {
 }
 
 #[doc="<p>Represents an association between an Amazon Lex bot and an external messaging platform.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BotChannelAssociation {
     #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made. </p>"]
     #[serde(rename="botAlias")]
@@ -96,7 +96,7 @@ pub struct BotChannelAssociation {
 }
 
 #[doc="<p>Provides information about a bot. .</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BotMetadata {
     #[doc="<p>The date that the bot was created.</p>"]
     #[serde(rename="createdDate")]
@@ -125,7 +125,7 @@ pub struct BotMetadata {
 }
 
 #[doc="<p>Provides metadata for a built-in intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BuiltinIntentMetadata {
     #[doc="<p>A unique identifier for the built-in intent. To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
     #[serde(rename="signature")]
@@ -138,7 +138,7 @@ pub struct BuiltinIntentMetadata {
 }
 
 #[doc="<p>Provides information about a slot used in a built-in intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BuiltinIntentSlot {
     #[doc="<p>A list of the slots defined for the intent.</p>"]
     #[serde(rename="name")]
@@ -147,7 +147,7 @@ pub struct BuiltinIntentSlot {
 }
 
 #[doc="<p>Provides information about a built in slot type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BuiltinSlotTypeMetadata {
     #[doc="<p>A unique identifier for the built-in slot type. To find the signature for a slot type, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference\">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>"]
     #[serde(rename="signature")]
@@ -170,7 +170,7 @@ pub struct CodeHook {
     pub uri: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBotVersionRequest {
     #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version of the bot. If you specify a checksum and the <code>$LATEST</code> version of the bot has a different checksum, a <code>PreconditionFailedException</code> exception is returned and Amazon Lex doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
     #[serde(rename="checksum")]
@@ -181,7 +181,7 @@ pub struct CreateBotVersionRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBotVersionResponse {
     #[doc="<p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>"]
     #[serde(rename="abortStatement")]
@@ -245,7 +245,7 @@ pub struct CreateBotVersionResponse {
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIntentVersionRequest {
     #[doc="<p>Checksum of the <code>$LATEST</code> version of the intent that should be used to create the new version. If you specify a checksum and the <code>$LATEST</code> version of the intent has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
     #[serde(rename="checksum")]
@@ -256,7 +256,7 @@ pub struct CreateIntentVersionRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIntentVersionResponse {
     #[doc="<p>Checksum of the intent version created.</p>"]
     #[serde(rename="checksum")]
@@ -320,7 +320,7 @@ pub struct CreateIntentVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSlotTypeVersionRequest {
     #[doc="<p>Checksum for the <code>$LATEST</code> version of the slot type that you want to publish. If you specify a checksum and the <code>$LATEST</code> version of the slot type has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish the new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>"]
     #[serde(rename="checksum")]
@@ -331,7 +331,7 @@ pub struct CreateSlotTypeVersionRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSlotTypeVersionResponse {
     #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
     #[serde(rename="checksum")]
@@ -363,7 +363,7 @@ pub struct CreateSlotTypeVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBotAliasRequest {
     #[doc="<p>The name of the bot that the alias points to.</p>"]
     #[serde(rename="botName")]
@@ -373,7 +373,7 @@ pub struct DeleteBotAliasRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBotChannelAssociationRequest {
     #[doc="<p>An alias that points to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
     #[serde(rename="botAlias")]
@@ -386,14 +386,14 @@ pub struct DeleteBotChannelAssociationRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBotRequest {
     #[doc="<p>The name of the bot. The name is case sensitive. </p>"]
     #[serde(rename="name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteBotVersionRequest {
     #[doc="<p>The name of the bot.</p>"]
     #[serde(rename="name")]
@@ -403,14 +403,14 @@ pub struct DeleteBotVersionRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIntentRequest {
     #[doc="<p>The name of the intent. The name is case sensitive. </p>"]
     #[serde(rename="name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIntentVersionRequest {
     #[doc="<p>The name of the intent.</p>"]
     #[serde(rename="name")]
@@ -420,14 +420,14 @@ pub struct DeleteIntentVersionRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSlotTypeRequest {
     #[doc="<p>The name of the slot type. The name is case sensitive. </p>"]
     #[serde(rename="name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSlotTypeVersionRequest {
     #[doc="<p>The name of the slot type.</p>"]
     #[serde(rename="name")]
@@ -437,7 +437,7 @@ pub struct DeleteSlotTypeVersionRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUtterancesRequest {
     #[doc="<p>The name of the bot that stored the utterances.</p>"]
     #[serde(rename="botName")]
@@ -478,7 +478,7 @@ pub struct FulfillmentActivity {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotAliasRequest {
     #[doc="<p>The name of the bot.</p>"]
     #[serde(rename="botName")]
@@ -488,7 +488,7 @@ pub struct GetBotAliasRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotAliasResponse {
     #[doc="<p>The name of the bot that the alias points to.</p>"]
     #[serde(rename="botName")]
@@ -520,7 +520,7 @@ pub struct GetBotAliasResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotAliasesRequest {
     #[doc="<p>The name of the bot.</p>"]
     #[serde(rename="botName")]
@@ -539,7 +539,7 @@ pub struct GetBotAliasesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotAliasesResponse {
     #[doc="<p>An array of <code>BotAliasMetadata</code> objects, each describing a bot alias.</p>"]
     #[serde(rename="BotAliases")]
@@ -551,7 +551,7 @@ pub struct GetBotAliasesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotChannelAssociationRequest {
     #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
     #[serde(rename="botAlias")]
@@ -564,7 +564,7 @@ pub struct GetBotChannelAssociationRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotChannelAssociationResponse {
     #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
     #[serde(rename="botAlias")]
@@ -596,7 +596,7 @@ pub struct GetBotChannelAssociationResponse {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotChannelAssociationsRequest {
     #[doc="<p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>"]
     #[serde(rename="botAlias")]
@@ -618,7 +618,7 @@ pub struct GetBotChannelAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotChannelAssociationsResponse {
     #[doc="<p>An array of objects, one for each association, that provides information about the Amazon Lex bot and its association with the channel. </p>"]
     #[serde(rename="botChannelAssociations")]
@@ -630,7 +630,7 @@ pub struct GetBotChannelAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotRequest {
     #[doc="<p>The name of the bot. The name is case sensitive. </p>"]
     #[serde(rename="name")]
@@ -640,7 +640,7 @@ pub struct GetBotRequest {
     pub version_or_alias: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotResponse {
     #[doc="<p>The message that Amazon Lex returns when the user elects to end the conversation without completing it. For more information, see <a>PutBot</a>.</p>"]
     #[serde(rename="abortStatement")]
@@ -704,7 +704,7 @@ pub struct GetBotResponse {
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotVersionsRequest {
     #[doc="<p>The maximum number of bot versions to return in the response. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -719,7 +719,7 @@ pub struct GetBotVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotVersionsResponse {
     #[doc="<p>An array of <code>BotMetadata</code> objects, one for each numbered version of the bot plus one for the <code>$LATEST</code> version.</p>"]
     #[serde(rename="bots")]
@@ -731,7 +731,7 @@ pub struct GetBotVersionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotsRequest {
     #[doc="<p>The maximum number of bots to return in the response that the request will return. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -747,7 +747,7 @@ pub struct GetBotsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBotsResponse {
     #[doc="<p>An array of <code>botMetadata</code> objects, with one entry for each bot. </p>"]
     #[serde(rename="bots")]
@@ -759,14 +759,14 @@ pub struct GetBotsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinIntentRequest {
     #[doc="<p>The unique identifier for a built-in intent. To find the signature for an intent, see <a href=\"https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents\">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>"]
     #[serde(rename="signature")]
     pub signature: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinIntentResponse {
     #[doc="<p>The unique identifier for a built-in intent.</p>"]
     #[serde(rename="signature")]
@@ -782,7 +782,7 @@ pub struct GetBuiltinIntentResponse {
     pub supported_locales: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinIntentsRequest {
     #[doc="<p>A list of locales that the intent supports.</p>"]
     #[serde(rename="locale")]
@@ -802,7 +802,7 @@ pub struct GetBuiltinIntentsRequest {
     pub signature_contains: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinIntentsResponse {
     #[doc="<p>An array of <code>builtinIntentMetadata</code> objects, one for each intent in the response.</p>"]
     #[serde(rename="intents")]
@@ -814,7 +814,7 @@ pub struct GetBuiltinIntentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinSlotTypesRequest {
     #[doc="<p>A list of locales that the slot type supports.</p>"]
     #[serde(rename="locale")]
@@ -834,7 +834,7 @@ pub struct GetBuiltinSlotTypesRequest {
     pub signature_contains: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBuiltinSlotTypesResponse {
     #[doc="<p>If the response is truncated, the response includes a pagination token that you can use in your next request to fetch the next page of slot types.</p>"]
     #[serde(rename="nextToken")]
@@ -846,7 +846,7 @@ pub struct GetBuiltinSlotTypesResponse {
     pub slot_types: Option<Vec<BuiltinSlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentRequest {
     #[doc="<p>The name of the intent. The name is case sensitive. </p>"]
     #[serde(rename="name")]
@@ -856,7 +856,7 @@ pub struct GetIntentRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentResponse {
     #[doc="<p>Checksum of the intent.</p>"]
     #[serde(rename="checksum")]
@@ -920,7 +920,7 @@ pub struct GetIntentResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentVersionsRequest {
     #[doc="<p>The maximum number of intent versions to return in the response. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -935,7 +935,7 @@ pub struct GetIntentVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentVersionsResponse {
     #[doc="<p>An array of <code>IntentMetadata</code> objects, one for each numbered version of the intent plus one for the <code>$LATEST</code> version.</p>"]
     #[serde(rename="intents")]
@@ -947,7 +947,7 @@ pub struct GetIntentVersionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentsRequest {
     #[doc="<p>The maximum number of intents to return in the response. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -963,7 +963,7 @@ pub struct GetIntentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIntentsResponse {
     #[doc="<p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>"]
     #[serde(rename="intents")]
@@ -975,7 +975,7 @@ pub struct GetIntentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypeRequest {
     #[doc="<p>The name of the slot type. The name is case sensitive. </p>"]
     #[serde(rename="name")]
@@ -985,7 +985,7 @@ pub struct GetSlotTypeRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypeResponse {
     #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
     #[serde(rename="checksum")]
@@ -1017,7 +1017,7 @@ pub struct GetSlotTypeResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypeVersionsRequest {
     #[doc="<p>The maximum number of slot type versions to return in the response. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -1032,7 +1032,7 @@ pub struct GetSlotTypeVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypeVersionsResponse {
     #[doc="<p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>"]
     #[serde(rename="nextToken")]
@@ -1044,7 +1044,7 @@ pub struct GetSlotTypeVersionsResponse {
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypesRequest {
     #[doc="<p>The maximum number of slot types to return in the response. The default is 10.</p>"]
     #[serde(rename="maxResults")]
@@ -1060,7 +1060,7 @@ pub struct GetSlotTypesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSlotTypesResponse {
     #[doc="<p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of slot types.</p>"]
     #[serde(rename="nextToken")]
@@ -1072,7 +1072,7 @@ pub struct GetSlotTypesResponse {
     pub slot_types: Option<Vec<SlotTypeMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUtterancesViewRequest {
     #[doc="<p>The name of the bot for which utterance information should be returned.</p>"]
     #[serde(rename="botName")]
@@ -1085,7 +1085,7 @@ pub struct GetUtterancesViewRequest {
     pub status_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUtterancesViewResponse {
     #[doc="<p>The name of the bot for which utterance information was returned.</p>"]
     #[serde(rename="botName")]
@@ -1109,7 +1109,7 @@ pub struct Intent {
 }
 
 #[doc="<p>Provides information about an intent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IntentMetadata {
     #[doc="<p>The date that the intent was created.</p>"]
     #[serde(rename="createdDate")]
@@ -1159,7 +1159,7 @@ pub struct Prompt {
     pub response_card: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutBotAliasRequest {
     #[doc="<p>The name of the bot.</p>"]
     #[serde(rename="botName")]
@@ -1180,7 +1180,7 @@ pub struct PutBotAliasRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutBotAliasResponse {
     #[doc="<p>The name of the bot that the alias points to.</p>"]
     #[serde(rename="botName")]
@@ -1212,7 +1212,7 @@ pub struct PutBotAliasResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutBotRequest {
     #[doc="<p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user \"What type of crust would you like?\" If the user's response is not one of the expected responses (for example, \"thin crust, \"deep dish,\" etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p>"]
     #[serde(rename="abortStatement")]
@@ -1257,7 +1257,7 @@ pub struct PutBotRequest {
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutBotResponse {
     #[doc="<p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>"]
     #[serde(rename="abortStatement")]
@@ -1321,7 +1321,7 @@ pub struct PutBotResponse {
     pub voice_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIntentRequest {
     #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new intent, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a intent, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
     #[serde(rename="checksum")]
@@ -1372,7 +1372,7 @@ pub struct PutIntentRequest {
     pub slots: Option<Vec<Slot>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutIntentResponse {
     #[doc="<p>Checksum of the <code>$LATEST</code>version of the intent created or updated.</p>"]
     #[serde(rename="checksum")]
@@ -1436,7 +1436,7 @@ pub struct PutIntentResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutSlotTypeRequest {
     #[doc="<p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new slot type, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a slot type, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>"]
     #[serde(rename="checksum")]
@@ -1455,7 +1455,7 @@ pub struct PutSlotTypeRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutSlotTypeResponse {
     #[doc="<p>Checksum of the <code>$LATEST</code> version of the slot type.</p>"]
     #[serde(rename="checksum")]
@@ -1488,11 +1488,15 @@ pub struct PutSlotTypeResponse {
 }
 
 #[doc="<p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceReference {
     #[doc="<p>The name of the resource that is using the resource that you are trying to delete.</p>"]
+    #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The version of the resource that is using the resource that you are trying to delete.</p>"]
+    #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<String>,
 }
 
@@ -1536,7 +1540,7 @@ pub struct Slot {
 }
 
 #[doc="<p>Provides information about a slot type..</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SlotTypeMetadata {
     #[doc="<p>The date that the slot type was created.</p>"]
     #[serde(rename="createdDate")]
@@ -1573,7 +1577,7 @@ pub struct Statement {
 }
 
 #[doc="<p>Provides information about a single utterance that was made to your bot. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UtteranceData {
     #[doc="<p>The number of times that the utterance was processed.</p>"]
     #[serde(rename="count")]
@@ -1598,7 +1602,7 @@ pub struct UtteranceData {
 }
 
 #[doc="<p>Provides a list of utterances that have been made to a specific version of your bot. The list contains a maximum of 100 utterances.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UtteranceList {
     #[doc="<p>The version of the bot that processed the list.</p>"]
     #[serde(rename="botVersion")]

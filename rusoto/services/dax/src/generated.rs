@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Contains all of the attributes of a specific DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Cluster {
     #[doc="<p>The number of nodes in the cluster that are active (i.e., capable of serving requests).</p>"]
     #[serde(rename="ActiveNodes")]
@@ -97,7 +97,7 @@ pub struct Cluster {
     pub total_nodes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterRequest {
     #[doc="<p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>"]
     #[serde(rename="AvailabilityZones")]
@@ -145,7 +145,7 @@ pub struct CreateClusterRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterResponse {
     #[doc="<p>A description of the DAX cluster that you have created.</p>"]
     #[serde(rename="Cluster")]
@@ -153,7 +153,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateParameterGroupRequest {
     #[doc="<p>A description of the parameter group.</p>"]
     #[serde(rename="Description")]
@@ -164,7 +164,7 @@ pub struct CreateParameterGroupRequest {
     pub parameter_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateParameterGroupResponse {
     #[doc="<p>Represents the output of a <i>CreateParameterGroup</i> action.</p>"]
     #[serde(rename="ParameterGroup")]
@@ -172,7 +172,7 @@ pub struct CreateParameterGroupResponse {
     pub parameter_group: Option<ParameterGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubnetGroupRequest {
     #[doc="<p>A description for the subnet group</p>"]
     #[serde(rename="Description")]
@@ -186,7 +186,7 @@ pub struct CreateSubnetGroupRequest {
     pub subnet_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubnetGroupResponse {
     #[doc="<p>Represents the output of a <i>CreateSubnetGroup</i> operation.</p>"]
     #[serde(rename="SubnetGroup")]
@@ -194,7 +194,7 @@ pub struct CreateSubnetGroupResponse {
     pub subnet_group: Option<SubnetGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DecreaseReplicationFactorRequest {
     #[doc="<p>The Availability Zone(s) from which to remove nodes.</p>"]
     #[serde(rename="AvailabilityZones")]
@@ -212,7 +212,7 @@ pub struct DecreaseReplicationFactorRequest {
     pub node_ids_to_remove: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DecreaseReplicationFactorResponse {
     #[doc="<p>A description of the DAX cluster, after you have decreased its replication factor.</p>"]
     #[serde(rename="Cluster")]
@@ -220,14 +220,14 @@ pub struct DecreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterRequest {
     #[doc="<p>The name of the cluster to be deleted.</p>"]
     #[serde(rename="ClusterName")]
     pub cluster_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterResponse {
     #[doc="<p>A description of the DAX cluster that is being deleted.</p>"]
     #[serde(rename="Cluster")]
@@ -235,14 +235,14 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteParameterGroupRequest {
     #[doc="<p>The name of the parameter group to delete.</p>"]
     #[serde(rename="ParameterGroupName")]
     pub parameter_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteParameterGroupResponse {
     #[doc="<p>A user-specified message for this action (i.e., a reason for deleting the parameter group).</p>"]
     #[serde(rename="DeletionMessage")]
@@ -250,14 +250,14 @@ pub struct DeleteParameterGroupResponse {
     pub deletion_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubnetGroupRequest {
     #[doc="<p>The name of the subnet group to delete.</p>"]
     #[serde(rename="SubnetGroupName")]
     pub subnet_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubnetGroupResponse {
     #[doc="<p>A user-specified message for this action (i.e., a reason for deleting the subnet group).</p>"]
     #[serde(rename="DeletionMessage")]
@@ -265,7 +265,7 @@ pub struct DeleteSubnetGroupResponse {
     pub deletion_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersRequest {
     #[doc="<p>The names of the DAX clusters being described.</p>"]
     #[serde(rename="ClusterNames")]
@@ -281,7 +281,7 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersResponse {
     #[doc="<p>The descriptions of your DAX clusters, in response to a <i>DescribeClusters</i> request.</p>"]
     #[serde(rename="Clusters")]
@@ -293,7 +293,7 @@ pub struct DescribeClustersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDefaultParametersRequest {
     #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
     #[serde(rename="MaxResults")]
@@ -305,7 +305,7 @@ pub struct DescribeDefaultParametersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDefaultParametersResponse {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     #[serde(rename="NextToken")]
@@ -317,7 +317,7 @@ pub struct DescribeDefaultParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsRequest {
     #[doc="<p>The number of minutes' worth of events to retrieve.</p>"]
     #[serde(rename="Duration")]
@@ -349,7 +349,7 @@ pub struct DescribeEventsRequest {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsResponse {
     #[doc="<p>An array of events. Each element in the array represents one event.</p>"]
     #[serde(rename="Events")]
@@ -361,7 +361,7 @@ pub struct DescribeEventsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeParameterGroupsRequest {
     #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
     #[serde(rename="MaxResults")]
@@ -377,7 +377,7 @@ pub struct DescribeParameterGroupsRequest {
     pub parameter_group_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeParameterGroupsResponse {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     #[serde(rename="NextToken")]
@@ -389,7 +389,7 @@ pub struct DescribeParameterGroupsResponse {
     pub parameter_groups: Option<Vec<ParameterGroup>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeParametersRequest {
     #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
     #[serde(rename="MaxResults")]
@@ -408,7 +408,7 @@ pub struct DescribeParametersRequest {
     pub source: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeParametersResponse {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     #[serde(rename="NextToken")]
@@ -420,7 +420,7 @@ pub struct DescribeParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubnetGroupsRequest {
     #[doc="<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p> <p>The value for <code>MaxResults</code> must be between 20 and 100.</p>"]
     #[serde(rename="MaxResults")]
@@ -436,7 +436,7 @@ pub struct DescribeSubnetGroupsRequest {
     pub subnet_group_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubnetGroupsResponse {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     #[serde(rename="NextToken")]
@@ -449,7 +449,7 @@ pub struct DescribeSubnetGroupsResponse {
 }
 
 #[doc="<p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Endpoint {
     #[doc="<p>The DNS hostname of the endpoint.</p>"]
     #[serde(rename="Address")]
@@ -462,7 +462,7 @@ pub struct Endpoint {
 }
 
 #[doc="<p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a DAX cluster, adding or removing a node, or rebooting a node.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Event {
     #[doc="<p>The date and time when the event occurred.</p>"]
     #[serde(rename="Date")]
@@ -482,7 +482,7 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IncreaseReplicationFactorRequest {
     #[doc="<p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>"]
     #[serde(rename="AvailabilityZones")]
@@ -496,7 +496,7 @@ pub struct IncreaseReplicationFactorRequest {
     pub new_replication_factor: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IncreaseReplicationFactorResponse {
     #[doc="<p>A description of the DAX cluster. with its new replication factor.</p>"]
     #[serde(rename="Cluster")]
@@ -504,7 +504,7 @@ pub struct IncreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsRequest {
     #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>"]
     #[serde(rename="NextToken")]
@@ -515,7 +515,7 @@ pub struct ListTagsRequest {
     pub resource_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsResponse {
     #[doc="<p>If this value is present, there are additional results to be displayed. To retrieve them, call <code>ListTags</code> again, with <code>NextToken</code> set to this value.</p>"]
     #[serde(rename="NextToken")]
@@ -528,7 +528,7 @@ pub struct ListTagsResponse {
 }
 
 #[doc="<p>Represents an individual node within a DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Node {
     #[doc="<p>The Availability Zone (AZ) in which the node has been deployed.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -557,7 +557,7 @@ pub struct Node {
 }
 
 #[doc="<p>Represents a parameter value that is applicable to a particular node type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NodeTypeSpecificValue {
     #[doc="<p>A node type to which the parameter value applies.</p>"]
     #[serde(rename="NodeType")]
@@ -570,7 +570,7 @@ pub struct NodeTypeSpecificValue {
 }
 
 #[doc="<p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotificationConfiguration {
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the topic. </p>"]
     #[serde(rename="TopicArn")]
@@ -583,7 +583,7 @@ pub struct NotificationConfiguration {
 }
 
 #[doc="<p>Describes an individual setting that controls some aspect of DAX behavior.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Parameter {
     #[doc="<p>A range of values within which the parameter can be set.</p>"]
     #[serde(rename="AllowedValues")]
@@ -628,7 +628,7 @@ pub struct Parameter {
 }
 
 #[doc="<p>A named set of parameters that are applied to all of the nodes in a DAX cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterGroup {
     #[doc="<p>A description of the parameter group.</p>"]
     #[serde(rename="Description")]
@@ -641,7 +641,7 @@ pub struct ParameterGroup {
 }
 
 #[doc="<p>The status of a parameter group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterGroupStatus {
     #[doc="<p>The node IDs of one or more nodes to be rebooted.</p>"]
     #[serde(rename="NodeIdsToReboot")]
@@ -658,7 +658,7 @@ pub struct ParameterGroupStatus {
 }
 
 #[doc="<p>An individual DAX parameter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterNameValue {
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="ParameterName")]
@@ -670,7 +670,7 @@ pub struct ParameterNameValue {
     pub parameter_value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootNodeRequest {
     #[doc="<p>The name of the DAX cluster containing the node to be rebooted.</p>"]
     #[serde(rename="ClusterName")]
@@ -680,7 +680,7 @@ pub struct RebootNodeRequest {
     pub node_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootNodeResponse {
     #[doc="<p>A description of the DAX cluster after a node has been rebooted.</p>"]
     #[serde(rename="Cluster")]
@@ -689,7 +689,7 @@ pub struct RebootNodeResponse {
 }
 
 #[doc="<p>An individual VPC security group and its status.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SecurityGroupMembership {
     #[doc="<p>The unique ID for this security group.</p>"]
     #[serde(rename="SecurityGroupIdentifier")]
@@ -702,7 +702,7 @@ pub struct SecurityGroupMembership {
 }
 
 #[doc="<p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subnet {
     #[doc="<p>The Availability Zone (AZ) for subnet subnet.</p>"]
     #[serde(rename="SubnetAvailabilityZone")]
@@ -715,7 +715,7 @@ pub struct Subnet {
 }
 
 #[doc="<p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubnetGroup {
     #[doc="<p>The description of the subnet group.</p>"]
     #[serde(rename="Description")]
@@ -748,7 +748,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The name of the DAX resource to which tags should be added.</p>"]
     #[serde(rename="ResourceName")]
@@ -758,7 +758,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceResponse {
     #[doc="<p>The list of tags that are associated with the DAX resource.</p>"]
     #[serde(rename="Tags")]
@@ -766,7 +766,7 @@ pub struct TagResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The name of the DAX resource from which the tags should be removed.</p>"]
     #[serde(rename="ResourceName")]
@@ -776,7 +776,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceResponse {
     #[doc="<p>The tag keys that have been removed from the cluster.</p>"]
     #[serde(rename="Tags")]
@@ -784,7 +784,7 @@ pub struct UntagResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClusterRequest {
     #[doc="<p>The name of the DAX cluster to be modified.</p>"]
     #[serde(rename="ClusterName")]
@@ -815,7 +815,7 @@ pub struct UpdateClusterRequest {
     pub security_group_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateClusterResponse {
     #[doc="<p>A description of the DAX cluster, after it has been modified.</p>"]
     #[serde(rename="Cluster")]
@@ -823,7 +823,7 @@ pub struct UpdateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateParameterGroupRequest {
     #[doc="<p>The name of the parameter group.</p>"]
     #[serde(rename="ParameterGroupName")]
@@ -833,7 +833,7 @@ pub struct UpdateParameterGroupRequest {
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateParameterGroupResponse {
     #[doc="<p>The parameter group that has been modified.</p>"]
     #[serde(rename="ParameterGroup")]
@@ -841,7 +841,7 @@ pub struct UpdateParameterGroupResponse {
     pub parameter_group: Option<ParameterGroup>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSubnetGroupRequest {
     #[doc="<p>A description of the subnet group.</p>"]
     #[serde(rename="Description")]
@@ -856,7 +856,7 @@ pub struct UpdateSubnetGroupRequest {
     pub subnet_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSubnetGroupResponse {
     #[doc="<p>The subnet group that has been modified.</p>"]
     #[serde(rename="SubnetGroup")]

@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Represents the input of a batch get repositories operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetRepositoriesInput {
     #[doc="<p>The names of the repositories to get information about.</p>"]
     #[serde(rename="repositoryNames")]
@@ -37,7 +37,7 @@ pub struct BatchGetRepositoriesInput {
 }
 
 #[doc="<p>Represents the output of a batch get repositories operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetRepositoriesOutput {
     #[doc="<p>A list of repositories returned by the batch get repositories operation.</p>"]
     #[serde(rename="repositories")]
@@ -50,7 +50,7 @@ pub struct BatchGetRepositoriesOutput {
 }
 
 #[doc="<p>Returns information about a specific Git blob object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BlobMetadata {
     #[doc="<p>The full ID of the blob.</p>"]
     #[serde(rename="blobId")]
@@ -67,7 +67,7 @@ pub struct BlobMetadata {
 }
 
 #[doc="<p>Returns information about a branch.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BranchInfo {
     #[doc="<p>The name of the branch.</p>"]
     #[serde(rename="branchName")]
@@ -80,7 +80,7 @@ pub struct BranchInfo {
 }
 
 #[doc="<p>Returns information about a specific commit.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Commit {
     #[doc="<p>Any additional data associated with the specified commit.</p>"]
     #[serde(rename="additionalData")]
@@ -109,7 +109,7 @@ pub struct Commit {
 }
 
 #[doc="<p>Represents the input of a create branch operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateBranchInput {
     #[doc="<p>The name of the new branch to create.</p>"]
     #[serde(rename="branchName")]
@@ -123,7 +123,7 @@ pub struct CreateBranchInput {
 }
 
 #[doc="<p>Represents the input of a create repository operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRepositoryInput {
     #[doc="<p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     #[serde(rename="repositoryDescription")]
@@ -135,7 +135,7 @@ pub struct CreateRepositoryInput {
 }
 
 #[doc="<p>Represents the output of a create repository operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRepositoryOutput {
     #[doc="<p>Information about the newly created repository.</p>"]
     #[serde(rename="repositoryMetadata")]
@@ -144,7 +144,7 @@ pub struct CreateRepositoryOutput {
 }
 
 #[doc="<p>Represents the input of a delete repository operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryInput {
     #[doc="<p>The name of the repository to delete.</p>"]
     #[serde(rename="repositoryName")]
@@ -152,7 +152,7 @@ pub struct DeleteRepositoryInput {
 }
 
 #[doc="<p>Represents the output of a delete repository operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRepositoryOutput {
     #[doc="<p>The ID of the repository that was deleted.</p>"]
     #[serde(rename="repositoryId")]
@@ -161,7 +161,7 @@ pub struct DeleteRepositoryOutput {
 }
 
 #[doc="<p>Returns information about a set of differences for a commit specifier.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Difference {
     #[doc="<p>Information about an <code>afterBlob</code> data type object, including the ID, the file mode permission code, and the path.</p>"]
     #[serde(rename="afterBlob")]
@@ -178,7 +178,7 @@ pub struct Difference {
 }
 
 #[doc="<p>Represents the input of a get blob operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBlobInput {
     #[doc="<p>The ID of the blob, which is its SHA-1 pointer.</p>"]
     #[serde(rename="blobId")]
@@ -189,7 +189,7 @@ pub struct GetBlobInput {
 }
 
 #[doc="<p>Represents the output of a get blob operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBlobOutput {
     #[doc="<p>The content of the blob, usually a file.</p>"]
     #[serde(rename="content")]
@@ -202,7 +202,7 @@ pub struct GetBlobOutput {
 }
 
 #[doc="<p>Represents the input of a get branch operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBranchInput {
     #[doc="<p>The name of the branch for which you want to retrieve information.</p>"]
     #[serde(rename="branchName")]
@@ -215,7 +215,7 @@ pub struct GetBranchInput {
 }
 
 #[doc="<p>Represents the output of a get branch operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetBranchOutput {
     #[doc="<p>The name of the branch.</p>"]
     #[serde(rename="branch")]
@@ -224,7 +224,7 @@ pub struct GetBranchOutput {
 }
 
 #[doc="<p>Represents the input of a get commit operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCommitInput {
     #[doc="<p>The commit ID.</p>"]
     #[serde(rename="commitId")]
@@ -235,14 +235,14 @@ pub struct GetCommitInput {
 }
 
 #[doc="<p>Represents the output of a get commit operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCommitOutput {
     #[doc="<p>A commit data type object that contains information about the specified commit.</p>"]
     #[serde(rename="commit")]
     pub commit: Commit,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDifferencesInput {
     #[doc="<p>A non-negative integer used to limit the number of returned results.</p>"]
     #[serde(rename="MaxResults")]
@@ -272,7 +272,7 @@ pub struct GetDifferencesInput {
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDifferencesOutput {
     #[doc="<p>An enumeration token that can be used in a request to return the next batch of the results.</p>"]
     #[serde(rename="NextToken")]
@@ -285,7 +285,7 @@ pub struct GetDifferencesOutput {
 }
 
 #[doc="<p>Represents the input of a get repository operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryInput {
     #[doc="<p>The name of the repository to get information about.</p>"]
     #[serde(rename="repositoryName")]
@@ -293,7 +293,7 @@ pub struct GetRepositoryInput {
 }
 
 #[doc="<p>Represents the output of a get repository operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryOutput {
     #[doc="<p>Information about the repository.</p>"]
     #[serde(rename="repositoryMetadata")]
@@ -302,7 +302,7 @@ pub struct GetRepositoryOutput {
 }
 
 #[doc="<p>Represents the input of a get repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryTriggersInput {
     #[doc="<p>The name of the repository for which the trigger is configured.</p>"]
     #[serde(rename="repositoryName")]
@@ -310,7 +310,7 @@ pub struct GetRepositoryTriggersInput {
 }
 
 #[doc="<p>Represents the output of a get repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRepositoryTriggersOutput {
     #[doc="<p>The system-generated unique ID for the trigger.</p>"]
     #[serde(rename="configurationId")]
@@ -323,7 +323,7 @@ pub struct GetRepositoryTriggersOutput {
 }
 
 #[doc="<p>Represents the input of a list branches operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBranchesInput {
     #[doc="<p>An enumeration token that allows the operation to batch the results.</p>"]
     #[serde(rename="nextToken")]
@@ -335,7 +335,7 @@ pub struct ListBranchesInput {
 }
 
 #[doc="<p>Represents the output of a list branches operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListBranchesOutput {
     #[doc="<p>The list of branch names.</p>"]
     #[serde(rename="branches")]
@@ -348,7 +348,7 @@ pub struct ListBranchesOutput {
 }
 
 #[doc="<p>Represents the input of a list repositories operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRepositoriesInput {
     #[doc="<p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>"]
     #[serde(rename="nextToken")]
@@ -365,7 +365,7 @@ pub struct ListRepositoriesInput {
 }
 
 #[doc="<p>Represents the output of a list repositories operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRepositoriesOutput {
     #[doc="<p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>"]
     #[serde(rename="nextToken")]
@@ -378,7 +378,7 @@ pub struct ListRepositoriesOutput {
 }
 
 #[doc="<p>Represents the input ofa put repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRepositoryTriggersInput {
     #[doc="<p>The name of the repository where you want to create or update the trigger.</p>"]
     #[serde(rename="repositoryName")]
@@ -389,7 +389,7 @@ pub struct PutRepositoryTriggersInput {
 }
 
 #[doc="<p>Represents the output of a put repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRepositoryTriggersOutput {
     #[doc="<p>The system-generated unique ID for the create or update operation.</p>"]
     #[serde(rename="configurationId")]
@@ -398,7 +398,7 @@ pub struct PutRepositoryTriggersOutput {
 }
 
 #[doc="<p>Information about a repository.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RepositoryMetadata {
     #[doc="<p>The Amazon Resource Name (ARN) of the repository.</p>"]
     #[serde(rename="Arn")]
@@ -443,7 +443,7 @@ pub struct RepositoryMetadata {
 }
 
 #[doc="<p>Information about a repository name and ID.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RepositoryNameIdPair {
     #[doc="<p>The ID associated with the repository.</p>"]
     #[serde(rename="repositoryId")]
@@ -478,7 +478,7 @@ pub struct RepositoryTrigger {
 }
 
 #[doc="<p>A trigger failed to run.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RepositoryTriggerExecutionFailure {
     #[doc="<p>Additional message information about the trigger that did not run.</p>"]
     #[serde(rename="failureMessage")]
@@ -491,7 +491,7 @@ pub struct RepositoryTriggerExecutionFailure {
 }
 
 #[doc="<p>Represents the input of a test repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestRepositoryTriggersInput {
     #[doc="<p>The name of the repository in which to test the triggers.</p>"]
     #[serde(rename="repositoryName")]
@@ -502,7 +502,7 @@ pub struct TestRepositoryTriggersInput {
 }
 
 #[doc="<p>Represents the output of a test repository triggers operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestRepositoryTriggersOutput {
     #[doc="<p>The list of triggers that were not able to be tested. This list provides the names of the triggers that could not be tested, separated by commas.</p>"]
     #[serde(rename="failedExecutions")]
@@ -515,7 +515,7 @@ pub struct TestRepositoryTriggersOutput {
 }
 
 #[doc="<p>Represents the input of an update default branch operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDefaultBranchInput {
     #[doc="<p>The name of the branch to set as the default.</p>"]
     #[serde(rename="defaultBranchName")]
@@ -526,7 +526,7 @@ pub struct UpdateDefaultBranchInput {
 }
 
 #[doc="<p>Represents the input of an update repository description operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRepositoryDescriptionInput {
     #[doc="<p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>"]
     #[serde(rename="repositoryDescription")]
@@ -538,7 +538,7 @@ pub struct UpdateRepositoryDescriptionInput {
 }
 
 #[doc="<p>Represents the input of an update repository description operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRepositoryNameInput {
     #[doc="<p>The new name for the repository.</p>"]
     #[serde(rename="newName")]
@@ -549,7 +549,7 @@ pub struct UpdateRepositoryNameInput {
 }
 
 #[doc="<p>Information about the user who made a specified commit.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserInfo {
     #[doc="<p>The date when the specified commit was pushed to the repository.</p>"]
     #[serde(rename="date")]

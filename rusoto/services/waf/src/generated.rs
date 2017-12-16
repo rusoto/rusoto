@@ -47,7 +47,7 @@ pub struct ActivatedRule {
 }
 
 #[doc="<p>In a <a>GetByteMatchSet</a> request, <code>ByteMatchSet</code> is a complex type that contains the <code>ByteMatchSetId</code> and <code>Name</code> of a <code>ByteMatchSet</code>, and the values that you specified when you updated the <code>ByteMatchSet</code>. </p> <p>A complex type that contains <code>ByteMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect and the values that you want AWS WAF to search for. If a <code>ByteMatchSet</code> contains more than one <code>ByteMatchTuple</code> object, a request needs to match the settings in only one <code>ByteMatchTuple</code> to be considered a match.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ByteMatchSet {
     #[doc="<p>The <code>ByteMatchSetId</code> for a <code>ByteMatchSet</code>. You use <code>ByteMatchSetId</code> to get information about a <code>ByteMatchSet</code> (see <a>GetByteMatchSet</a>), update a <code>ByteMatchSet</code> (see <a>UpdateByteMatchSet</a>), insert a <code>ByteMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>ByteMatchSet</code> from AWS WAF (see <a>DeleteByteMatchSet</a>).</p> <p> <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
@@ -62,7 +62,7 @@ pub struct ByteMatchSet {
 }
 
 #[doc="<p>Returned by <a>ListByteMatchSets</a>. Each <code>ByteMatchSetSummary</code> object includes the <code>Name</code> and <code>ByteMatchSetId</code> for one <a>ByteMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ByteMatchSetSummary {
     #[doc="<p>The <code>ByteMatchSetId</code> for a <code>ByteMatchSet</code>. You use <code>ByteMatchSetId</code> to get information about a <code>ByteMatchSet</code>, update a <code>ByteMatchSet</code>, remove a <code>ByteMatchSet</code> from a <code>Rule</code>, and delete a <code>ByteMatchSet</code> from AWS WAF.</p> <p> <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
@@ -73,7 +73,7 @@ pub struct ByteMatchSetSummary {
 }
 
 #[doc="<p>In an <a>UpdateByteMatchSet</a> request, <code>ByteMatchSetUpdate</code> specifies whether to insert or delete a <a>ByteMatchTuple</a> and includes the settings for the <code>ByteMatchTuple</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ByteMatchSetUpdate {
     #[doc="<p>Specifies whether to insert or delete a <a>ByteMatchTuple</a>.</p>"]
     #[serde(rename="Action")]
@@ -105,7 +105,7 @@ pub struct ByteMatchTuple {
     pub text_transformation: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateByteMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -115,7 +115,7 @@ pub struct CreateByteMatchSetRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateByteMatchSetResponse {
     #[doc="<p>A <a>ByteMatchSet</a> that contains no <code>ByteMatchTuple</code> objects.</p>"]
     #[serde(rename="ByteMatchSet")]
@@ -127,7 +127,7 @@ pub struct CreateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -137,7 +137,7 @@ pub struct CreateIPSetRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -149,7 +149,7 @@ pub struct CreateIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRateBasedRuleRequest {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -168,7 +168,7 @@ pub struct CreateRateBasedRuleRequest {
     pub rate_limit: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -180,7 +180,7 @@ pub struct CreateRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -193,7 +193,7 @@ pub struct CreateRuleRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -205,7 +205,7 @@ pub struct CreateRuleResponse {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -215,7 +215,7 @@ pub struct CreateSizeConstraintSetRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -228,7 +228,7 @@ pub struct CreateSizeConstraintSetResponse {
 }
 
 #[doc="<p>A request to create a <a>SqlInjectionMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -239,7 +239,7 @@ pub struct CreateSqlInjectionMatchSetRequest {
 }
 
 #[doc="<p>The response to a <code>CreateSqlInjectionMatchSet</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -251,7 +251,7 @@ pub struct CreateSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -267,7 +267,7 @@ pub struct CreateWebACLRequest {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -280,7 +280,7 @@ pub struct CreateWebACLResponse {
 }
 
 #[doc="<p>A request to create an <a>XssMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -291,7 +291,7 @@ pub struct CreateXssMatchSetRequest {
 }
 
 #[doc="<p>The response to a <code>CreateXssMatchSet</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -303,7 +303,7 @@ pub struct CreateXssMatchSetResponse {
     pub xss_match_set: Option<XssMatchSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to delete. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
@@ -313,7 +313,7 @@ pub struct DeleteByteMatchSetRequest {
     pub change_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteByteMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -321,7 +321,7 @@ pub struct DeleteByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -331,7 +331,7 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -339,7 +339,7 @@ pub struct DeleteIPSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRateBasedRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -349,7 +349,7 @@ pub struct DeleteRateBasedRuleRequest {
     pub rule_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -357,7 +357,7 @@ pub struct DeleteRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -367,7 +367,7 @@ pub struct DeleteRuleRequest {
     pub rule_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -375,7 +375,7 @@ pub struct DeleteRuleResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -385,7 +385,7 @@ pub struct DeleteSizeConstraintSetRequest {
     pub size_constraint_set_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -394,7 +394,7 @@ pub struct DeleteSizeConstraintSetResponse {
 }
 
 #[doc="<p>A request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -405,7 +405,7 @@ pub struct DeleteSqlInjectionMatchSetRequest {
 }
 
 #[doc="<p>The response to a request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -413,7 +413,7 @@ pub struct DeleteSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -423,7 +423,7 @@ pub struct DeleteWebACLRequest {
     pub web_acl_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -432,7 +432,7 @@ pub struct DeleteWebACLResponse {
 }
 
 #[doc="<p>A request to delete an <a>XssMatchSet</a> from AWS WAF.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -443,7 +443,7 @@ pub struct DeleteXssMatchSetRequest {
 }
 
 #[doc="<p>The response to a request to delete an <a>XssMatchSet</a> from AWS WAF.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -463,14 +463,14 @@ pub struct FieldToMatch {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to get. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
     pub byte_match_set_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetByteMatchSetResponse {
     #[doc="<p>Information about the <a>ByteMatchSet</a> that you specified in the <code>GetByteMatchSet</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>ByteMatchSet</a>: Contains <code>ByteMatchSetId</code>, <code>ByteMatchTuples</code>, and <code>Name</code> </p> </li> <li> <p> <code>ByteMatchTuples</code>: Contains an array of <a>ByteMatchTuple</a> objects. Each <code>ByteMatchTuple</code> object contains <a>FieldToMatch</a>, <code>PositionalConstraint</code>, <code>TargetString</code>, and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="ByteMatchSet")]
@@ -478,10 +478,10 @@ pub struct GetByteMatchSetResponse {
     pub byte_match_set: Option<ByteMatchSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetChangeTokenRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetChangeTokenResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used in the request. Use this value in a <code>GetChangeTokenStatus</code> request to get the current status of the request. </p>"]
     #[serde(rename="ChangeToken")]
@@ -489,14 +489,14 @@ pub struct GetChangeTokenResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetChangeTokenStatusRequest {
     #[doc="<p>The change token for which you want to get the status. This change token was previously returned in the <code>GetChangeToken</code> response.</p>"]
     #[serde(rename="ChangeToken")]
     pub change_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetChangeTokenStatusResponse {
     #[doc="<p>The status of the change token.</p>"]
     #[serde(rename="ChangeTokenStatus")]
@@ -504,14 +504,14 @@ pub struct GetChangeTokenStatusResponse {
     pub change_token_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIPSetRequest {
     #[doc="<p>The <code>IPSetId</code> of the <a>IPSet</a> that you want to get. <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>"]
     #[serde(rename="IPSetId")]
     pub ip_set_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetIPSetResponse {
     #[doc="<p>Information about the <a>IPSet</a> that you specified in the <code>GetIPSet</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>IPSet</a>: Contains <code>IPSetDescriptors</code>, <code>IPSetId</code>, and <code>Name</code> </p> </li> <li> <p> <code>IPSetDescriptors</code>: Contains an array of <a>IPSetDescriptor</a> objects. Each <code>IPSetDescriptor</code> object contains <code>Type</code> and <code>Value</code> </p> </li> </ul>"]
     #[serde(rename="IPSet")]
@@ -519,7 +519,7 @@ pub struct GetIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRateBasedRuleManagedKeysRequest {
     #[doc="<p>A null value and not currently used. Do not include this in your request.</p>"]
     #[serde(rename="NextMarker")]
@@ -530,7 +530,7 @@ pub struct GetRateBasedRuleManagedKeysRequest {
     pub rule_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRateBasedRuleManagedKeysResponse {
     #[doc="<p>An array of IP addresses that currently are blocked by the specified <a>RateBasedRule</a>. </p>"]
     #[serde(rename="ManagedKeys")]
@@ -542,14 +542,14 @@ pub struct GetRateBasedRuleManagedKeysResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRateBasedRuleRequest {
     #[doc="<p>The <code>RuleId</code> of the <a>RateBasedRule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRateBasedRule</a> and by <a>ListRateBasedRules</a>.</p>"]
     #[serde(rename="RuleId")]
     pub rule_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRateBasedRuleResponse {
     #[doc="<p>Information about the <a>RateBasedRule</a> that you specified in the <code>GetRateBasedRule</code> request.</p>"]
     #[serde(rename="Rule")]
@@ -557,14 +557,14 @@ pub struct GetRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRuleRequest {
     #[doc="<p>The <code>RuleId</code> of the <a>Rule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
     pub rule_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRuleResponse {
     #[doc="<p>Information about the <a>Rule</a> that you specified in the <code>GetRule</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>Rule</a>: Contains <code>MetricName</code>, <code>Name</code>, an array of <code>Predicate</code> objects, and <code>RuleId</code> </p> </li> <li> <p> <a>Predicate</a>: Each <code>Predicate</code> object contains <code>DataId</code>, <code>Negated</code>, and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Rule")]
@@ -572,7 +572,7 @@ pub struct GetRuleResponse {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSampledRequestsRequest {
     #[doc="<p>The number of requests that you want AWS WAF to return from among the first 5,000 requests that your AWS resource received during the time range. If your resource received fewer requests than the value of <code>MaxItems</code>, <code>GetSampledRequests</code> returns information about all of them. </p>"]
     #[serde(rename="MaxItems")]
@@ -588,7 +588,7 @@ pub struct GetSampledRequestsRequest {
     pub web_acl_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSampledRequestsResponse {
     #[doc="<p>The total number of requests from which <code>GetSampledRequests</code> got a sample of <code>MaxItems</code> requests. If <code>PopulationSize</code> is less than <code>MaxItems</code>, the sample includes every request that your AWS resource received during the specified time range.</p>"]
     #[serde(rename="PopulationSize")]
@@ -604,14 +604,14 @@ pub struct GetSampledRequestsResponse {
     pub time_window: Option<TimeWindow>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSizeConstraintSetRequest {
     #[doc="<p>The <code>SizeConstraintSetId</code> of the <a>SizeConstraintSet</a> that you want to get. <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
     pub size_constraint_set_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSizeConstraintSetResponse {
     #[doc="<p>Information about the <a>SizeConstraintSet</a> that you specified in the <code>GetSizeConstraintSet</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>SizeConstraintSet</a>: Contains <code>SizeConstraintSetId</code>, <code>SizeConstraints</code>, and <code>Name</code> </p> </li> <li> <p> <code>SizeConstraints</code>: Contains an array of <a>SizeConstraint</a> objects. Each <code>SizeConstraint</code> object contains <a>FieldToMatch</a>, <code>TextTransformation</code>, <code>ComparisonOperator</code>, and <code>Size</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="SizeConstraintSet")]
@@ -620,7 +620,7 @@ pub struct GetSizeConstraintSetResponse {
 }
 
 #[doc="<p>A request to get a <a>SqlInjectionMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSqlInjectionMatchSetRequest {
     #[doc="<p>The <code>SqlInjectionMatchSetId</code> of the <a>SqlInjectionMatchSet</a> that you want to get. <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
@@ -628,7 +628,7 @@ pub struct GetSqlInjectionMatchSetRequest {
 }
 
 #[doc="<p>The response to a <a>GetSqlInjectionMatchSet</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSqlInjectionMatchSetResponse {
     #[doc="<p>Information about the <a>SqlInjectionMatchSet</a> that you specified in the <code>GetSqlInjectionMatchSet</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>SqlInjectionMatchSet</a>: Contains <code>Name</code>, <code>SqlInjectionMatchSetId</code>, and an array of <code>SqlInjectionMatchTuple</code> objects</p> </li> <li> <p> <a>SqlInjectionMatchTuple</a>: Each <code>SqlInjectionMatchTuple</code> object contains <code>FieldToMatch</code> and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="SqlInjectionMatchSet")]
@@ -636,14 +636,14 @@ pub struct GetSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetWebACLRequest {
     #[doc="<p>The <code>WebACLId</code> of the <a>WebACL</a> that you want to get. <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
     pub web_acl_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetWebACLResponse {
     #[doc="<p>Information about the <a>WebACL</a> that you specified in the <code>GetWebACL</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>WebACL</a>: Contains <code>DefaultAction</code>, <code>MetricName</code>, <code>Name</code>, an array of <code>Rule</code> objects, and <code>WebACLId</code> </p> </li> <li> <p> <code>DefaultAction</code> (Data type is <a>WafAction</a>): Contains <code>Type</code> </p> </li> <li> <p> <code>Rules</code>: Contains an array of <code>ActivatedRule</code> objects, which contain <code>Action</code>, <code>Priority</code>, and <code>RuleId</code> </p> </li> <li> <p> <code>Action</code>: Contains <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="WebACL")]
@@ -652,7 +652,7 @@ pub struct GetWebACLResponse {
 }
 
 #[doc="<p>A request to get an <a>XssMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetXssMatchSetRequest {
     #[doc="<p>The <code>XssMatchSetId</code> of the <a>XssMatchSet</a> that you want to get. <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
@@ -660,7 +660,7 @@ pub struct GetXssMatchSetRequest {
 }
 
 #[doc="<p>The response to a <a>GetXssMatchSet</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetXssMatchSetResponse {
     #[doc="<p>Information about the <a>XssMatchSet</a> that you specified in the <code>GetXssMatchSet</code> request. For more information, see the following topics:</p> <ul> <li> <p> <a>XssMatchSet</a>: Contains <code>Name</code>, <code>XssMatchSetId</code>, and an array of <code>XssMatchTuple</code> objects</p> </li> <li> <p> <a>XssMatchTuple</a>: Each <code>XssMatchTuple</code> object contains <code>FieldToMatch</code> and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="XssMatchSet")]
@@ -669,7 +669,7 @@ pub struct GetXssMatchSetResponse {
 }
 
 #[doc="<p>The response from a <a>GetSampledRequests</a> request includes an <code>HTTPHeader</code> complex type that appears as <code>Headers</code> in the response syntax. <code>HTTPHeader</code> contains the names and values of all of the headers that appear in one of the web requests that were returned by <code>GetSampledRequests</code>. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HTTPHeader {
     #[doc="<p>The name of one of the headers in the sampled web request.</p>"]
     #[serde(rename="Name")]
@@ -682,7 +682,7 @@ pub struct HTTPHeader {
 }
 
 #[doc="<p>The response from a <a>GetSampledRequests</a> request includes an <code>HTTPRequest</code> complex type that appears as <code>Request</code> in the response syntax. <code>HTTPRequest</code> contains information about one of the web requests that were returned by <code>GetSampledRequests</code>. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HTTPRequest {
     #[doc="<p>The IP address that the request originated from. If the <code>WebACL</code> is associated with a CloudFront distribution, this is the value of one of the following fields in CloudFront access logs:</p> <ul> <li> <p> <code>c-ip</code>, if the viewer did not use an HTTP proxy or a load balancer to send the request</p> </li> <li> <p> <code>x-forwarded-for</code>, if the viewer did use an HTTP proxy or a load balancer to send the request</p> </li> </ul>"]
     #[serde(rename="ClientIP")]
@@ -711,7 +711,7 @@ pub struct HTTPRequest {
 }
 
 #[doc="<p>Contains one or more IP addresses or blocks of IP addresses specified in Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports /8, /16, /24, and /32 IP address ranges for IPv4, and /24, /32, /48, /56, /64 and /128 for IPv6.</p> <p>To specify an individual IP address, you specify the four-part IP address followed by a <code>/32</code>, for example, 192.0.2.0/31. To block a range of IP addresses, you can specify a <code>/128</code>, <code>/64</code>, <code>/56</code>, <code>/48</code>, <code>/32</code>, <code>/24</code>, <code>/16</code>, or <code>/8</code> CIDR. For more information about CIDR notation, see the Wikipedia entry <a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IPSet {
     #[doc="<p>The IP address type (<code>IPV4</code> or <code>IPV6</code>) and the IP address range (in CIDR notation) that web requests originate from. If the <code>WebACL</code> is associated with a CloudFront distribution and the viewer did not use an HTTP proxy or a load balancer to send the request, this is the value of the c-ip field in the CloudFront access logs.</p>"]
     #[serde(rename="IPSetDescriptors")]
@@ -737,7 +737,7 @@ pub struct IPSetDescriptor {
 }
 
 #[doc="<p>Contains the identifier and the name of the <code>IPSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IPSetSummary {
     #[doc="<p>The <code>IPSetId</code> for an <a>IPSet</a>. You can use <code>IPSetId</code> in a <a>GetIPSet</a> request to get detailed information about an <a>IPSet</a>.</p>"]
     #[serde(rename="IPSetId")]
@@ -748,7 +748,7 @@ pub struct IPSetSummary {
 }
 
 #[doc="<p>Specifies the type of update to perform to an <a>IPSet</a> with <a>UpdateIPSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IPSetUpdate {
     #[doc="<p>Specifies whether to insert or delete an IP address with <a>UpdateIPSet</a>.</p>"]
     #[serde(rename="Action")]
@@ -758,7 +758,7 @@ pub struct IPSetUpdate {
     pub ip_set_descriptor: IPSetDescriptor,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListByteMatchSetsRequest {
     #[doc="<p>Specifies the number of <code>ByteMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>ByteMatchSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ByteMatchSet</code> objects.</p>"]
     #[serde(rename="Limit")]
@@ -770,7 +770,7 @@ pub struct ListByteMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListByteMatchSetsResponse {
     #[doc="<p>An array of <a>ByteMatchSetSummary</a> objects.</p>"]
     #[serde(rename="ByteMatchSets")]
@@ -782,7 +782,7 @@ pub struct ListByteMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIPSetsRequest {
     #[doc="<p>Specifies the number of <code>IPSet</code> objects that you want AWS WAF to return for this request. If you have more <code>IPSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>IPSet</code> objects.</p>"]
     #[serde(rename="Limit")]
@@ -794,7 +794,7 @@ pub struct ListIPSetsRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIPSetsResponse {
     #[doc="<p>An array of <a>IPSetSummary</a> objects.</p>"]
     #[serde(rename="IPSets")]
@@ -806,7 +806,7 @@ pub struct ListIPSetsResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRateBasedRulesRequest {
     #[doc="<p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
@@ -818,7 +818,7 @@ pub struct ListRateBasedRulesRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRateBasedRulesResponse {
     #[doc="<p>If you have more <code>Rules</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>Rules</code>, submit another <code>ListRateBasedRules</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -830,7 +830,7 @@ pub struct ListRateBasedRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesRequest {
     #[doc="<p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
@@ -842,7 +842,7 @@ pub struct ListRulesRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRulesResponse {
     #[doc="<p>If you have more <code>Rules</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>Rules</code>, submit another <code>ListRules</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -854,7 +854,7 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSizeConstraintSetsRequest {
     #[doc="<p>Specifies the number of <code>SizeConstraintSet</code> objects that you want AWS WAF to return for this request. If you have more <code>SizeConstraintSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>SizeConstraintSet</code> objects.</p>"]
     #[serde(rename="Limit")]
@@ -866,7 +866,7 @@ pub struct ListSizeConstraintSetsRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSizeConstraintSetsResponse {
     #[doc="<p>If you have more <code>SizeConstraintSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>SizeConstraintSet</code> objects, submit another <code>ListSizeConstraintSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -879,7 +879,7 @@ pub struct ListSizeConstraintSetsResponse {
 }
 
 #[doc="<p>A request to list the <a>SqlInjectionMatchSet</a> objects created by the current AWS account.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSqlInjectionMatchSetsRequest {
     #[doc="<p>Specifies the number of <a>SqlInjectionMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>SqlInjectionMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
@@ -892,7 +892,7 @@ pub struct ListSqlInjectionMatchSetsRequest {
 }
 
 #[doc="<p>The response to a <a>ListSqlInjectionMatchSets</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSqlInjectionMatchSetsResponse {
     #[doc="<p>If you have more <a>SqlInjectionMatchSet</a> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>SqlInjectionMatchSet</code> objects, submit another <code>ListSqlInjectionMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -904,7 +904,7 @@ pub struct ListSqlInjectionMatchSetsResponse {
     pub sql_injection_match_sets: Option<Vec<SqlInjectionMatchSetSummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListWebACLsRequest {
     #[doc="<p>Specifies the number of <code>WebACL</code> objects that you want AWS WAF to return for this request. If you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>WebACL</code> objects.</p>"]
     #[serde(rename="Limit")]
@@ -916,7 +916,7 @@ pub struct ListWebACLsRequest {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListWebACLsResponse {
     #[doc="<p>If you have more <code>WebACL</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>WebACL</code> objects, submit another <code>ListWebACLs</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -929,7 +929,7 @@ pub struct ListWebACLsResponse {
 }
 
 #[doc="<p>A request to list the <a>XssMatchSet</a> objects created by the current AWS account.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListXssMatchSetsRequest {
     #[doc="<p>Specifies the number of <a>XssMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>XssMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
@@ -942,7 +942,7 @@ pub struct ListXssMatchSetsRequest {
 }
 
 #[doc="<p>The response to a <a>ListXssMatchSets</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListXssMatchSetsResponse {
     #[doc="<p>If you have more <a>XssMatchSet</a> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>XssMatchSet</code> objects, submit another <code>ListXssMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
@@ -969,7 +969,7 @@ pub struct Predicate {
 }
 
 #[doc="<p>A <code>RateBasedRule</code> is identical to a regular <a>Rule</a>, with one addition: a <code>RateBasedRule</code> counts the number of requests that arrive from a specified IP address every five minutes. For example, based on recent requests that you've seen from an attacker, you might create a <code>RateBasedRule</code> that includes the following conditions: </p> <ul> <li> <p>The requests come from 192.0.2.44.</p> </li> <li> <p>They contain the value <code>BadBot</code> in the <code>User-Agent</code> header.</p> </li> </ul> <p>In the rule, you also define the rate limit as 15,000.</p> <p>Requests that meet both of these conditions and exceed 15,000 requests every five minutes trigger the rule's action (block or count), which is defined in the web ACL.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RateBasedRule {
     #[doc="<p>The <code>Predicates</code> object contains one <code>Predicate</code> element for each <a>ByteMatchSet</a>, <a>IPSet</a>, or <a>SqlInjectionMatchSet</a> object that you want to include in a <code>RateBasedRule</code>.</p>"]
     #[serde(rename="MatchPredicates")]
@@ -994,7 +994,7 @@ pub struct RateBasedRule {
 }
 
 #[doc="<p>A combination of <a>ByteMatchSet</a>, <a>IPSet</a>, and/or <a>SqlInjectionMatchSet</a> objects that identify the web requests that you want to allow, block, or count. For example, you might create a <code>Rule</code> that includes the following predicates:</p> <ul> <li> <p>An <code>IPSet</code> that causes AWS WAF to search for web requests that originate from the IP address <code>192.0.2.44</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that causes AWS WAF to search for web requests for which the value of the <code>User-Agent</code> header is <code>BadBot</code>.</p> </li> </ul> <p>To match the settings in this <code>Rule</code>, a request must originate from <code>192.0.2.44</code> AND include a <code>User-Agent</code> header for which the value is <code>BadBot</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Rule {
     #[doc="<p>A friendly name or description for the metrics for this <code>Rule</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change <code>MetricName</code> after you create the <code>Rule</code>.</p>"]
     #[serde(rename="MetricName")]
@@ -1013,7 +1013,7 @@ pub struct Rule {
 }
 
 #[doc="<p>Contains the identifier and the friendly name or description of the <code>Rule</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RuleSummary {
     #[doc="<p>A friendly name or description of the <a>Rule</a>. You can't change the name of a <code>Rule</code> after you create it.</p>"]
     #[serde(rename="Name")]
@@ -1024,7 +1024,7 @@ pub struct RuleSummary {
 }
 
 #[doc="<p>Specifies a <code>Predicate</code> (such as an <code>IPSet</code>) and indicates whether you want to add it to a <code>Rule</code> or delete it from a <code>Rule</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RuleUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <code>Predicate</code> to a <code>Rule</code>. Use <code>DELETE</code> to remove a <code>Predicate</code> from a <code>Rule</code>.</p>"]
     #[serde(rename="Action")]
@@ -1035,7 +1035,7 @@ pub struct RuleUpdate {
 }
 
 #[doc="<p>The response from a <a>GetSampledRequests</a> request includes a <code>SampledHTTPRequests</code> complex type that appears as <code>SampledRequests</code> in the response syntax. <code>SampledHTTPRequests</code> contains one <code>SampledHTTPRequest</code> object for each web request that is returned by <code>GetSampledRequests</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SampledHTTPRequest {
     #[doc="<p>The action for the <code>Rule</code> that the request matched: <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p>"]
     #[serde(rename="Action")]
@@ -1071,7 +1071,7 @@ pub struct SizeConstraint {
 }
 
 #[doc="<p>A complex type that contains <code>SizeConstraint</code> objects, which specify the parts of web requests that you want AWS WAF to inspect the size of. If a <code>SizeConstraintSet</code> contains more than one <code>SizeConstraint</code> object, a request only needs to match one constraint to be considered a match.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SizeConstraintSet {
     #[doc="<p>The name, if any, of the <code>SizeConstraintSet</code>.</p>"]
     #[serde(rename="Name")]
@@ -1086,7 +1086,7 @@ pub struct SizeConstraintSet {
 }
 
 #[doc="<p>The <code>Id</code> and <code>Name</code> of a <code>SizeConstraintSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SizeConstraintSetSummary {
     #[doc="<p>The name of the <code>SizeConstraintSet</code>, if any.</p>"]
     #[serde(rename="Name")]
@@ -1097,7 +1097,7 @@ pub struct SizeConstraintSetSummary {
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect the size of and indicates whether you want to add the specification to a <a>SizeConstraintSet</a> or delete it from a <code>SizeConstraintSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SizeConstraintSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>SizeConstraintSetUpdate</a> to a <a>SizeConstraintSet</a>. Use <code>DELETE</code> to remove a <code>SizeConstraintSetUpdate</code> from a <code>SizeConstraintSet</code>.</p>"]
     #[serde(rename="Action")]
@@ -1108,7 +1108,7 @@ pub struct SizeConstraintSetUpdate {
 }
 
 #[doc="<p>A complex type that contains <code>SqlInjectionMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect for snippets of malicious SQL code and, if you want AWS WAF to inspect a header, the name of the header. If a <code>SqlInjectionMatchSet</code> contains more than one <code>SqlInjectionMatchTuple</code> object, a request needs to include snippets of SQL code in only one of the specified parts of the request to be considered a match.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SqlInjectionMatchSet {
     #[doc="<p>The name, if any, of the <code>SqlInjectionMatchSet</code>.</p>"]
     #[serde(rename="Name")]
@@ -1123,7 +1123,7 @@ pub struct SqlInjectionMatchSet {
 }
 
 #[doc="<p>The <code>Id</code> and <code>Name</code> of a <code>SqlInjectionMatchSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SqlInjectionMatchSetSummary {
     #[doc="<p>The name of the <code>SqlInjectionMatchSet</code>, if any, specified by <code>Id</code>.</p>"]
     #[serde(rename="Name")]
@@ -1134,7 +1134,7 @@ pub struct SqlInjectionMatchSetSummary {
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect for snippets of malicious SQL code and indicates whether you want to add the specification to a <a>SqlInjectionMatchSet</a> or delete it from a <code>SqlInjectionMatchSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SqlInjectionMatchSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>SqlInjectionMatchSetUpdate</a> to a <a>SqlInjectionMatchSet</a>. Use <code>DELETE</code> to remove a <code>SqlInjectionMatchSetUpdate</code> from a <code>SqlInjectionMatchSet</code>.</p>"]
     #[serde(rename="Action")]
@@ -1166,7 +1166,7 @@ pub struct TimeWindow {
     pub start_time: f64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to update. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
@@ -1179,7 +1179,7 @@ pub struct UpdateByteMatchSetRequest {
     pub updates: Vec<ByteMatchSetUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateByteMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1187,7 +1187,7 @@ pub struct UpdateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1200,7 +1200,7 @@ pub struct UpdateIPSetRequest {
     pub updates: Vec<IPSetUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1208,7 +1208,7 @@ pub struct UpdateIPSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRateBasedRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1224,7 +1224,7 @@ pub struct UpdateRateBasedRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1232,7 +1232,7 @@ pub struct UpdateRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1245,7 +1245,7 @@ pub struct UpdateRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1253,7 +1253,7 @@ pub struct UpdateRuleResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1266,7 +1266,7 @@ pub struct UpdateSizeConstraintSetRequest {
     pub updates: Vec<SizeConstraintSetUpdate>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1275,7 +1275,7 @@ pub struct UpdateSizeConstraintSetResponse {
 }
 
 #[doc="<p>A request to update a <a>SqlInjectionMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1289,7 +1289,7 @@ pub struct UpdateSqlInjectionMatchSetRequest {
 }
 
 #[doc="<p>The response to an <a>UpdateSqlInjectionMatchSets</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1297,7 +1297,7 @@ pub struct UpdateSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1315,7 +1315,7 @@ pub struct UpdateWebACLRequest {
     pub web_acl_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1324,7 +1324,7 @@ pub struct UpdateWebACLResponse {
 }
 
 #[doc="<p>A request to update an <a>XssMatchSet</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1338,7 +1338,7 @@ pub struct UpdateXssMatchSetRequest {
 }
 
 #[doc="<p>The response to an <a>UpdateXssMatchSets</a> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
@@ -1355,7 +1355,7 @@ pub struct WafAction {
 }
 
 #[doc="<p>Contains the <code>Rules</code> that identify the requests that you want to allow, block, or count. In a <code>WebACL</code>, you also specify a default action (<code>ALLOW</code> or <code>BLOCK</code>), and the action for each <code>Rule</code> that you add to a <code>WebACL</code>, for example, block requests from specified IP addresses or block requests from specified referrers. You also associate the <code>WebACL</code> with a CloudFront distribution to identify the requests that you want AWS WAF to filter. If you add more than one <code>Rule</code> to a <code>WebACL</code>, a request needs to match only one of the specifications to be allowed, blocked, or counted. For more information, see <a>UpdateWebACL</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WebACL {
     #[doc="<p>The action to perform if none of the <code>Rules</code> contained in the <code>WebACL</code> match. The action is specified by the <a>WafAction</a> object.</p>"]
     #[serde(rename="DefaultAction")]
@@ -1377,7 +1377,7 @@ pub struct WebACL {
 }
 
 #[doc="<p>Contains the identifier and the name or description of the <a>WebACL</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WebACLSummary {
     #[doc="<p>A friendly name or description of the <a>WebACL</a>. You can't change the name of a <code>WebACL</code> after you create it.</p>"]
     #[serde(rename="Name")]
@@ -1388,7 +1388,7 @@ pub struct WebACLSummary {
 }
 
 #[doc="<p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WebACLUpdate {
     #[doc="<p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>"]
     #[serde(rename="Action")]
@@ -1399,7 +1399,7 @@ pub struct WebACLUpdate {
 }
 
 #[doc="<p>A complex type that contains <code>XssMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect for cross-site scripting attacks and, if you want AWS WAF to inspect a header, the name of the header. If a <code>XssMatchSet</code> contains more than one <code>XssMatchTuple</code> object, a request needs to include cross-site scripting attacks in only one of the specified parts of the request to be considered a match.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct XssMatchSet {
     #[doc="<p>The name, if any, of the <code>XssMatchSet</code>.</p>"]
     #[serde(rename="Name")]
@@ -1414,7 +1414,7 @@ pub struct XssMatchSet {
 }
 
 #[doc="<p>The <code>Id</code> and <code>Name</code> of an <code>XssMatchSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct XssMatchSetSummary {
     #[doc="<p>The name of the <code>XssMatchSet</code>, if any, specified by <code>Id</code>.</p>"]
     #[serde(rename="Name")]
@@ -1425,7 +1425,7 @@ pub struct XssMatchSetSummary {
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect for cross-site scripting attacks and indicates whether you want to add the specification to an <a>XssMatchSet</a> or delete it from an <code>XssMatchSet</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct XssMatchSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>XssMatchSetUpdate</a> to an <a>XssMatchSet</a>. Use <code>DELETE</code> to remove a <code>XssMatchSetUpdate</code> from an <code>XssMatchSet</code>.</p>"]
     #[serde(rename="Action")]

@@ -29,17 +29,17 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLexiconInput {
     #[doc="<p>The name of the lexicon to delete. Must be an existing lexicon in the region.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLexiconOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVoicesInput {
     #[doc="<p> The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. </p>"]
     #[serde(rename="LanguageCode")]
@@ -51,7 +51,7 @@ pub struct DescribeVoicesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVoicesOutput {
     #[doc="<p>The pagination token to use in the next request to continue the listing of voices. <code>NextToken</code> is returned only if the response is truncated.</p>"]
     #[serde(rename="NextToken")]
@@ -63,14 +63,14 @@ pub struct DescribeVoicesOutput {
     pub voices: Option<Vec<Voice>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLexiconInput {
     #[doc="<p>Name of the lexicon.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLexiconOutput {
     #[doc="<p>Lexicon object that provides name and the string content of the lexicon. </p>"]
     #[serde(rename="Lexicon")]
@@ -83,7 +83,7 @@ pub struct GetLexiconOutput {
 }
 
 #[doc="<p>Provides lexicon name and lexicon content in string format. For more information, see <a href=\"https://www.w3.org/TR/pronunciation-lexicon/\">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Lexicon {
     #[doc="<p>Lexicon content in string format. The content of a lexicon must be in PLS format.</p>"]
     #[serde(rename="Content")]
@@ -96,7 +96,7 @@ pub struct Lexicon {
 }
 
 #[doc="<p>Contains metadata describing the lexicon such as the number of lexemes, language code, and so on. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LexiconAttributes {
     #[doc="<p>Phonetic alphabet used in the lexicon. Valid values are <code>ipa</code> and <code>x-sampa</code>.</p>"]
     #[serde(rename="Alphabet")]
@@ -125,7 +125,7 @@ pub struct LexiconAttributes {
 }
 
 #[doc="<p>Describes the content of the lexicon.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LexiconDescription {
     #[doc="<p>Provides lexicon metadata.</p>"]
     #[serde(rename="Attributes")]
@@ -137,7 +137,7 @@ pub struct LexiconDescription {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLexiconsInput {
     #[doc="<p>An opaque pagination token returned from previous <code>ListLexicons</code> operation. If present, indicates where to continue the list of lexicons.</p>"]
     #[serde(rename="NextToken")]
@@ -145,7 +145,7 @@ pub struct ListLexiconsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLexiconsOutput {
     #[doc="<p>A list of lexicon names and attributes.</p>"]
     #[serde(rename="Lexicons")]
@@ -157,7 +157,7 @@ pub struct ListLexiconsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLexiconInput {
     #[doc="<p>Content of the PLS lexicon as string data.</p>"]
     #[serde(rename="Content")]
@@ -167,10 +167,10 @@ pub struct PutLexiconInput {
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLexiconOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SynthesizeSpeechInput {
     #[doc="<p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. For information about storing lexicons, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html\">PutLexicon</a>.</p>"]
     #[serde(rename="LexiconNames")]
@@ -199,18 +199,28 @@ pub struct SynthesizeSpeechInput {
     pub voice_id: String,
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SynthesizeSpeechOutput {
     #[doc="<p> Stream containing the synthesized speech. </p>"]
+    #[serde(rename="AudioStream")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub audio_stream: Option<Vec<u8>>,
     #[doc="<p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> <li> <p>If you request <code>json</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/json.</p> </li> </ul> <p> </p>"]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="<p>Number of characters synthesized.</p>"]
+    #[serde(rename="RequestCharacters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_characters: Option<i64>,
 }
 
 #[doc="<p>Description of the voice.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Voice {
     #[doc="<p>Gender of the voice.</p>"]
     #[serde(rename="Gender")]
