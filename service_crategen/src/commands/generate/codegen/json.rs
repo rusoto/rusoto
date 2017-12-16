@@ -82,10 +82,10 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  serialized: bool,
-                                  deserialized: bool)
+                                  _serialized: bool,
+                                  _deserialized: bool)
                                   -> String {
-        let mut derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
+        let derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
 
         format!("#[derive({})]", derived.join(","))
     }

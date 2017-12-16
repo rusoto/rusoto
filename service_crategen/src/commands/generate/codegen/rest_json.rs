@@ -116,8 +116,8 @@ impl GenerateProtocol for RestJsonGenerator {
 
     }
 
-    fn generate_struct_attributes(&self, serialized: bool, deserialized: bool) -> String {
-        let mut derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
+    fn generate_struct_attributes(&self, _serialized: bool, _deserialized: bool) -> String {
+        let derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
 
         format!("#[derive({})]", derived.join(","))
     }
