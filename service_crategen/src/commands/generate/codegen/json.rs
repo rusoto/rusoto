@@ -85,15 +85,7 @@ impl GenerateProtocol for JsonGenerator {
                                   serialized: bool,
                                   deserialized: bool)
                                   -> String {
-        let mut derived = vec!["Default", "Debug", "Clone"];
-
-        if serialized {
-            derived.push("Serialize");
-        }
-
-        if deserialized {
-            derived.push("Deserialize")
-        }
+        let mut derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
 
         format!("#[derive({})]", derived.join(","))
     }

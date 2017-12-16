@@ -120,7 +120,7 @@ impl GenerateProtocol for RestXmlGenerator {
                                   _serialized: bool,
                                   _deserialized: bool)
                                   -> String {
-        let derived = vec!["Default", "Debug"];
+        let derived = vec!["Default", "Debug", "Serialize", "Deserialize"];
 
         format!("#[derive({})]", derived.join(","))
     }
