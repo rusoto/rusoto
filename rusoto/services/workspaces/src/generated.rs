@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Contains information about the compute type of a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComputeType {
     #[doc="<p>The name of the compute type for the bundle.</p>"]
     #[serde(rename="Name")]
@@ -38,7 +38,7 @@ pub struct ComputeType {
 }
 
 #[doc="<p>The request of the <a>CreateTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsRequest {
     #[doc="<p>The resource ID of the request.</p>"]
     #[serde(rename="ResourceId")]
@@ -49,11 +49,11 @@ pub struct CreateTagsRequest {
 }
 
 #[doc="<p>The result of the <a>CreateTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsResult;
 
 #[doc="<p>Contains the inputs for the <a>CreateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateWorkspacesRequest {
     #[doc="<p>An array of structures that specify the WorkSpaces to create.</p>"]
     #[serde(rename="Workspaces")]
@@ -61,7 +61,7 @@ pub struct CreateWorkspacesRequest {
 }
 
 #[doc="<p>Contains the result of the <a>CreateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateWorkspacesResult {
     #[doc="<p>An array of structures that represent the WorkSpaces that could not be created.</p>"]
     #[serde(rename="FailedRequests")]
@@ -74,7 +74,7 @@ pub struct CreateWorkspacesResult {
 }
 
 #[doc="<p>Contains default WorkSpace creation information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DefaultWorkspaceCreationProperties {
     #[doc="<p>The identifier of any custom security groups that are applied to the WorkSpaces when they are created.</p>"]
     #[serde(rename="CustomSecurityGroupId")]
@@ -99,7 +99,7 @@ pub struct DefaultWorkspaceCreationProperties {
 }
 
 #[doc="<p>The request of the <a>DeleteTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsRequest {
     #[doc="<p>The resource ID of the request.</p>"]
     #[serde(rename="ResourceId")]
@@ -110,11 +110,11 @@ pub struct DeleteTagsRequest {
 }
 
 #[doc="<p>The result of the <a>DeleteTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsResult;
 
 #[doc="<p>The request of the <a>DescribeTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsRequest {
     #[doc="<p>The resource ID of the request.</p>"]
     #[serde(rename="ResourceId")]
@@ -122,7 +122,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[doc="<p>The result of the <a>DescribeTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsResult {
     #[doc="<p>The list of tags.</p>"]
     #[serde(rename="TagList")]
@@ -131,7 +131,7 @@ pub struct DescribeTagsResult {
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeWorkspaceBundles</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspaceBundlesRequest {
     #[doc="<p>An array of strings that contains the identifiers of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p>"]
     #[serde(rename="BundleIds")]
@@ -148,7 +148,7 @@ pub struct DescribeWorkspaceBundlesRequest {
 }
 
 #[doc="<p>Contains the results of the <a>DescribeWorkspaceBundles</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspaceBundlesResult {
     #[doc="<p>An array of structures that contain information about the bundles.</p>"]
     #[serde(rename="Bundles")]
@@ -161,7 +161,7 @@ pub struct DescribeWorkspaceBundlesResult {
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeWorkspaceDirectories</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspaceDirectoriesRequest {
     #[doc="<p>An array of strings that contains the directory identifiers to retrieve information for. If this member is null, all directories are retrieved.</p>"]
     #[serde(rename="DirectoryIds")]
@@ -174,7 +174,7 @@ pub struct DescribeWorkspaceDirectoriesRequest {
 }
 
 #[doc="<p>Contains the results of the <a>DescribeWorkspaceDirectories</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspaceDirectoriesResult {
     #[doc="<p>An array of structures that contain information about the directories.</p>"]
     #[serde(rename="Directories")]
@@ -186,7 +186,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspacesConnectionStatusRequest {
     #[doc="<p>The next token of the request.</p>"]
     #[serde(rename="NextToken")]
@@ -198,7 +198,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspacesConnectionStatusResult {
     #[doc="<p>The next token of the result.</p>"]
     #[serde(rename="NextToken")]
@@ -211,7 +211,7 @@ pub struct DescribeWorkspacesConnectionStatusResult {
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspacesRequest {
     #[doc="<p>The identifier of a bundle to obtain the WorkSpaces for. All WorkSpaces that are created from this bundle will be retrieved. This parameter cannot be combined with any other filter parameter.</p>"]
     #[serde(rename="BundleId")]
@@ -240,7 +240,7 @@ pub struct DescribeWorkspacesRequest {
 }
 
 #[doc="<p>Contains the results for the <a>DescribeWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeWorkspacesResult {
     #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
     #[serde(rename="NextToken")]
@@ -253,7 +253,7 @@ pub struct DescribeWorkspacesResult {
 }
 
 #[doc="<p>Contains information about a WorkSpace that could not be created.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FailedCreateWorkspaceRequest {
     #[doc="<p>The error code.</p>"]
     #[serde(rename="ErrorCode")]
@@ -270,7 +270,7 @@ pub struct FailedCreateWorkspaceRequest {
 }
 
 #[doc="<p>Contains information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FailedWorkspaceChangeRequest {
     #[doc="<p>The error code.</p>"]
     #[serde(rename="ErrorCode")]
@@ -286,7 +286,7 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyWorkspacePropertiesRequest {
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -296,11 +296,11 @@ pub struct ModifyWorkspacePropertiesRequest {
     pub workspace_properties: WorkspaceProperties,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyWorkspacePropertiesResult;
 
 #[doc="<p>Contains information used with the <a>RebootWorkspaces</a> operation to reboot a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootRequest {
     #[doc="<p>The identifier of the WorkSpace to reboot.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -308,7 +308,7 @@ pub struct RebootRequest {
 }
 
 #[doc="<p>Contains the inputs for the <a>RebootWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootWorkspacesRequest {
     #[doc="<p>An array of structures that specify the WorkSpaces to reboot.</p>"]
     #[serde(rename="RebootWorkspaceRequests")]
@@ -316,7 +316,7 @@ pub struct RebootWorkspacesRequest {
 }
 
 #[doc="<p>Contains the results of the <a>RebootWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be rebooted.</p>"]
     #[serde(rename="FailedRequests")]
@@ -325,7 +325,7 @@ pub struct RebootWorkspacesResult {
 }
 
 #[doc="<p>Contains information used with the <a>RebuildWorkspaces</a> operation to rebuild a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebuildRequest {
     #[doc="<p>The identifier of the WorkSpace to rebuild.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -333,7 +333,7 @@ pub struct RebuildRequest {
 }
 
 #[doc="<p>Contains the inputs for the <a>RebuildWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebuildWorkspacesRequest {
     #[doc="<p>An array of structures that specify the WorkSpaces to rebuild.</p>"]
     #[serde(rename="RebuildWorkspaceRequests")]
@@ -341,7 +341,7 @@ pub struct RebuildWorkspacesRequest {
 }
 
 #[doc="<p>Contains the results of the <a>RebuildWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebuildWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be rebuilt.</p>"]
     #[serde(rename="FailedRequests")]
@@ -350,7 +350,7 @@ pub struct RebuildWorkspacesResult {
 }
 
 #[doc="<p>Describes the start request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartRequest {
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -358,14 +358,14 @@ pub struct StartRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartWorkspacesRequest {
     #[doc="<p>The requests.</p>"]
     #[serde(rename="StartWorkspaceRequests")]
     pub start_workspace_requests: Vec<StartRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartWorkspacesResult {
     #[doc="<p>The failed requests.</p>"]
     #[serde(rename="FailedRequests")]
@@ -374,7 +374,7 @@ pub struct StartWorkspacesResult {
 }
 
 #[doc="<p>Describes the stop request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopRequest {
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -382,14 +382,14 @@ pub struct StopRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopWorkspacesRequest {
     #[doc="<p>The requests.</p>"]
     #[serde(rename="StopWorkspaceRequests")]
     pub stop_workspace_requests: Vec<StopRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopWorkspacesResult {
     #[doc="<p>The failed requests.</p>"]
     #[serde(rename="FailedRequests")]
@@ -410,7 +410,7 @@ pub struct Tag {
 }
 
 #[doc="<p>Contains information used with the <a>TerminateWorkspaces</a> operation to terminate a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateRequest {
     #[doc="<p>The identifier of the WorkSpace to terminate.</p>"]
     #[serde(rename="WorkspaceId")]
@@ -418,7 +418,7 @@ pub struct TerminateRequest {
 }
 
 #[doc="<p>Contains the inputs for the <a>TerminateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateWorkspacesRequest {
     #[doc="<p>An array of structures that specify the WorkSpaces to terminate.</p>"]
     #[serde(rename="TerminateWorkspaceRequests")]
@@ -426,7 +426,7 @@ pub struct TerminateWorkspacesRequest {
 }
 
 #[doc="<p>Contains the results of the <a>TerminateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be terminated.</p>"]
     #[serde(rename="FailedRequests")]
@@ -435,7 +435,7 @@ pub struct TerminateWorkspacesResult {
 }
 
 #[doc="<p>Contains information about the user storage for a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserStorage {
     #[doc="<p>The amount of user storage for the bundle.</p>"]
     #[serde(rename="Capacity")]
@@ -444,7 +444,7 @@ pub struct UserStorage {
 }
 
 #[doc="<p>Contains information about a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Workspace {
     #[doc="<p>The identifier of the bundle that the WorkSpace was created from.</p>"]
     #[serde(rename="BundleId")]
@@ -504,7 +504,7 @@ pub struct Workspace {
 }
 
 #[doc="<p>Contains information about a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WorkspaceBundle {
     #[doc="<p>The bundle identifier.</p>"]
     #[serde(rename="BundleId")]
@@ -533,7 +533,7 @@ pub struct WorkspaceBundle {
 }
 
 #[doc="<p>Describes the connection status of a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WorkspaceConnectionStatus {
     #[doc="<p>The connection state of the WorkSpace. Returns UNKOWN if the WorkSpace is in a Stopped state.</p>"]
     #[serde(rename="ConnectionState")]
@@ -554,7 +554,7 @@ pub struct WorkspaceConnectionStatus {
 }
 
 #[doc="<p>Contains information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WorkspaceDirectory {
     #[doc="<p>The directory alias.</p>"]
     #[serde(rename="Alias")]

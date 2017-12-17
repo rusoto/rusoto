@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Structure containing the estimated age range, in years, for a face.</p> <p>Rekognition estimates an age-range for faces detected in the input image. Estimated age ranges can overlap; a face of a 5 year old may have an estimated range of 4-6 whilst the face of a 6 year old may have an estimated range of 4-8.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AgeRange {
     #[doc="<p>The highest estimated age.</p>"]
     #[serde(rename="High")]
@@ -42,7 +42,7 @@ pub struct AgeRange {
 }
 
 #[doc="<p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Beard {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -55,7 +55,7 @@ pub struct Beard {
 }
 
 #[doc="<p>Identifies the bounding box around the object or face. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p> The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BoundingBox {
     #[doc="<p>Height of the bounding box as a ratio of the overall image height.</p>"]
     #[serde(rename="Height")]
@@ -76,7 +76,7 @@ pub struct BoundingBox {
 }
 
 #[doc="<p>Provides information about a celebrity recognized by the operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Celebrity {
     #[doc="<p>Provides information about the celebrity's face, such as its location on the image.</p>"]
     #[serde(rename="Face")]
@@ -101,7 +101,7 @@ pub struct Celebrity {
 }
 
 #[doc="<p>Provides information about a face in a target image that matches the source image face analysed by <code>CompareFaces</code>. The <code>Face</code> property contains the bounding box of the face in the target image. The <code>Similarity</code> property is the confidence that the source image face matches the face in the bounding box.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompareFacesMatch {
     #[doc="<p>Provides face metadata (bounding box and confidence that the bounding box actually contains a face).</p>"]
     #[serde(rename="Face")]
@@ -113,7 +113,7 @@ pub struct CompareFacesMatch {
     pub similarity: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompareFacesRequest {
     #[doc="<p>The minimum level of confidence in the face matches that a match must meet to be included in the <code>FaceMatches</code> array.</p>"]
     #[serde(rename="SimilarityThreshold")]
@@ -127,7 +127,7 @@ pub struct CompareFacesRequest {
     pub target_image: Image,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompareFacesResponse {
     #[doc="<p>An array of faces in the target image that match the source image face. Each <code>CompareFacesMatch</code> object provides the bounding box, the confidence level that the bounding box contains a face, and the similarity score for the face in the bounding box and the face in the source image.</p>"]
     #[serde(rename="FaceMatches")]
@@ -152,7 +152,7 @@ pub struct CompareFacesResponse {
 }
 
 #[doc="<p>Provides face metadata for target image faces that are analysed by <code>CompareFaces</code> and <code>RecognizeCelebrities</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComparedFace {
     #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
@@ -177,7 +177,7 @@ pub struct ComparedFace {
 }
 
 #[doc="<p>Type that describes the face Amazon Rekognition chose to compare with the faces in the target. This contains a bounding box for the selected face and confidence level that the bounding box contains a face. Note that Amazon Rekognition selects the largest face in the source image for this comparison. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComparedSourceImageFace {
     #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
@@ -189,14 +189,14 @@ pub struct ComparedSourceImageFace {
     pub confidence: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCollectionRequest {
     #[doc="<p>ID for the collection that you are creating.</p>"]
     #[serde(rename="CollectionId")]
     pub collection_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCollectionResponse {
     #[doc="<p>Amazon Resource Name (ARN) of the collection. You can use this to manage permissions on your resources. </p>"]
     #[serde(rename="CollectionArn")]
@@ -208,14 +208,14 @@ pub struct CreateCollectionResponse {
     pub status_code: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCollectionRequest {
     #[doc="<p>ID of the collection to delete.</p>"]
     #[serde(rename="CollectionId")]
     pub collection_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCollectionResponse {
     #[doc="<p>HTTP status code that indicates the result of the operation.</p>"]
     #[serde(rename="StatusCode")]
@@ -223,7 +223,7 @@ pub struct DeleteCollectionResponse {
     pub status_code: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFacesRequest {
     #[doc="<p>Collection from which to remove the specific faces.</p>"]
     #[serde(rename="CollectionId")]
@@ -233,7 +233,7 @@ pub struct DeleteFacesRequest {
     pub face_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFacesResponse {
     #[doc="<p>An array of strings (face IDs) of the faces that were deleted.</p>"]
     #[serde(rename="DeletedFaces")]
@@ -241,7 +241,7 @@ pub struct DeleteFacesResponse {
     pub deleted_faces: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectFacesRequest {
     #[doc="<p>An array of facial attributes you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>[\"DEFAULT\"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code> and <code>Landmarks</code>. If you provide <code>[\"ALL\"]</code>, all facial attributes are returned but the operation will take longer to complete.</p> <p>If you provide both, <code>[\"ALL\", \"DEFAULT\"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>"]
     #[serde(rename="Attributes")]
@@ -252,7 +252,7 @@ pub struct DetectFacesRequest {
     pub image: Image,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectFacesResponse {
     #[doc="<p>Details of each face found in the image. </p>"]
     #[serde(rename="FaceDetails")]
@@ -264,7 +264,7 @@ pub struct DetectFacesResponse {
     pub orientation_correction: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectLabelsRequest {
     #[doc="<p>The input image. You can provide a blob of image bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
@@ -279,7 +279,7 @@ pub struct DetectLabelsRequest {
     pub min_confidence: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectLabelsResponse {
     #[doc="<p>An array of labels for the real-world objects detected. </p>"]
     #[serde(rename="Labels")]
@@ -291,7 +291,7 @@ pub struct DetectLabelsResponse {
     pub orientation_correction: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectModerationLabelsRequest {
     #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
@@ -302,7 +302,7 @@ pub struct DetectModerationLabelsRequest {
     pub min_confidence: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetectModerationLabelsResponse {
     #[doc="<p>An array of labels for explicit or suggestive adult content found in the image. The list includes the top-level label and each child label detected in the image. This is useful for filtering specific categories of content. </p>"]
     #[serde(rename="ModerationLabels")]
@@ -311,7 +311,7 @@ pub struct DetectModerationLabelsResponse {
 }
 
 #[doc="<p>The emotions detected on the face, and the confidence level in the determination. For example, HAPPY, SAD, and ANGRY.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Emotion {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -324,7 +324,7 @@ pub struct Emotion {
 }
 
 #[doc="<p>Indicates whether or not the eyes on the face are open, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EyeOpen {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -337,7 +337,7 @@ pub struct EyeOpen {
 }
 
 #[doc="<p>Indicates whether or not the face is wearing eye glasses, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Eyeglasses {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -350,7 +350,7 @@ pub struct Eyeglasses {
 }
 
 #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Face {
     #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
@@ -375,7 +375,7 @@ pub struct Face {
 }
 
 #[doc="<p>Structure containing attributes of the face that the algorithm detected.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FaceDetail {
     #[doc="<p>The estimated age range, in years, for the face. Low represents the lowest estimated age and High represents the highest estimated age.</p>"]
     #[serde(rename="AgeRange")]
@@ -440,7 +440,7 @@ pub struct FaceDetail {
 }
 
 #[doc="<p>Provides face metadata. In addition, it also provides the confidence in the match of this face with the input face.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FaceMatch {
     #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the source image, and external image ID that you assigned.</p>"]
     #[serde(rename="Face")]
@@ -453,7 +453,7 @@ pub struct FaceMatch {
 }
 
 #[doc="<p>Object containing both the face metadata (stored in the back-end database) and facial attributes that are detected but aren't stored in the database.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FaceRecord {
     #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>"]
     #[serde(rename="Face")]
@@ -466,7 +466,7 @@ pub struct FaceRecord {
 }
 
 #[doc="<p>Gender of the face and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Gender {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -478,14 +478,14 @@ pub struct Gender {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCelebrityInfoRequest {
     #[doc="<p>The ID for the celebrity. You get the celebrity ID from a call to the operation, which recognizes celebrities in an image. </p>"]
     #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCelebrityInfoResponse {
     #[doc="<p>The name of the celebrity.</p>"]
     #[serde(rename="Name")]
@@ -498,7 +498,7 @@ pub struct GetCelebrityInfoResponse {
 }
 
 #[doc="<p>Provides the input image either as bytes or an S3 object.</p> <p>You pass image bytes to a Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Rekognition API operations. For more information, see <a>example4</a>.</p> <p> You pass images stored in an S3 bucket to a Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the Amazon CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Image {
     #[doc="<p>Blob of image bytes up to 5 MBs.</p>"]
     #[serde(rename="Bytes")]
@@ -515,7 +515,7 @@ pub struct Image {
 }
 
 #[doc="<p>Identifies face image brightness and sharpness. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageQuality {
     #[doc="<p>Value representing brightness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a brighter face image.</p>"]
     #[serde(rename="Brightness")]
@@ -527,7 +527,7 @@ pub struct ImageQuality {
     pub sharpness: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IndexFacesRequest {
     #[doc="<p>The ID of an existing collection to which you want to add the faces that are detected in the input images.</p>"]
     #[serde(rename="CollectionId")]
@@ -545,7 +545,7 @@ pub struct IndexFacesRequest {
     pub image: Image,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IndexFacesResponse {
     #[doc="<p>An array of faces detected and added to the collection. For more information, see <a>howitworks-index-faces</a>. </p>"]
     #[serde(rename="FaceRecords")]
@@ -558,7 +558,7 @@ pub struct IndexFacesResponse {
 }
 
 #[doc="<p>Structure containing details about the detected label, including name, and level of confidence.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Label {
     #[doc="<p>Level of confidence.</p>"]
     #[serde(rename="Confidence")]
@@ -571,7 +571,7 @@ pub struct Label {
 }
 
 #[doc="<p>Indicates the location of the landmark on the face.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Landmark {
     #[doc="<p>Type of the landmark.</p>"]
     #[serde(rename="Type")]
@@ -587,7 +587,7 @@ pub struct Landmark {
     pub y: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCollectionsRequest {
     #[doc="<p>Maximum number of collection IDs to return.</p>"]
     #[serde(rename="MaxResults")]
@@ -599,7 +599,7 @@ pub struct ListCollectionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListCollectionsResponse {
     #[doc="<p>An array of collection IDs.</p>"]
     #[serde(rename="CollectionIds")]
@@ -611,7 +611,7 @@ pub struct ListCollectionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacesRequest {
     #[doc="<p>ID of the collection from which to list the faces.</p>"]
     #[serde(rename="CollectionId")]
@@ -626,7 +626,7 @@ pub struct ListFacesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacesResponse {
     #[doc="<p>An array of <code>Face</code> objects. </p>"]
     #[serde(rename="Faces")]
@@ -639,7 +639,7 @@ pub struct ListFacesResponse {
 }
 
 #[doc="<p>Provides information about a single type of moderated content found in an image. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see <a>image-moderation</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModerationLabel {
     #[doc="<p>Specifies the confidence that Amazon Rekognition has that the label has been correctly identified.</p> <p>If you don't specify the <code>MinConfidence</code> parameter in the call to <code>DetectModerationLabels</code>, the operation returns labels with a confidence value greater than or equal to 50 percent.</p>"]
     #[serde(rename="Confidence")]
@@ -656,7 +656,7 @@ pub struct ModerationLabel {
 }
 
 #[doc="<p>Indicates whether or not the mouth on the face is open, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MouthOpen {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -669,7 +669,7 @@ pub struct MouthOpen {
 }
 
 #[doc="<p>Indicates whether or not the face has a mustache, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Mustache {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -682,7 +682,7 @@ pub struct Mustache {
 }
 
 #[doc="<p>Indicates the pose of the face as determined by its pitch, roll, and yaw.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Pose {
     #[doc="<p>Value representing the face rotation on the pitch axis.</p>"]
     #[serde(rename="Pitch")]
@@ -698,14 +698,14 @@ pub struct Pose {
     pub yaw: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecognizeCelebritiesRequest {
     #[doc="<p>The input image to use for celebrity recognition.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecognizeCelebritiesResponse {
     #[doc="<p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 15 celebrities in an image.</p>"]
     #[serde(rename="CelebrityFaces")]
@@ -722,7 +722,7 @@ pub struct RecognizeCelebritiesResponse {
 }
 
 #[doc="<p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3Object {
     #[doc="<p>Name of the S3 bucket.</p>"]
     #[serde(rename="Bucket")]
@@ -738,7 +738,7 @@ pub struct S3Object {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchFacesByImageRequest {
     #[doc="<p>ID of the collection to search.</p>"]
     #[serde(rename="CollectionId")]
@@ -756,7 +756,7 @@ pub struct SearchFacesByImageRequest {
     pub max_faces: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchFacesByImageResponse {
     #[doc="<p>An array of faces that match the input face, along with the confidence in the match.</p>"]
     #[serde(rename="FaceMatches")]
@@ -772,7 +772,7 @@ pub struct SearchFacesByImageResponse {
     pub searched_face_confidence: Option<f32>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchFacesRequest {
     #[doc="<p>ID of the collection the face belongs to.</p>"]
     #[serde(rename="CollectionId")]
@@ -790,7 +790,7 @@ pub struct SearchFacesRequest {
     pub max_faces: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchFacesResponse {
     #[doc="<p>An array of faces that matched the input face, along with the confidence in the match.</p>"]
     #[serde(rename="FaceMatches")]
@@ -803,7 +803,7 @@ pub struct SearchFacesResponse {
 }
 
 #[doc="<p>Indicates whether or not the face is smiling, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Smile {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
@@ -816,7 +816,7 @@ pub struct Smile {
 }
 
 #[doc="<p>Indicates whether or not the face is wearing sunglasses, and the confidence level in the determination.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Sunglasses {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]

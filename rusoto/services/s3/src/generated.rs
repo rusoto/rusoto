@@ -45,9 +45,11 @@ enum DeserializerNext {
 use md5;
 use base64;
 #[doc="Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AbortIncompleteMultipartUpload {
     #[doc="Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload."]
+    #[serde(rename="DaysAfterInitiation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub days_after_initiation: Option<i64>,
 }
 
@@ -115,8 +117,10 @@ impl AbortIncompleteMultipartUploadSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AbortMultipartUploadOutput {
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
@@ -136,17 +140,24 @@ impl AbortMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AbortMultipartUploadRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
+    #[serde(rename="UploadId")]
     pub upload_id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AccelerateConfiguration {
     #[doc="The accelerate configuration of the bucket."]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -171,10 +182,14 @@ impl AccelerateConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AccessControlPolicy {
     #[doc="A list of grants."]
+    #[serde(rename="Grants")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grants: Option<Vec<Grant>>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
 }
 
@@ -465,11 +480,15 @@ impl AllowedOriginsSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AnalyticsAndOperator {
     #[doc="The prefix to use when evaluating an AND predicate."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="The list of tags to use when evaluating an AND predicate."]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -542,13 +561,17 @@ impl AnalyticsAndOperatorSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AnalyticsConfiguration {
     #[doc="The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis."]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<AnalyticsFilter>,
     #[doc="The identifier used to represent an analytics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="If present, it indicates that data related to access patterns will be collected and made available to analyze the tradeoffs between different storage classes."]
+    #[serde(rename="StorageClassAnalysis")]
     pub storage_class_analysis: StorageClassAnalysis,
 }
 
@@ -656,9 +679,10 @@ impl AnalyticsConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AnalyticsExportDestination {
     #[doc="A destination signifying output to an S3 bucket."]
+    #[serde(rename="S3BucketDestination")]
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
 }
 
@@ -723,13 +747,19 @@ impl AnalyticsExportDestinationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AnalyticsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates."]
+    #[serde(rename="And")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub and: Option<AnalyticsAndOperator>,
     #[doc="The prefix to use when evaluating an analytics filter."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="The tag to use when evaluating an analytics filter."]
+    #[serde(rename="Tag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag: Option<Tag>,
 }
 
@@ -842,15 +872,21 @@ impl AnalyticsIdSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct AnalyticsS3BucketDestination {
     #[doc="The Amazon resource name (ARN) of the bucket to which data is exported."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data."]
+    #[serde(rename="BucketAccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket_account_id: Option<String>,
     #[doc="The file format used when exporting data to Amazon S3."]
+    #[serde(rename="Format")]
     pub format: String,
     #[doc="The prefix to use when exporting data. The exported data begins with this prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
 }
 
@@ -1023,11 +1059,15 @@ impl BodySerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Bucket {
     #[doc="Date the bucket was created."]
+    #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<String>,
     #[doc="The name of the bucket."]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -1110,8 +1150,9 @@ impl BucketAccelerateStatusSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct BucketLifecycleConfiguration {
+    #[serde(rename="Rules")]
     pub rules: Vec<LifecycleRule>,
 }
 
@@ -1163,8 +1204,10 @@ impl BucketLocationConstraintSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct BucketLoggingStatus {
+    #[serde(rename="LoggingEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
@@ -1323,8 +1366,9 @@ impl BucketsDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CORSConfiguration {
+    #[serde(rename="CORSRules")]
     pub cors_rules: Vec<CORSRule>,
 }
 
@@ -1344,17 +1388,25 @@ impl CORSConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CORSRule {
     #[doc="Specifies which headers are allowed in a pre-flight OPTIONS request."]
+    #[serde(rename="AllowedHeaders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allowed_headers: Option<Vec<String>>,
     #[doc="Identifies HTTP methods that the domain/origin specified in the rule is allowed to execute."]
+    #[serde(rename="AllowedMethods")]
     pub allowed_methods: Vec<String>,
     #[doc="One or more origins you want customers to be able to access the bucket from."]
+    #[serde(rename="AllowedOrigins")]
     pub allowed_origins: Vec<String>,
     #[doc="One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object)."]
+    #[serde(rename="ExposeHeaders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expose_headers: Option<Vec<String>>,
     #[doc="The time in seconds that your browser is to cache the preflight response for the specified resource."]
+    #[serde(rename="MaxAgeSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_age_seconds: Option<i64>,
 }
 
@@ -1528,11 +1580,19 @@ impl CloudFunctionSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CloudFunctionConfiguration {
+    #[serde(rename="CloudFunction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_function: Option<String>,
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<String>>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename="InvocationRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub invocation_role: Option<String>,
 }
 
@@ -1671,8 +1731,10 @@ impl CodeDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CommonPrefix {
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
 }
 
@@ -1746,21 +1808,39 @@ impl CommonPrefixListDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CompleteMultipartUploadOutput {
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="Entity tag of the object."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded."]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="Location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="Version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -1816,17 +1896,26 @@ impl CompleteMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CompleteMultipartUploadRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="MultipartUpload")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub multipart_upload: Option<CompletedMultipartUpload>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
+    #[serde(rename="UploadId")]
     pub upload_id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CompletedMultipartUpload {
+    #[serde(rename="Parts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parts: Option<Vec<CompletedPart>>,
 }
 
@@ -1848,11 +1937,15 @@ impl CompletedMultipartUploadSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CompletedPart {
     #[doc="Entity tag returned when the part was uploaded."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="Part number that identifies the part. This is a positive integer between 1 and 10,000."]
+    #[serde(rename="PartNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number: Option<i64>,
 }
 
@@ -1900,11 +1993,15 @@ impl CompletedPartListSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Condition {
     #[doc="The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied."]
+    #[serde(rename="HttpErrorCodeReturnedEquals")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub http_error_code_returned_equals: Option<String>,
     #[doc="The object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be ExamplePage.html. To redirect request for all pages with the prefix docs/, the key prefix will be /docs, which identifies all objects in the docs/ folder. Required when the parent element Condition is specified and sibling HttpErrorCodeReturnedEquals is not specified. If both conditions are specified, both must be true for the redirect to be applied."]
+    #[serde(rename="KeyPrefixEquals")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_prefix_equals: Option<String>,
 }
 
@@ -1981,22 +2078,40 @@ impl ConditionSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CopyObjectOutput {
+    #[serde(rename="CopyObjectResult")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_object_result: Option<CopyObjectResult>,
+    #[serde(rename="CopySourceVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_version_id: Option<String>,
     #[doc="If the object expiration is configured, the response includes this header."]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="Version ID of the newly created copy."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -2043,76 +2158,143 @@ impl CopyObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CopyObjectRequest {
     #[doc="The canned ACL to apply to the object."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
+    #[serde(rename="CacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
+    #[serde(rename="ContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
+    #[serde(rename="ContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
+    #[serde(rename="ContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_language: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded."]
+    #[serde(rename="CopySource")]
     pub copy_source: String,
     #[doc="Copies the object if its entity tag (ETag) matches the specified tag."]
+    #[serde(rename="CopySourceIfMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_match: Option<String>,
     #[doc="Copies the object if it has been modified since the specified time."]
+    #[serde(rename="CopySourceIfModifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_modified_since: Option<String>,
     #[doc="Copies the object if its entity tag (ETag) is different than the specified ETag."]
+    #[serde(rename="CopySourceIfNoneMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_none_match: Option<String>,
     #[doc="Copies the object if it hasn't been modified since the specified time."]
+    #[serde(rename="CopySourceIfUnmodifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_unmodified_since: Option<String>,
     #[doc="Specifies the algorithm to use when decrypting the source object (e.g., AES256)."]
+    #[serde(rename="CopySourceSSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created."]
+    #[serde(rename="CopySourceSSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="CopySourceSSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_key_md5: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
+    #[serde(rename="Expires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request."]
+    #[serde(rename="MetadataDirective")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata_directive: Option<String>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters"]
+    #[serde(rename="Tagging")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tagging: Option<String>,
     #[doc="Specifies whether the object tag-set are copied from the source object or replaced with tag-set provided in the request."]
+    #[serde(rename="TaggingDirective")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tagging_directive: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
+    #[serde(rename="WebsiteRedirectLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CopyObjectResult {
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
 }
 
@@ -2162,11 +2344,15 @@ impl CopyObjectResultDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CopyPartResult {
     #[doc="Entity tag of the object."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="Date and time at which the object was uploaded."]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
 }
 
@@ -2216,9 +2402,11 @@ impl CopyPartResultDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CreateBucketConfiguration {
     #[doc="Specifies the region where the bucket will be created. If you don't specify a region, the bucket will be created in US Standard."]
+    #[serde(rename="LocationConstraint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location_constraint: Option<String>,
 }
 
@@ -2243,8 +2431,10 @@ impl CreateBucketConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CreateBucketOutput {
+    #[serde(rename="Location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location: Option<String>,
 }
 
@@ -2264,44 +2454,79 @@ impl CreateBucketOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CreateBucketRequest {
     #[doc="The canned ACL to apply to the bucket."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="CreateBucketConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_bucket_configuration: Option<CreateBucketConfiguration>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
+    #[serde(rename="GrantWrite")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CreateMultipartUploadOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
+    #[serde(rename="AbortDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_date: Option<String>,
     #[doc="Id of the lifecycle rule that makes a multipart upload eligible for abort operation."]
+    #[serde(rename="AbortRuleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_rule_id: Option<String>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="Object key for which the multipart upload was initiated."]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="ID for the initiated multipart upload."]
+    #[serde(rename="UploadId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_id: Option<String>,
 }
 
@@ -2355,50 +2580,94 @@ impl CreateMultipartUploadOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct CreateMultipartUploadRequest {
     #[doc="The canned ACL to apply to the object."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
+    #[serde(rename="CacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
+    #[serde(rename="ContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
+    #[serde(rename="ContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
+    #[serde(rename="ContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_language: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
+    #[serde(rename="Expires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="The tag-set for the object. The tag-set must be encoded as URL Query parameters"]
+    #[serde(rename="Tagging")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tagging: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
+    #[serde(rename="WebsiteRedirectLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub website_redirect_location: Option<String>,
 }
 
@@ -2512,10 +2781,13 @@ impl DaysAfterInitiationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Delete {
+    #[serde(rename="Objects")]
     pub objects: Vec<ObjectIdentifier>,
     #[doc="Element to enable quiet mode for the request. When you add this element, you must set its value to true."]
+    #[serde(rename="Quiet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub quiet: Option<bool>,
 }
 
@@ -2540,62 +2812,75 @@ impl DeleteSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is deleted."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketCorsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to delete."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketLifecycleRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to delete."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketPolicyRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketReplicationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteBucketWebsiteRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
@@ -2613,16 +2898,26 @@ impl DeleteMarkerDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteMarkerEntry {
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
+    #[serde(rename="IsLatest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_latest: Option<bool>,
     #[doc="The object key."]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="Date and time the object was last modified."]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
     #[doc="Version ID of an object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -2726,12 +3021,18 @@ impl DeleteMarkersDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectOutput {
     #[doc="Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker."]
+    #[serde(rename="DeleteMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_marker: Option<bool>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="Returns the version ID of the delete marker created as a result of the DELETE operation."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -2751,20 +3052,30 @@ impl DeleteObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
+    #[serde(rename="MFA")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mfa: Option<String>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectTaggingOutput {
     #[doc="The versionId of the object the tag-set was removed from."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -2784,18 +3095,28 @@ impl DeleteObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="The versionId of the object that the tag-set will be removed from."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectsOutput {
+    #[serde(rename="Deleted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deleted: Option<Vec<DeletedObject>>,
+    #[serde(rename="Errors")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub errors: Option<Vec<S3Error>>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
@@ -2846,20 +3167,34 @@ impl DeleteObjectsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeleteObjectsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Delete")]
     pub delete: Delete,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
+    #[serde(rename="MFA")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mfa: Option<String>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct DeletedObject {
+    #[serde(rename="DeleteMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_marker: Option<bool>,
+    #[serde(rename="DeleteMarkerVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_marker_version_id: Option<String>,
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -2979,11 +3314,14 @@ impl DelimiterSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Destination {
     #[doc="Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
 }
 
@@ -3187,11 +3525,19 @@ impl EncodingTypeSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct S3Error {
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -3248,9 +3594,10 @@ impl S3ErrorDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ErrorDocument {
     #[doc="The object key name to use when a 4XX class error occurs."]
+    #[serde(rename="Key")]
     pub key: String,
 }
 
@@ -3581,10 +3928,14 @@ impl FetchOwnerSerializer {
 }
 
 #[doc="Container for key value pair that defines the criteria for the filter rule."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct FilterRule {
     #[doc="Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide."]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -3769,9 +4120,11 @@ impl FilterRuleValueSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAccelerateConfigurationOutput {
     #[doc="The accelerate configuration of the bucket."]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -3819,16 +4172,21 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAccelerateConfigurationRequest {
     #[doc="Name of the bucket for which the accelerate configuration is retrieved."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAclOutput {
     #[doc="A list of grants."]
+    #[serde(rename="Grants")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grants: Option<Vec<Grant>>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
 }
 
@@ -3877,14 +4235,17 @@ impl GetBucketAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAclRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     #[doc="The configuration and any analyses for the analytics filter."]
+    #[serde(rename="AnalyticsConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
@@ -3932,16 +4293,20 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is retrieved."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketCorsOutput {
+    #[serde(rename="CORSRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cors_rules: Option<Vec<CORSRule>>,
 }
 
@@ -3987,14 +4352,17 @@ impl GetBucketCorsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketCorsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketInventoryConfigurationOutput {
     #[doc="Specifies the inventory configuration."]
+    #[serde(rename="InventoryConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
@@ -4042,16 +4410,20 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to retrieve."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLifecycleConfigurationOutput {
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<LifecycleRule>>,
 }
 
@@ -4098,13 +4470,16 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLifecycleConfigurationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLifecycleOutput {
+    #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -4149,13 +4524,16 @@ impl GetBucketLifecycleOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLifecycleRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLocationOutput {
+    #[serde(rename="LocationConstraint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location_constraint: Option<String>,
 }
 
@@ -4172,13 +4550,16 @@ impl GetBucketLocationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLocationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLoggingOutput {
+    #[serde(rename="LoggingEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
@@ -4225,14 +4606,17 @@ impl GetBucketLoggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketLoggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketMetricsConfigurationOutput {
     #[doc="Specifies the metrics configuration."]
+    #[serde(rename="MetricsConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
 
@@ -4280,33 +4664,41 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to retrieve."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketNotificationConfigurationRequest {
     #[doc="Name of the bucket to get the notification configuration for."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketPolicyOutput {
     #[doc="The bucket policy as a JSON document."]
+    #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketPolicyRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketReplicationOutput {
+    #[serde(rename="ReplicationConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
@@ -4351,14 +4743,17 @@ impl GetBucketReplicationOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketReplicationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketRequestPaymentOutput {
     #[doc="Specifies who pays for the download and request fees."]
+    #[serde(rename="Payer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payer: Option<String>,
 }
 
@@ -4403,13 +4798,15 @@ impl GetBucketRequestPaymentOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketRequestPaymentRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketTaggingOutput {
+    #[serde(rename="TagSet")]
     pub tag_set: Vec<Tag>,
 }
 
@@ -4454,16 +4851,21 @@ impl GetBucketTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketVersioningOutput {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
+    #[serde(rename="MFADelete")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mfa_delete: Option<String>,
     #[doc="The versioning state of the bucket."]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -4515,16 +4917,25 @@ impl GetBucketVersioningOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketVersioningRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketWebsiteOutput {
+    #[serde(rename="ErrorDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_document: Option<ErrorDocument>,
+    #[serde(rename="IndexDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub index_document: Option<IndexDocument>,
+    #[serde(rename="RedirectAllRequestsTo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
+    #[serde(rename="RoutingRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub routing_rules: Option<Vec<RoutingRule>>,
 }
 
@@ -4586,16 +4997,23 @@ impl GetBucketWebsiteOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetBucketWebsiteRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectAclOutput {
     #[doc="A list of grants."]
+    #[serde(rename="Grants")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grants: Option<Vec<Grant>>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
@@ -4644,113 +5062,218 @@ impl GetObjectAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectAclRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectOutput {
+    #[serde(rename="AcceptRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accept_ranges: Option<String>,
     #[doc="Object data."]
+    #[serde(rename="Body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<StreamingBody>,
     #[doc="Specifies caching behavior along the request/reply chain."]
+    #[serde(rename="CacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
+    #[serde(rename="ContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
+    #[serde(rename="ContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
+    #[serde(rename="ContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_language: Option<String>,
     #[doc="Size of the body in bytes."]
+    #[serde(rename="ContentLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_length: Option<i64>,
     #[doc="The portion of the object returned in the response."]
+    #[serde(rename="ContentRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_range: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response."]
+    #[serde(rename="DeleteMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_marker: Option<bool>,
     #[doc="An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL"]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded."]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
+    #[serde(rename="Expires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<String>,
     #[doc="Last modified date of the object"]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
     #[doc="A map of metadata to store with the object in S3."]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers."]
+    #[serde(rename="MissingMeta")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub missing_meta: Option<i64>,
     #[doc="The count of parts this object has."]
+    #[serde(rename="PartsCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parts_count: Option<i64>,
+    #[serde(rename="ReplicationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_status: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="Provides information about object restoration operation and expiration time of the restored object copy."]
+    #[serde(rename="Restore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restore: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="The number of tags, if any, on the object."]
+    #[serde(rename="TagCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_count: Option<i64>,
     #[doc="Version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
+    #[serde(rename="WebsiteRedirectLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
+    #[serde(rename="IfMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_match: Option<String>,
     #[doc="Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified)."]
+    #[serde(rename="IfModifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_modified_since: Option<String>,
     #[doc="Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified)."]
+    #[serde(rename="IfNoneMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_none_match: Option<String>,
     #[doc="Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed)."]
+    #[serde(rename="IfUnmodifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_unmodified_since: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object."]
+    #[serde(rename="PartNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number: Option<i64>,
     #[doc="Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35."]
+    #[serde(rename="Range")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub range: Option<String>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Sets the Cache-Control header of the response."]
+    #[serde(rename="ResponseCacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_cache_control: Option<String>,
     #[doc="Sets the Content-Disposition header of the response"]
+    #[serde(rename="ResponseContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_content_disposition: Option<String>,
     #[doc="Sets the Content-Encoding header of the response."]
+    #[serde(rename="ResponseContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_content_encoding: Option<String>,
     #[doc="Sets the Content-Language header of the response."]
+    #[serde(rename="ResponseContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_content_language: Option<String>,
     #[doc="Sets the Content-Type header of the response."]
+    #[serde(rename="ResponseContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_content_type: Option<String>,
     #[doc="Sets the Expires header of the response."]
+    #[serde(rename="ResponseExpires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_expires: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectTaggingOutput {
+    #[serde(rename="TagSet")]
     pub tag_set: Vec<Tag>,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -4795,29 +5318,46 @@ impl GetObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectTorrentOutput {
+    #[serde(rename="Body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<StreamingBody>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GetObjectTorrentRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct GlacierJobParameters {
     #[doc="Glacier retrieval tier at which the restore will be processed."]
+    #[serde(rename="Tier")]
     pub tier: String,
 }
 
@@ -4840,10 +5380,14 @@ impl GlacierJobParametersSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Grant {
+    #[serde(rename="Grantee")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grantee: Option<Grantee>,
     #[doc="Specifies the permission given to the grantee."]
+    #[serde(rename="Permission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub permission: Option<String>,
 }
 
@@ -4917,17 +5461,26 @@ impl GrantSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Grantee {
     #[doc="Screen name of the grantee."]
+    #[serde(rename="DisplayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
     #[doc="Email address of the grantee."]
+    #[serde(rename="EmailAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub email_address: Option<String>,
     #[doc="The canonical user ID of the grantee."]
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Type of grantee"]
+    #[serde(rename="Type")]
     pub type_: String,
     #[doc="URI of the grantee group."]
+    #[serde(rename="URI")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub uri: Option<String>,
 }
 
@@ -5090,58 +5643,109 @@ impl GrantsSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct HeadBucketRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct HeadObjectOutput {
+    #[serde(rename="AcceptRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accept_ranges: Option<String>,
     #[doc="Specifies caching behavior along the request/reply chain."]
+    #[serde(rename="CacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
+    #[serde(rename="ContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
+    #[serde(rename="ContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
+    #[serde(rename="ContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_language: Option<String>,
     #[doc="Size of the body in bytes."]
+    #[serde(rename="ContentLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_length: Option<i64>,
     #[doc="A standard MIME type describing the format of the object data."]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response."]
+    #[serde(rename="DeleteMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_marker: Option<bool>,
     #[doc="An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL"]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded."]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
+    #[serde(rename="Expires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<String>,
     #[doc="Last modified date of the object"]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
     #[doc="A map of metadata to store with the object in S3."]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers."]
+    #[serde(rename="MissingMeta")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub missing_meta: Option<i64>,
     #[doc="The count of parts this object has."]
+    #[serde(rename="PartsCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parts_count: Option<i64>,
+    #[serde(rename="ReplicationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_status: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="Provides information about object restoration operation and expiration time of the restored object copy."]
+    #[serde(rename="Restore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restore: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="Version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
+    #[serde(rename="WebsiteRedirectLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub website_redirect_location: Option<String>,
 }
 
@@ -5161,30 +5765,54 @@ impl HeadObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct HeadObjectRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
+    #[serde(rename="IfMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_match: Option<String>,
     #[doc="Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified)."]
+    #[serde(rename="IfModifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_modified_since: Option<String>,
     #[doc="Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified)."]
+    #[serde(rename="IfNoneMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_none_match: Option<String>,
     #[doc="Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed)."]
+    #[serde(rename="IfUnmodifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub if_unmodified_since: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object."]
+    #[serde(rename="PartNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number: Option<i64>,
     #[doc="Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35."]
+    #[serde(rename="Range")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub range: Option<String>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -5316,9 +5944,10 @@ impl IDSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct IndexDocument {
     #[doc="A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character."]
+    #[serde(rename="Suffix")]
     pub suffix: String,
 }
 
@@ -5397,11 +6026,15 @@ impl InitiatedDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Initiator {
     #[doc="Name of the Principal."]
+    #[serde(rename="DisplayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
     #[doc="If the principal is an AWS account, it provides the Canonical User ID. If the principal is an IAM User, it provides a user ARN value."]
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
 }
 
@@ -5451,21 +6084,30 @@ impl InitiatorDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct InventoryConfiguration {
     #[doc="Contains information about where to publish the inventory results."]
+    #[serde(rename="Destination")]
     pub destination: InventoryDestination,
     #[doc="Specifies an inventory filter. The inventory only includes objects that meet the filter's criteria."]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<InventoryFilter>,
     #[doc="The ID used to identify the inventory configuration."]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="Specifies which object version(s) to included in the inventory results."]
+    #[serde(rename="IncludedObjectVersions")]
     pub included_object_versions: String,
     #[doc="Specifies whether the inventory is enabled or disabled."]
+    #[serde(rename="IsEnabled")]
     pub is_enabled: bool,
     #[doc="Contains the optional fields that are included in the inventory results."]
+    #[serde(rename="OptionalFields")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub optional_fields: Option<Vec<String>>,
     #[doc="Specifies the schedule for generating inventory results."]
+    #[serde(rename="Schedule")]
     pub schedule: InventorySchedule,
 }
 
@@ -5603,9 +6245,10 @@ impl InventoryConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct InventoryDestination {
     #[doc="Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published."]
+    #[serde(rename="S3BucketDestination")]
     pub s3_bucket_destination: InventoryS3BucketDestination,
 }
 
@@ -5670,9 +6313,10 @@ impl InventoryDestinationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct InventoryFilter {
     #[doc="The prefix that an object must have to be included in the inventory results."]
+    #[serde(rename="Prefix")]
     pub prefix: String,
 }
 
@@ -5958,15 +6602,21 @@ impl InventoryOptionalFieldsSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct InventoryS3BucketDestination {
     #[doc="The ID of the account that owns the destination bucket."]
+    #[serde(rename="AccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<String>,
     #[doc="The Amazon resource name (ARN) of the bucket where inventory results will be published."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Specifies the output format of the inventory results."]
+    #[serde(rename="Format")]
     pub format: String,
     #[doc="The prefix that is prepended to all inventory results."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
 }
 
@@ -6060,9 +6710,10 @@ impl InventoryS3BucketDestinationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct InventorySchedule {
     #[doc="Specifies how frequently inventory results are produced."]
+    #[serde(rename="Frequency")]
     pub frequency: String,
 }
 
@@ -6300,12 +6951,18 @@ impl LambdaFunctionArnSerializer {
 }
 
 #[doc="Container for specifying the AWS Lambda notification configuration."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LambdaFunctionConfiguration {
+    #[serde(rename="Events")]
     pub events: Vec<String>,
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<NotificationConfigurationFilter>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type."]
+    #[serde(rename="LambdaFunctionArn")]
     pub lambda_function_arn: String,
 }
 
@@ -6454,8 +7111,9 @@ impl LastModifiedDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LifecycleConfiguration {
+    #[serde(rename="Rules")]
     pub rules: Vec<Rule>,
 }
 
@@ -6475,13 +7133,19 @@ impl LifecycleConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LifecycleExpiration {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
+    #[serde(rename="Date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<String>,
     #[doc="Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer."]
+    #[serde(rename="Days")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub days: Option<i64>,
     #[doc="Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set to true, the delete marker will be expired; if set to false the policy takes no action. This cannot be specified with Days or Date in a Lifecycle Expiration Policy."]
+    #[serde(rename="ExpiredObjectDeleteMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expired_object_delete_marker: Option<bool>,
 }
 
@@ -6563,17 +7227,32 @@ impl LifecycleExpirationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LifecycleRule {
+    #[serde(rename="AbortIncompleteMultipartUpload")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<LifecycleExpiration>,
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<LifecycleRuleFilter>,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename="NoncurrentVersionExpiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
+    #[serde(rename="NoncurrentVersionTransitions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
     #[doc="If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied."]
+    #[serde(rename="Status")]
     pub status: String,
+    #[serde(rename="Transitions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transitions: Option<Vec<Transition>>,
 }
 
@@ -6696,10 +7375,14 @@ impl LifecycleRuleSerializer {
 }
 
 #[doc="This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LifecycleRuleAndOperator {
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="All of these tags must exist in the object's tag set in order for the rule to apply."]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -6773,12 +7456,18 @@ impl LifecycleRuleAndOperatorSerializer {
 }
 
 #[doc="The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LifecycleRuleFilter {
+    #[serde(rename="And")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub and: Option<LifecycleRuleAndOperator>,
     #[doc="Prefix identifying one or more objects to which the rule applies."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="This tag must exist in the object's tag set in order for the rule to apply."]
+    #[serde(rename="Tag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag: Option<Tag>,
 }
 
@@ -6903,15 +7592,23 @@ impl LifecycleRulesSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     #[doc="The list of analytics configurations for a bucket."]
+    #[serde(rename="AnalyticsConfigurationList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
     #[doc="The ContinuationToken that represents where this request began."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
     #[doc="Indicates whether the returned list of analytics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="NextContinuationToken is sent when isTruncated is true, which indicates that there are more analytics configurations to list. The next request must include this NextContinuationToken. The token is obfuscated and is not a usable value."]
+    #[serde(rename="NextContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_continuation_token: Option<String>,
 }
 
@@ -6972,23 +7669,34 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     #[doc="The name of the bucket from which analytics configurations are retrieved."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ContinuationToken that represents a placeholder from where this request should begin."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketInventoryConfigurationsOutput {
     #[doc="If sent in the request, the marker that is used as a starting point for this inventory configuration list response."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
     #[doc="The list of inventory configurations for a bucket."]
+    #[serde(rename="InventoryConfigurationList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub inventory_configuration_list: Option<Vec<InventoryConfiguration>>,
     #[doc="Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands."]
+    #[serde(rename="NextContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_continuation_token: Option<String>,
 }
 
@@ -7049,23 +7757,34 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketInventoryConfigurationsRequest {
     #[doc="The name of the bucket containing the inventory configurations to retrieve."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketMetricsConfigurationsOutput {
     #[doc="The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
     #[doc="Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="The list of metrics configurations for a bucket."]
+    #[serde(rename="MetricsConfigurationList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics_configuration_list: Option<Vec<MetricsConfiguration>>,
     #[doc="The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
+    #[serde(rename="NextContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_continuation_token: Option<String>,
 }
 
@@ -7126,17 +7845,24 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketMetricsConfigurationsRequest {
     #[doc="The name of the bucket containing the metrics configurations to retrieve."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListBucketsOutput {
+    #[serde(rename="Buckets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub buckets: Option<Vec<Bucket>>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
 }
 
@@ -7185,28 +7911,52 @@ impl ListBucketsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListMultipartUploadsOutput {
     #[doc="Name of the bucket to which the multipart upload was initiated."]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
+    #[serde(rename="CommonPrefixes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub common_prefixes: Option<Vec<CommonPrefix>>,
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max uploads."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="The key at or after which the listing began."]
+    #[serde(rename="KeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_marker: Option<String>,
     #[doc="Maximum number of multipart uploads that could have been included in the response."]
+    #[serde(rename="MaxUploads")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_uploads: Option<i64>,
     #[doc="When a list is truncated, this element specifies the value that should be used for the key-marker request parameter in a subsequent request."]
+    #[serde(rename="NextKeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_key_marker: Option<String>,
     #[doc="When a list is truncated, this element specifies the value that should be used for the upload-id-marker request parameter in a subsequent request."]
+    #[serde(rename="NextUploadIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_upload_id_marker: Option<String>,
     #[doc="When a prefix is provided in the request, this field contains the specified prefix. The result contains only keys starting with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="Upload ID after which listing began."]
+    #[serde(rename="UploadIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_id_marker: Option<String>,
+    #[serde(rename="Uploads")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub uploads: Option<Vec<MultipartUpload>>,
 }
 
@@ -7304,41 +8054,80 @@ impl ListMultipartUploadsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListMultipartUploadsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Character you use to group keys."]
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin."]
+    #[serde(rename="KeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_marker: Option<String>,
     #[doc="Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response."]
+    #[serde(rename="MaxUploads")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_uploads: Option<i64>,
     #[doc="Lists in-progress uploads only for those keys that begin with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored."]
+    #[serde(rename="UploadIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_id_marker: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectVersionsOutput {
+    #[serde(rename="CommonPrefixes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub common_prefixes: Option<Vec<CommonPrefix>>,
+    #[serde(rename="DeleteMarkers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_markers: Option<Vec<DeleteMarkerEntry>>,
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria. If your results were truncated, you can make a follow-up paginated request using the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in another request to return the rest of the results."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="Marks the last Key returned in a truncated response."]
+    #[serde(rename="KeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_marker: Option<String>,
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="Use this value for the key marker request parameter in a subsequent request."]
+    #[serde(rename="NextKeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_key_marker: Option<String>,
     #[doc="Use this value for the next version id marker parameter in a subsequent request."]
+    #[serde(rename="NextVersionIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_version_id_marker: Option<String>,
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
+    #[serde(rename="VersionIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id_marker: Option<String>,
+    #[serde(rename="Versions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub versions: Option<Vec<ObjectVersion>>,
 }
 
@@ -7440,36 +8229,69 @@ impl ListObjectVersionsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectVersionsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="Specifies the key to start with when listing objects in a bucket."]
+    #[serde(rename="KeyMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_marker: Option<String>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="Specifies the object version you want to start listing from."]
+    #[serde(rename="VersionIdMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id_marker: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectsOutput {
+    #[serde(rename="CommonPrefixes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub common_prefixes: Option<Vec<CommonPrefix>>,
+    #[serde(rename="Contents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub contents: Option<Vec<Object>>,
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys."]
+    #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<String>,
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
 }
 
@@ -7555,47 +8377,84 @@ impl ListObjectsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="Specifies the key to start with when listing objects in a bucket."]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests."]
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectsV2Output {
     #[doc="CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter"]
+    #[serde(rename="CommonPrefixes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     #[doc="Metadata about each object returned."]
+    #[serde(rename="Contents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub contents: Option<Vec<Object>>,
     #[doc="ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key"]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
     #[doc="A delimiter is a character you use to group keys."]
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys"]
+    #[serde(rename="KeyCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_count: Option<i64>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
     #[doc="Name of the bucket to list."]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="NextContinuationToken is sent when isTruncated is true which means there are more keys in the bucket that can be listed. The next list requests to Amazon S3 can be continued with this NextContinuationToken. NextContinuationToken is obfuscated and is not a real key"]
+    #[serde(rename="NextContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_continuation_token: Option<String>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket"]
+    #[serde(rename="StartAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_after: Option<String>,
 }
 
@@ -7691,54 +8550,99 @@ impl ListObjectsV2OutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListObjectsV2Request {
     #[doc="Name of the bucket to list."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key"]
+    #[serde(rename="ContinuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<String>,
     #[doc="A delimiter is a character you use to group keys."]
+    #[serde(rename="Delimiter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
+    #[serde(rename="EncodingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encoding_type: Option<String>,
     #[doc="The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true"]
+    #[serde(rename="FetchOwner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fetch_owner: Option<bool>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
+    #[serde(rename="MaxKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests."]
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket"]
+    #[serde(rename="StartAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_after: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListPartsOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
+    #[serde(rename="AbortDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_date: Option<String>,
     #[doc="Id of the lifecycle rule that makes a multipart upload eligible for abort operation."]
+    #[serde(rename="AbortRuleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_rule_id: Option<String>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="Identifies who initiated the multipart upload."]
+    #[serde(rename="Initiator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiator: Option<Initiator>,
     #[doc="Indicates whether the returned list of parts is truncated."]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="Object key for which the multipart upload was initiated."]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="Maximum number of parts that were allowed in the response."]
+    #[serde(rename="MaxParts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_parts: Option<i64>,
     #[doc="When a list is truncated, this element specifies the last part in the list, as well as the value to use for the part-number-marker request parameter in a subsequent request."]
+    #[serde(rename="NextPartNumberMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_part_number_marker: Option<i64>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
     #[doc="Part number after which listing begins."]
+    #[serde(rename="PartNumberMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number_marker: Option<i64>,
+    #[serde(rename="Parts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parts: Option<Vec<Part>>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose parts are being listed."]
+    #[serde(rename="UploadId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_id: Option<String>,
 }
 
@@ -7826,16 +8730,25 @@ impl ListPartsOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ListPartsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Sets the maximum number of parts to return."]
+    #[serde(rename="MaxParts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_parts: Option<i64>,
     #[doc="Specifies the part after which listing should begin. Only parts with higher part numbers will be listed."]
+    #[serde(rename="PartNumberMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number_marker: Option<i64>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose parts are being listed."]
+    #[serde(rename="UploadId")]
     pub upload_id: String,
 }
 
@@ -7853,12 +8766,18 @@ impl LocationDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct LoggingEnabled {
     #[doc="Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key."]
+    #[serde(rename="TargetBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_bucket: Option<String>,
+    #[serde(rename="TargetGrants")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_grants: Option<Vec<TargetGrant>>,
     #[doc="This element lets you specify a prefix for the keys that the log files will be stored under."]
+    #[serde(rename="TargetPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_prefix: Option<String>,
 }
 
@@ -8151,11 +9070,15 @@ impl MessageDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct MetricsAndOperator {
     #[doc="The prefix used when evaluating an AND predicate."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="The list of tags used when evaluating an AND predicate."]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -8228,11 +9151,14 @@ impl MetricsAndOperatorSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct MetricsConfiguration {
     #[doc="Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator)."]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<MetricsFilter>,
     #[doc="The ID used to identify the metrics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
@@ -8331,13 +9257,19 @@ impl MetricsConfigurationListDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct MetricsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply."]
+    #[serde(rename="And")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub and: Option<MetricsAndOperator>,
     #[doc="The prefix used when evaluating a metrics filter."]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="The tag used when evaluating a metrics filter."]
+    #[serde(rename="Tag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag: Option<Tag>,
 }
 
@@ -8450,18 +9382,30 @@ impl MetricsIdSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct MultipartUpload {
     #[doc="Date and time at which the multipart upload was initiated."]
+    #[serde(rename="Initiated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiated: Option<String>,
     #[doc="Identifies who initiated the multipart upload."]
+    #[serde(rename="Initiator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiator: Option<Initiator>,
     #[doc="Key of the object for which the multipart upload was initiated."]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="Upload ID that identifies the multipart upload."]
+    #[serde(rename="UploadId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_id: Option<String>,
 }
 
@@ -8672,9 +9616,11 @@ impl NextVersionIdMarkerDeserializer {
     }
 }
 #[doc="Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct NoncurrentVersionExpiration {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
+    #[serde(rename="NoncurrentDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_days: Option<i64>,
 }
 
@@ -8742,11 +9688,15 @@ impl NoncurrentVersionExpirationSerializer {
 }
 
 #[doc="Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA or GLACIER storage class at a specific period in the object's lifetime."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct NoncurrentVersionTransition {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
+    #[serde(rename="NoncurrentDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_days: Option<i64>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
 }
 
@@ -8873,10 +9823,16 @@ impl NoncurrentVersionTransitionListSerializer {
 }
 
 #[doc="Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct NotificationConfiguration {
+    #[serde(rename="LambdaFunctionConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
+    #[serde(rename="QueueConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub queue_configurations: Option<Vec<QueueConfiguration>>,
+    #[serde(rename="TopicConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_configurations: Option<Vec<TopicConfiguration>>,
 }
 
@@ -8957,10 +9913,16 @@ impl NotificationConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct NotificationConfigurationDeprecated {
+    #[serde(rename="CloudFunctionConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
+    #[serde(rename="QueueConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub queue_configuration: Option<QueueConfigurationDeprecated>,
+    #[serde(rename="TopicConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_configuration: Option<TopicConfigurationDeprecated>,
 }
 
@@ -9043,8 +10005,10 @@ impl NotificationConfigurationDeprecatedSerializer {
 }
 
 #[doc="Container for object key name filtering rules. For information about key name filtering, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct NotificationConfigurationFilter {
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<S3KeyFilter>,
 }
 
@@ -9141,14 +10105,26 @@ impl NotificationIdSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Object {
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
 }
 
@@ -9212,11 +10188,14 @@ impl ObjectDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ObjectIdentifier {
     #[doc="Key name of the object to delete."]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="VersionId for the specific version of the object to delete."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -9337,21 +10316,37 @@ impl ObjectStorageClassDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ObjectVersion {
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
+    #[serde(rename="IsLatest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_latest: Option<bool>,
     #[doc="The object key."]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="Date and time the object was last modified."]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<Owner>,
     #[doc="Size in bytes of the object."]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="Version ID of an object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -9496,9 +10491,13 @@ impl ObjectVersionStorageClassDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Owner {
+    #[serde(rename="DisplayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub display_name: Option<String>,
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
 }
 
@@ -9574,15 +10573,23 @@ impl OwnerSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Part {
     #[doc="Entity tag returned when the part was uploaded."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="Date and time at which the part was uploaded."]
+    #[serde(rename="LastModified")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<String>,
     #[doc="Part number identifying the part. This is a positive integer between 1 and 10,000."]
+    #[serde(rename="PartNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub part_number: Option<i64>,
     #[doc="Size of the uploaded part data."]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
 }
 
@@ -9878,150 +10885,228 @@ impl ProtocolSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketAccelerateConfigurationRequest {
     #[doc="Specifies the Accelerate Configuration you want to set for the bucket."]
+    #[serde(rename="AccelerateConfiguration")]
     pub accelerate_configuration: AccelerateConfiguration,
     #[doc="Name of the bucket for which the accelerate configuration is set."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketAclRequest {
     #[doc="The canned ACL to apply to the bucket."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
+    #[serde(rename="AccessControlPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_control_policy: Option<AccessControlPolicy>,
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
+    #[serde(rename="GrantWrite")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketAnalyticsConfigurationRequest {
     #[doc="The configuration and any analyses for the analytics filter."]
+    #[serde(rename="AnalyticsConfiguration")]
     pub analytics_configuration: AnalyticsConfiguration,
     #[doc="The name of the bucket to which an analytics configuration is stored."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketCorsRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="CORSConfiguration")]
     pub cors_configuration: CORSConfiguration,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket where the inventory configuration will be stored."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="Specifies the inventory configuration."]
+    #[serde(rename="InventoryConfiguration")]
     pub inventory_configuration: InventoryConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketLifecycleConfigurationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="LifecycleConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketLifecycleRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="LifecycleConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketLoggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="BucketLoggingStatus")]
     pub bucket_logging_status: BucketLoggingStatus,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket for which the metrics configuration is set."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="Specifies the metrics configuration."]
+    #[serde(rename="MetricsConfiguration")]
     pub metrics_configuration: MetricsConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketNotificationConfigurationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="NotificationConfiguration")]
     pub notification_configuration: NotificationConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketNotificationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="NotificationConfiguration")]
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketPolicyRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="The bucket policy as a JSON document."]
+    #[serde(rename="Policy")]
     pub policy: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketReplicationRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="ReplicationConfiguration")]
     pub replication_configuration: ReplicationConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketRequestPaymentRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="RequestPaymentConfiguration")]
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="Tagging")]
     pub tagging: Tagging,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketVersioningRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
+    #[serde(rename="MFA")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mfa: Option<String>,
+    #[serde(rename="VersioningConfiguration")]
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutBucketWebsiteRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="WebsiteConfiguration")]
     pub website_configuration: WebsiteConfiguration,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectAclOutput {
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
@@ -10041,45 +11126,83 @@ impl PutObjectAclOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectAclRequest {
     #[doc="The canned ACL to apply to the object."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
+    #[serde(rename="AccessControlPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_control_policy: Option<AccessControlPolicy>,
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
+    #[serde(rename="GrantWrite")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectOutput {
     #[doc="Entity tag for the uploaded object."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
     #[doc="If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded."]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="Version of the object."]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -10099,63 +11222,119 @@ impl PutObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectRequest {
     #[doc="The canned ACL to apply to the object."]
+    #[serde(rename="ACL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acl: Option<String>,
     #[doc="Object data."]
+    #[serde(rename="Body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<Vec<u8>>,
     #[doc="Name of the bucket to which the PUT operation was initiated."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
+    #[serde(rename="CacheControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
+    #[serde(rename="ContentDisposition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
+    #[serde(rename="ContentEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
+    #[serde(rename="ContentLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_language: Option<String>,
     #[doc="Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically."]
+    #[serde(rename="ContentLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_length: Option<i64>,
     #[doc="The base64-encoded 128-bit MD5 digest of the part data."]
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
+    #[serde(rename="ContentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
+    #[serde(rename="Expires")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
+    #[serde(rename="GrantFullControl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
+    #[serde(rename="GrantRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
+    #[serde(rename="GrantReadACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
+    #[serde(rename="GrantWriteACP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grant_write_acp: Option<String>,
     #[doc="Object key for which the PUT operation was initiated."]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
+    #[serde(rename="Metadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
     #[doc="The tag-set for the object. The tag-set must be encoded as URL Query parameters"]
+    #[serde(rename="Tagging")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tagging: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
+    #[serde(rename="WebsiteRedirectLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectTaggingOutput {
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -10175,12 +11354,19 @@ impl PutObjectTaggingOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct PutObjectTaggingRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="Tagging")]
     pub tagging: Tagging,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -10217,12 +11403,18 @@ impl QueueArnSerializer {
 }
 
 #[doc="Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct QueueConfiguration {
+    #[serde(rename="Events")]
     pub events: Vec<String>,
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<NotificationConfigurationFilter>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type."]
+    #[serde(rename="QueueArn")]
     pub queue_arn: String,
 }
 
@@ -10305,10 +11497,16 @@ impl QueueConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct QueueConfigurationDeprecated {
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<String>>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename="Queue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub queue: Option<String>,
 }
 
@@ -10454,17 +11652,27 @@ impl QuietSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Redirect {
     #[doc="The host name to use in the redirect request."]
+    #[serde(rename="HostName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_name: Option<String>,
     #[doc="The HTTP redirect code to use on the response. Not required if one of the siblings is present."]
+    #[serde(rename="HttpRedirectCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub http_redirect_code: Option<String>,
     #[doc="Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request."]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix docs/ (objects in the docs/ folder) to documents/, you can set a condition block with KeyPrefixEquals set to docs/ and in the Redirect set ReplaceKeyPrefixWith to /documents. Not required if one of the siblings is present. Can be present only if ReplaceKeyWith is not provided."]
+    #[serde(rename="ReplaceKeyPrefixWith")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replace_key_prefix_with: Option<String>,
     #[doc="The specific object key to use in the redirect request. For example, redirect request to error.html. Not required if one of the sibling is present. Can be present only if ReplaceKeyPrefixWith is not provided."]
+    #[serde(rename="ReplaceKeyWith")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replace_key_with: Option<String>,
 }
 
@@ -10574,11 +11782,14 @@ impl RedirectSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RedirectAllRequestsTo {
     #[doc="Name of the host where requests will be redirected."]
+    #[serde(rename="HostName")]
     pub host_name: String,
     #[doc="Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request."]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
 }
 
@@ -10719,11 +11930,13 @@ impl ReplaceKeyWithSerializer {
 }
 
 #[doc="Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ReplicationConfiguration {
     #[doc="Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects."]
+    #[serde(rename="Role")]
     pub role: String,
     #[doc="Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules."]
+    #[serde(rename="Rules")]
     pub rules: Vec<ReplicationRule>,
 }
 
@@ -10792,14 +12005,19 @@ impl ReplicationConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct ReplicationRule {
+    #[serde(rename="Destination")]
     pub destination: Destination,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported."]
+    #[serde(rename="Prefix")]
     pub prefix: String,
     #[doc="The rule is ignored if status is not Enabled."]
+    #[serde(rename="Status")]
     pub status: String,
 }
 
@@ -10965,9 +12183,10 @@ impl ReplicationRulesSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RequestPaymentConfiguration {
     #[doc="Specifies who pays for the download and request fees."]
+    #[serde(rename="Payer")]
     pub payer: String,
 }
 
@@ -11098,8 +12317,10 @@ impl ResponseExpiresSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RestoreObjectOutput {
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
 }
 
@@ -11119,20 +12340,31 @@ impl RestoreObjectOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RestoreObjectRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
+    #[serde(rename="Key")]
     pub key: String,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
+    #[serde(rename="RestoreRequest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restore_request: Option<RestoreRequest>,
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RestoreRequest {
     #[doc="Lifetime of the active copy in days"]
+    #[serde(rename="Days")]
     pub days: i64,
     #[doc="Glacier related prameters pertaining to this job."]
+    #[serde(rename="GlacierJobParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub glacier_job_parameters: Option<GlacierJobParameters>,
 }
 
@@ -11190,11 +12422,14 @@ impl RoleSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct RoutingRule {
     #[doc="A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error."]
+    #[serde(rename="Condition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub condition: Option<Condition>,
     #[doc="Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can can specify a different error code to return."]
+    #[serde(rename="Redirect")]
     pub redirect: Redirect,
 }
 
@@ -11323,18 +12558,32 @@ impl RoutingRulesSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Rule {
+    #[serde(rename="AbortIncompleteMultipartUpload")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<LifecycleExpiration>,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
+    #[serde(rename="ID")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename="NoncurrentVersionExpiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
+    #[serde(rename="NoncurrentVersionTransition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
     #[doc="Prefix identifying one or more objects to which the rule applies."]
+    #[serde(rename="Prefix")]
     pub prefix: String,
     #[doc="If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied."]
+    #[serde(rename="Status")]
     pub status: String,
+    #[serde(rename="Transition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transition: Option<Transition>,
 }
 
@@ -11502,8 +12751,10 @@ impl RulesSerializer {
 }
 
 #[doc="Container for object key name prefix and suffix filtering rules."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct S3KeyFilter {
+    #[serde(rename="FilterRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_rules: Option<Vec<FilterRule>>,
 }
 
@@ -11646,9 +12897,11 @@ impl StorageClassSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct StorageClassAnalysis {
     #[doc="A container used to describe how data related to the storage class analysis should be exported."]
+    #[serde(rename="DataExport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
 
@@ -11711,11 +12964,13 @@ impl StorageClassAnalysisSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct StorageClassAnalysisDataExport {
     #[doc="The place to store the data for an analysis."]
+    #[serde(rename="Destination")]
     pub destination: AnalyticsExportDestination,
     #[doc="The version of the output schema to use when exporting data. Must be V_1."]
+    #[serde(rename="OutputSchemaVersion")]
     pub output_schema_version: String,
 }
 
@@ -11853,11 +13108,13 @@ impl SuffixSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="Name of the tag."]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Value of the tag."]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -11988,8 +13245,9 @@ impl TagSetSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Tagging {
+    #[serde(rename="TagSet")]
     pub tag_set: Vec<Tag>,
 }
 
@@ -12041,10 +13299,14 @@ impl TargetBucketSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct TargetGrant {
+    #[serde(rename="Grantee")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub grantee: Option<Grantee>,
     #[doc="Logging permissions assigned to the Grantee for the bucket."]
+    #[serde(rename="Permission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub permission: Option<String>,
 }
 
@@ -12294,12 +13556,18 @@ impl TopicArnSerializer {
 }
 
 #[doc="Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic."]
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct TopicConfiguration {
+    #[serde(rename="Events")]
     pub events: Vec<String>,
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<NotificationConfigurationFilter>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type."]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -12382,11 +13650,17 @@ impl TopicConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct TopicConfigurationDeprecated {
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<String>>,
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket."]
+    #[serde(rename="Topic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic: Option<String>,
 }
 
@@ -12514,13 +13788,19 @@ impl TopicConfigurationListSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct Transition {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
+    #[serde(rename="Date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<String>,
     #[doc="Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer."]
+    #[serde(rename="Days")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub days: Option<i64>,
     #[doc="The class of storage used to store the object."]
+    #[serde(rename="StorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage_class: Option<String>,
 }
 
@@ -12778,19 +14058,33 @@ impl UploadIdMarkerSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct UploadPartCopyOutput {
+    #[serde(rename="CopyPartResult")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_part_result: Option<CopyPartResult>,
     #[doc="The version of the source object that was copied, if you have enabled versioning on the source bucket."]
+    #[serde(rename="CopySourceVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_version_id: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
 }
 
@@ -12837,53 +14131,94 @@ impl UploadPartCopyOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct UploadPartCopyRequest {
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded."]
+    #[serde(rename="CopySource")]
     pub copy_source: String,
     #[doc="Copies the object if its entity tag (ETag) matches the specified tag."]
+    #[serde(rename="CopySourceIfMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_match: Option<String>,
     #[doc="Copies the object if it has been modified since the specified time."]
+    #[serde(rename="CopySourceIfModifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_modified_since: Option<String>,
     #[doc="Copies the object if its entity tag (ETag) is different than the specified ETag."]
+    #[serde(rename="CopySourceIfNoneMatch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_none_match: Option<String>,
     #[doc="Copies the object if it hasn't been modified since the specified time."]
+    #[serde(rename="CopySourceIfUnmodifiedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_if_unmodified_since: Option<String>,
     #[doc="The range of bytes to copy from the source object. The range value must use the form bytes=first-last, where the first and last are the zero-based byte offsets to copy. For example, bytes=0-9 indicates that you want to copy the first ten bytes of the source. You can copy a range only if the source object is greater than 5 GB."]
+    #[serde(rename="CopySourceRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_range: Option<String>,
     #[doc="Specifies the algorithm to use when decrypting the source object (e.g., AES256)."]
+    #[serde(rename="CopySourceSSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created."]
+    #[serde(rename="CopySourceSSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="CopySourceSSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub copy_source_sse_customer_key_md5: Option<String>,
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Part number of part being copied. This is a positive integer between 1 and 10,000."]
+    #[serde(rename="PartNumber")]
     pub part_number: i64,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose part is being copied."]
+    #[serde(rename="UploadId")]
     pub upload_id: String,
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct UploadPartOutput {
     #[doc="Entity tag for the uploaded object."]
+    #[serde(rename="ETag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<String>,
+    #[serde(rename="RequestCharged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
+    #[serde(rename="SSEKMSKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
+    #[serde(rename="ServerSideEncryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_encryption: Option<String>,
 }
 
@@ -12903,28 +14238,50 @@ impl UploadPartOutputDeserializer {
 
     }
 }
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct UploadPartRequest {
     #[doc="Object data."]
+    #[serde(rename="Body")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub body: Option<Vec<u8>>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically."]
+    #[serde(rename="ContentLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_length: Option<i64>,
     #[doc="The base64-encoded 128-bit MD5 digest of the part data."]
+    #[serde(rename="ContentMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_md5: Option<String>,
     #[doc="Object key for which the multipart upload was initiated."]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="Part number of part being uploaded. This is a positive integer between 1 and 10,000."]
+    #[serde(rename="PartNumber")]
     pub part_number: i64,
+    #[serde(rename="RequestPayer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
+    #[serde(rename="SSECustomerAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request."]
+    #[serde(rename="SSECustomerKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
+    #[serde(rename="SSECustomerKeyMD5")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sse_customer_key_md5: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose part is being uploaded."]
+    #[serde(rename="UploadId")]
     pub upload_id: String,
 }
 
@@ -12992,11 +14349,15 @@ impl VersionIdMarkerSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct VersioningConfiguration {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
+    #[serde(rename="MFADelete")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mfa_delete: Option<String>,
     #[doc="The versioning state of the bucket."]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -13027,11 +14388,19 @@ impl VersioningConfigurationSerializer {
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default,Debug,Serialize,Deserialize)]
 pub struct WebsiteConfiguration {
+    #[serde(rename="ErrorDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_document: Option<ErrorDocument>,
+    #[serde(rename="IndexDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub index_document: Option<IndexDocument>,
+    #[serde(rename="RedirectAllRequestsTo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
+    #[serde(rename="RoutingRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub routing_rules: Option<Vec<RoutingRule>>,
 }
 

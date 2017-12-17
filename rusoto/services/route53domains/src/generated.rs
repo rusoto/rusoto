@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Information for one billing record.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BillingRecord {
     #[doc="<p>The date that the operation was billed, in Unix format.</p>"]
     #[serde(rename="BillDate")]
@@ -54,7 +54,7 @@ pub struct BillingRecord {
 }
 
 #[doc="<p>The CheckDomainAvailability request contains the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CheckDomainAvailabilityRequest {
     #[doc="<p>The name of the domain that you want to get availability for.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
     #[serde(rename="DomainName")]
@@ -66,7 +66,7 @@ pub struct CheckDomainAvailabilityRequest {
 }
 
 #[doc="<p>The CheckDomainAvailability response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CheckDomainAvailabilityResponse {
     #[doc="<p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>"]
     #[serde(rename="Availability")]
@@ -135,7 +135,7 @@ pub struct ContactDetail {
 }
 
 #[doc="<p>The DeleteTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsForDomainRequest {
     #[doc="<p>The domain for which you want to delete one or more tags.</p>"]
     #[serde(rename="DomainName")]
@@ -145,21 +145,21 @@ pub struct DeleteTagsForDomainRequest {
     pub tags_to_delete: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsForDomainResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDomainAutoRenewRequest {
     #[doc="<p>The name of the domain that you want to disable automatic renewal for.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDomainAutoRenewResponse;
 
 #[doc="<p>The DisableDomainTransferLock request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDomainTransferLockRequest {
     #[doc="<p>The name of the domain that you want to remove the transfer lock for.</p>"]
     #[serde(rename="DomainName")]
@@ -167,7 +167,7 @@ pub struct DisableDomainTransferLockRequest {
 }
 
 #[doc="<p>The DisableDomainTransferLock response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDomainTransferLockResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
@@ -175,7 +175,7 @@ pub struct DisableDomainTransferLockResponse {
 }
 
 #[doc="<p>Information about one suggested domain name.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainSuggestion {
     #[doc="<p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>"]
     #[serde(rename="Availability")]
@@ -188,7 +188,7 @@ pub struct DomainSuggestion {
 }
 
 #[doc="<p>Summary information about one domain.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainSummary {
     #[doc="<p>Indicates whether the domain is automatically renewed upon expiration.</p>"]
     #[serde(rename="AutoRenew")]
@@ -207,18 +207,18 @@ pub struct DomainSummary {
     pub transfer_lock: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDomainAutoRenewRequest {
     #[doc="<p>The name of the domain that you want to enable automatic renewal for.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDomainAutoRenewResponse;
 
 #[doc="<p>A request to set the transfer lock for the specified domain.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDomainTransferLockRequest {
     #[doc="<p>The name of the domain that you want to set the transfer lock for.</p>"]
     #[serde(rename="DomainName")]
@@ -226,7 +226,7 @@ pub struct EnableDomainTransferLockRequest {
 }
 
 #[doc="<p>The EnableDomainTransferLock response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDomainTransferLockResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>"]
     #[serde(rename="OperationId")]
@@ -244,7 +244,7 @@ pub struct ExtraParam {
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetContactReachabilityStatusRequest {
     #[doc="<p>The name of the domain for which you want to know whether the registrant contact has confirmed that the email address is valid.</p>"]
     #[serde(rename="domainName")]
@@ -252,7 +252,7 @@ pub struct GetContactReachabilityStatusRequest {
     pub domain_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetContactReachabilityStatusResponse {
     #[doc="<p>The domain name for which you requested the reachability status.</p>"]
     #[serde(rename="domainName")]
@@ -265,7 +265,7 @@ pub struct GetContactReachabilityStatusResponse {
 }
 
 #[doc="<p>The GetDomainDetail request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainDetailRequest {
     #[doc="<p>The name of the domain that you want to get detailed information about.</p>"]
     #[serde(rename="DomainName")]
@@ -273,7 +273,7 @@ pub struct GetDomainDetailRequest {
 }
 
 #[doc="<p>The GetDomainDetail response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainDetailResponse {
     #[doc="<p>Email address to contact to report incorrect contact information for a domain, to report that the domain is being used to send spam, to report that someone is cybersquatting on a domain name, or report some other type of abuse.</p>"]
     #[serde(rename="AbuseContactEmail")]
@@ -356,7 +356,7 @@ pub struct GetDomainDetailResponse {
     pub who_is_server: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainSuggestionsRequest {
     #[doc="<p>A domain name that you want to use as the basis for a list of possible domain names. The domain name must contain a top-level domain (TLD), such as .com, that Amazon Route 53 supports. For a list of TLDs, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html\">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[serde(rename="DomainName")]
@@ -369,7 +369,7 @@ pub struct GetDomainSuggestionsRequest {
     pub suggestion_count: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDomainSuggestionsResponse {
     #[doc="<p>A list of possible domain names. If you specified <code>true</code> for <code>OnlyAvailable</code> in the request, the list contains only domains that are available for registration.</p>"]
     #[serde(rename="SuggestionsList")]
@@ -378,7 +378,7 @@ pub struct GetDomainSuggestionsResponse {
 }
 
 #[doc="<p>The <a>GetOperationDetail</a> request includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOperationDetailRequest {
     #[doc="<p>The identifier for the operation for which you want to get the status. Amazon Route 53 returned the identifier in the response to the original request.</p>"]
     #[serde(rename="OperationId")]
@@ -386,7 +386,7 @@ pub struct GetOperationDetailRequest {
 }
 
 #[doc="<p>The GetOperationDetail response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOperationDetailResponse {
     #[doc="<p>The name of a domain.</p>"]
     #[serde(rename="DomainName")]
@@ -415,7 +415,7 @@ pub struct GetOperationDetailResponse {
 }
 
 #[doc="<p>The ListDomains request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDomainsRequest {
     #[doc="<p>For an initial request for a list of domains, omit this element. If the number of domains that are associated with the current AWS account is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional domains. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p> <p>Constraints: The marker must match the value specified in the previous request.</p>"]
     #[serde(rename="Marker")]
@@ -428,7 +428,7 @@ pub struct ListDomainsRequest {
 }
 
 #[doc="<p>The ListDomains response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDomainsResponse {
     #[doc="<p>A summary of domains.</p>"]
     #[serde(rename="Domains")]
@@ -440,7 +440,7 @@ pub struct ListDomainsResponse {
 }
 
 #[doc="<p>The ListOperations request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOperationsRequest {
     #[doc="<p>For an initial request for a list of operations, omit this element. If the number of operations that are not yet complete is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional operations. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p>"]
     #[serde(rename="Marker")]
@@ -453,7 +453,7 @@ pub struct ListOperationsRequest {
 }
 
 #[doc="<p>The ListOperations response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOperationsResponse {
     #[doc="<p>If there are more operations than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
     #[serde(rename="NextPageMarker")]
@@ -465,7 +465,7 @@ pub struct ListOperationsResponse {
 }
 
 #[doc="<p>The ListTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForDomainRequest {
     #[doc="<p>The domain for which you want to get a list of tags.</p>"]
     #[serde(rename="DomainName")]
@@ -473,7 +473,7 @@ pub struct ListTagsForDomainRequest {
 }
 
 #[doc="<p>The ListTagsForDomain response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForDomainResponse {
     #[doc="<p>A list of the tags that are associated with the specified domain.</p>"]
     #[serde(rename="TagList")]
@@ -493,7 +493,7 @@ pub struct Nameserver {
 }
 
 #[doc="<p>OperationSummary includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OperationSummary {
     #[doc="<p>Identifier returned to track the requested action.</p>"]
     #[serde(rename="OperationId")]
@@ -510,7 +510,7 @@ pub struct OperationSummary {
 }
 
 #[doc="<p>The RegisterDomain request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterDomainRequest {
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="AdminContact")]
@@ -550,7 +550,7 @@ pub struct RegisterDomainRequest {
 }
 
 #[doc="<p>The RegisterDomain response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterDomainResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
@@ -558,7 +558,7 @@ pub struct RegisterDomainResponse {
 }
 
 #[doc="<p>A <code>RenewDomain</code> request includes the number of years that you want to renew for and the current expiration year.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RenewDomainRequest {
     #[doc="<p>The year when the registration for the domain is set to expire. This value must match the current expiration date for the domain.</p>"]
     #[serde(rename="CurrentExpiryYear")]
@@ -572,14 +572,14 @@ pub struct RenewDomainRequest {
     pub duration_in_years: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RenewDomainResponse {
     #[doc="<p>The identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
     pub operation_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResendContactReachabilityEmailRequest {
     #[doc="<p>The name of the domain for which you want Amazon Route 53 to resend a confirmation email to the registrant contact.</p>"]
     #[serde(rename="domainName")]
@@ -587,7 +587,7 @@ pub struct ResendContactReachabilityEmailRequest {
     pub domain_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResendContactReachabilityEmailResponse {
     #[doc="<p>The domain name for which you requested a confirmation email.</p>"]
     #[serde(rename="domainName")]
@@ -604,7 +604,7 @@ pub struct ResendContactReachabilityEmailResponse {
 }
 
 #[doc="<p>A request for the authorization code for the specified domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RetrieveDomainAuthCodeRequest {
     #[doc="<p>The name of the domain that you want to get an authorization code for.</p>"]
     #[serde(rename="DomainName")]
@@ -612,7 +612,7 @@ pub struct RetrieveDomainAuthCodeRequest {
 }
 
 #[doc="<p>The RetrieveDomainAuthCode response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RetrieveDomainAuthCodeResponse {
     #[doc="<p>The authorization code for the domain.</p>"]
     #[serde(rename="AuthCode")]
@@ -633,7 +633,7 @@ pub struct Tag {
 }
 
 #[doc="<p>The TransferDomain request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TransferDomainRequest {
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="AdminContact")]
@@ -681,7 +681,7 @@ pub struct TransferDomainRequest {
 }
 
 #[doc="<p>The TranserDomain response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TransferDomainResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
@@ -689,7 +689,7 @@ pub struct TransferDomainResponse {
 }
 
 #[doc="<p>The UpdateDomainContactPrivacy request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainContactPrivacyRequest {
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="AdminPrivacy")]
@@ -709,7 +709,7 @@ pub struct UpdateDomainContactPrivacyRequest {
 }
 
 #[doc="<p>The UpdateDomainContactPrivacy response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainContactPrivacyResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>"]
     #[serde(rename="OperationId")]
@@ -717,7 +717,7 @@ pub struct UpdateDomainContactPrivacyResponse {
 }
 
 #[doc="<p>The UpdateDomainContact request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainContactRequest {
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="AdminContact")]
@@ -737,7 +737,7 @@ pub struct UpdateDomainContactRequest {
 }
 
 #[doc="<p>The UpdateDomainContact response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainContactResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
@@ -745,7 +745,7 @@ pub struct UpdateDomainContactResponse {
 }
 
 #[doc="<p>Replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainNameserversRequest {
     #[doc="<p>The name of the domain that you want to change name servers for.</p>"]
     #[serde(rename="DomainName")]
@@ -760,7 +760,7 @@ pub struct UpdateDomainNameserversRequest {
 }
 
 #[doc="<p>The UpdateDomainNameservers response includes the following element.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDomainNameserversResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
@@ -768,7 +768,7 @@ pub struct UpdateDomainNameserversResponse {
 }
 
 #[doc="<p>The UpdateTagsForDomainRequest includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTagsForDomainRequest {
     #[doc="<p>The domain for which you want to add or update tags.</p>"]
     #[serde(rename="DomainName")]
@@ -779,11 +779,11 @@ pub struct UpdateTagsForDomainRequest {
     pub tags_to_update: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTagsForDomainResponse;
 
 #[doc="<p>The ViewBilling request includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ViewBillingRequest {
     #[doc="<p>The end date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>"]
     #[serde(rename="End")]
@@ -804,7 +804,7 @@ pub struct ViewBillingRequest {
 }
 
 #[doc="<p>The ViewBilling response includes the following elements.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ViewBillingResponse {
     #[doc="<p>A summary of billing records.</p>"]
     #[serde(rename="BillingRecords")]

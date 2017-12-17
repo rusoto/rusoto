@@ -40,17 +40,23 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> actions. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccessKey {
     #[doc="<p>The ID for this access key.</p>"]
+    #[serde(rename="AccessKeyId")]
     pub access_key_id: String,
     #[doc="<p>The date when the access key was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The secret key used to sign requests.</p>"]
+    #[serde(rename="SecretAccessKey")]
     pub secret_access_key: String,
     #[doc="<p>The status of the access key. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not. </p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user that the access key is associated with.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -128,13 +134,16 @@ impl AccessKeyIdTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about the last time an AWS access key was used.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccessKeyLastUsed {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>"]
+    #[serde(rename="LastUsedDate")]
     pub last_used_date: String,
     #[doc="<p>The AWS region where this access key was most recently used. This field is displays \"N/A\" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul> <p>For more information about AWS regions, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a> in the Amazon Web Services General Reference.</p>"]
+    #[serde(rename="Region")]
     pub region: String,
     #[doc="<p>The name of the AWS service with which this access key was most recently used. This field displays \"N/A\" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>"]
+    #[serde(rename="ServiceName")]
     pub service_name: String,
 }
 
@@ -188,15 +197,23 @@ impl AccessKeyLastUsedDeserializer {
     }
 }
 #[doc="<p>Contains information about an AWS access key, without its secret key.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccessKeyMetadata {
     #[doc="<p>The ID for this access key.</p>"]
+    #[serde(rename="AccessKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_key_id: Option<String>,
     #[doc="<p>The date when the access key was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The status of the access key. <code>Active</code> means the key is valid for API calls; <code>Inactive</code> means it is not.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The name of the IAM user that the key is associated with.</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -392,11 +409,13 @@ impl ActionNameTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddClientIDToOpenIDConnectProviderRequest {
     #[doc="<p>The client ID (also known as audience) to add to the IAM OpenID Connect provider resource.</p>"]
+    #[serde(rename="ClientID")]
     pub client_id: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OpenID Connect (OIDC) provider resource to add the client ID to. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
     pub open_id_connect_provider_arn: String,
 }
 
@@ -420,11 +439,13 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddRoleToInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
     #[doc="<p>The name of the role to add.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -446,11 +467,13 @@ impl AddRoleToInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddUserToGroupRequest {
     #[doc="<p>The name of the group to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The name of the user to add.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -486,11 +509,13 @@ impl ArnTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -512,11 +537,13 @@ impl AttachGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachRolePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the role to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -538,11 +565,13 @@ impl AttachRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachUserPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM user to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -606,10 +635,14 @@ impl AttachedPoliciesListTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an attached policy.</p> <p>An attached policy is a managed policy that has been attached to a user, group, or role. This data type is used as a response element in the <a>ListAttachedGroupPolicies</a>, <a>ListAttachedRolePolicies</a>, <a>ListAttachedUserPolicies</a>, and <a>GetAccountAuthorizationDetails</a> actions. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachedPolicy {
+    #[serde(rename="PolicyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<String>,
     #[doc="<p>The friendly name of the attached policy.</p>"]
+    #[serde(rename="PolicyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
 }
 
@@ -800,11 +833,13 @@ impl CertificateListTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ChangePasswordRequest {
     #[doc="<p>The new password. The new password must conform to the AWS account's password policy, if one exists.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of almost any printable ASCII character from the space (\\u0020) through the end of the ASCII character range (\\u00FF). You can also include the tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D) characters. Although any of these characters are valid in a password, note that many tools, such as the AWS Management Console, might restrict the ability to enter certain characters because they have special meaning within that tool.</p>"]
+    #[serde(rename="NewPassword")]
     pub new_password: String,
     #[doc="<p>The IAM user's current password.</p>"]
+    #[serde(rename="OldPassword")]
     pub old_password: String,
 }
 
@@ -908,13 +943,19 @@ impl ColumnNumberDeserializer {
     }
 }
 #[doc="<p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulateCustomPolicy</a> </code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ContextEntry {
     #[doc="<p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>"]
+    #[serde(rename="ContextKeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_key_name: Option<String>,
     #[doc="<p>The data type of the value (or values) specified in the <code>ContextKeyValues</code> parameter.</p>"]
+    #[serde(rename="ContextKeyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_key_type: Option<String>,
     #[doc="<p>The value (or values, if the condition context key supports multiple values) to provide to the simulation for use when the key is referenced by a <code>Condition</code> element in an input policy.</p>"]
+    #[serde(rename="ContextKeyValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_key_values: Option<Vec<String>>,
 }
 
@@ -1027,9 +1068,11 @@ impl ContextKeyValueListTypeSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAccessKeyRequest {
     #[doc="<p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -1052,9 +1095,10 @@ impl CreateAccessKeyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateAccessKey</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAccessKeyResponse {
     #[doc="<p>A structure with details about the access key.</p>"]
+    #[serde(rename="AccessKey")]
     pub access_key: AccessKey,
 }
 
@@ -1100,9 +1144,10 @@ impl CreateAccessKeyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAccountAliasRequest {
     #[doc="<p>The account alias to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>"]
+    #[serde(rename="AccountAlias")]
     pub account_alias: String,
 }
 
@@ -1122,11 +1167,14 @@ impl CreateAccountAliasRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateGroupRequest {
     #[doc="<p>The name of the group to create. Do not include the path in this value.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both \"ADMINS\" and \"admins\".</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p> The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
 }
 
@@ -1151,9 +1199,10 @@ impl CreateGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateGroup</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateGroupResponse {
     #[doc="<p>A structure containing details about the new group.</p>"]
+    #[serde(rename="Group")]
     pub group: Group,
 }
 
@@ -1198,11 +1247,14 @@ impl CreateGroupResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
     #[doc="<p> The path to the instance profile. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
 }
 
@@ -1227,9 +1279,10 @@ impl CreateInstanceProfileRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateInstanceProfile</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceProfileResponse {
     #[doc="<p>A structure containing details about the new instance profile.</p>"]
+    #[serde(rename="InstanceProfile")]
     pub instance_profile: InstanceProfile,
 }
 
@@ -1276,13 +1329,17 @@ impl CreateInstanceProfileResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLoginProfileRequest {
     #[doc="<p>The new password for the user.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of almost any printable ASCII character from the space (\\u0020) through the end of the ASCII character range (\\u00FF). You can also include the tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D) characters. Although any of these characters are valid in a password, note that many tools, such as the AWS Management Console, might restrict the ability to enter certain characters because they have special meaning within that tool.</p>"]
+    #[serde(rename="Password")]
     pub password: String,
     #[doc="<p>Specifies whether the user is required to set a new password on next sign-in.</p>"]
+    #[serde(rename="PasswordResetRequired")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the IAM user to create a password for. The user must already exist.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -1309,9 +1366,10 @@ impl CreateLoginProfileRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateLoginProfile</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLoginProfileResponse {
     #[doc="<p>A structure containing the user name and password create date.</p>"]
+    #[serde(rename="LoginProfile")]
     pub login_profile: LoginProfile,
 }
 
@@ -1357,13 +1415,17 @@ impl CreateLoginProfileResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateOpenIDConnectProviderRequest {
     #[doc="<p>A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the <code>client_id</code> parameter on OAuth requests.)</p> <p>You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider.</p> <p>There is no defined format for a client ID. The <code>CreateOpenIDConnectProviderRequest</code> action accepts client IDs up to 255 characters long.</p>"]
+    #[serde(rename="ClientIDList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_id_list: Option<Vec<String>>,
     #[doc="<p>A list of server certificate thumbprints for the OpenID Connect (OIDC) identity provider's server certificate(s). Typically this list includes only one entry. However, IAM lets you have up to five thumbprints for an OIDC provider. This lets you maintain multiple thumbprints if the identity provider is rotating certificates.</p> <p>The server certificate thumbprint is the hex-encoded SHA-1 hash value of the X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string.</p> <p>You must provide at least one thumbprint when creating an IAM OIDC provider. For example, if the OIDC provider is <code>server.example.com</code> and the provider stores its keys at \"https://keys.server.example.com/openid-connect\", the thumbprint string would be the hex-encoded SHA-1 hash value of the certificate used by https://keys.server.example.com.</p> <p>For more information about obtaining the OIDC provider's thumbprint, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/identity-providers-oidc-obtain-thumbprint.html\">Obtaining the Thumbprint for an OpenID Connect Provider</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="ThumbprintList")]
     pub thumbprint_list: Vec<String>,
     #[doc="<p>The URL of the identity provider. The URL must begin with \"https://\" and should correspond to the <code>iss</code> claim in the provider's OpenID Connect ID tokens. Per the OIDC standard, path components are allowed but query parameters are not. Typically the URL consists of only a host name, like \"https://server.example.org\" or \"https://example.com\".</p> <p>You cannot register the same provider multiple times in a single AWS account. If you try to submit a URL that has already been used for an OpenID Connect provider in the AWS account, you will get an error.</p>"]
+    #[serde(rename="Url")]
     pub url: String,
 }
 
@@ -1392,9 +1454,11 @@ impl CreateOpenIDConnectProviderRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateOpenIDConnectProvider</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateOpenIDConnectProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the new IAM OpenID Connect provider that is created. For more information, see <a>OpenIDConnectProviderListEntry</a>. </p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub open_id_connect_provider_arn: Option<String>,
 }
 
@@ -1442,15 +1506,21 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyRequest {
     #[doc="<p>A friendly description of the policy.</p> <p>Typically used to store information about the permissions defined in the policy. For example, \"Grants access to production DynamoDB tables.\"</p> <p>The policy description is immutable. After a value is assigned, it cannot be changed.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The path for the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The JSON policy document that you want to use as the content for the new policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The friendly name of the policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -1481,9 +1551,11 @@ impl CreatePolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreatePolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyResponse {
     #[doc="<p>A structure containing details about the new policy.</p>"]
+    #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<Policy>,
 }
 
@@ -1529,13 +1601,17 @@ impl CreatePolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy to which you want to add a new version.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The JSON policy document that you want to use as the content for this new version of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>Specifies whether to set this version as the policy's default version.</p> <p>When this parameter is <code>true</code>, the new policy version becomes the operative version; that is, the version that is in effect for the IAM users, groups, and roles that the policy is attached to.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="SetAsDefault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_default: Option<bool>,
 }
 
@@ -1562,9 +1638,11 @@ impl CreatePolicyVersionRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreatePolicyVersion</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePolicyVersionResponse {
     #[doc="<p>A structure containing details about the new policy version.</p>"]
+    #[serde(rename="PolicyVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version: Option<PolicyVersion>,
 }
 
@@ -1611,15 +1689,21 @@ impl CreatePolicyVersionResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRoleRequest {
     #[doc="<p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="AssumeRolePolicyDocument")]
     pub assume_role_policy_document: String,
     #[doc="<p>A customer-provided description of the role.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p> The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The name of the role to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p> <p>Role names are not distinguished by case. For example, you cannot create roles named both \"PRODROLE\" and \"prodrole\".</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -1650,9 +1734,10 @@ impl CreateRoleRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateRole</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRoleResponse {
     #[doc="<p>A structure containing details about the new role.</p>"]
+    #[serde(rename="Role")]
     pub role: Role,
 }
 
@@ -1697,11 +1782,13 @@ impl CreateRoleResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSAMLProviderRequest {
     #[doc="<p>The name of the provider to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i> </p>"]
+    #[serde(rename="SAMLMetadataDocument")]
     pub saml_metadata_document: String,
 }
 
@@ -1724,9 +1811,11 @@ impl CreateSAMLProviderRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateSAMLProvider</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSAMLProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the new SAML provider resource in IAM.</p>"]
+    #[serde(rename="SAMLProviderArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_provider_arn: Option<String>,
 }
 
@@ -1773,13 +1862,18 @@ impl CreateSAMLProviderResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceLinkedRoleRequest {
     #[doc="<p>The AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code> </p>"]
+    #[serde(rename="AWSServiceName")]
     pub aws_service_name: String,
     #[doc="<p>A string that you provide, which is combined with the service name to form the complete role name. If you make multiple requests for the same service, then you must supply a different <code>CustomSuffix</code> for each request. Otherwise the request fails with a duplicate role name error. For example, you could add <code>-1</code> or <code>-debug</code> to the suffix.</p>"]
+    #[serde(rename="CustomSuffix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub custom_suffix: Option<String>,
     #[doc="<p>The description of the role.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
 }
 
@@ -1807,9 +1901,11 @@ impl CreateServiceLinkedRoleRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceLinkedRoleResponse {
     #[doc="<p>A <a>Role</a> object that contains details about the newly created role.</p>"]
+    #[serde(rename="Role")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<Role>,
 }
 
@@ -1855,11 +1951,13 @@ impl CreateServiceLinkedRoleResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceSpecificCredentialRequest {
     #[doc="<p>The name of the AWS service that is to be associated with the credentials. The service you specify here is the only service that can be accessed using these credentials.</p>"]
+    #[serde(rename="ServiceName")]
     pub service_name: String,
     #[doc="<p>The name of the IAM user that is to be associated with the credentials. The new service-specific credentials have the same permissions as the associated user except that they can be used only to access the specified service.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -1881,9 +1979,11 @@ impl CreateServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateServiceSpecificCredentialResponse {
     #[doc="<p>A structure that contains information about the newly created service-specific credential.</p> <important> <p>This is the only time that the password for this credential set is available. It cannot be recovered later. Instead, you will have to reset the password with <a>ResetServiceSpecificCredential</a>.</p> </important>"]
+    #[serde(rename="ServiceSpecificCredential")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_specific_credential: Option<ServiceSpecificCredential>,
 }
 
@@ -1929,11 +2029,14 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserRequest {
     #[doc="<p> The path for the user name. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The name of the user to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-. User names are not distinguished by case. For example, you cannot create users named both \"TESTUSER\" and \"testuser\".</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -1958,9 +2061,11 @@ impl CreateUserRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateUser</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserResponse {
     #[doc="<p>A structure with details about the new IAM user.</p>"]
+    #[serde(rename="User")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<User>,
 }
 
@@ -2005,11 +2110,14 @@ impl CreateUserResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVirtualMFADeviceRequest {
     #[doc="<p> The path for the virtual MFA device. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The name of the virtual MFA device. Use with path to uniquely identify a virtual MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="VirtualMFADeviceName")]
     pub virtual_mfa_device_name: String,
 }
 
@@ -2034,9 +2142,10 @@ impl CreateVirtualMFADeviceRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>CreateVirtualMFADevice</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVirtualMFADeviceResponse {
     #[doc="<p>A structure containing details about the new virtual MFA device.</p>"]
+    #[serde(rename="VirtualMFADevice")]
     pub virtual_mfa_device: VirtualMFADevice,
 }
 
@@ -2097,11 +2206,13 @@ impl DateTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeactivateMFADeviceRequest {
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
     #[doc="<p>The name of the user whose MFA device you want to deactivate.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2123,11 +2234,14 @@ impl DeactivateMFADeviceRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAccessKeyRequest {
     #[doc="<p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="AccessKeyId")]
     pub access_key_id: String,
     #[doc="<p>The name of the user whose access key pair you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -2151,9 +2265,10 @@ impl DeleteAccessKeyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAccountAliasRequest {
     #[doc="<p>The name of the account alias to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>"]
+    #[serde(rename="AccountAlias")]
     pub account_alias: String,
 }
 
@@ -2173,11 +2288,13 @@ impl DeleteAccountAliasRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -2199,9 +2316,10 @@ impl DeleteGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteGroupRequest {
     #[doc="<p>The name of the IAM group to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
 }
 
@@ -2221,9 +2339,10 @@ impl DeleteGroupRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
 }
 
@@ -2243,9 +2362,10 @@ impl DeleteInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLoginProfileRequest {
     #[doc="<p>The name of the user whose password you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2265,9 +2385,10 @@ impl DeleteLoginProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteOpenIDConnectProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OpenID Connect provider resource object to delete. You can get a list of OpenID Connect provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
     pub open_id_connect_provider_arn: String,
 }
 
@@ -2287,9 +2408,10 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to delete.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -2309,11 +2431,13 @@ impl DeletePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The policy version to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="VersionId")]
     pub version_id: String,
 }
 
@@ -2335,11 +2459,13 @@ impl DeletePolicyVersionRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRolePolicyRequest {
     #[doc="<p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name (friendly name, not ARN) identifying the role that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -2361,9 +2487,10 @@ impl DeleteRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRoleRequest {
     #[doc="<p>The name of the role to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -2383,9 +2510,10 @@ impl DeleteRoleRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSAMLProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider to delete.</p>"]
+    #[serde(rename="SAMLProviderArn")]
     pub saml_provider_arn: String,
 }
 
@@ -2405,11 +2533,13 @@ impl DeleteSAMLProviderRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSSHPublicKeyRequest {
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="SSHPublicKeyId")]
     pub ssh_public_key_id: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2431,9 +2561,10 @@ impl DeleteSSHPublicKeyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteServerCertificateRequest {
     #[doc="<p>The name of the server certificate you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="ServerCertificateName")]
     pub server_certificate_name: String,
 }
 
@@ -2453,11 +2584,14 @@ impl DeleteServerCertificateRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="ServiceSpecificCredentialId")]
     pub service_specific_credential_id: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -2481,11 +2615,14 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSigningCertificateRequest {
     #[doc="<p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href=\"http://wikipedia.org/wiki/regex\">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>"]
+    #[serde(rename="CertificateId")]
     pub certificate_id: String,
     #[doc="<p>The name of the user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -2509,11 +2646,13 @@ impl DeleteSigningCertificateRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserPolicyRequest {
     #[doc="<p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name (friendly name, not ARN) identifying the user that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2535,9 +2674,10 @@ impl DeleteUserPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserRequest {
     #[doc="<p>The name of the user to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2557,9 +2697,10 @@ impl DeleteUserRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVirtualMFADeviceRequest {
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
 }
 
@@ -2579,11 +2720,13 @@ impl DeleteVirtualMFADeviceRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -2605,11 +2748,13 @@ impl DetachGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachRolePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM role to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -2631,11 +2776,13 @@ impl DetachRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachUserPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM user to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2657,15 +2804,19 @@ impl DetachUserPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableMFADeviceRequest {
     #[doc="<p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html\">resync the device</a>.</p> </important>"]
+    #[serde(rename="AuthenticationCode1")]
     pub authentication_code_1: String,
     #[doc="<p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html\">resync the device</a>.</p> </important>"]
+    #[serde(rename="AuthenticationCode2")]
     pub authentication_code_2: String,
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
     #[doc="<p>The name of the IAM user for whom you want to enable the MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -2742,23 +2893,37 @@ impl EvalDecisionSourceTypeDeserializer {
     }
 }
 #[doc="<p>Contains the results of a simulation.</p> <p>This data type is used by the return parameter of <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluationResult {
     #[doc="<p>The name of the API action tested on the indicated resource.</p>"]
+    #[serde(rename="EvalActionName")]
     pub eval_action_name: String,
     #[doc="<p>The result of the simulation.</p>"]
+    #[serde(rename="EvalDecision")]
     pub eval_decision: String,
     #[doc="<p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access. See <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_compare-resource-policies.html\">How IAM Roles Differ from Resource-based Policies</a> </p>"]
+    #[serde(rename="EvalDecisionDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The ARN of the resource that the indicated API action was tested on.</p>"]
+    #[serde(rename="EvalResourceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub eval_resource_name: Option<String>,
     #[doc="<p>A list of the statements in the input policies that determine the result for this scenario. Remember that even if multiple statements allow the action on the resource, if only one statement denies that action, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>"]
+    #[serde(rename="MatchedStatements")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matched_statements: Option<Vec<Statement>>,
     #[doc="<p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when the resource in a simulation is \"*\", either explicitly, or when the <code>ResourceArns</code> parameter blank. If you include a list of resources, then any missing context values are instead included under the <code>ResourceSpecificResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>"]
+    #[serde(rename="MissingContextValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub missing_context_values: Option<Vec<String>>,
     #[doc="<p>A structure that details how AWS Organizations and its service control policies affect the results of the simulation. Only applies if the simulated user's account is part of an organization.</p>"]
+    #[serde(rename="OrganizationsDecisionDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizations_decision_detail: Option<OrganizationsDecisionDetail>,
     #[doc="<p>The individual results of the simulation of the API action specified in EvalActionName on each resource.</p>"]
+    #[serde(rename="ResourceSpecificResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_specific_results: Option<Vec<ResourceSpecificResult>>,
 }
 
@@ -2890,11 +3055,15 @@ impl ExistingUserNameTypeDeserializer {
     }
 }
 #[doc="<p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateCredentialReportResponse {
     #[doc="<p>Information about the credential report.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Information about the state of the credential report.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -2944,9 +3113,10 @@ impl GenerateCredentialReportResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccessKeyLastUsedRequest {
     #[doc="<p>The identifier of an access key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="AccessKeyId")]
     pub access_key_id: String,
 }
 
@@ -2967,11 +3137,15 @@ impl GetAccessKeyLastUsedRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetAccessKeyLastUsed</a> request. It is also returned as a member of the <a>AccessKeyMetaData</a> structure returned by the <a>ListAccessKeys</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccessKeyLastUsedResponse {
     #[doc="<p>Contains information about the last time the access key was used.</p>"]
+    #[serde(rename="AccessKeyLastUsed")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_key_last_used: Option<AccessKeyLastUsed>,
     #[doc="<p>The name of the AWS IAM user that owns this access key.</p> <p/>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -3023,13 +3197,19 @@ impl GetAccessKeyLastUsedResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountAuthorizationDetailsRequest {
     #[doc="<p>A list of entity types used to filter the results. Only the entities that match the types you specify are included in the output. Use the value <code>LocalManagedPolicy</code> to include customer managed policies.</p> <p>The format for this parameter is a comma-separated (if more than one) list of strings. Each string value in the list must be one of the valid values listed below.</p>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<String>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
 }
 
@@ -3061,19 +3241,31 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetAccountAuthorizationDetails</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountAuthorizationDetailsResponse {
     #[doc="<p>A list containing information about IAM groups.</p>"]
+    #[serde(rename="GroupDetailList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_detail_list: Option<Vec<GroupDetail>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list containing information about managed policies.</p>"]
+    #[serde(rename="Policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Vec<ManagedPolicyDetail>>,
     #[doc="<p>A list containing information about IAM roles.</p>"]
+    #[serde(rename="RoleDetailList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_detail_list: Option<Vec<RoleDetail>>,
     #[doc="<p>A list containing information about IAM users.</p>"]
+    #[serde(rename="UserDetailList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_detail_list: Option<Vec<UserDetail>>,
 }
 
@@ -3144,9 +3336,10 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
     }
 }
 #[doc="<p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountPasswordPolicyResponse {
     #[doc="<p>A structure that contains details about the account's password policy.</p>"]
+    #[serde(rename="PasswordPolicy")]
     pub password_policy: PasswordPolicy,
 }
 
@@ -3195,9 +3388,11 @@ impl GetAccountPasswordPolicyResponseDeserializer {
     }
 }
 #[doc="<p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountSummaryResponse {
     #[doc="<p>A set of key value pairs containing information about IAM entity usage and IAM quotas.</p>"]
+    #[serde(rename="SummaryMap")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub summary_map: Option<::std::collections::HashMap<String, i64>>,
 }
 
@@ -3244,9 +3439,10 @@ impl GetAccountSummaryResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetContextKeysForCustomPolicyRequest {
     #[doc="<p>A list of policies for which you want the list of context keys referenced in those policies. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyInputList")]
     pub policy_input_list: Vec<String>,
 }
 
@@ -3268,9 +3464,11 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetContextKeysForPolicyResponse {
     #[doc="<p>The list of context keys that are referenced in the input policies.</p>"]
+    #[serde(rename="ContextKeyNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_key_names: Option<Vec<String>>,
 }
 
@@ -3316,11 +3514,14 @@ impl GetContextKeysForPolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetContextKeysForPrincipalPolicyRequest {
     #[doc="<p>An optional list of additional policies for which you want the list of context keys that are referenced.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyInputList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_input_list: Option<Vec<String>>,
     #[doc="<p>The ARN of a user, group, or role whose policies contain the context keys that you want listed. If you specify a user, the list includes context keys that are found in all policies attached to the user as well as to all groups that the user is a member of. If you pick a group or a role, then it includes only those context keys that are found in policies attached to that entity. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicySourceArn")]
     pub policy_source_arn: String,
 }
 
@@ -3348,13 +3549,23 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetCredentialReport</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCredentialReportResponse {
     #[doc="<p>Contains the credential report. The report is Base64-encoded.</p>"]
+    #[serde(rename="Content")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub content: Option<Vec<u8>>,
     #[doc="<p> The date and time when the credential report was created, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>.</p>"]
+    #[serde(rename="GeneratedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub generated_time: Option<String>,
     #[doc="<p>The format (MIME type) of the credential report.</p>"]
+    #[serde(rename="ReportFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub report_format: Option<String>,
 }
 
@@ -3411,11 +3622,13 @@ impl GetCredentialReportResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGroupPolicyRequest {
     #[doc="<p>The name of the group the policy is associated with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -3438,13 +3651,16 @@ impl GetGroupPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetGroupPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGroupPolicyResponse {
     #[doc="<p>The group the policy is associated with.</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The policy document.</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -3499,13 +3715,18 @@ impl GetGroupPolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGroupRequest {
     #[doc="<p>The name of the group.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
 }
 
@@ -3534,15 +3755,21 @@ impl GetGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetGroup</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetGroupResponse {
     #[doc="<p>A structure that contains details about the group.</p>"]
+    #[serde(rename="Group")]
     pub group: Group,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of users in the group.</p>"]
+    #[serde(rename="Users")]
     pub users: Vec<User>,
 }
 
@@ -3599,9 +3826,10 @@ impl GetGroupResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to get information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
 }
 
@@ -3622,9 +3850,10 @@ impl GetInstanceProfileRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetInstanceProfile</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetInstanceProfileResponse {
     #[doc="<p>A structure containing details about the instance profile.</p>"]
+    #[serde(rename="InstanceProfile")]
     pub instance_profile: InstanceProfile,
 }
 
@@ -3671,9 +3900,10 @@ impl GetInstanceProfileResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLoginProfileRequest {
     #[doc="<p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -3694,9 +3924,10 @@ impl GetLoginProfileRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetLoginProfile</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetLoginProfileResponse {
     #[doc="<p>A structure containing the user name and password create date for the user.</p>"]
+    #[serde(rename="LoginProfile")]
     pub login_profile: LoginProfile,
 }
 
@@ -3742,9 +3973,10 @@ impl GetLoginProfileResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOpenIDConnectProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the OIDC provider resource object in IAM to get information for. You can get a list of OIDC provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
     pub open_id_connect_provider_arn: String,
 }
 
@@ -3765,15 +3997,23 @@ impl GetOpenIDConnectProviderRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetOpenIDConnectProvider</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOpenIDConnectProviderResponse {
     #[doc="<p>A list of client IDs (also known as audiences) that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>"]
+    #[serde(rename="ClientIDList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_id_list: Option<Vec<String>>,
     #[doc="<p>The date and time when the IAM OIDC provider resource object was created in the AWS account.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>A list of certificate thumbprints that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>. </p>"]
+    #[serde(rename="ThumbprintList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thumbprint_list: Option<Vec<String>>,
     #[doc="<p>The URL that the IAM OIDC provider resource object is associated with. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>"]
+    #[serde(rename="Url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
 }
 
@@ -3833,9 +4073,10 @@ impl GetOpenIDConnectProviderResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -3856,9 +4097,11 @@ impl GetPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyResponse {
     #[doc="<p>A structure containing details about the policy.</p>"]
+    #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<Policy>,
 }
 
@@ -3904,11 +4147,13 @@ impl GetPolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>Identifies the policy version to retrieve.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p>"]
+    #[serde(rename="VersionId")]
     pub version_id: String,
 }
 
@@ -3931,9 +4176,11 @@ impl GetPolicyVersionRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetPolicyVersion</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyVersionResponse {
     #[doc="<p>A structure containing details about the policy version.</p>"]
+    #[serde(rename="PolicyVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version: Option<PolicyVersion>,
 }
 
@@ -3980,11 +4227,13 @@ impl GetPolicyVersionResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRolePolicyRequest {
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name of the role associated with the policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -4007,13 +4256,16 @@ impl GetRolePolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetRolePolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRolePolicyResponse {
     #[doc="<p>The policy document.</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The role the policy is associated with.</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -4068,9 +4320,10 @@ impl GetRolePolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRoleRequest {
     #[doc="<p>The name of the IAM role to get information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -4091,9 +4344,10 @@ impl GetRoleRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetRole</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetRoleResponse {
     #[doc="<p>A structure containing details about the IAM role.</p>"]
+    #[serde(rename="Role")]
     pub role: Role,
 }
 
@@ -4138,9 +4392,10 @@ impl GetRoleResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSAMLProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider resource object in IAM to get information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="SAMLProviderArn")]
     pub saml_provider_arn: String,
 }
 
@@ -4161,13 +4416,19 @@ impl GetSAMLProviderRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetSAMLProvider</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSAMLProviderResponse {
     #[doc="<p>The date and time when the SAML provider was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The XML metadata document that includes information about an identity provider.</p>"]
+    #[serde(rename="SAMLMetadataDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_metadata_document: Option<String>,
     #[doc="<p>The expiration date and time for the SAML provider.</p>"]
+    #[serde(rename="ValidUntil")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_until: Option<String>,
 }
 
@@ -4220,13 +4481,16 @@ impl GetSAMLProviderResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSSHPublicKeyRequest {
     #[doc="<p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>"]
+    #[serde(rename="Encoding")]
     pub encoding: String,
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="SSHPublicKeyId")]
     pub ssh_public_key_id: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -4251,9 +4515,11 @@ impl GetSSHPublicKeyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetSSHPublicKey</a> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSSHPublicKeyResponse {
     #[doc="<p>A structure containing details about the SSH public key.</p>"]
+    #[serde(rename="SSHPublicKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssh_public_key: Option<SSHPublicKey>,
 }
 
@@ -4300,9 +4566,10 @@ impl GetSSHPublicKeyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetServerCertificateRequest {
     #[doc="<p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="ServerCertificateName")]
     pub server_certificate_name: String,
 }
 
@@ -4323,9 +4590,10 @@ impl GetServerCertificateRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetServerCertificate</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetServerCertificateResponse {
     #[doc="<p>A structure containing details about the server certificate.</p>"]
+    #[serde(rename="ServerCertificate")]
     pub server_certificate: ServerCertificate,
 }
 
@@ -4372,11 +4640,13 @@ impl GetServerCertificateResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserPolicyRequest {
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name of the user who the policy is associated with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -4399,13 +4669,16 @@ impl GetUserPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetUserPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserPolicyResponse {
     #[doc="<p>The policy document.</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The user the policy is associated with.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -4461,9 +4734,11 @@ impl GetUserPolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserRequest {
     #[doc="<p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -4486,9 +4761,10 @@ impl GetUserRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>GetUser</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetUserResponse {
     #[doc="<p>A structure containing details about the IAM user.</p>"]
+    #[serde(rename="User")]
     pub user: User,
 }
 
@@ -4534,17 +4810,22 @@ impl GetUserResponseDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Group {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the group. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Arn")]
     pub arn: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the group was created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p> The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="GroupId")]
     pub group_id: String,
     #[doc="<p>The friendly name that identifies the group.</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Path")]
     pub path: String,
 }
 
@@ -4604,20 +4885,34 @@ impl GroupDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM group, including all of the group's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GroupDetail {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>A list of the managed policies attached to the group.</p>"]
+    #[serde(rename="AttachedManagedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the group was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>The friendly name that identifies the group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>A list of the inline policies embedded in the group.</p>"]
+    #[serde(rename="GroupPolicyList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_policy_list: Option<Vec<PolicyDetail>>,
     #[doc="<p>The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
 }
 
@@ -4838,19 +5133,25 @@ impl IdTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceProfile {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the instance profile. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Arn")]
     pub arn: String,
     #[doc="<p>The date when the instance profile was created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p> The stable and unique string identifying the instance profile. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="InstanceProfileId")]
     pub instance_profile_id: String,
     #[doc="<p>The name identifying the instance profile.</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
     #[doc="<p> The path to the instance profile. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Path")]
     pub path: String,
     #[doc="<p>The role associated with the instance profile.</p>"]
+    #[serde(rename="Roles")]
     pub roles: Vec<Role>,
 }
 
@@ -4983,13 +5284,19 @@ impl LineNumberDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAccessKeysRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the user.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -5020,13 +5327,18 @@ impl ListAccessKeysRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListAccessKeys</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAccessKeysResponse {
     #[doc="<p>A list of objects containing metadata about the access keys.</p>"]
+    #[serde(rename="AccessKeyMetadata")]
     pub access_key_metadata: Vec<AccessKeyMetadata>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5082,11 +5394,15 @@ impl ListAccessKeysResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAccountAliasesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
 }
 
@@ -5113,13 +5429,18 @@ impl ListAccountAliasesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListAccountAliases</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAccountAliasesResponse {
     #[doc="<p>A list of aliases associated with the account. AWS supports only one alias per account.</p>"]
+    #[serde(rename="AccountAliases")]
     pub account_aliases: Vec<String>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5175,15 +5496,22 @@ impl ListAccountAliasesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedGroupPoliciesRequest {
     #[doc="<p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -5216,13 +5544,19 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListAttachedGroupPolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedGroupPoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
+    #[serde(rename="AttachedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5277,15 +5611,22 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedRolePoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) of the role to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -5318,13 +5659,19 @@ impl ListAttachedRolePoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListAttachedRolePolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedRolePoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
+    #[serde(rename="AttachedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5379,15 +5726,22 @@ impl ListAttachedRolePoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedUserPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) of the user to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -5420,13 +5774,19 @@ impl ListAttachedUserPoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListAttachedUserPolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedUserPoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
+    #[serde(rename="AttachedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5481,17 +5841,26 @@ impl ListAttachedUserPoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEntitiesForPolicyRequest {
     #[doc="<p>The entity type to use for filtering the results.</p> <p>For example, when <code>EntityFilter</code> is <code>Role</code>, only the roles that are attached to the specified policy are returned. This parameter is optional. If it is not included, all attached entities (users, groups, and roles) are returned. The argument for this parameter must be one of the valid values listed below.</p>"]
+    #[serde(rename="EntityFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entity_filter: Option<String>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all entities.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -5528,17 +5897,27 @@ impl ListEntitiesForPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListEntitiesForPolicy</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEntitiesForPolicyResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of IAM groups that the policy is attached to.</p>"]
+    #[serde(rename="PolicyGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_groups: Option<Vec<PolicyGroup>>,
     #[doc="<p>A list of IAM roles that the policy is attached to.</p>"]
+    #[serde(rename="PolicyRoles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_roles: Option<Vec<PolicyRole>>,
     #[doc="<p>A list of IAM users that the policy is attached to.</p>"]
+    #[serde(rename="PolicyUsers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_users: Option<Vec<PolicyUser>>,
 }
 
@@ -5604,13 +5983,18 @@ impl ListEntitiesForPolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupPoliciesRequest {
     #[doc="<p>The name of the group to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
 }
 
@@ -5639,13 +6023,18 @@ impl ListGroupPoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListGroupPolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
+    #[serde(rename="PolicyNames")]
     pub policy_names: Vec<String>,
 }
 
@@ -5701,13 +6090,18 @@ impl ListGroupPoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupsForUserRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the user to list groups for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -5736,13 +6130,18 @@ impl ListGroupsForUserRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListGroupsForUser</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupsForUserResponse {
     #[doc="<p>A list of groups.</p>"]
+    #[serde(rename="Groups")]
     pub groups: Vec<Group>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5797,13 +6196,19 @@ impl ListGroupsForUserResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupsRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/division_abc/subdivision_xyz/</code> gets all groups whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all groups. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -5834,13 +6239,18 @@ impl ListGroupsRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListGroups</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGroupsResponse {
     #[doc="<p>A list of groups.</p>"]
+    #[serde(rename="Groups")]
     pub groups: Vec<Group>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5895,13 +6305,18 @@ impl ListGroupsResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListInstanceProfilesForRoleRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the role to list instance profiles for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -5930,13 +6345,18 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListInstanceProfilesForRole</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListInstanceProfilesForRoleResponse {
     #[doc="<p>A list of instance profiles.</p>"]
+    #[serde(rename="InstanceProfiles")]
     pub instance_profiles: Vec<InstanceProfile>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -5993,13 +6413,19 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListInstanceProfilesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all instance profiles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all instance profiles. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -6030,13 +6456,18 @@ impl ListInstanceProfilesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListInstanceProfiles</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListInstanceProfilesResponse {
     #[doc="<p>A list of instance profiles.</p>"]
+    #[serde(rename="InstanceProfiles")]
     pub instance_profiles: Vec<InstanceProfile>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -6092,13 +6523,19 @@ impl ListInstanceProfilesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMFADevicesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the user whose MFA devices you want to list.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -6129,13 +6566,18 @@ impl ListMFADevicesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListMFADevices</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListMFADevicesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>A list of MFA devices.</p>"]
+    #[serde(rename="MFADevices")]
     pub mfa_devices: Vec<MFADevice>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -6191,7 +6633,7 @@ impl ListMFADevicesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOpenIDConnectProvidersRequest;
 
 
@@ -6210,9 +6652,11 @@ impl ListOpenIDConnectProvidersRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListOpenIDConnectProviders</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOpenIDConnectProvidersResponse {
     #[doc="<p>The list of IAM OIDC provider resource objects defined in the AWS account.</p>"]
+    #[serde(rename="OpenIDConnectProviderList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub open_id_connect_provider_list: Option<Vec<OpenIDConnectProviderListEntry>>,
 }
 
@@ -6258,17 +6702,27 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>A flag to filter the results to only the attached policies.</p> <p>When <code>OnlyAttached</code> is <code>true</code>, the returned list contains only the policies that are attached to an IAM user, group, or role. When <code>OnlyAttached</code> is <code>false</code>, or when the parameter is not included, all policies are returned.</p>"]
+    #[serde(rename="OnlyAttached")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub only_attached: Option<bool>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
     #[doc="<p>The scope to use for filtering the results.</p> <p>To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>. To list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>.</p> <p>This parameter is optional. If it is not included, or if it is set to <code>All</code>, all policies are returned.</p>"]
+    #[serde(rename="Scope")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scope: Option<String>,
 }
 
@@ -6307,13 +6761,19 @@ impl ListPoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListPolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of policies.</p>"]
+    #[serde(rename="Policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Vec<Policy>>,
 }
 
@@ -6369,13 +6829,18 @@ impl ListPoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyVersionsRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
 }
 
@@ -6404,13 +6869,19 @@ impl ListPolicyVersionsRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListPolicyVersions</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyVersionsResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of policy versions.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="Versions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub versions: Option<Vec<PolicyVersion>>,
 }
 
@@ -6464,13 +6935,18 @@ impl ListPolicyVersionsResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRolePoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the role to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -6499,13 +6975,18 @@ impl ListRolePoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListRolePolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRolePoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
+    #[serde(rename="PolicyNames")]
     pub policy_names: Vec<String>,
 }
 
@@ -6561,13 +7042,19 @@ impl ListRolePoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRolesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all roles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all roles. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -6598,13 +7085,18 @@ impl ListRolesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListRoles</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRolesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of roles.</p>"]
+    #[serde(rename="Roles")]
     pub roles: Vec<Role>,
 }
 
@@ -6658,7 +7150,7 @@ impl ListRolesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSAMLProvidersRequest;
 
 
@@ -6677,9 +7169,11 @@ impl ListSAMLProvidersRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListSAMLProviders</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSAMLProvidersResponse {
     #[doc="<p>The list of SAML provider resource objects defined in IAM for this AWS account.</p>"]
+    #[serde(rename="SAMLProviderList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_provider_list: Option<Vec<SAMLProviderListEntry>>,
 }
 
@@ -6726,13 +7220,19 @@ impl ListSAMLProvidersResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSSHPublicKeysRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the IAM user to list SSH public keys for. If none is specified, the UserName field is determined implicitly based on the AWS access key used to sign the request.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -6763,13 +7263,19 @@ impl ListSSHPublicKeysRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListSSHPublicKeys</a> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSSHPublicKeysResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of the SSH public keys assigned to IAM user.</p>"]
+    #[serde(rename="SSHPublicKeys")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssh_public_keys: Option<Vec<SSHPublicKeyMetadata>>,
 }
 
@@ -6825,13 +7331,19 @@ impl ListSSHPublicKeysResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServerCertificatesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example: <code>/company/servercerts</code> would get all server certificates for which the path starts with <code>/company/servercerts</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all server certificates. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -6862,13 +7374,18 @@ impl ListServerCertificatesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListServerCertificates</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServerCertificatesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of server certificates.</p>"]
+    #[serde(rename="ServerCertificateMetadataList")]
     pub server_certificate_metadata_list: Vec<ServerCertificateMetadata>,
 }
 
@@ -6922,11 +7439,15 @@ impl ListServerCertificatesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServiceSpecificCredentialsRequest {
     #[doc="<p>Filters the returned results to only those for the specified AWS service. If not specified, then AWS returns service-specific credentials for all services.</p>"]
+    #[serde(rename="ServiceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_name: Option<String>,
     #[doc="<p>The name of the user whose service-specific credentials you want information about. If this value is not specified then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -6952,9 +7473,11 @@ impl ListServiceSpecificCredentialsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListServiceSpecificCredentialsResponse {
     #[doc="<p>A list of structures that each contain details about a service-specific credential.</p>"]
+    #[serde(rename="ServiceSpecificCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_specific_credentials: Option<Vec<ServiceSpecificCredentialMetadata>>,
 }
 
@@ -7000,13 +7523,19 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSigningCertificatesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the IAM user whose signing certificates you want to examine.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -7037,13 +7566,18 @@ impl ListSigningCertificatesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListSigningCertificates</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSigningCertificatesResponse {
     #[doc="<p>A list of the user's signing certificate information.</p>"]
+    #[serde(rename="Certificates")]
     pub certificates: Vec<SigningCertificate>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -7100,13 +7634,18 @@ impl ListSigningCertificatesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUserPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>The name of the user to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -7135,13 +7674,18 @@ impl ListUserPoliciesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListUserPolicies</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUserPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
+    #[serde(rename="PolicyNames")]
     pub policy_names: Vec<String>,
 }
 
@@ -7197,13 +7741,19 @@ impl ListUserPoliciesResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUsersRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example: <code>/division_abc/subdivision_xyz/</code>, which would get all user names whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all user names. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="PathPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path_prefix: Option<String>,
 }
 
@@ -7234,13 +7784,18 @@ impl ListUsersRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListUsers</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListUsersResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of users.</p>"]
+    #[serde(rename="Users")]
     pub users: Vec<User>,
 }
 
@@ -7294,13 +7849,19 @@ impl ListUsersResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVirtualMFADevicesRequest {
     #[doc="<p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the action defaults to <code>Any</code> which lists both assigned and unassigned virtual MFA devices.</p>"]
+    #[serde(rename="AssignmentStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assignment_status: Option<String>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
 }
 
@@ -7331,13 +7892,18 @@ impl ListVirtualMFADevicesRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>ListVirtualMFADevices</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVirtualMFADevicesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p> The list of virtual MFA devices in the current account that match the <code>AssignmentStatus</code> value that was passed in the request.</p>"]
+    #[serde(rename="VirtualMFADevices")]
     pub virtual_mfa_devices: Vec<VirtualMFADevice>,
 }
 
@@ -7394,13 +7960,17 @@ impl ListVirtualMFADevicesResponseDeserializer {
     }
 }
 #[doc="<p>Contains the user name and password create date for a user.</p> <p> This data type is used as a response element in the <a>CreateLoginProfile</a> and <a>GetLoginProfile</a> actions. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoginProfile {
     #[doc="<p>The date when the password for the user was created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p>Specifies whether the user is required to set a new password on next sign-in.</p>"]
+    #[serde(rename="PasswordResetRequired")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the user, which can be used for signing in to the AWS Management Console.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -7456,13 +8026,16 @@ impl LoginProfileDeserializer {
     }
 }
 #[doc="<p>Contains information about an MFA device.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MFADevice {
     #[doc="<p>The date when the MFA device was enabled for the user.</p>"]
+    #[serde(rename="EnableDate")]
     pub enable_date: String,
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
     #[doc="<p>The user with whom the MFA device is associated.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -7518,28 +8091,50 @@ impl MFADeviceDeserializer {
     }
 }
 #[doc="<p>Contains information about a managed policy, including the policy's ARN, versions, and the number of principal entities (users, groups, and roles) that the policy is attached to.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ManagedPolicyDetail {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The number of principal entities (users, groups, and roles) that the policy is attached to.</p>"]
+    #[serde(rename="AttachmentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_count: Option<i64>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The identifier for the version of the policy that is set as the default (operative) version.</p> <p>For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="DefaultVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_version_id: Option<String>,
     #[doc="<p>A friendly description of the policy.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Specifies whether the policy can be attached to an IAM user, group, or role.</p>"]
+    #[serde(rename="IsAttachable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_attachable: Option<bool>,
     #[doc="<p>The path to the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="PolicyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_id: Option<String>,
     #[doc="<p>The friendly name (not ARN) identifying the policy.</p>"]
+    #[serde(rename="PolicyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
     #[doc="<p>A list containing information about the versions of the policy.</p>"]
+    #[serde(rename="PolicyVersionList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version_list: Option<Vec<PolicyVersion>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was last updated.</p> <p>When a policy has only one version, this field contains the date and time when the policy was created. When a policy has more than one version, this field contains the date and time when the most recent policy version was created.</p>"]
+    #[serde(rename="UpdateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_date: Option<String>,
 }
 
@@ -7754,8 +8349,10 @@ impl MinimumPasswordLengthTypeDeserializer {
     }
 }
 #[doc="<p>Contains the Amazon Resource Name (ARN) for an IAM OpenID Connect provider.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OpenIDConnectProviderListEntry {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
 }
 
@@ -7857,9 +8454,11 @@ impl OpenIDConnectProviderUrlTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about AWS Organizations's affect on a policy simulation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OrganizationsDecisionDetail {
     #[doc="<p>Specifies whether the simulated action is allowed by the AWS Organizations service control policies that impact the simulated user's account.</p>"]
+    #[serde(rename="AllowedByOrganizations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allowed_by_organizations: Option<bool>,
 }
 
@@ -7907,27 +8506,47 @@ impl OrganizationsDecisionDetailDeserializer {
     }
 }
 #[doc="<p>Contains information about the account password policy.</p> <p> This data type is used as a response element in the <a>GetAccountPasswordPolicy</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PasswordPolicy {
     #[doc="<p>Specifies whether IAM users are allowed to change their own password.</p>"]
+    #[serde(rename="AllowUsersToChangePassword")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_users_to_change_password: Option<bool>,
     #[doc="<p>Indicates whether passwords in the account expire. Returns true if MaxPasswordAge is contains a value greater than 0. Returns false if MaxPasswordAge is 0 or not present.</p>"]
+    #[serde(rename="ExpirePasswords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expire_passwords: Option<bool>,
     #[doc="<p>Specifies whether IAM users are prevented from setting a new password after their password has expired.</p>"]
+    #[serde(rename="HardExpiry")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hard_expiry: Option<bool>,
     #[doc="<p>The number of days that an IAM user password is valid.</p>"]
+    #[serde(rename="MaxPasswordAge")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_password_age: Option<i64>,
     #[doc="<p>Minimum length to require for IAM user passwords.</p>"]
+    #[serde(rename="MinimumPasswordLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_password_length: Option<i64>,
     #[doc="<p>Specifies the number of previous passwords that IAM users are prevented from reusing.</p>"]
+    #[serde(rename="PasswordReusePrevention")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_reuse_prevention: Option<i64>,
     #[doc="<p>Specifies whether to require lowercase characters for IAM user passwords.</p>"]
+    #[serde(rename="RequireLowercaseCharacters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_lowercase_characters: Option<bool>,
     #[doc="<p>Specifies whether to require numbers for IAM user passwords.</p>"]
+    #[serde(rename="RequireNumbers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_numbers: Option<bool>,
     #[doc="<p>Specifies whether to require symbols for IAM user passwords.</p>"]
+    #[serde(rename="RequireSymbols")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_symbols: Option<bool>,
     #[doc="<p>Specifies whether to require uppercase characters for IAM user passwords.</p>"]
+    #[serde(rename="RequireUppercaseCharacters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_uppercase_characters: Option<bool>,
 }
 
@@ -8044,26 +8663,46 @@ impl PathTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicy</a>, <a>GetPolicy</a>, and <a>ListPolicies</a> actions. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Policy {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The number of entities (users, groups, and roles) that the policy is attached to.</p>"]
+    #[serde(rename="AttachmentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_count: Option<i64>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The identifier for the version of the policy that is set as the default version.</p>"]
+    #[serde(rename="DefaultVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_version_id: Option<String>,
     #[doc="<p>A friendly description of the policy.</p> <p>This element is included in the response to the <a>GetPolicy</a> operation. It is not included in the response to the <a>ListPolicies</a> operation. </p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Specifies whether the policy can be attached to an IAM user, group, or role.</p>"]
+    #[serde(rename="IsAttachable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_attachable: Option<bool>,
     #[doc="<p>The path to the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="PolicyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_id: Option<String>,
     #[doc="<p>The friendly name (not ARN) identifying the policy.</p>"]
+    #[serde(rename="PolicyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was last updated.</p> <p>When a policy has only one version, this field contains the date and time when the policy was created. When a policy has more than one version, this field contains the date and time when the most recent policy version was created.</p>"]
+    #[serde(rename="UpdateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_date: Option<String>,
 }
 
@@ -8164,11 +8803,15 @@ impl PolicyDescriptionTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM policy, including the policy document.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyDetail {
     #[doc="<p>The policy document.</p>"]
+    #[serde(rename="PolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<String>,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="PolicyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
 }
 
@@ -8331,11 +8974,15 @@ impl PolicyEvaluationDecisionTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> action. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyGroup {
     #[doc="<p>The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
 }
 
@@ -8552,11 +9199,15 @@ impl PolicyPathTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a role that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> action. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyRole {
     #[doc="<p>The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="RoleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the role.</p>"]
+    #[serde(rename="RoleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_name: Option<String>,
 }
 
@@ -8663,11 +9314,15 @@ impl PolicySourceTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a user that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> action. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyUser {
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="UserId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the user.</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -8760,15 +9415,23 @@ impl PolicyUserListTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a version of a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicyVersion</a>, <a>GetPolicyVersion</a>, <a>ListPolicyVersions</a>, and <a>GetAccountAuthorizationDetails</a> actions. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyVersion {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy version was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The policy document.</p> <p>The policy document is returned in the response to the <a>GetPolicyVersion</a> and <a>GetAccountAuthorizationDetails</a> operations. It is not returned in the response to the <a>CreatePolicyVersion</a> or <a>ListPolicyVersions</a> operations. </p>"]
+    #[serde(rename="Document")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document: Option<String>,
     #[doc="<p>Specifies whether the policy version is set as the policy's default version.</p>"]
+    #[serde(rename="IsDefaultVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default_version: Option<bool>,
     #[doc="<p>The identifier for the policy version.</p> <p>Policy version identifiers always begin with <code>v</code> (always lowercase). When a policy is created, the first policy version is <code>v1</code>. </p>"]
+    #[serde(rename="VersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<String>,
 }
 
@@ -8844,11 +9507,15 @@ impl PolicyVersionIdTypeDeserializer {
     }
 }
 #[doc="<p>Contains the row and column of a location of a <code>Statement</code> element in a policy document.</p> <p>This data type is used as a member of the <code> <a>Statement</a> </code> type.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Position {
     #[doc="<p>The column in the line containing the specified position in the document.</p>"]
+    #[serde(rename="Column")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub column: Option<i64>,
     #[doc="<p>The line containing the specified position in the document.</p>"]
+    #[serde(rename="Line")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub line: Option<i64>,
 }
 
@@ -8940,13 +9607,16 @@ impl PublicKeyMaterialTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutGroupPolicyRequest {
     #[doc="<p>The name of the group to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -8970,13 +9640,16 @@ impl PutGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutRolePolicyRequest {
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name of the role to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -9000,13 +9673,16 @@ impl PutRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutUserPolicyRequest {
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The name of the user to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -9030,11 +9706,13 @@ impl PutUserPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
     #[doc="<p>The client ID (also known as audience) to remove from the IAM OIDC provider resource. For more information about client IDs, see <a>CreateOpenIDConnectProvider</a>.</p>"]
+    #[serde(rename="ClientID")]
     pub client_id: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource to remove the client ID from. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
     pub open_id_connect_provider_arn: String,
 }
 
@@ -9058,11 +9736,13 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveRoleFromInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="InstanceProfileName")]
     pub instance_profile_name: String,
     #[doc="<p>The name of the role to remove.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -9084,11 +9764,13 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveUserFromGroupRequest {
     #[doc="<p>The name of the group to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The name of the user to remove.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -9166,11 +9848,14 @@ impl ReportStateTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="ServiceSpecificCredentialId")]
     pub service_specific_credential_id: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -9194,9 +9879,11 @@ impl ResetServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetServiceSpecificCredentialResponse {
     #[doc="<p>A structure with details about the updated service-specific credential, including the new password.</p> <important> <p>This is the <b>only</b> time that you can access the password. You cannot recover the password later, but you can reset it again.</p> </important>"]
+    #[serde(rename="ServiceSpecificCredential")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_specific_credential: Option<ServiceSpecificCredential>,
 }
 
@@ -9269,17 +9956,25 @@ impl ResourceNameTypeDeserializer {
     }
 }
 #[doc="<p>Contains the result of the simulation of a single API action call on a single resource.</p> <p>This data type is used by a member of the <a>EvaluationResult</a> data type.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceSpecificResult {
     #[doc="<p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access.</p>"]
+    #[serde(rename="EvalDecisionDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The result of the simulation of the simulated API action on the resource specified in <code>EvalResourceName</code>.</p>"]
+    #[serde(rename="EvalResourceDecision")]
     pub eval_resource_decision: String,
     #[doc="<p>The name of the simulated resource, in Amazon Resource Name (ARN) format.</p>"]
+    #[serde(rename="EvalResourceName")]
     pub eval_resource_name: String,
     #[doc="<p>A list of the statements in the input policies that determine the result for this part of the simulation. Remember that even if multiple statements allow the action on the resource, if <i>any</i> statement denies that action, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>"]
+    #[serde(rename="MatchedStatements")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matched_statements: Option<Vec<Statement>>,
     #[doc="<p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when a list of ARNs is included in the <code>ResourceArns</code> parameter instead of \"*\". If you do not specify individual resources, by setting <code>ResourceArns</code> to \"*\" or by not including the <code>ResourceArns</code> parameter, then any missing context values are instead included under the <code>EvaluationResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>"]
+    #[serde(rename="MissingContextValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub missing_context_values: Option<Vec<String>>,
 }
 
@@ -9386,15 +10081,19 @@ impl ResourceSpecificResultListTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResyncMFADeviceRequest {
     #[doc="<p>An authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>"]
+    #[serde(rename="AuthenticationCode1")]
     pub authentication_code_1: String,
     #[doc="<p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>"]
+    #[serde(rename="AuthenticationCode2")]
     pub authentication_code_2: String,
     #[doc="<p>Serial number that uniquely identifies the MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
     #[doc="<p>The name of the user whose MFA device you want to resynchronize.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -9421,21 +10120,30 @@ impl ResyncMFADeviceRequestSerializer {
 }
 
 #[doc="<p>Contains information about an IAM role. This structure is returned as a response element in several APIs that interact with roles.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Role {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the role. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i> guide. </p>"]
+    #[serde(rename="Arn")]
     pub arn: String,
     #[doc="<p>The policy that grants an entity permission to assume the role.</p>"]
+    #[serde(rename="AssumeRolePolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assume_role_policy_document: Option<String>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the role was created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p>A description of the role that you provide.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p> The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Path")]
     pub path: String,
     #[doc="<p> The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="RoleId")]
     pub role_id: String,
     #[doc="<p>The friendly name that identifies the role.</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -9519,24 +10227,42 @@ impl RoleDescriptionTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM role, including all of the role's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RoleDetail {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The trust policy that grants permission to assume the role.</p>"]
+    #[serde(rename="AssumeRolePolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assume_role_policy_document: Option<String>,
     #[doc="<p>A list of managed policies attached to the role. These policies are the role's access (permissions) policies.</p>"]
+    #[serde(rename="AttachedManagedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the role was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>A list of instance profiles that contain this role.</p>"]
+    #[serde(rename="InstanceProfileList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_profile_list: Option<Vec<InstanceProfile>>,
     #[doc="<p>The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="RoleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_id: Option<String>,
     #[doc="<p>The friendly name that identifies the role.</p>"]
+    #[serde(rename="RoleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_name: Option<String>,
     #[doc="<p>A list of inline policies embedded in the role. These policies are the role's access (permissions) policies.</p>"]
+    #[serde(rename="RolePolicyList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_policy_list: Option<Vec<PolicyDetail>>,
 }
 
@@ -9726,13 +10452,19 @@ impl SAMLMetadataDocumentTypeDeserializer {
     }
 }
 #[doc="<p>Contains the list of SAML providers for this account.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SAMLProviderListEntry {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider.</p>"]
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The date and time when the SAML provider was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The expiration date and time for the SAML provider.</p>"]
+    #[serde(rename="ValidUntil")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_until: Option<String>,
 }
 
@@ -9828,19 +10560,26 @@ impl SAMLProviderListTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an SSH public key.</p> <p>This data type is used as a response element in the <a>GetSSHPublicKey</a> and <a>UploadSSHPublicKey</a> actions. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SSHPublicKey {
     #[doc="<p>The MD5 message digest of the SSH public key.</p>"]
+    #[serde(rename="Fingerprint")]
     pub fingerprint: String,
     #[doc="<p>The SSH public key.</p>"]
+    #[serde(rename="SSHPublicKeyBody")]
     pub ssh_public_key_body: String,
     #[doc="<p>The unique identifier for the SSH public key.</p>"]
+    #[serde(rename="SSHPublicKeyId")]
     pub ssh_public_key_id: String,
     #[doc="<p>The status of the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>"]
+    #[serde(rename="UploadDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_date: Option<String>,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -9951,15 +10690,19 @@ impl SSHPublicKeyListTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about an SSH public key, without the key's body or fingerprint.</p> <p>This data type is used as a response element in the <a>ListSSHPublicKeys</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SSHPublicKeyMetadata {
     #[doc="<p>The unique identifier for the SSH public key.</p>"]
+    #[serde(rename="SSHPublicKeyId")]
     pub ssh_public_key_id: String,
     #[doc="<p>The status of the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>"]
+    #[serde(rename="UploadDate")]
     pub upload_date: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -10032,13 +10775,17 @@ impl SerialNumberTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a server certificate.</p> <p> This data type is used as a response element in the <a>GetServerCertificate</a> action. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServerCertificate {
     #[doc="<p>The contents of the public key certificate.</p>"]
+    #[serde(rename="CertificateBody")]
     pub certificate_body: String,
     #[doc="<p>The contents of the public key certificate chain.</p>"]
+    #[serde(rename="CertificateChain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_chain: Option<String>,
     #[doc="<p>The meta information of the server certificate, such as its name, path, ID, and ARN.</p>"]
+    #[serde(rename="ServerCertificateMetadata")]
     pub server_certificate_metadata: ServerCertificateMetadata,
 }
 
@@ -10096,19 +10843,27 @@ impl ServerCertificateDeserializer {
     }
 }
 #[doc="<p>Contains information about a server certificate without its certificate body, certificate chain, and private key.</p> <p> This data type is used as a response element in the <a>UploadServerCertificate</a> and <a>ListServerCertificates</a> actions. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServerCertificateMetadata {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the server certificate. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Arn")]
     pub arn: String,
     #[doc="<p>The date on which the certificate is set to expire.</p>"]
+    #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<String>,
     #[doc="<p> The path to the server certificate. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Path")]
     pub path: String,
     #[doc="<p> The stable and unique string identifying the server certificate. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="ServerCertificateId")]
     pub server_certificate_id: String,
     #[doc="<p>The name that identifies the server certificate.</p>"]
+    #[serde(rename="ServerCertificateName")]
     pub server_certificate_name: String,
     #[doc="<p>The date when the server certificate was uploaded.</p>"]
+    #[serde(rename="UploadDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_date: Option<String>,
 }
 
@@ -10258,21 +11013,28 @@ impl ServicePasswordDeserializer {
     }
 }
 #[doc="<p>Contains the details of a service specific credential.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServiceSpecificCredential {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p>The name of the service associated with the service-specific credential.</p>"]
+    #[serde(rename="ServiceName")]
     pub service_name: String,
     #[doc="<p>The generated password for the service-specific credential.</p>"]
+    #[serde(rename="ServicePassword")]
     pub service_password: String,
     #[doc="<p>The unique identifier for the service-specific credential.</p>"]
+    #[serde(rename="ServiceSpecificCredentialId")]
     pub service_specific_credential_id: String,
     #[doc="<p>The generated user name for the service-specific credential. This value is generated by combining the IAM user's name combined with the ID number of the AWS account, as in <code>jane-at-123456789012</code>, for example. This value cannot be configured by the user.</p>"]
+    #[serde(rename="ServiceUserName")]
     pub service_user_name: String,
     #[doc="<p>The status of the service-specific credential. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -10359,19 +11121,25 @@ impl ServiceSpecificCredentialIdDeserializer {
     }
 }
 #[doc="<p>Contains additional details about a service-specific credential.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ServiceSpecificCredentialMetadata {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p>The name of the service associated with the service-specific credential.</p>"]
+    #[serde(rename="ServiceName")]
     pub service_name: String,
     #[doc="<p>The unique identifier for the service-specific credential.</p>"]
+    #[serde(rename="ServiceSpecificCredentialId")]
     pub service_specific_credential_id: String,
     #[doc="<p>The generated user name for the service-specific credential.</p>"]
+    #[serde(rename="ServiceUserName")]
     pub service_user_name: String,
     #[doc="<p>The status of the service-specific credential. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -10495,11 +11263,13 @@ impl ServiceUserNameDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetDefaultPolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy whose default version you want to set.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicyArn")]
     pub policy_arn: String,
     #[doc="<p>The version of the policy to set as the default (operative) version.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
+    #[serde(rename="VersionId")]
     pub version_id: String,
 }
 
@@ -10522,17 +11292,23 @@ impl SetDefaultPolicyVersionRequestSerializer {
 }
 
 #[doc="<p>Contains information about an X.509 signing certificate.</p> <p>This data type is used as a response element in the <a>UploadSigningCertificate</a> and <a>ListSigningCertificates</a> actions. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SigningCertificate {
     #[doc="<p>The contents of the signing certificate.</p>"]
+    #[serde(rename="CertificateBody")]
     pub certificate_body: String,
     #[doc="<p>The ID for the signing certificate.</p>"]
+    #[serde(rename="CertificateId")]
     pub certificate_id: String,
     #[doc="<p>The status of the signing certificate. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The date when the signing certificate was uploaded.</p>"]
+    #[serde(rename="UploadDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_date: Option<String>,
     #[doc="<p>The name of the user the signing certificate is associated with.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -10595,27 +11371,45 @@ impl SigningCertificateDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SimulateCustomPolicyRequest {
     #[doc="<p>A list of names of API actions to evaluate in the simulation. Each action is evaluated against each resource. Each action must include the service identifier, such as <code>iam:CreateUser</code>.</p>"]
+    #[serde(rename="ActionNames")]
     pub action_names: Vec<String>,
     #[doc="<p>The ARN of the IAM user that you want to use as the simulated caller of the APIs. <code>CallerArn</code> is required if you include a <code>ResourcePolicy</code> so that the policy's <code>Principal</code> element has a value to use in evaluating the policy.</p> <p>You can specify only the ARN of an IAM user. You cannot specify the ARN of an assumed role, federated user, or a service principal.</p>"]
+    #[serde(rename="CallerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub caller_arn: Option<String>,
     #[doc="<p>A list of context keys and corresponding values for the simulation to use. Whenever a context key is evaluated in one of the simulated IAM permission policies, the corresponding value is supplied.</p>"]
+    #[serde(rename="ContextEntries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_entries: Option<Vec<ContextEntry>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>A list of policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy. Do not include any resource-based policies in this parameter. Any resource-based policy must be submitted with the <code>ResourcePolicy</code> parameter. The policies cannot be \"scope-down\" policies, such as you could include in a call to <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_GetFederationToken.html\">GetFederationToken</a> or one of the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_AssumeRole.html\">AssumeRole</a> APIs to restrict what a user can do while using the temporary credentials.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyInputList")]
     pub policy_input_list: Vec<String>,
     #[doc="<p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>If you include a <code>ResourcePolicy</code>, then it must be applicable to all of the resources included in the simulation or you receive an invalid input error.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="ResourceArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arns: Option<Vec<String>>,
     #[doc="<p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>"]
+    #[serde(rename="ResourceHandlingOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_handling_option: Option<String>,
     #[doc="<p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>"]
+    #[serde(rename="ResourceOwner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_owner: Option<String>,
     #[doc="<p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="ResourcePolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_policy: Option<String>,
 }
 
@@ -10674,13 +11468,19 @@ impl SimulateCustomPolicyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SimulatePolicyResponse {
     #[doc="<p>The results of the simulation.</p>"]
+    #[serde(rename="EvaluationResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub evaluation_results: Option<Vec<EvaluationResult>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -10734,29 +11534,49 @@ impl SimulatePolicyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SimulatePrincipalPolicyRequest {
     #[doc="<p>A list of names of API actions to evaluate in the simulation. Each action is evaluated for each resource. Each action must include the service identifier, such as <code>iam:CreateUser</code>.</p>"]
+    #[serde(rename="ActionNames")]
     pub action_names: Vec<String>,
     #[doc="<p>The ARN of the IAM user that you want to specify as the simulated caller of the APIs. If you do not specify a <code>CallerArn</code>, it defaults to the ARN of the user that you specify in <code>PolicySourceArn</code>, if you specified a user. If you include both a <code>PolicySourceArn</code> (for example, <code>arn:aws:iam::123456789012:user/David</code>) and a <code>CallerArn</code> (for example, <code>arn:aws:iam::123456789012:user/Bob</code>), the result is that you simulate calling the APIs as Bob, as if Bob had David's policies.</p> <p>You can specify only the ARN of an IAM user. You cannot specify the ARN of an assumed role, federated user, or a service principal.</p> <p> <code>CallerArn</code> is required if you include a <code>ResourcePolicy</code> and the <code>PolicySourceArn</code> is not the ARN for an IAM user. This is required so that the resource-based policy's <code>Principal</code> element has a value to use in evaluating the policy.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="CallerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub caller_arn: Option<String>,
     #[doc="<p>A list of context keys and corresponding values for the simulation to use. Whenever a context key is evaluated in one of the simulated IAM permission policies, the corresponding value is supplied.</p>"]
+    #[serde(rename="ContextEntries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub context_entries: Option<Vec<ContextEntry>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
+    #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<i64>,
     #[doc="<p>An optional list of additional policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyInputList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_input_list: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of a user, group, or role whose policies you want to include in the simulation. If you specify a user, group, or role, the simulation includes all policies that are associated with that entity. If you specify a user, the simulation also includes all policies that are attached to any groups the user belongs to.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="PolicySourceArn")]
     pub policy_source_arn: String,
     #[doc="<p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="ResourceArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arns: Option<Vec<String>>,
     #[doc="<p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>"]
+    #[serde(rename="ResourceHandlingOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_handling_option: Option<String>,
     #[doc="<p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>"]
+    #[serde(rename="ResourceOwner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_owner: Option<String>,
     #[doc="<p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="ResourcePolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_policy: Option<String>,
 }
 
@@ -10833,15 +11653,23 @@ impl SimulationPolicyListTypeSerializer {
 }
 
 #[doc="<p>Contains a reference to a <code>Statement</code> element in a policy document that determines the result of the simulation.</p> <p>This data type is used by the <code>MatchedStatements</code> member of the <code> <a>EvaluationResult</a> </code> type.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Statement {
     #[doc="<p>The row and column of the end of a <code>Statement</code> in an IAM policy.</p>"]
+    #[serde(rename="EndPosition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_position: Option<Position>,
     #[doc="<p>The identifier of the policy that was provided as an input.</p>"]
+    #[serde(rename="SourcePolicyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_policy_id: Option<String>,
     #[doc="<p>The type of the policy.</p>"]
+    #[serde(rename="SourcePolicyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_policy_type: Option<String>,
     #[doc="<p>The row and column of the beginning of the <code>Statement</code> in an IAM policy.</p>"]
+    #[serde(rename="StartPosition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_position: Option<Position>,
 }
 
@@ -11090,13 +11918,17 @@ impl ThumbprintTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAccessKeyRequest {
     #[doc="<p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="AccessKeyId")]
     pub access_key_id: String,
     #[doc="<p> The status you want to assign to the secret access key. <code>Active</code> means the key can be used for API calls to AWS, while <code>Inactive</code> means the key cannot be used.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the user whose key you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -11122,25 +11954,43 @@ impl UpdateAccessKeyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAccountPasswordPolicyRequest {
     #[doc="<p> Allows all IAM users in your account to use the AWS Management Console to change their own passwords. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html\">Letting IAM Users Change Their Own Passwords</a> in the <i>IAM User Guide</i>.</p> <p>Default value: false</p>"]
+    #[serde(rename="AllowUsersToChangePassword")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_users_to_change_password: Option<bool>,
     #[doc="<p>Prevents IAM users from setting a new password after their password has expired.</p> <p>Default value: false</p>"]
+    #[serde(rename="HardExpiry")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hard_expiry: Option<bool>,
     #[doc="<p>The number of days that an IAM user password is valid. The default value of 0 means IAM user passwords never expire.</p> <p>Default value: 0</p>"]
+    #[serde(rename="MaxPasswordAge")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_password_age: Option<i64>,
     #[doc="<p>The minimum number of characters allowed in an IAM user password.</p> <p>Default value: 6</p>"]
+    #[serde(rename="MinimumPasswordLength")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_password_length: Option<i64>,
     #[doc="<p>Specifies the number of previous passwords that IAM users are prevented from reusing. The default value of 0 means IAM users are not prevented from reusing previous passwords.</p> <p>Default value: 0</p>"]
+    #[serde(rename="PasswordReusePrevention")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_reuse_prevention: Option<i64>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one lowercase character from the ISO basic Latin alphabet (a to z).</p> <p>Default value: false</p>"]
+    #[serde(rename="RequireLowercaseCharacters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_lowercase_characters: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one numeric character (0 to 9).</p> <p>Default value: false</p>"]
+    #[serde(rename="RequireNumbers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_numbers: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one of the following non-alphanumeric characters:</p> <p>! @ # $ % ^ &amp;amp; * ( ) _ + - = [ ] { } | '</p> <p>Default value: false</p>"]
+    #[serde(rename="RequireSymbols")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_symbols: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one uppercase character from the ISO basic Latin alphabet (A to Z).</p> <p>Default value: false</p>"]
+    #[serde(rename="RequireUppercaseCharacters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub require_uppercase_characters: Option<bool>,
 }
 
@@ -11194,11 +12044,13 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAssumeRolePolicyRequest {
     #[doc="<p>The policy that grants an entity permission to assume the role.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PolicyDocument")]
     pub policy_document: String,
     #[doc="<p>The name of the role to update with the new policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -11220,13 +12072,18 @@ impl UpdateAssumeRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateGroupRequest {
     #[doc="<p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>New name for the IAM group. Only include this if changing the group's name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="NewGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_group_name: Option<String>,
     #[doc="<p>New path for the IAM group. Only include this if changing the group's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="NewPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_path: Option<String>,
 }
 
@@ -11254,13 +12111,18 @@ impl UpdateGroupRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateLoginProfileRequest {
     #[doc="<p>The new password for the specified IAM user.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D). However, the format can be further restricted by the account administrator by setting a password policy on the AWS account. For more information, see <a>UpdateAccountPasswordPolicy</a>.</p>"]
+    #[serde(rename="Password")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password: Option<String>,
     #[doc="<p>Allows this new password to be used only once by requiring the specified IAM user to set a new password on next sign-in.</p>"]
+    #[serde(rename="PasswordResetRequired")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the user whose password you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -11288,11 +12150,13 @@ impl UpdateLoginProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource object for which you want to update the thumbprint. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="OpenIDConnectProviderArn")]
     pub open_id_connect_provider_arn: String,
     #[doc="<p>A list of certificate thumbprints that are associated with the specified IAM OpenID Connect provider. For more information, see <a>CreateOpenIDConnectProvider</a>. </p>"]
+    #[serde(rename="ThumbprintList")]
     pub thumbprint_list: Vec<String>,
 }
 
@@ -11317,11 +12181,13 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRoleDescriptionRequest {
     #[doc="<p>The new description that you want to apply to the specified role.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>The name of the role that you want to modify.</p>"]
+    #[serde(rename="RoleName")]
     pub role_name: String,
 }
 
@@ -11343,9 +12209,11 @@ impl UpdateRoleDescriptionRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateRoleDescriptionResponse {
     #[doc="<p>A structure that contains details about the modified role.</p>"]
+    #[serde(rename="Role")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<Role>,
 }
 
@@ -11390,11 +12258,13 @@ impl UpdateRoleDescriptionResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSAMLProviderRequest {
     #[doc="<p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p>"]
+    #[serde(rename="SAMLMetadataDocument")]
     pub saml_metadata_document: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider to update.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
+    #[serde(rename="SAMLProviderArn")]
     pub saml_provider_arn: String,
 }
 
@@ -11417,9 +12287,11 @@ impl UpdateSAMLProviderRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>UpdateSAMLProvider</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSAMLProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider that was updated.</p>"]
+    #[serde(rename="SAMLProviderArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_provider_arn: Option<String>,
 }
 
@@ -11466,13 +12338,16 @@ impl UpdateSAMLProviderResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSSHPublicKeyRequest {
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="SSHPublicKeyId")]
     pub ssh_public_key_id: String,
     #[doc="<p>The status to assign to the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -11496,13 +12371,18 @@ impl UpdateSSHPublicKeyRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateServerCertificateRequest {
     #[doc="<p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="NewPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_path: Option<String>,
     #[doc="<p>The new name for the server certificate. Include this only if you are updating the server certificate's name. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="NewServerCertificateName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_server_certificate_name: Option<String>,
     #[doc="<p>The name of the server certificate that you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="ServerCertificateName")]
     pub server_certificate_name: String,
 }
 
@@ -11530,13 +12410,17 @@ impl UpdateServerCertificateRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="ServiceSpecificCredentialId")]
     pub service_specific_credential_id: String,
     #[doc="<p>The status to be assigned to the service-specific credential.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If you do not specify this value, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -11562,13 +12446,17 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSigningCertificateRequest {
     #[doc="<p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
+    #[serde(rename="CertificateId")]
     pub certificate_id: String,
     #[doc="<p> The status you want to assign to the certificate. <code>Active</code> means the certificate can be used for API calls to AWS, while <code>Inactive</code> means the certificate cannot be used.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The name of the IAM user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -11594,13 +12482,18 @@ impl UpdateSigningCertificateRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserRequest {
     #[doc="<p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
+    #[serde(rename="NewPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_path: Option<String>,
     #[doc="<p>New name for the user. Include this parameter only if you're changing the user's name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="NewUserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_user_name: Option<String>,
     #[doc="<p>Name of the user to update. If you're changing the name of the user, this is the original user name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -11628,11 +12521,13 @@ impl UpdateUserRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadSSHPublicKeyRequest {
     #[doc="<p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="SSHPublicKeyBody")]
     pub ssh_public_key_body: String,
     #[doc="<p>The name of the IAM user to associate the SSH public key with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -11655,9 +12550,11 @@ impl UploadSSHPublicKeyRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>UploadSSHPublicKey</a> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadSSHPublicKeyResponse {
     #[doc="<p>Contains information about the SSH public key.</p>"]
+    #[serde(rename="SSHPublicKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ssh_public_key: Option<SSHPublicKey>,
 }
 
@@ -11704,17 +12601,24 @@ impl UploadSSHPublicKeyResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadServerCertificateRequest {
     #[doc="<p>The contents of the public key certificate in PEM-encoded format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="CertificateBody")]
     pub certificate_body: String,
     #[doc="<p>The contents of the certificate chain. This is typically a concatenation of the PEM-encoded public key certificates of the chain.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="CertificateChain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_chain: Option<String>,
     #[doc="<p>The path for the server certificate. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>--path</code> option. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The contents of the private key in PEM-encoded format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="PrivateKey")]
     pub private_key: String,
     #[doc="<p>The name for the server certificate. Do not include the path in this value. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="ServerCertificateName")]
     pub server_certificate_name: String,
 }
 
@@ -11747,9 +12651,11 @@ impl UploadServerCertificateRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>UploadServerCertificate</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadServerCertificateResponse {
     #[doc="<p>The meta information of the uploaded server certificate without its certificate body, certificate chain, and private key.</p>"]
+    #[serde(rename="ServerCertificateMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_certificate_metadata: Option<ServerCertificateMetadata>,
 }
 
@@ -11795,11 +12701,14 @@ impl UploadServerCertificateResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadSigningCertificateRequest {
     #[doc="<p>The contents of the signing certificate.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
+    #[serde(rename="CertificateBody")]
     pub certificate_body: String,
     #[doc="<p>The name of the user the signing certificate is for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
 }
 
@@ -11824,9 +12733,10 @@ impl UploadSigningCertificateRequestSerializer {
 }
 
 #[doc="<p>Contains the response to a successful <a>UploadSigningCertificate</a> request. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadSigningCertificateResponse {
     #[doc="<p>Information about the certificate.</p>"]
+    #[serde(rename="Certificate")]
     pub certificate: SigningCertificate,
 }
 
@@ -11875,19 +12785,26 @@ impl UploadSigningCertificateResponseDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct User {
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
+    #[serde(rename="Arn")]
     pub arn: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user was created.</p>"]
+    #[serde(rename="CreateDate")]
     pub create_date: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. This field is null (not present) when:</p> <ul> <li> <p>The user does not have a password</p> </li> <li> <p>The password exists but has never been used (at least not since IAM started tracking this information on October 20th, 2014</p> </li> <li> <p>there is no sign-in data associated with the user</p> </li> </ul> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> actions. </p>"]
+    #[serde(rename="PasswordLastUsed")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_last_used: Option<String>,
     #[doc="<p>The path to the user. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
     pub path: String,
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="UserId")]
     pub user_id: String,
     #[doc="<p>The friendly name identifying the user.</p>"]
+    #[serde(rename="UserName")]
     pub user_name: String,
 }
 
@@ -11952,22 +12869,38 @@ impl UserDeserializer {
     }
 }
 #[doc="<p>Contains information about an IAM user, including all the user's policies and all the IAM groups the user is in.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserDetail {
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>A list of the managed policies attached to the user.</p>"]
+    #[serde(rename="AttachedManagedPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>A list of IAM groups that the user is in.</p>"]
+    #[serde(rename="GroupList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_list: Option<Vec<String>>,
     #[doc="<p>The path to the user. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
+    #[serde(rename="UserId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id: Option<String>,
     #[doc="<p>The friendly name identifying the user.</p>"]
+    #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<String>,
     #[doc="<p>A list of the inline policies embedded in the user.</p>"]
+    #[serde(rename="UserPolicyList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_policy_list: Option<Vec<PolicyDetail>>,
 }
 
@@ -12138,17 +13071,34 @@ impl UserNameTypeDeserializer {
     }
 }
 #[doc="<p>Contains information about a virtual MFA device.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VirtualMFADevice {
     #[doc="<p> The Base32 seed defined as specified in <a href=\"https://tools.ietf.org/html/rfc3548.txt\">RFC3548</a>. The <code>Base32StringSeed</code> is Base64-encoded. </p>"]
+    #[serde(rename="Base32StringSeed")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub base_32_string_seed: Option<Vec<u8>>,
     #[doc="<p>The date and time on which the virtual MFA device was enabled.</p>"]
+    #[serde(rename="EnableDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_date: Option<String>,
     #[doc="<p> A QR code PNG image that encodes <code>otpauth://totp/$virtualMFADeviceName@$AccountName?secret=$Base32String</code> where <code>$virtualMFADeviceName</code> is one of the create call arguments, <code>AccountName</code> is the user name if set (otherwise, the account ID otherwise), and <code>Base32String</code> is the seed in Base32 format. The <code>Base32String</code> value is Base64-encoded. </p>"]
+    #[serde(rename="QRCodePNG")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub qr_code_png: Option<Vec<u8>>,
     #[doc="<p>The serial number associated with <code>VirtualMFADevice</code>.</p>"]
+    #[serde(rename="SerialNumber")]
     pub serial_number: String,
     #[doc="<p>The IAM user associated with this virtual MFA device.</p>"]
+    #[serde(rename="User")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<User>,
 }
 

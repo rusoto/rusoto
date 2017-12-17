@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptPortfolioShareInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -39,11 +39,11 @@ pub struct AcceptPortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptPortfolioShareOutput;
 
 #[doc="<p>The access level to limit results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccessLevelFilter {
     #[doc="<p>Specifies the access level.</p> <p> <code>Account</code> allows results at the account level. </p> <p> <code>Role</code> allows results based on the federated role of the specified user.</p> <p> <code>User</code> allows results limited to the specified user. </p>"]
     #[serde(rename="Key")]
@@ -55,7 +55,7 @@ pub struct AccessLevelFilter {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociatePrincipalWithPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -72,10 +72,10 @@ pub struct AssociatePrincipalWithPortfolioInput {
     pub principal_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociatePrincipalWithPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateProductWithPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -93,10 +93,10 @@ pub struct AssociateProductWithPortfolioInput {
     pub source_portfolio_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateProductWithPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateTagOptionWithResourceInput {
     #[doc="<p>The resource identifier.</p>"]
     #[serde(rename="ResourceId")]
@@ -106,11 +106,11 @@ pub struct AssociateTagOptionWithResourceInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateTagOptionWithResourceOutput;
 
 #[doc="<p>Detailed constraint information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConstraintDetail {
     #[doc="<p>The identifier of the constraint.</p>"]
     #[serde(rename="ConstraintId")]
@@ -131,7 +131,7 @@ pub struct ConstraintDetail {
 }
 
 #[doc="<p>An administrator-specified constraint to apply when provisioning a product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConstraintSummary {
     #[doc="<p>The text description of the constraint.</p>"]
     #[serde(rename="Description")]
@@ -143,7 +143,7 @@ pub struct ConstraintSummary {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConstraintInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -170,7 +170,7 @@ pub struct CreateConstraintInput {
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateConstraintOutput {
     #[doc="<p>The resulting detailed constraint information.</p>"]
     #[serde(rename="ConstraintDetail")]
@@ -186,7 +186,7 @@ pub struct CreateConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -211,7 +211,7 @@ pub struct CreatePortfolioInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePortfolioOutput {
     #[doc="<p>The resulting detailed portfolio information.</p>"]
     #[serde(rename="PortfolioDetail")]
@@ -223,7 +223,7 @@ pub struct CreatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePortfolioShareInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -237,10 +237,10 @@ pub struct CreatePortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePortfolioShareOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -287,7 +287,7 @@ pub struct CreateProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProductOutput {
     #[doc="<p>The resulting detailed product view information.</p>"]
     #[serde(rename="ProductViewDetail")]
@@ -303,7 +303,7 @@ pub struct CreateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProvisioningArtifactInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -320,7 +320,7 @@ pub struct CreateProvisioningArtifactInput {
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateProvisioningArtifactOutput {
     #[doc="<p>Additional information about the creation request for the provisioning artifact.</p>"]
     #[serde(rename="Info")]
@@ -336,7 +336,7 @@ pub struct CreateProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagOptionInput {
     #[doc="<p>The TagOption key.</p>"]
     #[serde(rename="Key")]
@@ -346,7 +346,7 @@ pub struct CreateTagOptionInput {
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagOptionOutput {
     #[doc="<p>The resulting detailed TagOption information.</p>"]
     #[serde(rename="TagOptionDetail")]
@@ -354,7 +354,7 @@ pub struct CreateTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConstraintInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -365,10 +365,10 @@ pub struct DeleteConstraintInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConstraintOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -379,10 +379,10 @@ pub struct DeletePortfolioInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePortfolioShareInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -396,10 +396,10 @@ pub struct DeletePortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePortfolioShareOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -410,10 +410,10 @@ pub struct DeleteProductInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProductOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProvisioningArtifactInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -427,10 +427,10 @@ pub struct DeleteProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteProvisioningArtifactOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConstraintInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -441,7 +441,7 @@ pub struct DescribeConstraintInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConstraintOutput {
     #[doc="<p>Detailed constraint information.</p>"]
     #[serde(rename="ConstraintDetail")]
@@ -457,7 +457,7 @@ pub struct DescribeConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -468,7 +468,7 @@ pub struct DescribePortfolioInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePortfolioOutput {
     #[doc="<p>Detailed portfolio information.</p>"]
     #[serde(rename="PortfolioDetail")]
@@ -484,7 +484,7 @@ pub struct DescribePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductAsAdminInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -495,7 +495,7 @@ pub struct DescribeProductAsAdminInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductAsAdminOutput {
     #[doc="<p>Detailed product view information.</p>"]
     #[serde(rename="ProductViewDetail")]
@@ -515,7 +515,7 @@ pub struct DescribeProductAsAdminOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -526,7 +526,7 @@ pub struct DescribeProductInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductOutput {
     #[doc="<p>The summary metadata about the specified product.</p>"]
     #[serde(rename="ProductViewSummary")]
@@ -538,7 +538,7 @@ pub struct DescribeProductOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductViewInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -549,7 +549,7 @@ pub struct DescribeProductViewInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProductViewOutput {
     #[doc="<p>The summary metadata about the specified product.</p>"]
     #[serde(rename="ProductViewSummary")]
@@ -561,7 +561,7 @@ pub struct DescribeProductViewOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisionedProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -572,7 +572,7 @@ pub struct DescribeProvisionedProductInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisionedProductOutput {
     #[doc="<p>Detailed provisioned product information.</p>"]
     #[serde(rename="ProvisionedProductDetail")]
@@ -580,7 +580,7 @@ pub struct DescribeProvisionedProductOutput {
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisioningArtifactInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -598,7 +598,7 @@ pub struct DescribeProvisioningArtifactInput {
     pub verbose: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisioningArtifactOutput {
     #[doc="<p>Additional information about the provisioning artifact.</p>"]
     #[serde(rename="Info")]
@@ -614,7 +614,7 @@ pub struct DescribeProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisioningParametersInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -632,7 +632,7 @@ pub struct DescribeProvisioningParametersInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeProvisioningParametersOutput {
     #[doc="<p>The list of constraint summaries that apply to provisioning this product.</p>"]
     #[serde(rename="ConstraintSummaries")]
@@ -652,7 +652,7 @@ pub struct DescribeProvisioningParametersOutput {
     pub usage_instructions: Option<Vec<UsageInstruction>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRecordInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -671,7 +671,7 @@ pub struct DescribeRecordInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRecordOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -687,14 +687,14 @@ pub struct DescribeRecordOutput {
     pub record_outputs: Option<Vec<RecordOutput>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagOptionInput {
     #[doc="<p>The identifier of the TagOption.</p>"]
     #[serde(rename="Id")]
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagOptionOutput {
     #[doc="<p>The resulting detailed TagOption information.</p>"]
     #[serde(rename="TagOptionDetail")]
@@ -702,7 +702,7 @@ pub struct DescribeTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -716,10 +716,10 @@ pub struct DisassociatePrincipalFromPortfolioInput {
     pub principal_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociatePrincipalFromPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateProductFromPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -733,10 +733,10 @@ pub struct DisassociateProductFromPortfolioInput {
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateProductFromPortfolioOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateTagOptionFromResourceInput {
     #[doc="<p>Identifier of the resource from which to disassociate the TagOption.</p>"]
     #[serde(rename="ResourceId")]
@@ -746,11 +746,11 @@ pub struct DisassociateTagOptionFromResourceInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput;
 
 #[doc="<p>Summary information about a path for a user to have access to a specified product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchPathSummary {
     #[doc="<p>List of constraints on the portfolio-product relationship.</p>"]
     #[serde(rename="ConstraintSummaries")]
@@ -770,7 +770,7 @@ pub struct LaunchPathSummary {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAcceptedPortfolioSharesInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -786,7 +786,7 @@ pub struct ListAcceptedPortfolioSharesInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAcceptedPortfolioSharesOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -798,7 +798,7 @@ pub struct ListAcceptedPortfolioSharesOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConstraintsForPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -821,7 +821,7 @@ pub struct ListConstraintsForPortfolioInput {
     pub product_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListConstraintsForPortfolioOutput {
     #[doc="<p>List of detailed constraint information objects.</p>"]
     #[serde(rename="ConstraintDetails")]
@@ -833,7 +833,7 @@ pub struct ListConstraintsForPortfolioOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLaunchPathsInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -852,7 +852,7 @@ pub struct ListLaunchPathsInput {
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListLaunchPathsOutput {
     #[doc="<p>List of launch path information summaries for the specified <code>PageToken</code>.</p>"]
     #[serde(rename="LaunchPathSummaries")]
@@ -864,7 +864,7 @@ pub struct ListLaunchPathsOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfolioAccessInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -875,7 +875,7 @@ pub struct ListPortfolioAccessInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfolioAccessOutput {
     #[doc="<p>List of account IDs associated with access to the portfolio.</p>"]
     #[serde(rename="AccountIds")]
@@ -887,7 +887,7 @@ pub struct ListPortfolioAccessOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfoliosForProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -906,7 +906,7 @@ pub struct ListPortfoliosForProductInput {
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfoliosForProductOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -918,7 +918,7 @@ pub struct ListPortfoliosForProductOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfoliosInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -934,7 +934,7 @@ pub struct ListPortfoliosInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPortfoliosOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -946,7 +946,7 @@ pub struct ListPortfoliosOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalsForPortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -965,7 +965,7 @@ pub struct ListPrincipalsForPortfolioInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPrincipalsForPortfolioOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -977,7 +977,7 @@ pub struct ListPrincipalsForPortfolioOutput {
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProvisioningArtifactsInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -988,7 +988,7 @@ pub struct ListProvisioningArtifactsInput {
     pub product_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListProvisioningArtifactsOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -1000,7 +1000,7 @@ pub struct ListProvisioningArtifactsOutput {
     pub provisioning_artifact_details: Option<Vec<ProvisioningArtifactDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRecordHistoryInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1024,7 +1024,7 @@ pub struct ListRecordHistoryInput {
     pub search_filter: Option<ListRecordHistorySearchFilter>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRecordHistoryOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -1037,7 +1037,7 @@ pub struct ListRecordHistoryOutput {
 }
 
 #[doc="<p>The search filter to limit results when listing request history records.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRecordHistorySearchFilter {
     #[doc="<p>The filter key.</p>"]
     #[serde(rename="Key")]
@@ -1049,7 +1049,7 @@ pub struct ListRecordHistorySearchFilter {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourcesForTagOptionInput {
     #[doc="<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"]
     #[serde(rename="PageSize")]
@@ -1068,7 +1068,7 @@ pub struct ListResourcesForTagOptionInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourcesForTagOptionOutput {
     #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
     #[serde(rename="PageToken")]
@@ -1081,7 +1081,7 @@ pub struct ListResourcesForTagOptionOutput {
 }
 
 #[doc="<p>The ListTagOptions filters.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagOptionsFilters {
     #[doc="<p>The ListTagOptionsFilters active state.</p>"]
     #[serde(rename="Active")]
@@ -1097,7 +1097,7 @@ pub struct ListTagOptionsFilters {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagOptionsInput {
     #[doc="<p>The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. </p>"]
     #[serde(rename="Filters")]
@@ -1113,7 +1113,7 @@ pub struct ListTagOptionsInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagOptionsOutput {
     #[doc="<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>"]
     #[serde(rename="PageToken")]
@@ -1126,7 +1126,7 @@ pub struct ListTagOptionsOutput {
 }
 
 #[doc="<p>The constraints that the administrator has put on the parameter.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterConstraints {
     #[doc="<p>The values that the administrator has allowed for the parameter.</p>"]
     #[serde(rename="AllowedValues")]
@@ -1135,7 +1135,7 @@ pub struct ParameterConstraints {
 }
 
 #[doc="<p>Detailed portfolio information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PortfolioDetail {
     #[doc="<p>The ARN assigned to the portfolio.</p>"]
     #[serde(rename="ARN")]
@@ -1164,7 +1164,7 @@ pub struct PortfolioDetail {
 }
 
 #[doc="<p>A principal's ARN and type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Principal {
     #[doc="<p>The ARN representing the principal (IAM user, role, or group).</p>"]
     #[serde(rename="PrincipalARN")]
@@ -1177,7 +1177,7 @@ pub struct Principal {
 }
 
 #[doc="<p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProductViewAggregationValue {
     #[doc="<p>An approximate count of the products that match the value.</p>"]
     #[serde(rename="ApproximateCount")]
@@ -1190,7 +1190,7 @@ pub struct ProductViewAggregationValue {
 }
 
 #[doc="<p>Detailed product view information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProductViewDetail {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
@@ -1211,7 +1211,7 @@ pub struct ProductViewDetail {
 }
 
 #[doc="<p>The summary metadata about the specified product.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProductViewSummary {
     #[doc="<p>The distributor of the product. Contact the product administrator for the significance of this value.</p>"]
     #[serde(rename="Distributor")]
@@ -1259,7 +1259,7 @@ pub struct ProductViewSummary {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisionProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1295,7 +1295,7 @@ pub struct ProvisionProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisionProductOutput {
     #[doc="<p>The detailed result of the <a>ProvisionProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object of the request, and a list of any errors that the request encountered. </p>"]
     #[serde(rename="RecordDetail")]
@@ -1304,7 +1304,7 @@ pub struct ProvisionProductOutput {
 }
 
 #[doc="<p>Detailed information about a ProvisionedProduct object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisionedProductDetail {
     #[doc="<p>The ARN associated with the ProvisionedProduct object.</p>"]
     #[serde(rename="Arn")]
@@ -1345,7 +1345,7 @@ pub struct ProvisionedProductDetail {
 }
 
 #[doc="<p>Contains information indicating the ways in which a product can be provisioned.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningArtifact {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
@@ -1366,7 +1366,7 @@ pub struct ProvisioningArtifact {
 }
 
 #[doc="<p>Detailed provisioning artifact information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningArtifactDetail {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
@@ -1391,7 +1391,7 @@ pub struct ProvisioningArtifactDetail {
 }
 
 #[doc="<p>A parameter used to successfully provision the product. This value includes a list of allowable values and additional metadata. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningArtifactParameter {
     #[doc="<p>The default value for this parameter.</p>"]
     #[serde(rename="DefaultValue")]
@@ -1420,7 +1420,7 @@ pub struct ProvisioningArtifactParameter {
 }
 
 #[doc="<p>Provisioning artifact properties. For example request JSON, see <a>CreateProvisioningArtifact</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningArtifactProperties {
     #[doc="<p>The text description of the provisioning artifact properties.</p>"]
     #[serde(rename="Description")]
@@ -1440,7 +1440,7 @@ pub struct ProvisioningArtifactProperties {
 }
 
 #[doc="<p>Stores summary information about a provisioning artifact.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningArtifactSummary {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
@@ -1465,7 +1465,7 @@ pub struct ProvisioningArtifactSummary {
 }
 
 #[doc="<p>The parameter key-value pairs used to provision a product.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisioningParameter {
     #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
     #[serde(rename="Key")]
@@ -1478,7 +1478,7 @@ pub struct ProvisioningParameter {
 }
 
 #[doc="<p>The full details of a specific ProvisionedProduct object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordDetail {
     #[doc="<p>The UTC timestamp of the creation time.</p>"]
     #[serde(rename="CreatedTime")]
@@ -1535,7 +1535,7 @@ pub struct RecordDetail {
 }
 
 #[doc="<p>The error code and description resulting from an operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordError {
     #[doc="<p>The numeric value of the error.</p>"]
     #[serde(rename="Code")]
@@ -1548,7 +1548,7 @@ pub struct RecordError {
 }
 
 #[doc="<p>An output for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordOutput {
     #[doc="<p>The text description of the output.</p>"]
     #[serde(rename="Description")]
@@ -1565,7 +1565,7 @@ pub struct RecordOutput {
 }
 
 #[doc="<p>A tag associated with the record, stored as a key-value pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordTag {
     #[doc="<p>The key for this tag.</p>"]
     #[serde(rename="Key")]
@@ -1577,7 +1577,7 @@ pub struct RecordTag {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectPortfolioShareInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1588,11 +1588,11 @@ pub struct RejectPortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectPortfolioShareOutput;
 
 #[doc="<p>Detailed resource information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceDetail {
     #[doc="<p>ARN of the resource.</p>"]
     #[serde(rename="ARN")]
@@ -1616,7 +1616,7 @@ pub struct ResourceDetail {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScanProvisionedProductsInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1636,7 +1636,7 @@ pub struct ScanProvisionedProductsInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScanProvisionedProductsOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -1648,7 +1648,7 @@ pub struct ScanProvisionedProductsOutput {
     pub provisioned_products: Option<Vec<ProvisionedProductDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchProductsAsAdminInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1684,7 +1684,7 @@ pub struct SearchProductsAsAdminInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchProductsAsAdminOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -1696,7 +1696,7 @@ pub struct SearchProductsAsAdminOutput {
     pub product_view_details: Option<Vec<ProductViewDetail>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchProductsInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1724,7 +1724,7 @@ pub struct SearchProductsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SearchProductsOutput {
     #[doc="<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextPageToken")]
@@ -1753,7 +1753,7 @@ pub struct Tag {
 }
 
 #[doc="<p>The TagOption details.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagOptionDetail {
     #[doc="<p>The TagOptionDetail active state.</p>"]
     #[serde(rename="Active")]
@@ -1774,7 +1774,7 @@ pub struct TagOptionDetail {
 }
 
 #[doc="<p>The TagOption summary key-value pair.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagOptionSummary {
     #[doc="<p>The TagOptionSummary key.</p>"]
     #[serde(rename="Key")]
@@ -1786,7 +1786,7 @@ pub struct TagOptionSummary {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateProvisionedProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1809,7 +1809,7 @@ pub struct TerminateProvisionedProductInput {
     pub terminate_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateProvisionedProductOutput {
     #[doc="<p>The detailed result of the <a>TerminateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>"]
     #[serde(rename="RecordDetail")]
@@ -1817,7 +1817,7 @@ pub struct TerminateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConstraintInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1832,7 +1832,7 @@ pub struct UpdateConstraintInput {
     pub id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateConstraintOutput {
     #[doc="<p>The resulting detailed constraint information.</p>"]
     #[serde(rename="ConstraintDetail")]
@@ -1848,7 +1848,7 @@ pub struct UpdateConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePortfolioInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1879,7 +1879,7 @@ pub struct UpdatePortfolioInput {
     pub remove_tags: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePortfolioOutput {
     #[doc="<p>The resulting detailed portfolio information.</p>"]
     #[serde(rename="PortfolioDetail")]
@@ -1891,7 +1891,7 @@ pub struct UpdatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1938,7 +1938,7 @@ pub struct UpdateProductInput {
     pub support_url: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProductOutput {
     #[doc="<p>The resulting detailed product view information.</p>"]
     #[serde(rename="ProductViewDetail")]
@@ -1950,7 +1950,7 @@ pub struct UpdateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProvisionedProductInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -1985,7 +1985,7 @@ pub struct UpdateProvisionedProductInput {
     pub update_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProvisionedProductOutput {
     #[doc="<p>The detailed result of the <a>UpdateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>"]
     #[serde(rename="RecordDetail")]
@@ -1993,7 +1993,7 @@ pub struct UpdateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProvisioningArtifactInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -2015,7 +2015,7 @@ pub struct UpdateProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProvisioningArtifactOutput {
     #[doc="<p>Additional information about the provisioning artifact update request.</p>"]
     #[serde(rename="Info")]
@@ -2032,7 +2032,7 @@ pub struct UpdateProvisioningArtifactOutput {
 }
 
 #[doc="<p>The parameter key-value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateProvisioningParameter {
     #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
     #[serde(rename="Key")]
@@ -2048,7 +2048,7 @@ pub struct UpdateProvisioningParameter {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTagOptionInput {
     #[doc="<p>The updated active state.</p>"]
     #[serde(rename="Active")]
@@ -2063,7 +2063,7 @@ pub struct UpdateTagOptionInput {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTagOptionOutput {
     #[doc="<p>The resulting detailed TagOption information.</p>"]
     #[serde(rename="TagOptionDetail")]
@@ -2072,7 +2072,7 @@ pub struct UpdateTagOptionOutput {
 }
 
 #[doc="<p>Additional information provided by the administrator.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsageInstruction {
     #[doc="<p>The usage instruction type for the value.</p>"]
     #[serde(rename="Type")]

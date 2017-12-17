@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Button {
     #[doc="<p>Text that is visible to the user on the button.</p>"]
     #[serde(rename="text")]
@@ -40,7 +40,7 @@ pub struct Button {
 }
 
 #[doc="<p>Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenericAttachment {
     #[doc="<p>The URL of an attachment to the response card.</p>"]
     #[serde(rename="attachmentLinkUrl")]
@@ -64,7 +64,7 @@ pub struct GenericAttachment {
     pub title: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PostContentRequest {
     #[doc="<p> You pass this value as the <code>Accept</code> HTTP header. </p> <p> The message Amazon Lex returns in the response can be either text or speech based on the <code>Accept</code> HTTP header value in the request. </p> <ul> <li> <p> If the value is <code>text/plain; charset=utf-8</code>, Amazon Lex returns text in the response. </p> </li> <li> <p> If the value begins with <code>audio/</code>, Amazon Lex returns speech in the response. Amazon Lex uses Amazon Polly to generate the speech (using the configuration you specified in the <code>Accept</code> header). For example, if you specify <code>audio/mpeg</code> as the value, Amazon Lex returns speech in the MPEG format.</p> <p>The following are the accepted values:</p> <ul> <li> <p>audio/mpeg</p> </li> <li> <p>audio/ogg</p> </li> <li> <p>audio/pcm</p> </li> <li> <p>text/plain; charset=utf-8</p> </li> <li> <p>audio/* (defaults to mpeg)</p> </li> </ul> </li> </ul>"]
     #[serde(rename="accept")]
@@ -96,29 +96,51 @@ pub struct PostContentRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PostContentResponse {
     #[doc="<p>The prompt (or statement) to convey to the user. This is based on the bot configuration and context. For example, if Amazon Lex did not understand the user intent, it sends the <code>clarificationPrompt</code> configured for the bot. If the intent requires confirmation before taking the fulfillment action, it sends the <code>confirmationPrompt</code>. Another example: Suppose that the Lambda function successfully fulfilled the intent, and sent a message to convey to the user. Then Amazon Lex sends that message in the response. </p>"]
+    #[serde(rename="audioStream")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub audio_stream: Option<Vec<u8>>,
     #[doc="<p>Content type as specified in the <code>Accept</code> HTTP header in the request.</p>"]
+    #[serde(rename="contentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_type: Option<String>,
     #[doc="<p>Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> – Amazon Lex wants to elicit the user's intent. Consider the following examples: </p> <p> For example, a user might utter an intent (\"I want to order a pizza\"). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialog state. </p> </li> <li> <p> <code>ConfirmIntent</code> – Amazon Lex is expecting a \"yes\" or \"no\" response. </p> <p>For example, Amazon Lex wants user confirmation before fulfilling an intent. Instead of a simple \"yes\" or \"no\" response, a user might respond with additional information. For example, \"yes, but make it a thick crust pizza\" or \"no, I want to order a drink.\" Amazon Lex can process such additional information (in these examples, update the crust type slot or change the intent from OrderPizza to OrderDrink). </p> </li> <li> <p> <code>ElicitSlot</code> – Amazon Lex is expecting the value of a slot for the current intent. </p> <p> For example, suppose that in the response Amazon Lex sends this message: \"What size pizza would you like?\". A user might reply with the slot value (e.g., \"medium\"). The user might also provide additional information in the response (e.g., \"medium thick crust pizza\"). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> – Conveys that the Lambda function has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> – Conveys that the client has to fullfill the request. </p> </li> <li> <p> <code>Failed</code> – Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons, including that the user does not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or if the Lambda function fails to fulfill the intent. </p> </li> </ul>"]
+    #[serde(rename="dialogState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dialog_state: Option<String>,
     #[doc="<p>Transcript of the voice input to the operation.</p>"]
+    #[serde(rename="inputTranscript")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_transcript: Option<String>,
     #[doc="<p>Current user intent that Amazon Lex is aware of.</p>"]
+    #[serde(rename="intentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub intent_name: Option<String>,
     #[doc="<p> Message to convey to the user. It can come from the bot's configuration or a code hook (Lambda function). If the current intent is not configured with a code hook or if the code hook returned <code>Delegate</code> as the <code>dialogAction.type</code> in its response, then Amazon Lex decides the next course of action and selects an appropriate message from the bot configuration based on the current user interaction context. For example, if Amazon Lex is not able to understand the user input, it uses a clarification prompt message (For more information, see the Error Handling section in the Amazon Lex console). Another example: if the intent requires confirmation before fulfillment, then Amazon Lex uses the confirmation prompt message in the intent configuration. If the code hook returns a message, Amazon Lex passes it as-is in its response to the client. </p>"]
+    #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p> Map of key/value pairs representing the session-specific context information. </p>"]
+    #[serde(rename="sessionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub session_attributes: Option<String>,
     #[doc="<p> If the <code>dialogState</code> value is <code>ElicitSlot</code>, returns the name of the slot for which Amazon Lex is eliciting a value. </p>"]
+    #[serde(rename="slotToElicit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slot_to_elicit: Option<String>,
     #[doc="<p>Map of zero or more intent slots (name/value pairs) Amazon Lex detected from the user input during the conversation.</p>"]
+    #[serde(rename="slots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slots: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PostTextRequest {
     #[doc="<p>The alias of the Amazon Lex bot.</p>"]
     #[serde(rename="botAlias")]
@@ -138,7 +160,7 @@ pub struct PostTextRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PostTextResponse {
     #[doc="<p> Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> – Amazon Lex wants to elicit user intent. </p> <p>For example, a user might utter an intent (\"I want to order a pizza\"). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialogState.</p> </li> <li> <p> <code>ConfirmIntent</code> – Amazon Lex is expecting a \"yes\" or \"no\" response. </p> <p> For example, Amazon Lex wants user confirmation before fulfilling an intent. </p> <p>Instead of a simple \"yes\" or \"no,\" a user might respond with additional information. For example, \"yes, but make it thick crust pizza\" or \"no, I want to order a drink\". Amazon Lex can process such additional information (in these examples, update the crust type slot value, or change intent from OrderPizza to OrderDrink).</p> </li> <li> <p> <code>ElicitSlot</code> – Amazon Lex is expecting a slot value for the current intent. </p> <p>For example, suppose that in the response Amazon Lex sends this message: \"What size pizza would you like?\". A user might reply with the slot value (e.g., \"medium\"). The user might also provide additional information in the response (e.g., \"medium thick crust pizza\"). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> – Conveys that the Lambda function configured for the intent has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> – Conveys that the client has to fulfill the intent. </p> </li> <li> <p> <code>Failed</code> – Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons including that the user did not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or the Lambda function failed to fulfill the intent. </p> </li> </ul>"]
     #[serde(rename="dialogState")]
@@ -171,7 +193,7 @@ pub struct PostTextResponse {
 }
 
 #[doc="<p>If you configure a response card when creating your bots, Amazon Lex substitutes the session attributes and slot values that are available, and then returns it. The response card can also come from a Lambda function ( <code>dialogCodeHook</code> and <code>fulfillmentActivity</code> on an intent).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResponseCard {
     #[doc="<p>The content type of the response.</p>"]
     #[serde(rename="contentType")]

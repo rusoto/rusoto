@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchMeterUsageRequest {
     #[doc="<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>"]
     #[serde(rename="ProductCode")]
@@ -40,7 +40,7 @@ pub struct BatchMeterUsageRequest {
 }
 
 #[doc="<p>Contains the UsageRecords processed by BatchMeterUsage and any records that have failed due to transient error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchMeterUsageResult {
     #[doc="<p>Contains all UsageRecords processed by BatchMeterUsage. These records were either honored by AWS Marketplace Metering Service or were invalid.</p>"]
     #[serde(rename="Results")]
@@ -52,7 +52,7 @@ pub struct BatchMeterUsageResult {
     pub unprocessed_records: Option<Vec<UsageRecord>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MeterUsageRequest {
     #[doc="<p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException.</p>"]
     #[serde(rename="DryRun")]
@@ -71,7 +71,7 @@ pub struct MeterUsageRequest {
     pub usage_quantity: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MeterUsageResult {
     #[serde(rename="MeteringRecordId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -79,7 +79,7 @@ pub struct MeterUsageResult {
 }
 
 #[doc="<p>Contains input to the ResolveCustomer operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResolveCustomerRequest {
     #[doc="<p>When a buyer visits your website during the registration process, the buyer submits a registration token through the browser. The registration token is resolved to obtain a CustomerIdentifier and product code.</p>"]
     #[serde(rename="RegistrationToken")]
@@ -87,7 +87,7 @@ pub struct ResolveCustomerRequest {
 }
 
 #[doc="<p>The result of the ResolveCustomer operation. Contains the CustomerIdentifier and product code.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResolveCustomerResult {
     #[doc="<p>The CustomerIdentifier is used to identify an individual customer in your application. Calls to BatchMeterUsage require CustomerIdentifiers for each UsageRecord.</p>"]
     #[serde(rename="CustomerIdentifier")]
@@ -117,7 +117,7 @@ pub struct UsageRecord {
 }
 
 #[doc="<p>A UsageRecordResult indicates the status of a given UsageRecord processed by BatchMeterUsage.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsageRecordResult {
     #[doc="<p>The MeteringRecordId is a unique identifier for this metering event.</p>"]
     #[serde(rename="MeteringRecordId")]

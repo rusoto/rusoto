@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Contains information about a backup of an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Backup {
     #[doc="<p>The identifier (ID) of the backup.</p>"]
     #[serde(rename="BackupId")]
@@ -49,7 +49,7 @@ pub struct Backup {
 }
 
 #[doc="<p>Contains one or more certificates or a certificate signing request (CSR).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Certificates {
     #[doc="<p>The HSM hardware certificate issued (signed) by AWS CloudHSM.</p>"]
     #[serde(rename="AwsHardwareCertificate")]
@@ -74,7 +74,7 @@ pub struct Certificates {
 }
 
 #[doc="<p>Contains information about an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Cluster {
     #[doc="<p>The cluster's backup policy.</p>"]
     #[serde(rename="BackupPolicy")]
@@ -130,7 +130,7 @@ pub struct Cluster {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterRequest {
     #[doc="<p>The type of HSM to use in the cluster. Currently the only allowed value is <code>hsm1.medium</code>.</p>"]
     #[serde(rename="HsmType")]
@@ -144,7 +144,7 @@ pub struct CreateClusterRequest {
     pub subnet_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateClusterResponse {
     #[doc="<p>Information about the cluster that was created.</p>"]
     #[serde(rename="Cluster")]
@@ -152,7 +152,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmRequest {
     #[doc="<p>The Availability Zone where you are creating the HSM. To find the cluster's Availability Zones, use <a>DescribeClusters</a>.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -166,7 +166,7 @@ pub struct CreateHsmRequest {
     pub ip_address: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateHsmResponse {
     #[doc="<p>Information about the HSM that was created.</p>"]
     #[serde(rename="Hsm")]
@@ -174,14 +174,14 @@ pub struct CreateHsmResponse {
     pub hsm: Option<Hsm>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterRequest {
     #[doc="<p>The identifier (ID) of the cluster that you are deleting. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
     #[serde(rename="ClusterId")]
     pub cluster_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteClusterResponse {
     #[doc="<p>Information about the cluster that was deleted.</p>"]
     #[serde(rename="Cluster")]
@@ -189,7 +189,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmRequest {
     #[doc="<p>The identifier (ID) of the cluster that contains the HSM that you are deleting.</p>"]
     #[serde(rename="ClusterId")]
@@ -208,7 +208,7 @@ pub struct DeleteHsmRequest {
     pub hsm_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteHsmResponse {
     #[doc="<p>The identifier (ID) of the HSM that was deleted.</p>"]
     #[serde(rename="HsmId")]
@@ -216,7 +216,7 @@ pub struct DeleteHsmResponse {
     pub hsm_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBackupsRequest {
     #[doc="<p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>backupIds</code> filter to return only the specified backups. Specify backups by their backup identifier (ID).</p> <p>Use the <code>clusterIds</code> filter to return only the backups for the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>states</code> filter to return only backups that match the specified state.</p>"]
     #[serde(rename="Filters")]
@@ -232,7 +232,7 @@ pub struct DescribeBackupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBackupsResponse {
     #[doc="<p>A list of backups.</p>"]
     #[serde(rename="Backups")]
@@ -244,7 +244,7 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersRequest {
     #[doc="<p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>clusterIds</code> filter to return only the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>vpcIds</code> filter to return only the clusters in the specified virtual private clouds (VPCs). Specify VPCs by their VPC identifier (ID).</p> <p>Use the <code>states</code> filter to return only clusters that match the specified state.</p>"]
     #[serde(rename="Filters")]
@@ -260,7 +260,7 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClustersResponse {
     #[doc="<p>A list of clusters.</p>"]
     #[serde(rename="Clusters")]
@@ -273,7 +273,7 @@ pub struct DescribeClustersResponse {
 }
 
 #[doc="<p>Contains information about a hardware security module (HSM) in an AWS CloudHSM cluster.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Hsm {
     #[doc="<p>The Availability Zone that contains the HSM.</p>"]
     #[serde(rename="AvailabilityZone")]
@@ -308,7 +308,7 @@ pub struct Hsm {
     pub subnet_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitializeClusterRequest {
     #[doc="<p>The identifier (ID) of the cluster that you are claiming. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
     #[serde(rename="ClusterId")]
@@ -321,7 +321,7 @@ pub struct InitializeClusterRequest {
     pub trust_anchor: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitializeClusterResponse {
     #[doc="<p>The cluster's state.</p>"]
     #[serde(rename="State")]
@@ -333,7 +333,7 @@ pub struct InitializeClusterResponse {
     pub state_message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsRequest {
     #[doc="<p>The maximum number of tags to return in the response. When there are more tags than the number you specify, the response contains a <code>NextToken</code> value.</p>"]
     #[serde(rename="MaxResults")]
@@ -348,7 +348,7 @@ pub struct ListTagsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsResponse {
     #[doc="<p>An opaque string that indicates that the response contains only a subset of tags. Use this value in a subsequent <code>ListTags</code> request to get more tags.</p>"]
     #[serde(rename="NextToken")]
@@ -370,7 +370,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The cluster identifier (ID) for the cluster that you are tagging. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
     #[serde(rename="ResourceId")]
@@ -380,10 +380,10 @@ pub struct TagResourceRequest {
     pub tag_list: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The cluster identifier (ID) for the cluster whose tags you are removing. To find the cluster ID, use <a>DescribeClusters</a>.</p>"]
     #[serde(rename="ResourceId")]
@@ -393,7 +393,7 @@ pub struct UntagResourceRequest {
     pub tag_key_list: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceResponse;
 
 /// Errors returned by CreateCluster

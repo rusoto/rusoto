@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="Request of DeleteReportDefinition"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename="ReportName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -37,7 +37,7 @@ pub struct DeleteReportDefinitionRequest {
 }
 
 #[doc="Response of DeleteReportDefinition"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename="ResponseMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -45,7 +45,7 @@ pub struct DeleteReportDefinitionResponse {
 }
 
 #[doc="Request of DescribeReportDefinitions"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -56,7 +56,7 @@ pub struct DescribeReportDefinitionsRequest {
 }
 
 #[doc="Response of DescribeReportDefinitions"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -67,14 +67,14 @@ pub struct DescribeReportDefinitionsResponse {
 }
 
 #[doc="Request of PutReportDefinition"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutReportDefinitionRequest {
     #[serde(rename="ReportDefinition")]
     pub report_definition: ReportDefinition,
 }
 
 #[doc="Response of PutReportDefinition"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutReportDefinitionResponse;
 
 #[doc="The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition."]

@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Contains the parameters for ActivatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivatePipelineInput {
     #[doc="<p>A list of parameter values to pass to the pipeline at activation.</p>"]
     #[serde(rename="parameterValues")]
@@ -45,11 +45,11 @@ pub struct ActivatePipelineInput {
 }
 
 #[doc="<p>Contains the output of ActivatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivatePipelineOutput;
 
 #[doc="<p>Contains the parameters for AddTags.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
@@ -60,11 +60,11 @@ pub struct AddTagsInput {
 }
 
 #[doc="<p>Contains the output of AddTags.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsOutput;
 
 #[doc="<p>Contains the parameters for CreatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePipelineInput {
     #[doc="<p>The description for the pipeline.</p>"]
     #[serde(rename="description")]
@@ -83,7 +83,7 @@ pub struct CreatePipelineInput {
 }
 
 #[doc="<p>Contains the output of CreatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePipelineOutput {
     #[doc="<p>The ID that AWS Data Pipeline assigns the newly created pipeline. For example, <code>df-06372391ZG65EXAMPLE</code>.</p>"]
     #[serde(rename="pipelineId")]
@@ -91,7 +91,7 @@ pub struct CreatePipelineOutput {
 }
 
 #[doc="<p>Contains the parameters for DeactivatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeactivatePipelineInput {
     #[doc="<p>Indicates whether to cancel any running objects. The default is true, which sets the state of any running objects to <code>CANCELED</code>. If this value is false, the pipeline is deactivated after all running objects finish.</p>"]
     #[serde(rename="cancelActive")]
@@ -103,11 +103,11 @@ pub struct DeactivatePipelineInput {
 }
 
 #[doc="<p>Contains the output of DeactivatePipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeactivatePipelineOutput;
 
 #[doc="<p>Contains the parameters for DeletePipeline.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePipelineInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
@@ -115,7 +115,7 @@ pub struct DeletePipelineInput {
 }
 
 #[doc="<p>Contains the parameters for DescribeObjects.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeObjectsInput {
     #[doc="<p>Indicates whether any expressions in the object should be evaluated when the object descriptions are returned.</p>"]
     #[serde(rename="evaluateExpressions")]
@@ -134,7 +134,7 @@ pub struct DescribeObjectsInput {
 }
 
 #[doc="<p>Contains the output of DescribeObjects.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeObjectsOutput {
     #[doc="<p>Indicates whether there are more results to return.</p>"]
     #[serde(rename="hasMoreResults")]
@@ -150,7 +150,7 @@ pub struct DescribeObjectsOutput {
 }
 
 #[doc="<p>Contains the parameters for DescribePipelines.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePipelinesInput {
     #[doc="<p>The IDs of the pipelines to describe. You can pass as many as 25 identifiers in a single call. To obtain pipeline IDs, call <a>ListPipelines</a>.</p>"]
     #[serde(rename="pipelineIds")]
@@ -158,7 +158,7 @@ pub struct DescribePipelinesInput {
 }
 
 #[doc="<p>Contains the output of DescribePipelines.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePipelinesOutput {
     #[doc="<p>An array of descriptions for the specified pipelines.</p>"]
     #[serde(rename="pipelineDescriptionList")]
@@ -166,7 +166,7 @@ pub struct DescribePipelinesOutput {
 }
 
 #[doc="<p>Contains the parameters for EvaluateExpression.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluateExpressionInput {
     #[doc="<p>The expression to evaluate.</p>"]
     #[serde(rename="expression")]
@@ -180,7 +180,7 @@ pub struct EvaluateExpressionInput {
 }
 
 #[doc="<p>Contains the output of EvaluateExpression.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluateExpressionOutput {
     #[doc="<p>The evaluated expression.</p>"]
     #[serde(rename="evaluatedExpression")]
@@ -204,7 +204,7 @@ pub struct Field {
 }
 
 #[doc="<p>Contains the parameters for GetPipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPipelineDefinitionInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
@@ -216,7 +216,7 @@ pub struct GetPipelineDefinitionInput {
 }
 
 #[doc="<p>Contains the output of GetPipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPipelineDefinitionOutput {
     #[doc="<p>The parameter objects used in the pipeline definition.</p>"]
     #[serde(rename="parameterObjects")]
@@ -233,7 +233,7 @@ pub struct GetPipelineDefinitionOutput {
 }
 
 #[doc="<p><p>Identity information for the EC2 instance that is hosting the task runner. You can get this value by calling a metadata URI from the EC2 instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html\">Instance Metadata</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> Passing in this value proves that your task runner is running on an EC2 instance, and ensures the proper AWS Data Pipeline service charges are applied to your pipeline.</p></p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceIdentity {
     #[doc="<p>A description of an EC2 instance that is generated when the instance is launched and exposed to the instance via the instance metadata service in the form of a JSON representation of an object.</p>"]
     #[serde(rename="document")]
@@ -246,7 +246,7 @@ pub struct InstanceIdentity {
 }
 
 #[doc="<p>Contains the parameters for ListPipelines.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPipelinesInput {
     #[doc="<p>The starting point for the results to be returned. For the first call, this value should be empty. As long as there are more results, continue to call <code>ListPipelines</code> with the marker value from the previous call to retrieve the next set of results.</p>"]
     #[serde(rename="marker")]
@@ -255,7 +255,7 @@ pub struct ListPipelinesInput {
 }
 
 #[doc="<p>Contains the output of ListPipelines.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPipelinesOutput {
     #[doc="<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"]
     #[serde(rename="hasMoreResults")]
@@ -271,7 +271,7 @@ pub struct ListPipelinesOutput {
 }
 
 #[doc="<p>Contains a logical operation for comparing the value of a field with a specified value.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Operator {
     #[doc="<p> The logical operation to be performed: equal (<code>EQ</code>), equal reference (<code>REF_EQ</code>), less than or equal (<code>LE</code>), greater than or equal (<code>GE</code>), or between (<code>BETWEEN</code>). Equal reference (<code>REF_EQ</code>) can be used only with reference fields. The other comparison types can be used only with String fields. The comparison types you can use apply only to certain object fields, as detailed below. </p> <p> The comparison operators EQ and REF_EQ act on the following fields: </p> <ul> <li>name</li> <li>@sphere</li> <li>parent</li> <li>@componentParent</li> <li>@instanceParent</li> <li>@status</li> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p> The comparison operators <code>GE</code>, <code>LE</code>, and <code>BETWEEN</code> act on the following fields: </p> <ul> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p>Note that fields beginning with the at sign (@) are read-only and set by the web service. When you name fields, you should choose names containing only alpha-numeric values, as symbols may be reserved by AWS Data Pipeline. User-defined fields that you add to a pipeline should prefix their name with the string \"my\".</p>"]
     #[serde(rename="type")]
@@ -317,7 +317,7 @@ pub struct ParameterValue {
 }
 
 #[doc="<p>Contains pipeline metadata.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PipelineDescription {
     #[doc="<p>Description of the pipeline.</p>"]
     #[serde(rename="description")]
@@ -339,7 +339,7 @@ pub struct PipelineDescription {
 }
 
 #[doc="<p>Contains the name and identifier of a pipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PipelineIdName {
     #[doc="<p>The ID of the pipeline that was assigned by AWS Data Pipeline. This is a string of the form <code>df-297EG78HU43EEXAMPLE</code>.</p>"]
     #[serde(rename="id")]
@@ -366,7 +366,7 @@ pub struct PipelineObject {
 }
 
 #[doc="<p>Contains the parameters for PollForTask.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PollForTaskInput {
     #[doc="<p>The public DNS name of the calling task runner.</p>"]
     #[serde(rename="hostname")]
@@ -382,7 +382,7 @@ pub struct PollForTaskInput {
 }
 
 #[doc="<p>Contains the output of PollForTask.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PollForTaskOutput {
     #[doc="<p>The information needed to complete the task that is being assigned to the task runner. One of the fields returned in this object is <code>taskId</code>, which contains an identifier for the task being assigned. The calling task runner uses <code>taskId</code> in subsequent calls to <a>ReportTaskProgress</a> and <a>SetTaskStatus</a>.</p>"]
     #[serde(rename="taskObject")]
@@ -391,7 +391,7 @@ pub struct PollForTaskOutput {
 }
 
 #[doc="<p>Contains the parameters for PutPipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutPipelineDefinitionInput {
     #[doc="<p>The parameter objects used with the pipeline.</p>"]
     #[serde(rename="parameterObjects")]
@@ -410,7 +410,7 @@ pub struct PutPipelineDefinitionInput {
 }
 
 #[doc="<p>Contains the output of PutPipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutPipelineDefinitionOutput {
     #[doc="<p>Indicates whether there were validation errors, and the pipeline definition is stored but cannot be activated until you correct the pipeline and call <code>PutPipelineDefinition</code> to commit the corrected pipeline.</p>"]
     #[serde(rename="errored")]
@@ -426,7 +426,7 @@ pub struct PutPipelineDefinitionOutput {
 }
 
 #[doc="<p>Defines the query to run against an object.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Query {
     #[doc="<p>List of selectors that define the query. An object must satisfy all of the selectors to match the query.</p>"]
     #[serde(rename="selectors")]
@@ -435,7 +435,7 @@ pub struct Query {
 }
 
 #[doc="<p>Contains the parameters for QueryObjects.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct QueryObjectsInput {
     #[doc="<p>The maximum number of object names that <code>QueryObjects</code> will return in a single call. The default value is 100. </p>"]
     #[serde(rename="limit")]
@@ -458,7 +458,7 @@ pub struct QueryObjectsInput {
 }
 
 #[doc="<p>Contains the output of QueryObjects.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct QueryObjectsOutput {
     #[doc="<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"]
     #[serde(rename="hasMoreResults")]
@@ -475,7 +475,7 @@ pub struct QueryObjectsOutput {
 }
 
 #[doc="<p>Contains the parameters for RemoveTags.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
@@ -486,11 +486,11 @@ pub struct RemoveTagsInput {
 }
 
 #[doc="<p>Contains the output of RemoveTags.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsOutput;
 
 #[doc="<p>Contains the parameters for ReportTaskProgress.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportTaskProgressInput {
     #[doc="<p>Key-value pairs that define the properties of the ReportTaskProgressInput object.</p>"]
     #[serde(rename="fields")]
@@ -502,7 +502,7 @@ pub struct ReportTaskProgressInput {
 }
 
 #[doc="<p>Contains the output of ReportTaskProgress.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportTaskProgressOutput {
     #[doc="<p>If true, the calling task runner should cancel processing of the task. The task runner does not need to call <a>SetTaskStatus</a> for canceled tasks.</p>"]
     #[serde(rename="canceled")]
@@ -510,7 +510,7 @@ pub struct ReportTaskProgressOutput {
 }
 
 #[doc="<p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportTaskRunnerHeartbeatInput {
     #[doc="<p>The public DNS name of the task runner.</p>"]
     #[serde(rename="hostname")]
@@ -526,7 +526,7 @@ pub struct ReportTaskRunnerHeartbeatInput {
 }
 
 #[doc="<p>Contains the output of ReportTaskRunnerHeartbeat.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportTaskRunnerHeartbeatOutput {
     #[doc="<p>Indicates whether the calling task runner should terminate.</p>"]
     #[serde(rename="terminate")]
@@ -534,7 +534,7 @@ pub struct ReportTaskRunnerHeartbeatOutput {
 }
 
 #[doc="<p>A comparision that is used to determine whether a query should return this object.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Selector {
     #[doc="<p>The name of the field that the operator will be applied to. The field name is the \"key\" portion of the field definition in the pipeline definition syntax that is used by the AWS Data Pipeline API. If the field is not set on the object, the condition fails.</p>"]
     #[serde(rename="fieldName")]
@@ -546,7 +546,7 @@ pub struct Selector {
 }
 
 #[doc="<p>Contains the parameters for SetStatus.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetStatusInput {
     #[doc="<p>The IDs of the objects. The corresponding objects can be either physical or components, but not a mix of both types.</p>"]
     #[serde(rename="objectIds")]
@@ -560,7 +560,7 @@ pub struct SetStatusInput {
 }
 
 #[doc="<p>Contains the parameters for SetTaskStatus.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetTaskStatusInput {
     #[doc="<p>If an error occurred during the task, this value specifies the error code. This value is set on the physical attempt object. It is used to display error information to the user. It should not start with string \"Service_\" which is reserved by the system.</p>"]
     #[serde(rename="errorId")]
@@ -583,7 +583,7 @@ pub struct SetTaskStatusInput {
 }
 
 #[doc="<p>Contains the output of SetTaskStatus.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetTaskStatusOutput;
 
 #[doc="<p>Tags are key/value pairs defined by a user and associated with a pipeline to control access. AWS Data Pipeline allows you to associate ten tags per pipeline. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
@@ -598,7 +598,7 @@ pub struct Tag {
 }
 
 #[doc="<p>Contains information about a pipeline task that is assigned to a task runner.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TaskObject {
     #[doc="<p>The ID of the pipeline task attempt object. AWS Data Pipeline uses this value to track how many times a task is attempted.</p>"]
     #[serde(rename="attemptId")]
@@ -619,7 +619,7 @@ pub struct TaskObject {
 }
 
 #[doc="<p>Contains the parameters for ValidatePipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ValidatePipelineDefinitionInput {
     #[doc="<p>The parameter objects used with the pipeline.</p>"]
     #[serde(rename="parameterObjects")]
@@ -638,7 +638,7 @@ pub struct ValidatePipelineDefinitionInput {
 }
 
 #[doc="<p>Contains the output of ValidatePipelineDefinition.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ValidatePipelineDefinitionOutput {
     #[doc="<p>Indicates whether there were validation errors.</p>"]
     #[serde(rename="errored")]
@@ -654,7 +654,7 @@ pub struct ValidatePipelineDefinitionOutput {
 }
 
 #[doc="<p>Defines a validation error. Validation errors prevent pipeline activation. The set of validation errors that can be returned are defined by AWS Data Pipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ValidationError {
     #[doc="<p>A description of the validation error.</p>"]
     #[serde(rename="errors")]
@@ -667,7 +667,7 @@ pub struct ValidationError {
 }
 
 #[doc="<p>Defines a validation warning. Validation warnings do not prevent pipeline activation. The set of validation warnings that can be returned are defined by AWS Data Pipeline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ValidationWarning {
     #[doc="<p>The identifier of the object that contains the validation warning.</p>"]
     #[serde(rename="id")]

@@ -29,7 +29,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AbortDocumentVersionUploadRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -43,7 +43,7 @@ pub struct AbortDocumentVersionUploadRequest {
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivateUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -54,7 +54,7 @@ pub struct ActivateUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivateUserResponse {
     #[doc="<p>The user information.</p>"]
     #[serde(rename="User")]
@@ -63,7 +63,7 @@ pub struct ActivateUserResponse {
 }
 
 #[doc="<p>Describes the activity information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Activity {
     #[doc="<p>Metadata of the commenting activity. This is an optional field and is filled for commenting activities.</p>"]
     #[serde(rename="CommentMetadata")]
@@ -99,7 +99,7 @@ pub struct Activity {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddResourcePermissionsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -113,7 +113,7 @@ pub struct AddResourcePermissionsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddResourcePermissionsResponse {
     #[doc="<p>The share results.</p>"]
     #[serde(rename="ShareResults")]
@@ -122,7 +122,7 @@ pub struct AddResourcePermissionsResponse {
 }
 
 #[doc="<p>Describes a comment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Comment {
     #[doc="<p>The ID of the comment.</p>"]
     #[serde(rename="CommentId")]
@@ -162,7 +162,7 @@ pub struct Comment {
 }
 
 #[doc="<p>Describes the metadata of a comment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CommentMetadata {
     #[doc="<p>The ID of the comment.</p>"]
     #[serde(rename="CommentId")]
@@ -184,7 +184,7 @@ pub struct CommentMetadata {
     pub recipient_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCommentRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -217,7 +217,7 @@ pub struct CreateCommentRequest {
     pub visibility: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCommentResponse {
     #[doc="<p>The comment that has been created.</p>"]
     #[serde(rename="Comment")]
@@ -225,7 +225,7 @@ pub struct CreateCommentResponse {
     pub comment: Option<Comment>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCustomMetadataRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -243,10 +243,10 @@ pub struct CreateCustomMetadataRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCustomMetadataResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFolderRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -261,7 +261,7 @@ pub struct CreateFolderRequest {
     pub parent_folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFolderResponse {
     #[doc="<p>The metadata of the folder.</p>"]
     #[serde(rename="Metadata")]
@@ -269,7 +269,7 @@ pub struct CreateFolderResponse {
     pub metadata: Option<FolderMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLabelsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -283,10 +283,10 @@ pub struct CreateLabelsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLabelsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNotificationSubscriptionRequest {
     #[doc="<p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with \"https://\".</p>"]
     #[serde(rename="Endpoint")]
@@ -302,7 +302,7 @@ pub struct CreateNotificationSubscriptionRequest {
     pub subscription_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNotificationSubscriptionResponse {
     #[doc="<p>The subscription.</p>"]
     #[serde(rename="Subscription")]
@@ -310,7 +310,7 @@ pub struct CreateNotificationSubscriptionResponse {
     pub subscription: Option<Subscription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -346,7 +346,7 @@ pub struct CreateUserRequest {
     pub username: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateUserResponse {
     #[doc="<p>The user information.</p>"]
     #[serde(rename="User")]
@@ -354,7 +354,7 @@ pub struct CreateUserResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeactivateUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -365,7 +365,7 @@ pub struct DeactivateUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCommentRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -382,7 +382,7 @@ pub struct DeleteCommentRequest {
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCustomMetadataRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -405,10 +405,10 @@ pub struct DeleteCustomMetadataRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCustomMetadataResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDocumentRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -419,7 +419,7 @@ pub struct DeleteDocumentRequest {
     pub document_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFolderContentsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -430,7 +430,7 @@ pub struct DeleteFolderContentsRequest {
     pub folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFolderRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -441,7 +441,7 @@ pub struct DeleteFolderRequest {
     pub folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLabelsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -460,10 +460,10 @@ pub struct DeleteLabelsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLabelsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNotificationSubscriptionRequest {
     #[doc="<p>The ID of the organization.</p>"]
     #[serde(rename="OrganizationId")]
@@ -473,7 +473,7 @@ pub struct DeleteNotificationSubscriptionRequest {
     pub subscription_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -484,7 +484,7 @@ pub struct DeleteUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeActivitiesRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -516,7 +516,7 @@ pub struct DescribeActivitiesRequest {
     pub user_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeActivitiesResponse {
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="Marker")]
@@ -528,7 +528,7 @@ pub struct DescribeActivitiesResponse {
     pub user_activities: Option<Vec<Activity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommentsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -550,7 +550,7 @@ pub struct DescribeCommentsRequest {
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCommentsResponse {
     #[doc="<p>The list of comments for the specified document version.</p>"]
     #[serde(rename="Comments")]
@@ -562,7 +562,7 @@ pub struct DescribeCommentsResponse {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDocumentVersionsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -589,7 +589,7 @@ pub struct DescribeDocumentVersionsRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDocumentVersionsResponse {
     #[doc="<p>The document versions.</p>"]
     #[serde(rename="DocumentVersions")]
@@ -601,7 +601,7 @@ pub struct DescribeDocumentVersionsResponse {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFolderContentsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -636,7 +636,7 @@ pub struct DescribeFolderContentsRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFolderContentsResponse {
     #[doc="<p>The documents in the specified folder.</p>"]
     #[serde(rename="Documents")]
@@ -652,7 +652,7 @@ pub struct DescribeFolderContentsResponse {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationSubscriptionsRequest {
     #[doc="<p>The maximum number of items to return with this call.</p>"]
     #[serde(rename="Limit")]
@@ -667,7 +667,7 @@ pub struct DescribeNotificationSubscriptionsRequest {
     pub organization_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationSubscriptionsResponse {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
     #[serde(rename="Marker")]
@@ -679,7 +679,7 @@ pub struct DescribeNotificationSubscriptionsResponse {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeResourcePermissionsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -698,7 +698,7 @@ pub struct DescribeResourcePermissionsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeResourcePermissionsResponse {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
     #[serde(rename="Marker")]
@@ -710,7 +710,7 @@ pub struct DescribeResourcePermissionsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRootFoldersRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -725,7 +725,7 @@ pub struct DescribeRootFoldersRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRootFoldersResponse {
     #[doc="<p>The user's special folders.</p>"]
     #[serde(rename="Folders")]
@@ -737,7 +737,7 @@ pub struct DescribeRootFoldersResponse {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUsersRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -781,7 +781,7 @@ pub struct DescribeUsersRequest {
     pub user_ids: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeUsersResponse {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
     #[serde(rename="Marker")]
@@ -798,7 +798,7 @@ pub struct DescribeUsersResponse {
 }
 
 #[doc="<p>Describes the document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentMetadata {
     #[doc="<p>The time when the document was created.</p>"]
     #[serde(rename="CreatedTimestamp")]
@@ -835,7 +835,7 @@ pub struct DocumentMetadata {
 }
 
 #[doc="<p>Describes a version of a document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DocumentVersionMetadata {
     #[doc="<p>The time stamp when the content of the document was originally created.</p>"]
     #[serde(rename="ContentCreatedTimestamp")]
@@ -892,7 +892,7 @@ pub struct DocumentVersionMetadata {
 }
 
 #[doc="<p>Describes a folder.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FolderMetadata {
     #[doc="<p>The time when the folder was created.</p>"]
     #[serde(rename="CreatedTimestamp")]
@@ -940,14 +940,14 @@ pub struct FolderMetadata {
     pub size: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCurrentUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token.</p>"]
     #[serde(rename="AuthenticationToken")]
     pub authentication_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetCurrentUserResponse {
     #[doc="<p>Metadata of the user.</p>"]
     #[serde(rename="User")]
@@ -955,7 +955,7 @@ pub struct GetCurrentUserResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentPathRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -978,7 +978,7 @@ pub struct GetDocumentPathRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentPathResponse {
     #[doc="<p>The path information.</p>"]
     #[serde(rename="Path")]
@@ -986,7 +986,7 @@ pub struct GetDocumentPathResponse {
     pub path: Option<ResourcePath>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1001,7 +1001,7 @@ pub struct GetDocumentRequest {
     pub include_custom_metadata: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentResponse {
     #[doc="<p>The custom metadata on the document.</p>"]
     #[serde(rename="CustomMetadata")]
@@ -1013,7 +1013,7 @@ pub struct GetDocumentResponse {
     pub metadata: Option<DocumentMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentVersionRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1035,7 +1035,7 @@ pub struct GetDocumentVersionRequest {
     pub version_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDocumentVersionResponse {
     #[doc="<p>The custom metadata on the document version.</p>"]
     #[serde(rename="CustomMetadata")]
@@ -1047,7 +1047,7 @@ pub struct GetDocumentVersionResponse {
     pub metadata: Option<DocumentVersionMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFolderPathRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1070,7 +1070,7 @@ pub struct GetFolderPathRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFolderPathResponse {
     #[doc="<p>The path information.</p>"]
     #[serde(rename="Path")]
@@ -1078,7 +1078,7 @@ pub struct GetFolderPathResponse {
     pub path: Option<ResourcePath>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFolderRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1093,7 +1093,7 @@ pub struct GetFolderRequest {
     pub include_custom_metadata: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFolderResponse {
     #[doc="<p>The custom metadata on the folder.</p>"]
     #[serde(rename="CustomMetadata")]
@@ -1106,7 +1106,7 @@ pub struct GetFolderResponse {
 }
 
 #[doc="<p>Describes the metadata of a user group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GroupMetadata {
     #[doc="<p>The ID of the user group.</p>"]
     #[serde(rename="Id")]
@@ -1118,7 +1118,7 @@ pub struct GroupMetadata {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateDocumentVersionUploadRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1153,7 +1153,7 @@ pub struct InitiateDocumentVersionUploadRequest {
     pub parent_folder_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InitiateDocumentVersionUploadResponse {
     #[doc="<p>The document metadata.</p>"]
     #[serde(rename="Metadata")]
@@ -1166,7 +1166,7 @@ pub struct InitiateDocumentVersionUploadResponse {
 }
 
 #[doc="<p>Describes the users and/or user groups.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Participants {
     #[doc="<p>The list of user groups.</p>"]
     #[serde(rename="Groups")]
@@ -1179,7 +1179,7 @@ pub struct Participants {
 }
 
 #[doc="<p>Describes the permissions.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PermissionInfo {
     #[doc="<p>The role of the user.</p>"]
     #[serde(rename="Role")]
@@ -1192,7 +1192,7 @@ pub struct PermissionInfo {
 }
 
 #[doc="<p>Describes a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Principal {
     #[doc="<p>The ID of the resource.</p>"]
     #[serde(rename="Id")]
@@ -1208,7 +1208,7 @@ pub struct Principal {
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveAllResourcePermissionsRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1219,7 +1219,7 @@ pub struct RemoveAllResourcePermissionsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveResourcePermissionRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1238,7 +1238,7 @@ pub struct RemoveResourcePermissionRequest {
 }
 
 #[doc="<p>Describes the metadata of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceMetadata {
     #[doc="<p>The ID of the resource.</p>"]
     #[serde(rename="Id")]
@@ -1271,7 +1271,7 @@ pub struct ResourceMetadata {
 }
 
 #[doc="<p>Describes the path information of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourcePath {
     #[doc="<p>The components of the resource path.</p>"]
     #[serde(rename="Components")]
@@ -1280,7 +1280,7 @@ pub struct ResourcePath {
 }
 
 #[doc="<p>Describes the resource path.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourcePathComponent {
     #[doc="<p>The ID of the resource path.</p>"]
     #[serde(rename="Id")]
@@ -1293,7 +1293,7 @@ pub struct ResourcePathComponent {
 }
 
 #[doc="<p>Describes the recipient type and ID, if available.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SharePrincipal {
     #[doc="<p>The ID of the recipient.</p>"]
     #[serde(rename="Id")]
@@ -1307,7 +1307,7 @@ pub struct SharePrincipal {
 }
 
 #[doc="<p>Describes the share results of a resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ShareResult {
     #[doc="<p>The ID of the principal.</p>"]
     #[serde(rename="PrincipalId")]
@@ -1345,7 +1345,7 @@ pub struct StorageRuleType {
 }
 
 #[doc="<p>Describes a subscription.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subscription {
     #[doc="<p>The endpoint of the subscription.</p>"]
     #[serde(rename="EndPoint")]
@@ -1361,7 +1361,7 @@ pub struct Subscription {
     pub subscription_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDocumentRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1384,7 +1384,7 @@ pub struct UpdateDocumentRequest {
     pub resource_state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDocumentVersionRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1402,7 +1402,7 @@ pub struct UpdateDocumentVersionRequest {
     pub version_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateFolderRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1425,7 +1425,7 @@ pub struct UpdateFolderRequest {
     pub resource_state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserRequest {
     #[doc="<p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>"]
     #[serde(rename="AuthenticationToken")]
@@ -1460,7 +1460,7 @@ pub struct UpdateUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateUserResponse {
     #[doc="<p>The user information.</p>"]
     #[serde(rename="User")]
@@ -1469,7 +1469,7 @@ pub struct UpdateUserResponse {
 }
 
 #[doc="<p>Describes the upload.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UploadMetadata {
     #[doc="<p>The signed headers.</p>"]
     #[serde(rename="SignedHeaders")]
@@ -1482,7 +1482,7 @@ pub struct UploadMetadata {
 }
 
 #[doc="<p>Describes a user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct User {
     #[doc="<p>The time when the user was created.</p>"]
     #[serde(rename="CreatedTimestamp")]
@@ -1547,7 +1547,7 @@ pub struct User {
 }
 
 #[doc="<p>Describes the metadata of the user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserMetadata {
     #[doc="<p>The email address of the user.</p>"]
     #[serde(rename="EmailAddress")]
@@ -1572,7 +1572,7 @@ pub struct UserMetadata {
 }
 
 #[doc="<p>Describes the storage for a user.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserStorageMetadata {
     #[doc="<p>The storage for a user.</p>"]
     #[serde(rename="StorageRule")]

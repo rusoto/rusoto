@@ -81,11 +81,14 @@ impl ActivitiesDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeScalingActivities.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivitiesType {
     #[doc="<p>The scaling activities. Activities are sorted by start time. Activities still in progress are described first.</p>"]
+    #[serde(rename="Activities")]
     pub activities: Vec<Activity>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -136,27 +139,42 @@ impl ActivitiesTypeDeserializer {
     }
 }
 #[doc="<p>Describes scaling activity, which is a long-running process that represents a change to your Auto Scaling group, such as changing its size or replacing an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Activity {
     #[doc="<p>The ID of the activity.</p>"]
+    #[serde(rename="ActivityId")]
     pub activity_id: String,
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The reason the activity began.</p>"]
+    #[serde(rename="Cause")]
     pub cause: String,
     #[doc="<p>A friendly, more verbose description of the activity.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The details about the activity.</p>"]
+    #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<String>,
     #[doc="<p>The end time of the activity.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>A value between 0 and 100 that indicates the progress of the activity.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<i64>,
     #[doc="<p>The start time of the activity.</p>"]
+    #[serde(rename="StartTime")]
     pub start_time: String,
     #[doc="<p>The current status of the activity.</p>"]
+    #[serde(rename="StatusCode")]
     pub status_code: String,
     #[doc="<p>A friendly, more verbose description of the activity status.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -255,9 +273,11 @@ impl ActivityIdsSerializer {
 }
 
 #[doc="<p>Contains the output of TerminateInstancesInAutoScalingGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivityType {
     #[doc="<p>A scaling activity.</p>"]
+    #[serde(rename="Activity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity: Option<Activity>,
 }
 
@@ -304,9 +324,11 @@ impl ActivityTypeDeserializer {
     }
 }
 #[doc="<p>Describes a policy adjustment type.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/as-scale-based-on-demand.html\">Dynamic Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AdjustmentType {
     #[doc="<p>The policy adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>"]
+    #[serde(rename="AdjustmentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjustment_type: Option<String>,
 }
 
@@ -395,11 +417,15 @@ impl AdjustmentTypesDeserializer {
     }
 }
 #[doc="<p>Describes an alarm.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Alarm {
     #[doc="<p>The Amazon Resource Name (ARN) of the alarm.</p>"]
+    #[serde(rename="AlarmARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_arn: Option<String>,
     #[doc="<p>The name of the alarm.</p>"]
+    #[serde(rename="AlarmName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_name: Option<String>,
 }
 
@@ -521,11 +547,14 @@ impl AssociatePublicIpAddressDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AttachInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachInstancesQuery {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
 }
 
@@ -550,7 +579,7 @@ impl AttachInstancesQuerySerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachLoadBalancerTargetGroupsResultType;
 
 struct AttachLoadBalancerTargetGroupsResultTypeDeserializer;
@@ -571,11 +600,13 @@ impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AttachLoadBalancerTargetGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachLoadBalancerTargetGroupsType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
+    #[serde(rename="TargetGroupARNs")]
     pub target_group_ar_ns: Vec<String>,
 }
 
@@ -599,7 +630,7 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[doc="<p>Contains the output of AttachLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachLoadBalancersResultType;
 
 struct AttachLoadBalancersResultTypeDeserializer;
@@ -619,11 +650,13 @@ impl AttachLoadBalancersResultTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AttachLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachLoadBalancersType {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more load balancer names.</p>"]
+    #[serde(rename="LoadBalancerNames")]
     pub load_balancer_names: Vec<String>,
 }
 
@@ -647,51 +680,87 @@ impl AttachLoadBalancersTypeSerializer {
 }
 
 #[doc="<p>Describes an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingGroup {
     #[doc="<p>The Amazon Resource Name (ARN) of the group.</p>"]
+    #[serde(rename="AutoScalingGroupARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_arn: Option<String>,
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group.</p>"]
+    #[serde(rename="AvailabilityZones")]
     pub availability_zones: Vec<String>,
     #[doc="<p>The date and time the group was created.</p>"]
+    #[serde(rename="CreatedTime")]
     pub created_time: String,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start.</p>"]
+    #[serde(rename="DefaultCooldown")]
     pub default_cooldown: i64,
     #[doc="<p>The desired size of the group.</p>"]
+    #[serde(rename="DesiredCapacity")]
     pub desired_capacity: i64,
     #[doc="<p>The metrics enabled for the group.</p>"]
+    #[serde(rename="EnabledMetrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled_metrics: Option<Vec<EnabledMetric>>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service.</p>"]
+    #[serde(rename="HealthCheckGracePeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>"]
+    #[serde(rename="HealthCheckType")]
     pub health_check_type: String,
     #[doc="<p>The EC2 instances associated with the group.</p>"]
+    #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<Vec<Instance>>,
     #[doc="<p>The name of the associated launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_configuration_name: Option<String>,
     #[doc="<p>One or more load balancers associated with the group.</p>"]
+    #[serde(rename="LoadBalancerNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_names: Option<Vec<String>>,
     #[doc="<p>The maximum size of the group.</p>"]
+    #[serde(rename="MaxSize")]
     pub max_size: i64,
     #[doc="<p>The minimum size of the group.</p>"]
+    #[serde(rename="MinSize")]
     pub min_size: i64,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="NewInstancesProtectedFromScaleIn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="PlacementGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_group: Option<String>,
     #[doc="<p>The current state of the group when <a>DeleteAutoScalingGroup</a> is in progress.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The suspended processes associated with the group.</p>"]
+    #[serde(rename="SuspendedProcesses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub suspended_processes: Option<Vec<SuspendedProcess>>,
     #[doc="<p>The tags for the group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<TagDescription>>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups for your load balancer.</p>"]
+    #[serde(rename="TargetGroupARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_ar_ns: Option<Vec<String>>,
     #[doc="<p>The termination policies for the group.</p>"]
+    #[serde(rename="TerminationPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_policies: Option<Vec<String>>,
     #[doc="<p>One or more subnet IDs, if applicable, separated by commas.</p> <p>If you specify <code>VPCZoneIdentifier</code> and <code>AvailabilityZones</code>, ensure that the Availability Zones of the subnets match the values for <code>AvailabilityZones</code>.</p>"]
+    #[serde(rename="VPCZoneIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -893,13 +962,19 @@ impl AutoScalingGroupNamesSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeAutoScalingGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingGroupNamesType {
     #[doc="<p>The group names. If you omit this parameter, all Auto Scaling groups are described.</p>"]
+    #[serde(rename="AutoScalingGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -974,11 +1049,14 @@ impl AutoScalingGroupsDeserializer {
     }
 }
 #[doc="<p>Contains the output for DescribeAutoScalingGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingGroupsType {
     #[doc="<p>The groups.</p>"]
+    #[serde(rename="AutoScalingGroups")]
     pub auto_scaling_groups: Vec<AutoScalingGroup>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1030,21 +1108,28 @@ impl AutoScalingGroupsTypeDeserializer {
     }
 }
 #[doc="<p>Describes an EC2 instance associated with an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingInstanceDetails {
     #[doc="<p>The name of the Auto Scaling group associated with the instance.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The Availability Zone for the instance.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>The last reported health status of this instance. \"Healthy\" means that the instance is healthy and should remain in service. \"Unhealthy\" means that the instance is unhealthy and Auto Scaling should terminate and replace it.</p>"]
+    #[serde(rename="HealthStatus")]
     pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The launch configuration used to launch the instance. This value is not available if you attached the instance to the Auto Scaling group.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
     pub launch_configuration_name: String,
     #[doc="<p>The lifecycle state for the instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="LifecycleState")]
     pub lifecycle_state: String,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="ProtectedFromScaleIn")]
     pub protected_from_scale_in: bool,
 }
 
@@ -1165,11 +1250,15 @@ impl AutoScalingInstancesDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeAutoScalingInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingInstancesType {
     #[doc="<p>The instances.</p>"]
+    #[serde(rename="AutoScalingInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1399,15 +1488,22 @@ impl BlockDeviceEbsVolumeTypeDeserializer {
     }
 }
 #[doc="<p>Describes a block device mapping.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BlockDeviceMapping {
     #[doc="<p>The device name exposed to the EC2 instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="DeviceName")]
     pub device_name: String,
     #[doc="<p>The information about the Amazon EBS volume.</p>"]
+    #[serde(rename="Ebs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs: Option<Ebs>,
     #[doc="<p>Suppresses a device mapping.</p> <p>If this parameter is true for the root device, the instance might fail the EC2 health check. Auto Scaling launches a replacement instance if the instance fails the health check.</p>"]
+    #[serde(rename="NoDevice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub no_device: Option<bool>,
     #[doc="<p>The name of the virtual device (for example, <code>ephemeral0</code>).</p>"]
+    #[serde(rename="VirtualName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtual_name: Option<String>,
 }
 
@@ -1602,7 +1698,7 @@ impl ClassicLinkVPCSecurityGroupsSerializer {
 }
 
 #[doc="<p>Contains the output of CompleteLifecycleAction.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteLifecycleActionAnswer;
 
 struct CompleteLifecycleActionAnswerDeserializer;
@@ -1622,17 +1718,24 @@ impl CompleteLifecycleActionAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CompleteLifecycleAction.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CompleteLifecycleActionType {
     #[doc="<p>The name of the group for the lifecycle hook.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The action for the group to take. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>.</p>"]
+    #[serde(rename="LifecycleActionResult")]
     pub lifecycle_action_result: String,
     #[doc="<p>A universally unique identifier (UUID) that identifies a specific lifecycle action associated with an instance. Auto Scaling sends this token to the notification target you specified when you created the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleActionToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_action_token: Option<String>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleHookName")]
     pub lifecycle_hook_name: String,
 }
 
@@ -1679,41 +1782,72 @@ impl CooldownDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateAutoScalingGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAutoScalingGroupType {
     #[doc="<p>The name of the group. This name must be unique within the scope of your AWS account.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="DefaultCooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_cooldown: Option<i64>,
     #[doc="<p>The number of EC2 instances that should be running in the group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group.</p>"]
+    #[serde(rename="DesiredCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_capacity: Option<i64>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default is 0.</p> <p>This parameter is required if you are adding an <code>ELB</code> health check.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="HealthCheckGracePeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p> <p>By default, health checks use Amazon EC2 instance status checks to determine the health of an instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="HealthCheckType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_type: Option<String>,
     #[doc="<p>The ID of the instance used to create a launch configuration for the group. Alternatively, specify a launch configuration instead of an EC2 instance.</p> <p>When you specify an ID of an instance, Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, with the exception of the block device mapping.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-asg-from-instance.html\">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The name of the launch configuration. Alternatively, specify an EC2 instance instead of a launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_configuration_name: Option<String>,
     #[doc="<p>One or more Classic Load Balancers. To specify an Application Load Balancer, use <code>TargetGroupARNs</code> instead.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-asg-from-instance.html\">Using a Load Balancer With an Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="LoadBalancerNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_names: Option<Vec<String>>,
     #[doc="<p>The maximum size of the group.</p>"]
+    #[serde(rename="MaxSize")]
     pub max_size: i64,
     #[doc="<p>The minimum size of the group.</p>"]
+    #[serde(rename="MinSize")]
     pub min_size: i64,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="NewInstancesProtectedFromScaleIn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="PlacementGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_group: Option<String>,
     #[doc="<p>One or more tags.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
+    #[serde(rename="TargetGroupARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_ar_ns: Option<Vec<String>>,
     #[doc="<p>One or more termination policies used to select the instance to terminate. These policies are executed in the order that they are listed.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html\">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="TerminationPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_policies: Option<Vec<String>>,
     #[doc="<p>A comma-separated list of subnet identifiers for your virtual private cloud (VPC).</p> <p>If you specify subnets and Availability Zones with this call, ensure that the subnets' Availability Zones match the Availability Zones specified.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="VPCZoneIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -1799,43 +1933,78 @@ impl CreateAutoScalingGroupTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateLaunchConfiguration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateLaunchConfigurationType {
     #[doc="<p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is <code>true</code>. If the instance is launched into a nondefault subnet, the default is <code>false</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="AssociatePublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associate_public_ip_address: Option<bool>,
     #[doc="<p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html\">Block Device Mapping</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter is supported only if you are launching EC2-Classic instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClassicLinkVPCId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_vpc_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. This parameter is required if you specify a ClassicLink-enabled VPC, and is not supported otherwise. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClassicLinkVPCSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
     #[doc="<p>Indicates whether the instance is optimized for Amazon EBS I/O. By default, the instance is not optimized for EBS I/O. The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional usage charges apply. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html\">Amazon EBS-Optimized Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p> <p>EC2 instances launched with an IAM role will automatically have AWS security credentials available. You can use IAM roles with Auto Scaling to automatically enable applications running on your EC2 instances to securely access other AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/us-iam-role.html\">Launch Auto Scaling Instances with an IAM Role</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html\">Finding an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The ID of the instance to use to create the launch configuration.</p> <p>The new launch configuration derives attributes from the instance, with the exception of the block device mapping.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-lc-with-instanceID.html\">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>Enables detailed monitoring (<code>true</code>) or basic monitoring (<code>false</code>) for the Auto Scaling instances.</p>"]
+    #[serde(rename="InstanceMonitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_monitoring: Option<InstanceMonitoring>,
     #[doc="<p>The instance type of the EC2 instance. For information about available instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\"> Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel associated with the AMI.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Amazon EC2 Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>The name of the launch configuration. This name must be unique within the scope of your AWS account.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
     pub launch_configuration_name: String,
     #[doc="<p>The tenancy of the instance. An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware and can only be launched into a VPC.</p> <p>You must set the value of this parameter to <code>dedicated</code> if want to launch Dedicated Instances into a shared tenancy VPC (VPC with instance placement tenancy attribute set to <code>default</code>).</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>"]
+    #[serde(rename="PlacementTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_tenancy: Option<String>,
     #[doc="<p>The ID of the RAM disk associated with the AMI.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups with which to associate the instances.</p> <p>If your instances are launched in EC2-Classic, you can either specify security group names or the security group IDs. For more information about security groups for EC2-Classic, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If your instances are launched into a VPC, specify security group IDs. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/US-SpotInstances.html\">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="SpotPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price: Option<String>,
     #[doc="<p>The user data to make available to the launched EC2 instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\">Instance Metadata and User Data</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -1932,9 +2101,10 @@ impl CreateLaunchConfigurationTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateOrUpdateTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateOrUpdateTagsType {
     #[doc="<p>One or more tags.</p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -1954,17 +2124,24 @@ impl CreateOrUpdateTagsTypeSerializer {
 }
 
 #[doc="<p>Configures a customized metric for a target tracking policy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CustomizedMetricSpecification {
     #[doc="<p>The dimensions of the metric.</p>"]
+    #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<Vec<MetricDimension>>,
     #[doc="<p>The name of the metric.</p>"]
+    #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The namespace of the metric.</p>"]
+    #[serde(rename="Namespace")]
     pub namespace: String,
     #[doc="<p>The statistic of the metric.</p>"]
+    #[serde(rename="Statistic")]
     pub statistic: String,
     #[doc="<p>The unit of the metric.</p>"]
+    #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<String>,
 }
 
@@ -2057,11 +2234,14 @@ impl CustomizedMetricSpecificationSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteAutoScalingGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAutoScalingGroupType {
     #[doc="<p>The name of the group to delete.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>Specifies that the group will be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any lifecycle actions associated with the group.</p>"]
+    #[serde(rename="ForceDelete")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force_delete: Option<bool>,
 }
 
@@ -2086,7 +2266,7 @@ impl DeleteAutoScalingGroupTypeSerializer {
 }
 
 #[doc="<p>Contains the output of DeleteLifecycleHook.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLifecycleHookAnswer;
 
 struct DeleteLifecycleHookAnswerDeserializer;
@@ -2106,11 +2286,13 @@ impl DeleteLifecycleHookAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteLifecycleHook.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteLifecycleHookType {
     #[doc="<p>The name of the Auto Scaling group for the lifecycle hook.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The name of the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleHookName")]
     pub lifecycle_hook_name: String,
 }
 
@@ -2133,11 +2315,13 @@ impl DeleteLifecycleHookTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteNotificationConfiguration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNotificationConfigurationType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
+    #[serde(rename="TopicARN")]
     pub topic_arn: String,
 }
 
@@ -2160,11 +2344,14 @@ impl DeleteNotificationConfigurationTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeletePolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePolicyType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The name or Amazon Resource Name (ARN) of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -2189,11 +2376,13 @@ impl DeletePolicyTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteScheduledAction.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteScheduledActionType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The name of the action to delete.</p>"]
+    #[serde(rename="ScheduledActionName")]
     pub scheduled_action_name: String,
 }
 
@@ -2216,9 +2405,10 @@ impl DeleteScheduledActionTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsType {
     #[doc="<p>One or more tags.</p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -2238,15 +2428,23 @@ impl DeleteTagsTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeAccountLimits.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountLimitsAnswer {
     #[doc="<p>The maximum number of groups allowed for your AWS account. The default limit is 20 per region.</p>"]
+    #[serde(rename="MaxNumberOfAutoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_number_of_auto_scaling_groups: Option<i64>,
     #[doc="<p>The maximum number of launch configurations allowed for your AWS account. The default limit is 100 per region.</p>"]
+    #[serde(rename="MaxNumberOfLaunchConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_number_of_launch_configurations: Option<i64>,
     #[doc="<p>The current number of groups for your AWS account.</p>"]
+    #[serde(rename="NumberOfAutoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_auto_scaling_groups: Option<i64>,
     #[doc="<p>The current number of launch configurations for your AWS account.</p>"]
+    #[serde(rename="NumberOfLaunchConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub number_of_launch_configurations: Option<i64>,
 }
 
@@ -2301,9 +2499,11 @@ impl DescribeAccountLimitsAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeAdjustmentTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAdjustmentTypesAnswer {
     #[doc="<p>The policy adjustment types.</p>"]
+    #[serde(rename="AdjustmentTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjustment_types: Option<Vec<AdjustmentType>>,
 }
 
@@ -2351,13 +2551,19 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeAutoScalingInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAutoScalingInstancesType {
     #[doc="<p>The instances to describe; up to 50 instance IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2389,9 +2595,11 @@ impl DescribeAutoScalingInstancesTypeSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeAutoScalingNotificationTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAutoScalingNotificationTypesAnswer {
     #[doc="<p>The notification types.</p>"]
+    #[serde(rename="AutoScalingNotificationTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_notification_types: Option<Vec<String>>,
 }
 
@@ -2438,9 +2646,11 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeLifecycleHookTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLifecycleHookTypesAnswer {
     #[doc="<p>The lifecycle hook types.</p>"]
+    #[serde(rename="LifecycleHookTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_hook_types: Option<Vec<String>>,
 }
 
@@ -2487,9 +2697,11 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeLifecycleHooks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLifecycleHooksAnswer {
     #[doc="<p>The lifecycle hooks for the specified group.</p>"]
+    #[serde(rename="LifecycleHooks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_hooks: Option<Vec<LifecycleHook>>,
 }
 
@@ -2537,11 +2749,14 @@ impl DescribeLifecycleHooksAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeLifecycleHooks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLifecycleHooksType {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The names of one or more lifecycle hooks. If you omit this parameter, all lifecycle hooks are described.</p>"]
+    #[serde(rename="LifecycleHookNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_hook_names: Option<Vec<String>>,
 }
 
@@ -2567,13 +2782,18 @@ impl DescribeLifecycleHooksTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeLoadBalancerTargetGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancerTargetGroupsRequest {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2602,11 +2822,15 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeLoadBalancerTargetGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancerTargetGroupsResponse {
     #[doc="<p>Information about the target groups.</p>"]
+    #[serde(rename="LoadBalancerTargetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_target_groups: Option<Vec<LoadBalancerTargetGroupState>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2657,13 +2881,18 @@ impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancersRequest {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2692,11 +2921,15 @@ impl DescribeLoadBalancersRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeLoadBalancersResponse {
     #[doc="<p>The load balancers.</p>"]
+    #[serde(rename="LoadBalancers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancerState>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2748,11 +2981,15 @@ impl DescribeLoadBalancersResponseDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeMetricsCollectionTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMetricCollectionTypesAnswer {
     #[doc="<p>The granularities for the metrics.</p>"]
+    #[serde(rename="Granularities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub granularities: Option<Vec<MetricGranularityType>>,
     #[doc="<p>One or more metrics.</p>"]
+    #[serde(rename="Metrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics: Option<Vec<MetricCollectionType>>,
 }
 
@@ -2806,11 +3043,14 @@ impl DescribeMetricCollectionTypesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the output from DescribeNotificationConfigurations.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationConfigurationsAnswer {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The notification configurations.</p>"]
+    #[serde(rename="NotificationConfigurations")]
     pub notification_configurations: Vec<NotificationConfiguration>,
 }
 
@@ -2863,13 +3103,19 @@ impl DescribeNotificationConfigurationsAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNotificationConfigurations.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNotificationConfigurationsType {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2903,17 +3149,27 @@ impl DescribeNotificationConfigurationsTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribePolicies.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePoliciesType {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The maximum number of items to be returned with each call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more policy names or policy ARNs to be described. If you omit this parameter, all policy names are described. If an group name is provided, the results are limited to that group. This list is limited to 50 items. If you specify an unknown policy name, it is ignored with no error.</p>"]
+    #[serde(rename="PolicyNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_names: Option<Vec<String>>,
     #[doc="<p>One or more policy types. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>"]
+    #[serde(rename="PolicyTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_types: Option<Vec<String>>,
 }
 
@@ -2954,15 +3210,23 @@ impl DescribePoliciesTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeScalingActivities.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalingActivitiesType {
     #[doc="<p>The activity IDs of the desired scaling activities. If you omit this parameter, all activities for the past six weeks are described. If you specify an Auto Scaling group, the results are limited to that group. The list of requested activities cannot contain more than 50 items. If unknown activities are requested, they are ignored with no error.</p>"]
+    #[serde(rename="ActivityIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_ids: Option<Vec<String>>,
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -2998,19 +3262,31 @@ impl DescribeScalingActivitiesTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeScheduledActions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScheduledActionsType {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The latest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Describes one or more scheduled actions. If you omit this parameter, all scheduled actions are described. If you specify an unknown scheduled action, it is ignored with no error.</p> <p>You can describe up to a maximum of 50 instances with a single call. If there are more items to return, the call returns a token. To get the next set of items, repeat the call with the returned token.</p>"]
+    #[serde(rename="ScheduledActionNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_action_names: Option<Vec<String>>,
     #[doc="<p>The earliest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
 }
 
@@ -3056,13 +3332,19 @@ impl DescribeScheduledActionsTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsType {
     #[doc="<p>A filter used to scope the tags to return.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -3092,9 +3374,11 @@ impl DescribeTagsTypeSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeTerminationPolicyTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTerminationPolicyTypesAnswer {
     #[doc="<p>The termination policies supported by Auto Scaling (<code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, and <code>Default</code>).</p>"]
+    #[serde(rename="TerminationPolicyTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_policy_types: Option<Vec<String>>,
 }
 
@@ -3143,9 +3427,11 @@ impl DescribeTerminationPolicyTypesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the output of DetachInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachInstancesAnswer {
     #[doc="<p>The activities related to detaching the instances from the Auto Scaling group.</p>"]
+    #[serde(rename="Activities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activities: Option<Vec<Activity>>,
 }
 
@@ -3192,13 +3478,17 @@ impl DetachInstancesAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DetachInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachInstancesQuery {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>If <code>True</code>, the Auto Scaling group decrements the desired capacity value by the number of instances detached.</p>"]
+    #[serde(rename="ShouldDecrementDesiredCapacity")]
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -3227,7 +3517,7 @@ impl DetachInstancesQuerySerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachLoadBalancerTargetGroupsResultType;
 
 struct DetachLoadBalancerTargetGroupsResultTypeDeserializer;
@@ -3247,11 +3537,13 @@ impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachLoadBalancerTargetGroupsType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
+    #[serde(rename="TargetGroupARNs")]
     pub target_group_ar_ns: Vec<String>,
 }
 
@@ -3275,7 +3567,7 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[doc="<p>Contains the output for DetachLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachLoadBalancersResultType;
 
 struct DetachLoadBalancersResultTypeDeserializer;
@@ -3295,11 +3587,13 @@ impl DetachLoadBalancersResultTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DetachLoadBalancers.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachLoadBalancersType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more load balancer names.</p>"]
+    #[serde(rename="LoadBalancerNames")]
     pub load_balancer_names: Vec<String>,
 }
 
@@ -3323,11 +3617,14 @@ impl DetachLoadBalancersTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for DisableMetricsCollection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableMetricsCollectionQuery {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more of the following metrics. If you omit this parameter, all metrics are disabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
+    #[serde(rename="Metrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3365,19 +3662,31 @@ impl DisableScaleInDeserializer {
     }
 }
 #[doc="<p>Describes an Amazon EBS volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Ebs {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p> <p>Default: <code>true</code> </p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) to provision for the volume.</p> <p>Constraint: Required when the volume type is <code>io1</code>.</p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The volume size, in GiB. For <code>standard</code> volumes, specify a value from 1 to 1,024. For <code>io1</code> volumes, specify a value from 4 to 16,384. For <code>gp2</code> volumes, specify a value from 1 to 16,384. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don't specify a volume size, the default is the snapshot size.</p>"]
+    #[serde(rename="VolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size: Option<i64>,
     #[doc="<p>The volume type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> </p> <p>Default: <code>standard</code> </p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -3496,13 +3805,17 @@ impl EbsOptimizedDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for EnableMetricsCollection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableMetricsCollectionQuery {
     #[doc="<p>The name or ARN of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The granularity to associate with the metrics to collect. The only valid value is <code>1Minute</code>.</p>"]
+    #[serde(rename="Granularity")]
     pub granularity: String,
     #[doc="<p>One or more of the following metrics. If you omit this parameter, all metrics are enabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
+    #[serde(rename="Metrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3528,11 +3841,15 @@ impl EnableMetricsCollectionQuerySerializer {
 }
 
 #[doc="<p>Describes an enabled metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnabledMetric {
     #[doc="<p>The granularity of the metric. The only valid value is <code>1Minute</code>.</p>"]
+    #[serde(rename="Granularity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub granularity: Option<String>,
     #[doc="<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
+    #[serde(rename="Metric")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric: Option<String>,
 }
 
@@ -3626,9 +3943,11 @@ impl EnabledMetricsDeserializer {
     }
 }
 #[doc="<p>Contains the output of EnterStandby.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnterStandbyAnswer {
     #[doc="<p>The activities related to moving instances into <code>Standby</code> mode.</p>"]
+    #[serde(rename="Activities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activities: Option<Vec<Activity>>,
 }
 
@@ -3675,13 +3994,17 @@ impl EnterStandbyAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for EnteStandby.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnterStandbyQuery {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more instances to move into <code>Standby</code> mode. You must specify at least one instance ID.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>Specifies whether the instances moved to <code>Standby</code> mode count as part of the Auto Scaling group's desired capacity. If set, the desired capacity for the Auto Scaling group decrements by the number of instances moved to <code>Standby</code> mode.</p>"]
+    #[serde(rename="ShouldDecrementDesiredCapacity")]
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -3725,17 +4048,26 @@ impl EstimatedInstanceWarmupDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ExecutePolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExecutePolicyType {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The breach threshold for the alarm.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
+    #[serde(rename="BreachThreshold")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub breach_threshold: Option<f64>,
     #[doc="<p>If this parameter is true, Auto Scaling waits for the cooldown period to complete before executing the policy. Otherwise, Auto Scaling executes the policy without waiting for the cooldown period to complete.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="HonorCooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub honor_cooldown: Option<bool>,
     #[doc="<p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
+    #[serde(rename="MetricValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_value: Option<f64>,
     #[doc="<p>The name or ARN of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
 }
 
@@ -3772,9 +4104,11 @@ impl ExecutePolicyTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for ExitStandby.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExitStandbyAnswer {
     #[doc="<p>The activities related to moving instances out of <code>Standby</code> mode.</p>"]
+    #[serde(rename="Activities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activities: Option<Vec<Activity>>,
 }
 
@@ -3821,11 +4155,14 @@ impl ExitStandbyAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ExitStandby.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExitStandbyQuery {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs. You must specify at least one instance ID.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
 }
 
@@ -3851,11 +4188,15 @@ impl ExitStandbyQuerySerializer {
 }
 
 #[doc="<p>Describes a filter.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Filter {
     #[doc="<p>The name of the filter. The valid values are: <code>\"auto-scaling-group\"</code>, <code>\"key\"</code>, <code>\"value\"</code>, and <code>\"propagate-at-launch\"</code>.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The value of the filter.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
@@ -3935,19 +4276,25 @@ impl HeartbeatTimeoutDeserializer {
     }
 }
 #[doc="<p>Describes an EC2 instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Instance {
     #[doc="<p>The Availability Zone in which the instance is running.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>The last reported health status of the instance. \"Healthy\" means that the instance is healthy and should remain in service. \"Unhealthy\" means that the instance is unhealthy and Auto Scaling should terminate and replace it.</p>"]
+    #[serde(rename="HealthStatus")]
     pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The launch configuration associated with the instance.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
     pub launch_configuration_name: String,
     #[doc="<p>A description of the current lifecycle state. Note that the <code>Quarantined</code> state is not used.</p>"]
+    #[serde(rename="LifecycleState")]
     pub lifecycle_state: String,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="ProtectedFromScaleIn")]
     pub protected_from_scale_in: bool,
 }
 
@@ -4032,9 +4379,11 @@ impl InstanceIdsSerializer {
 }
 
 #[doc="<p>Describes whether instance monitoring is enabled.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceMonitoring {
     #[doc="<p>If <code>True</code>, instance monitoring is enabled.</p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
 }
 
@@ -4155,45 +4504,79 @@ impl InstancesDeserializer {
     }
 }
 #[doc="<p>Describes a launch configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchConfiguration {
     #[doc="<p>[EC2-VPC] Indicates whether to assign a public IP address to each instance.</p>"]
+    #[serde(rename="AssociatePublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associate_public_ip_address: Option<bool>,
     #[doc="<p>A block device mapping, which specifies the block devices for the instance.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter can only be used if you are launching EC2-Classic instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClassicLinkVPCId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_vpc_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. This parameter is required if you specify a ClassicLink-enabled VPC, and cannot be used otherwise. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClassicLinkVPCSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
     #[doc="<p>The creation date and time for the launch configuration.</p>"]
+    #[serde(rename="CreatedTime")]
     pub created_time: String,
     #[doc="<p>Controls whether the instance is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>).</p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The name or Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI).</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
     #[doc="<p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p>"]
+    #[serde(rename="InstanceMonitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_monitoring: Option<InstanceMonitoring>,
     #[doc="<p>The instance type for the instances.</p>"]
+    #[serde(rename="InstanceType")]
     pub instance_type: String,
     #[doc="<p>The ID of the kernel associated with the AMI.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_configuration_arn: Option<String>,
     #[doc="<p>The name of the launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
     pub launch_configuration_name: String,
     #[doc="<p>The tenancy of the instance, either <code>default</code> or <code>dedicated</code>. An instance with <code>dedicated</code> tenancy runs in an isolated, single-tenant hardware and can only be launched into a VPC.</p>"]
+    #[serde(rename="PlacementTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_tenancy: Option<String>,
     #[doc="<p>The ID of the RAM disk associated with the AMI.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The security groups to associate with the instances.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>The price to bid when launching Spot Instances.</p>"]
+    #[serde(rename="SpotPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price: Option<String>,
     #[doc="<p>The user data available to the instances.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -4324,9 +4707,10 @@ impl LaunchConfigurationDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteLaunchConfiguration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchConfigurationNameType {
     #[doc="<p>The name of the launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
     pub launch_configuration_name: String,
 }
 
@@ -4359,13 +4743,19 @@ impl LaunchConfigurationNamesSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeLaunchConfigurations.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchConfigurationNamesType {
     #[doc="<p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>"]
+    #[serde(rename="LaunchConfigurationNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_configuration_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -4441,11 +4831,14 @@ impl LaunchConfigurationsDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeLaunchConfigurations.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchConfigurationsType {
     #[doc="<p>The launch configurations.</p>"]
+    #[serde(rename="LaunchConfigurations")]
     pub launch_configurations: Vec<LaunchConfiguration>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -4511,25 +4904,43 @@ impl LifecycleActionResultDeserializer {
     }
 }
 #[doc="<p>Describes a lifecycle hook, which tells Auto Scaling that you want to perform an action when an instance launches or terminates. When you have a lifecycle hook in place, the Auto Scaling group will either:</p> <ul> <li> <p>Pause the instance after it launches, but before it is put into service</p> </li> <li> <p>Pause the instance as it terminates, but before it is fully terminated</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LifecycleHook {
     #[doc="<p>The name of the Auto Scaling group for the lifecycle hook.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>. The default value is <code>CONTINUE</code>.</p>"]
+    #[serde(rename="DefaultResult")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_result: Option<String>,
     #[doc="<p>The maximum time, in seconds, that an instance can remain in a <code>Pending:Wait</code> or <code>Terminating:Wait</code> state. The maximum is 172800 seconds (48 hours) or 100 times <code>HeartbeatTimeout</code>, whichever is smaller.</p>"]
+    #[serde(rename="GlobalTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub global_timeout: Option<i64>,
     #[doc="<p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. The default is 3600 seconds (1 hour). When the lifecycle hook times out, Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>"]
+    #[serde(rename="HeartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub heartbeat_timeout: Option<i64>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleHookName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_hook_name: Option<String>,
     #[doc="<p>The state of the EC2 instance to which you want to attach the lifecycle hook. For a list of lifecycle hook types, see <a>DescribeLifecycleHookTypes</a>.</p>"]
+    #[serde(rename="LifecycleTransition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_transition: Option<String>,
     #[doc="<p>Additional information that you want to include any time Auto Scaling sends a message to the notification target.</p>"]
+    #[serde(rename="NotificationMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_metadata: Option<String>,
     #[doc="<p>The ARN of the notification target that Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This ARN target can be either an SQS queue or an SNS topic. The notification message sent to the target includes the following:</p> <ul> <li> <p>Lifecycle action token</p> </li> <li> <p>User account ID</p> </li> <li> <p>Name of the Auto Scaling group</p> </li> <li> <p>Lifecycle hook name</p> </li> <li> <p>EC2 instance ID</p> </li> <li> <p>Lifecycle transition</p> </li> <li> <p>Notification metadata</p> </li> </ul>"]
+    #[serde(rename="NotificationTargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_target_arn: Option<String>,
     #[doc="<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p>"]
+    #[serde(rename="RoleARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
 }
 
@@ -4751,11 +5162,15 @@ impl LoadBalancerNamesSerializer {
 }
 
 #[doc="<p>Describes the state of a Classic Load Balancer.</p> <p>If you specify a load balancer when creating the Auto Scaling group, the state of the load balancer is <code>InService</code>.</p> <p>If you attach a load balancer to an existing Auto Scaling group, the initial state is <code>Adding</code>. The state transitions to <code>Added</code> after all instances in the group are registered with the load balancer. If ELB health checks are enabled for the load balancer, the state transitions to <code>InService</code> after at least one instance in the group passes the health check. If EC2 health checks are enabled instead, the load balancer remains in the <code>Added</code> state.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerState {
     #[doc="<p>The name of the load balancer.</p>"]
+    #[serde(rename="LoadBalancerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_name: Option<String>,
     #[doc="<p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The instances in the group are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All instances in the group are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one instance in the group passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The instances in the group are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All instances in the group are deregistered from the load balancer.</p> </li> </ul>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -4849,11 +5264,15 @@ impl LoadBalancerStatesDeserializer {
     }
 }
 #[doc="<p>Describes the state of a target group.</p> <p>If you attach a target group to an existing Auto Scaling group, the initial state is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the target group. If ELB health checks are enabled, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. If EC2 health checks are enabled instead, the target group remains in the <code>Added</code> state.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LoadBalancerTargetGroupState {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
+    #[serde(rename="LoadBalancerTargetGroupARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_target_group_arn: Option<String>,
     #[doc="<p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -4976,9 +5395,11 @@ impl MaxNumberOfLaunchConfigurationsDeserializer {
     }
 }
 #[doc="<p>Describes a metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricCollectionType {
     #[doc="<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
+    #[serde(rename="Metric")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric: Option<String>,
 }
 
@@ -5068,11 +5489,13 @@ impl MetricCollectionTypesDeserializer {
     }
 }
 #[doc="<p>Describes the dimension of a metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricDimension {
     #[doc="<p>The name of the dimension.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The value of the dimension.</p>"]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -5222,9 +5645,11 @@ impl MetricDimensionsSerializer {
 }
 
 #[doc="<p>Describes a granularity of a metric.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricGranularityType {
     #[doc="<p>The granularity. The only valid value is <code>1Minute</code>.</p>"]
+    #[serde(rename="Granularity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub granularity: Option<String>,
 }
 
@@ -5466,13 +5891,19 @@ impl NoDeviceDeserializer {
     }
 }
 #[doc="<p>Describes a notification.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotificationConfiguration {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>One of the following event notification types:</p> <ul> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH_ERROR</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE_ERROR</code> </p> </li> <li> <p> <code>autoscaling:TEST_NOTIFICATION</code> </p> </li> </ul>"]
+    #[serde(rename="NotificationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
+    #[serde(rename="TopicARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -5600,11 +6031,15 @@ impl NumberOfLaunchConfigurationsDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribePolicies.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PoliciesType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The scaling policies.</p>"]
+    #[serde(rename="ScalingPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
@@ -5656,11 +6091,15 @@ impl PoliciesTypeDeserializer {
     }
 }
 #[doc="<p>Contains the output of PutScalingPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyARNType {
     #[doc="<p>The CloudWatch alarms created for the target tracking policy. This parameter will be empty if the policy type is anything other than <code>TargetTrackingScaling</code>.</p>"]
+    #[serde(rename="Alarms")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarms: Option<Vec<Alarm>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p>"]
+    #[serde(rename="PolicyARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<String>,
 }
 
@@ -5750,11 +6189,14 @@ impl PolicyTypesSerializer {
 }
 
 #[doc="<p>Configures a predefined metric for a target tracking policy. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - average CPU utilization of the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - average number of bytes received on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - average number of bytes sent out on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - number of requests completed per target in an Application Load Balancer target group</p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PredefinedMetricSpecification {
     #[doc="<p>The metric type.</p>"]
+    #[serde(rename="PredefinedMetricType")]
     pub predefined_metric_type: String,
     #[doc="<p>Identifies the resource associated with the metric type. For predefined metric types <code>ASGAverageCPUUtilization</code>, <code>ASGAverageNetworkIn</code> and <code>ASGAverageNetworkOut</code>, the parameter must not be specified as the resource associated with the metric type is the Auto Scaling group. For predefined metric type <code>ALBRequestCountPerTarget</code>, the parameter must be specified in the format <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN. The target group must be attached to the Auto Scaling group.</p>"]
+    #[serde(rename="ResourceLabel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_label: Option<String>,
 }
 
@@ -5839,9 +6281,10 @@ impl ProcessNamesSerializer {
 }
 
 #[doc="<p>Describes a process type.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html#process-types\">Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProcessType {
     #[doc="<p>One of the following processes:</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> </ul>"]
+    #[serde(rename="ProcessName")]
     pub process_name: String,
 }
 
@@ -5930,9 +6373,11 @@ impl ProcessesDeserializer {
     }
 }
 #[doc="<p>Contains the output of DescribeScalingProcessTypes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProcessesType {
     #[doc="<p>The names of the process types.</p>"]
+    #[serde(rename="Processes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub processes: Option<Vec<ProcessType>>,
 }
 
@@ -6007,7 +6452,7 @@ impl PropagateAtLaunchDeserializer {
     }
 }
 #[doc="<p>Contains the output of PutLifecycleHook.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLifecycleHookAnswer;
 
 struct PutLifecycleHookAnswerDeserializer;
@@ -6027,23 +6472,37 @@ impl PutLifecycleHookAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for PutLifecycleHook.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutLifecycleHookType {
     #[doc="<p>The name of the Auto Scaling group to which you want to assign the lifecycle hook.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>"]
+    #[serde(rename="DefaultResult")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_result: Option<String>,
     #[doc="<p>The amount of time, in seconds, that can elapse before the lifecycle hook times out. When the lifecycle hook times out, Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>. The default is 3600 seconds (1 hour).</p>"]
+    #[serde(rename="HeartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub heartbeat_timeout: Option<i64>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleHookName")]
     pub lifecycle_hook_name: String,
     #[doc="<p>The instance state to which you want to attach the lifecycle hook. For a list of lifecycle hook types, see <a>DescribeLifecycleHookTypes</a>.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>"]
+    #[serde(rename="LifecycleTransition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_transition: Option<String>,
     #[doc="<p>Contains additional information that you want to include any time Auto Scaling sends a message to the notification target.</p>"]
+    #[serde(rename="NotificationMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_metadata: Option<String>,
     #[doc="<p>The ARN of the notification target that Auto Scaling will use to notify you when an instance is in the transition state for the lifecycle hook. This target can be either an SQS queue or an SNS topic. If you specify an empty string, this overrides the current ARN.</p> <p>This operation uses the JSON format when sending notifications to an Amazon SQS queue, and an email key/value pair format when sending notifications to an Amazon SNS topic.</p> <p>When you specify a notification target, Auto Scaling sends it a test message. Test messages contains the following additional key/value pair: <code>\"Event\": \"autoscaling:TEST_NOTIFICATION\"</code>.</p>"]
+    #[serde(rename="NotificationTargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_target_arn: Option<String>,
     #[doc="<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>"]
+    #[serde(rename="RoleARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
 }
 
@@ -6090,13 +6549,16 @@ impl PutLifecycleHookTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for PutNotificationConfiguration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutNotificationConfigurationType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The type of event that will cause the notification to be sent. For details about notification types supported by Auto Scaling, see <a>DescribeAutoScalingNotificationTypes</a>.</p>"]
+    #[serde(rename="NotificationTypes")]
     pub notification_types: Vec<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
+    #[serde(rename="TopicARN")]
     pub topic_arn: String,
 }
 
@@ -6124,31 +6586,53 @@ impl PutNotificationConfigurationTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for PutScalingPolicy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutScalingPolicyType {
     #[doc="<p>The adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-scale-based-on-demand.html\">Dynamic Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="AdjustmentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjustment_type: Option<String>,
     #[doc="<p>The name or ARN of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="Cooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cooldown: Option<i64>,
     #[doc="<p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics. The default is to use the value specified for the default cooldown period for the group.</p> <p>This parameter is supported if the policy type is <code>StepScaling</code> or <code>TargetTrackingScaling</code>.</p>"]
+    #[serde(rename="EstimatedInstanceWarmup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub estimated_instance_warmup: Option<i64>,
     #[doc="<p>The aggregation type for the CloudWatch metrics. The valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>. If the aggregation type is null, the value is treated as <code>Average</code>.</p> <p>This parameter is supported if the policy type is <code>StepScaling</code>.</p>"]
+    #[serde(rename="MetricAggregationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_aggregation_type: Option<String>,
     #[doc="<p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p>"]
+    #[serde(rename="MinAdjustmentMagnitude")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_adjustment_magnitude: Option<i64>,
     #[doc="<p>Available for backward compatibility. Use <code>MinAdjustmentMagnitude</code> instead.</p>"]
+    #[serde(rename="MinAdjustmentStep")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_adjustment_step: Option<i64>,
     #[doc="<p>The name of the policy.</p>"]
+    #[serde(rename="PolicyName")]
     pub policy_name: String,
     #[doc="<p>The policy type. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>. If the policy type is null, the value is treated as <code>SimpleScaling</code>.</p>"]
+    #[serde(rename="PolicyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_type: Option<String>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p> <p>This parameter is required if the policy type is <code>SimpleScaling</code> and not supported otherwise.</p>"]
+    #[serde(rename="ScalingAdjustment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scaling_adjustment: Option<i64>,
     #[doc="<p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
+    #[serde(rename="StepAdjustments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_adjustments: Option<Vec<StepAdjustment>>,
     #[doc="<p>The configuration of a target tracking policy.</p> <p>This parameter is required if the policy type is <code>TargetTrackingScaling</code> and not supported otherwise.</p>"]
+    #[serde(rename="TargetTrackingConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -6215,25 +6699,41 @@ impl PutScalingPolicyTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for PutScheduledUpdateGroupAction.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutScheduledUpdateGroupActionType {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The number of EC2 instances that should be running in the group.</p>"]
+    #[serde(rename="DesiredCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_capacity: Option<i64>,
     #[doc="<p>The time for the recurring schedule to end. Auto Scaling does not perform the action after this time.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>The maximum size for the Auto Scaling group.</p>"]
+    #[serde(rename="MaxSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_size: Option<i64>,
     #[doc="<p>The minimum size for the Auto Scaling group.</p>"]
+    #[serde(rename="MinSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_size: Option<i64>,
     #[doc="<p>The recurring schedule for this action, in Unix cron syntax format. For more information, see <a href=\"http://en.wikipedia.org/wiki/Cron\">Cron</a> in Wikipedia.</p>"]
+    #[serde(rename="Recurrence")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurrence: Option<String>,
     #[doc="<p>The name of this scaling action.</p>"]
+    #[serde(rename="ScheduledActionName")]
     pub scheduled_action_name: String,
     #[doc="<p>The time for this action to start, in \"YYYY-MM-DDThh:mm:ssZ\" format in UTC/GMT only (for example, <code>2014-06-01T00:00:00Z</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Auto Scaling returns an error message.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>This parameter is deprecated.</p>"]
+    #[serde(rename="Time")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub time: Option<String>,
 }
 
@@ -6284,7 +6784,7 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
 }
 
 #[doc="<p>Contains the output of RecordLifecycleActionHeartBeat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordLifecycleActionHeartbeatAnswer;
 
 struct RecordLifecycleActionHeartbeatAnswerDeserializer;
@@ -6305,15 +6805,21 @@ impl RecordLifecycleActionHeartbeatAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for RecordLifecycleActionHeartbeat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecordLifecycleActionHeartbeatType {
     #[doc="<p>The name of the Auto Scaling group for the hook.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>A token that uniquely identifies a specific lifecycle action associated with an instance. Auto Scaling sends this token to the notification target you specified when you created the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleActionToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_action_token: Option<String>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
+    #[serde(rename="LifecycleHookName")]
     pub lifecycle_hook_name: String,
 }
 
@@ -6413,35 +6919,63 @@ impl ScalingPoliciesDeserializer {
     }
 }
 #[doc="<p>Describes a scaling policy.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalingPolicy {
     #[doc="<p>The adjustment type, which specifies how <code>ScalingAdjustment</code> is interpreted. Valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>"]
+    #[serde(rename="AdjustmentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjustment_type: Option<String>,
     #[doc="<p>The CloudWatch alarms related to the policy.</p>"]
+    #[serde(rename="Alarms")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarms: Option<Vec<Alarm>>,
     #[doc="<p>The name of the Auto Scaling group associated with this scaling policy.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before any further trigger-related scaling activities can start.</p>"]
+    #[serde(rename="Cooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cooldown: Option<i64>,
     #[doc="<p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics.</p>"]
+    #[serde(rename="EstimatedInstanceWarmup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub estimated_instance_warmup: Option<i64>,
     #[doc="<p>The aggregation type for the CloudWatch metrics. Valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>.</p>"]
+    #[serde(rename="MetricAggregationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_aggregation_type: Option<String>,
     #[doc="<p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p>"]
+    #[serde(rename="MinAdjustmentMagnitude")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_adjustment_magnitude: Option<i64>,
     #[doc="<p>Available for backward compatibility. Use <code>MinAdjustmentMagnitude</code> instead.</p>"]
+    #[serde(rename="MinAdjustmentStep")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_adjustment_step: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p>"]
+    #[serde(rename="PolicyARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<String>,
     #[doc="<p>The name of the scaling policy.</p>"]
+    #[serde(rename="PolicyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
     #[doc="<p>The policy type. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>"]
+    #[serde(rename="PolicyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_type: Option<String>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>"]
+    #[serde(rename="ScalingAdjustment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scaling_adjustment: Option<i64>,
     #[doc="<p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p>"]
+    #[serde(rename="StepAdjustments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_adjustments: Option<Vec<StepAdjustment>>,
     #[doc="<p>A target tracking policy.</p>"]
+    #[serde(rename="TargetTrackingConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -6550,11 +7084,14 @@ impl ScalingPolicyDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for SuspendProcesses and ResumeProcesses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalingProcessQuery {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul>"]
+    #[serde(rename="ScalingProcesses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scaling_processes: Option<Vec<String>>,
 }
 
@@ -6592,11 +7129,15 @@ impl ScheduledActionNamesSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeScheduledActions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledActionsType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The scheduled actions.</p>"]
+    #[serde(rename="ScheduledUpdateGroupActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
 }
 
@@ -6646,27 +7187,47 @@ impl ScheduledActionsTypeDeserializer {
     }
 }
 #[doc="<p>Describes a scheduled update to an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledUpdateGroupAction {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The number of instances you prefer to maintain in the group.</p>"]
+    #[serde(rename="DesiredCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_capacity: Option<i64>,
     #[doc="<p>The date and time that the action is scheduled to end. This date and time can be up to one month in the future.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>The maximum size of the group.</p>"]
+    #[serde(rename="MaxSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_size: Option<i64>,
     #[doc="<p>The minimum size of the group.</p>"]
+    #[serde(rename="MinSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_size: Option<i64>,
     #[doc="<p>The recurring schedule for the action.</p>"]
+    #[serde(rename="Recurrence")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurrence: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the scheduled action.</p>"]
+    #[serde(rename="ScheduledActionARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_action_arn: Option<String>,
     #[doc="<p>The name of the scheduled action.</p>"]
+    #[serde(rename="ScheduledActionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_action_name: Option<String>,
     #[doc="<p>The date and time that the action is scheduled to begin. This date and time can be up to one month in the future.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action will start and stop.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>This parameter is deprecated.</p>"]
+    #[serde(rename="Time")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub time: Option<String>,
 }
 
@@ -6852,13 +7413,17 @@ impl SecurityGroupsSerializer {
 }
 
 #[doc="<p>Contains the parameters for SetDesiredCapacity.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetDesiredCapacityType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>The number of EC2 instances that should be running in the Auto Scaling group.</p>"]
+    #[serde(rename="DesiredCapacity")]
     pub desired_capacity: i64,
     #[doc="<p>By default, <code>SetDesiredCapacity</code> overrides any cooldown period associated with the Auto Scaling group. Specify <code>True</code> to make Auto Scaling to wait for the cool-down period associated with the Auto Scaling group to complete before initiating a scaling activity to set your Auto Scaling group to its new capacity.</p>"]
+    #[serde(rename="HonorCooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub honor_cooldown: Option<bool>,
 }
 
@@ -6885,13 +7450,17 @@ impl SetDesiredCapacityTypeSerializer {
 }
 
 #[doc="<p>Contains the parameters for SetInstanceHealth.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetInstanceHealthQuery {
     #[doc="<p>The health status of the instance. Set to <code>Healthy</code> if you want the instance to remain in service. Set to <code>Unhealthy</code> if you want the instance to be out of service. Auto Scaling will terminate and replace the unhealthy instance.</p>"]
+    #[serde(rename="HealthStatus")]
     pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>If the Auto Scaling group of the specified instance has a <code>HealthCheckGracePeriod</code> specified for the group, by default, this call will respect the grace period. Set this to <code>False</code>, if you do not want the call to respect the grace period associated with the group.</p> <p>For more information, see the description of the health check grace period for <a>CreateAutoScalingGroup</a>.</p>"]
+    #[serde(rename="ShouldRespectGracePeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub should_respect_grace_period: Option<bool>,
 }
 
@@ -6918,7 +7487,7 @@ impl SetInstanceHealthQuerySerializer {
 }
 
 #[doc="<p>Contains the output of SetInstanceProtection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetInstanceProtectionAnswer;
 
 struct SetInstanceProtectionAnswerDeserializer;
@@ -6938,13 +7507,16 @@ impl SetInstanceProtectionAnswerDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for SetInstanceProtection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetInstanceProtectionQuery {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="ProtectedFromScaleIn")]
     pub protected_from_scale_in: bool,
 }
 
@@ -6984,13 +7556,18 @@ impl SpotPriceDeserializer {
     }
 }
 #[doc="<p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you've defined for the alarm.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>If you want the adjustment to be triggered when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>If you want the adjustment to be triggered when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can't overlap or have a gap.</p> </li> <li> <p>At most one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can't be null in the same step adjustment.</p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StepAdjustment {
     #[doc="<p>The lower bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the lower bound is inclusive (the metric must be greater than or equal to the threshold plus the lower bound). Otherwise, it is exclusive (the metric must be greater than the threshold plus the lower bound). A null value indicates negative infinity.</p>"]
+    #[serde(rename="MetricIntervalLowerBound")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_interval_lower_bound: Option<f64>,
     #[doc="<p>The upper bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the upper bound is exclusive (the metric must be less than the threshold plus the upper bound). Otherwise, it is inclusive (the metric must be less than or equal to the threshold plus the upper bound). A null value indicates positive infinity.</p> <p>The upper bound must be greater than the lower bound.</p>"]
+    #[serde(rename="MetricIntervalUpperBound")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_interval_upper_bound: Option<f64>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>"]
+    #[serde(rename="ScalingAdjustment")]
     pub scaling_adjustment: i64,
 }
 
@@ -7125,11 +7702,15 @@ impl StepAdjustmentsSerializer {
 }
 
 #[doc="<p>Describes an Auto Scaling process that has been suspended. For more information, see <a>ProcessType</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SuspendedProcess {
     #[doc="<p>The name of the suspended process.</p>"]
+    #[serde(rename="ProcessName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub process_name: Option<String>,
     #[doc="<p>The reason that the process was suspended.</p>"]
+    #[serde(rename="SuspensionReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub suspension_reason: Option<String>,
 }
 
@@ -7223,17 +7804,26 @@ impl SuspendedProcessesDeserializer {
     }
 }
 #[doc="<p>Describes a tag for an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The tag key.</p>"]
+    #[serde(rename="Key")]
     pub key: String,
     #[doc="<p>Determines whether the tag is added to new instances as they are launched in the group.</p>"]
+    #[serde(rename="PropagateAtLaunch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub propagate_at_launch: Option<bool>,
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
     #[doc="<p>The type of resource. The only supported value is <code>auto-scaling-group</code>.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -7270,17 +7860,27 @@ impl TagSerializer {
 }
 
 #[doc="<p>Describes a tag for an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagDescription {
     #[doc="<p>The tag key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>Determines whether the tag is added to new instances as they are launched in the group.</p>"]
+    #[serde(rename="PropagateAtLaunch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub propagate_at_launch: Option<bool>,
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
     #[doc="<p>The type of resource. The only supported value is <code>auto-scaling-group</code>.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -7425,11 +8025,15 @@ impl TagsSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagsType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more tags.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<TagDescription>>,
 }
 
@@ -7535,15 +8139,22 @@ impl TargetGroupARNsSerializer {
 }
 
 #[doc="<p>Represents a target tracking policy configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetTrackingConfiguration {
     #[doc="<p>A customized metric.</p>"]
+    #[serde(rename="CustomizedMetricSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customized_metric_specification: Option<CustomizedMetricSpecification>,
     #[doc="<p>If the parameter is true, then scale-in will be disabled for the target tracking policy, i.e. the target tracking policy will not scale in the Auto Scaling group. The default value is false.</p>"]
+    #[serde(rename="DisableScaleIn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disable_scale_in: Option<bool>,
     #[doc="<p>A predefined metric. You can specify either a predefined metric or a customized metric.</p>"]
+    #[serde(rename="PredefinedMetricSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub predefined_metric_specification: Option<PredefinedMetricSpecification>,
     #[doc="<p>The target value for the metric.</p>"]
+    #[serde(rename="TargetValue")]
     pub target_value: f64,
 }
 
@@ -7635,11 +8246,13 @@ impl TargetTrackingConfigurationSerializer {
 }
 
 #[doc="<p>Contains the parameters for TerminateInstanceInAutoScalingGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateInstanceInAutoScalingGroupType {
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>If <code>true</code>, terminating the instance also decrements the size of the Auto Scaling group.</p>"]
+    #[serde(rename="ShouldDecrementDesiredCapacity")]
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -7732,33 +8345,58 @@ impl TimestampTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for UpdateAutoScalingGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAutoScalingGroupType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
+    #[serde(rename="AutoScalingGroupName")]
     pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="DefaultCooldown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_cooldown: Option<i64>,
     #[doc="<p>The number of EC2 instances that should be running in the Auto Scaling group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group.</p>"]
+    #[serde(rename="DesiredCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_capacity: Option<i64>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default is 0.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="HealthCheckGracePeriod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>"]
+    #[serde(rename="HealthCheckType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub health_check_type: Option<String>,
     #[doc="<p>The name of the launch configuration.</p>"]
+    #[serde(rename="LaunchConfigurationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_configuration_name: Option<String>,
     #[doc="<p>The maximum size of the Auto Scaling group.</p>"]
+    #[serde(rename="MaxSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_size: Option<i64>,
     #[doc="<p>The minimum size of the Auto Scaling group.</p>"]
+    #[serde(rename="MinSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_size: Option<i64>,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
+    #[serde(rename="NewInstancesProtectedFromScaleIn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="PlacementGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_group: Option<String>,
     #[doc="<p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html\">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="TerminationPolicies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_policies: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet, if you are launching into a VPC. You can specify several subnets in a comma-separated list.</p> <p>When you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, ensure that the subnets' Availability Zones match the values you specify for <code>AvailabilityZones</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    #[serde(rename="VPCZoneIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_zone_identifier: Option<String>,
 }
 

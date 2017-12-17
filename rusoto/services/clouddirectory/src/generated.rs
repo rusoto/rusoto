@@ -28,7 +28,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddFacetToObjectRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -45,10 +45,10 @@ pub struct AddFacetToObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddFacetToObjectResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApplySchemaRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> into which the schema is copied. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -58,7 +58,7 @@ pub struct ApplySchemaRequest {
     pub published_schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApplySchemaResponse {
     #[doc="<p>The applied schema ARN that is associated with the copied schema in the <a>Directory</a>. You can use this ARN to describe the schema information applied on this directory. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="AppliedSchemaArn")]
@@ -70,7 +70,7 @@ pub struct ApplySchemaResponse {
     pub directory_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachObjectRequest {
     #[doc="<p>The child object reference to be attached to the object.</p>"]
     #[serde(rename="ChildReference")]
@@ -86,7 +86,7 @@ pub struct AttachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachObjectResponse {
     #[doc="<p>The attached <code>ObjectIdentifier</code>, which is the child <code>ObjectIdentifier</code>.</p>"]
     #[serde(rename="AttachedObjectIdentifier")]
@@ -94,7 +94,7 @@ pub struct AttachObjectResponse {
     pub attached_object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where both objects reside. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -108,10 +108,10 @@ pub struct AttachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachPolicyResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachToIndexRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the directory where the object and index exist.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -124,7 +124,7 @@ pub struct AttachToIndexRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachToIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>"]
     #[serde(rename="AttachedObjectIdentifier")]
@@ -132,7 +132,7 @@ pub struct AttachToIndexResponse {
     pub attached_object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachTypedLinkRequest {
     #[doc="<p>A set of attributes that are associated with the typed link.</p>"]
     #[serde(rename="Attributes")]
@@ -151,7 +151,7 @@ pub struct AttachTypedLinkRequest {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachTypedLinkResponse {
     #[doc="<p>Returns a typed link specifier as output.</p>"]
     #[serde(rename="TypedLinkSpecifier")]
@@ -196,7 +196,7 @@ pub struct AttributeNameAndValue {
 }
 
 #[doc="<p>Represents the output of a batch add facet to object operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAddFacetToObject {
     #[doc="<p>The attributes to set on the object.</p>"]
     #[serde(rename="ObjectAttributeList")]
@@ -210,11 +210,11 @@ pub struct BatchAddFacetToObject {
 }
 
 #[doc="<p>The result of a batch add facet to object operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAddFacetToObjectResponse;
 
 #[doc="<p>Represents the output of an <a>AttachObject</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachObject {
     #[doc="<p>The child object reference that is to be attached to the object.</p>"]
     #[serde(rename="ChildReference")]
@@ -228,7 +228,7 @@ pub struct BatchAttachObject {
 }
 
 #[doc="<p>Represents the output batch <a>AttachObject</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachObjectResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the object that has been attached.</p>"]
     #[serde(rename="attachedObjectIdentifier")]
@@ -237,7 +237,7 @@ pub struct BatchAttachObjectResponse {
 }
 
 #[doc="<p>Attaches a policy object to a regular object inside a <a>BatchRead</a> operation. For more information, see <a>AttachPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachPolicy {
     #[doc="<p>The reference that identifies the object to which the policy will be attached.</p>"]
     #[serde(rename="ObjectReference")]
@@ -248,11 +248,11 @@ pub struct BatchAttachPolicy {
 }
 
 #[doc="<p>Represents the output of an <a>AttachPolicy</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachPolicyResponse;
 
 #[doc="<p>Attaches the specified object to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>AttachToIndex</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachToIndex {
     #[doc="<p>A reference to the index that you are attaching the object to.</p>"]
     #[serde(rename="IndexReference")]
@@ -263,7 +263,7 @@ pub struct BatchAttachToIndex {
 }
 
 #[doc="<p>Represents the output of a <a>AttachToIndex</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachToIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>"]
     #[serde(rename="AttachedObjectIdentifier")]
@@ -272,7 +272,7 @@ pub struct BatchAttachToIndexResponse {
 }
 
 #[doc="<p>Attaches a typed link to a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>AttachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachTypedLink {
     #[doc="<p>A set of attributes that are associated with the typed link.</p>"]
     #[serde(rename="Attributes")]
@@ -289,7 +289,7 @@ pub struct BatchAttachTypedLink {
 }
 
 #[doc="<p>Represents the output of a <a>AttachTypedLink</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchAttachTypedLinkResponse {
     #[doc="<p>Returns a typed link specifier as output.</p>"]
     #[serde(rename="TypedLinkSpecifier")]
@@ -298,7 +298,7 @@ pub struct BatchAttachTypedLinkResponse {
 }
 
 #[doc="<p>Creates an index object inside of a <a>BatchRead</a> operation. For more information, see <a>CreateIndex</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreateIndex {
     #[doc="<p>The batch reference name. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches\">Batches</a> for more information.</p>"]
     #[serde(rename="BatchReferenceName")]
@@ -321,7 +321,7 @@ pub struct BatchCreateIndex {
 }
 
 #[doc="<p>Represents the output of a <a>CreateIndex</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreateIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -330,7 +330,7 @@ pub struct BatchCreateIndexResponse {
 }
 
 #[doc="<p>Represents the output of a <a>CreateObject</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreateObject {
     #[doc="<p>The batch reference name. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches\">Batches</a> for more information.</p>"]
     #[serde(rename="BatchReferenceName")]
@@ -350,7 +350,7 @@ pub struct BatchCreateObject {
 }
 
 #[doc="<p>Represents the output of a <a>CreateObject</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchCreateObjectResponse {
     #[doc="<p>The ID that is associated with the object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -359,7 +359,7 @@ pub struct BatchCreateObjectResponse {
 }
 
 #[doc="<p>Represents the output of a <a>DeleteObject</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteObject {
     #[doc="<p>The reference that identifies the object.</p>"]
     #[serde(rename="ObjectReference")]
@@ -367,11 +367,11 @@ pub struct BatchDeleteObject {
 }
 
 #[doc="<p>Represents the output of a <a>DeleteObject</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteObjectResponse;
 
 #[doc="<p>Detaches the specified object from the specified index inside a <a>BatchRead</a> operation. For more information, see <a>DetachFromIndex</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachFromIndex {
     #[doc="<p>A reference to the index object.</p>"]
     #[serde(rename="IndexReference")]
@@ -382,7 +382,7 @@ pub struct BatchDetachFromIndex {
 }
 
 #[doc="<p>Represents the output of a <a>DetachFromIndex</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachFromIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>"]
     #[serde(rename="DetachedObjectIdentifier")]
@@ -391,7 +391,7 @@ pub struct BatchDetachFromIndexResponse {
 }
 
 #[doc="<p>Represents the output of a <a>DetachObject</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachObject {
     #[doc="<p>The batch reference name. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches\">Batches</a> for more information.</p>"]
     #[serde(rename="BatchReferenceName")]
@@ -405,7 +405,7 @@ pub struct BatchDetachObject {
 }
 
 #[doc="<p>Represents the output of a <a>DetachObject</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachObjectResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the detached object.</p>"]
     #[serde(rename="detachedObjectIdentifier")]
@@ -414,7 +414,7 @@ pub struct BatchDetachObjectResponse {
 }
 
 #[doc="<p>Detaches the specified policy from the specified directory inside a <a>BatchRead</a> operation. For more information, see <a>DetachPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachPolicy {
     #[doc="<p>Reference that identifies the object whose policy object will be detached.</p>"]
     #[serde(rename="ObjectReference")]
@@ -425,11 +425,11 @@ pub struct BatchDetachPolicy {
 }
 
 #[doc="<p>Represents the output of a <a>DetachPolicy</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachPolicyResponse;
 
 #[doc="<p>Detaches a typed link from a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>DetachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachTypedLink {
     #[doc="<p>Used to accept a typed link specifier as input.</p>"]
     #[serde(rename="TypedLinkSpecifier")]
@@ -437,11 +437,11 @@ pub struct BatchDetachTypedLink {
 }
 
 #[doc="<p>Represents the output of a <a>DetachTypedLink</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDetachTypedLinkResponse;
 
 #[doc="<p>Retrieves metadata about an object inside a <a>BatchRead</a> operation. For more information, see <a>GetObjectInformation</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetObjectInformation {
     #[doc="<p>A reference to the object.</p>"]
     #[serde(rename="ObjectReference")]
@@ -449,7 +449,7 @@ pub struct BatchGetObjectInformation {
 }
 
 #[doc="<p>Represents the output of a <a>GetObjectInformation</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetObjectInformationResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the specified object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -462,7 +462,7 @@ pub struct BatchGetObjectInformationResponse {
 }
 
 #[doc="<p>Lists indices attached to an object inside a <a>BatchRead</a> operation. For more information, see <a>ListAttachedIndices</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListAttachedIndices {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -478,7 +478,7 @@ pub struct BatchListAttachedIndices {
 }
 
 #[doc="<p>Represents the output of a <a>ListAttachedIndices</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListAttachedIndicesResponse {
     #[doc="<p>The indices attached to the specified object.</p>"]
     #[serde(rename="IndexAttachments")]
@@ -491,7 +491,7 @@ pub struct BatchListAttachedIndicesResponse {
 }
 
 #[doc="<p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object inside a <a>BatchRead</a> operation. For more information, see <a>ListIncomingTypedLinks</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListIncomingTypedLinks {
     #[doc="<p>Provides range filters for multiple attributes. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range.</p>"]
     #[serde(rename="FilterAttributeRanges")]
@@ -515,7 +515,7 @@ pub struct BatchListIncomingTypedLinks {
 }
 
 #[doc="<p>Represents the output of a <a>ListIncomingTypedLinks</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListIncomingTypedLinksResponse {
     #[doc="<p>Returns one or more typed link specifiers as output.</p>"]
     #[serde(rename="LinkSpecifiers")]
@@ -528,7 +528,7 @@ pub struct BatchListIncomingTypedLinksResponse {
 }
 
 #[doc="<p>Lists objects attached to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>ListIndex</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListIndex {
     #[doc="<p>The reference to the index to list.</p>"]
     #[serde(rename="IndexReference")]
@@ -548,7 +548,7 @@ pub struct BatchListIndex {
 }
 
 #[doc="<p>Represents the output of a <a>ListIndex</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListIndexResponse {
     #[doc="<p>The objects and indexed values attached to the index.</p>"]
     #[serde(rename="IndexAttachments")]
@@ -561,7 +561,7 @@ pub struct BatchListIndexResponse {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectAttributes</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectAttributes {
     #[doc="<p>Used to filter the list of object attributes that are associated with a certain facet.</p>"]
     #[serde(rename="FacetFilter")]
@@ -581,7 +581,7 @@ pub struct BatchListObjectAttributes {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectAttributes</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectAttributesResponse {
     #[doc="<p>The attributes map that is associated with the object. <code>AttributeArn</code> is the key; attribute value is the value.</p>"]
     #[serde(rename="Attributes")]
@@ -594,7 +594,7 @@ pub struct BatchListObjectAttributesResponse {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectChildren</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectChildren {
     #[doc="<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>"]
     #[serde(rename="MaxResults")]
@@ -610,7 +610,7 @@ pub struct BatchListObjectChildren {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectChildren</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectChildrenResponse {
     #[doc="<p>The children structure, which is a map with the key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>"]
     #[serde(rename="Children")]
@@ -623,7 +623,7 @@ pub struct BatchListObjectChildrenResponse {
 }
 
 #[doc="<p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects inside a <a>BatchRead</a> operation. For more information, see <a>ListObjectParentPaths</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectParentPaths {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -639,7 +639,7 @@ pub struct BatchListObjectParentPaths {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectParentPaths</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectParentPathsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -652,7 +652,7 @@ pub struct BatchListObjectParentPathsResponse {
 }
 
 #[doc="<p>Returns policies attached to an object in pagination fashion inside a <a>BatchRead</a> operation. For more information, see <a>ListObjectPolicies</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectPolicies {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -668,7 +668,7 @@ pub struct BatchListObjectPolicies {
 }
 
 #[doc="<p>Represents the output of a <a>ListObjectPolicies</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListObjectPoliciesResponse {
     #[doc="<p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>"]
     #[serde(rename="AttachedPolicyIds")]
@@ -681,7 +681,7 @@ pub struct BatchListObjectPoliciesResponse {
 }
 
 #[doc="<p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object inside a <a>BatchRead</a> operation. For more information, see <a>ListOutgoingTypedLinks</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListOutgoingTypedLinks {
     #[doc="<p>Provides range filters for multiple attributes. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range.</p>"]
     #[serde(rename="FilterAttributeRanges")]
@@ -705,7 +705,7 @@ pub struct BatchListOutgoingTypedLinks {
 }
 
 #[doc="<p>Represents the output of a <a>ListOutgoingTypedLinks</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListOutgoingTypedLinksResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -718,7 +718,7 @@ pub struct BatchListOutgoingTypedLinksResponse {
 }
 
 #[doc="<p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached inside a <a>BatchRead</a> operation. For more information, see <a>ListPolicyAttachments</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListPolicyAttachments {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -734,7 +734,7 @@ pub struct BatchListPolicyAttachments {
 }
 
 #[doc="<p>Represents the output of a <a>ListPolicyAttachments</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchListPolicyAttachmentsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -747,7 +747,7 @@ pub struct BatchListPolicyAttachmentsResponse {
 }
 
 #[doc="<p>Lists all policies from the root of the Directory to the object specified inside a <a>BatchRead</a> operation. For more information, see <a>LookupPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchLookupPolicy {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -763,7 +763,7 @@ pub struct BatchLookupPolicy {
 }
 
 #[doc="<p>Represents the output of a <a>LookupPolicy</a> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchLookupPolicyResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -776,7 +776,7 @@ pub struct BatchLookupPolicyResponse {
 }
 
 #[doc="<p>The batch read exception structure, which contains the exception type and message.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadException {
     #[doc="<p>An exception message that is associated with the failure.</p>"]
     #[serde(rename="Message")]
@@ -789,7 +789,7 @@ pub struct BatchReadException {
 }
 
 #[doc="<p>Represents the output of a <code>BatchRead</code> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadOperation {
     #[doc="<p>Retrieves metadata about an object.</p>"]
     #[serde(rename="GetObjectInformation")]
@@ -838,7 +838,7 @@ pub struct BatchReadOperation {
 }
 
 #[doc="<p>Represents the output of a <code>BatchRead</code> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadOperationResponse {
     #[doc="<p>Identifies which operation in a batch has failed.</p>"]
     #[serde(rename="ExceptionResponse")]
@@ -850,7 +850,7 @@ pub struct BatchReadOperationResponse {
     pub successful_response: Option<BatchReadSuccessfulResponse>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -864,7 +864,7 @@ pub struct BatchReadRequest {
     pub operations: Vec<BatchReadOperation>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadResponse {
     #[doc="<p>A list of all the responses for each batch read.</p>"]
     #[serde(rename="Responses")]
@@ -873,7 +873,7 @@ pub struct BatchReadResponse {
 }
 
 #[doc="<p>Represents the output of a <code>BatchRead</code> success response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchReadSuccessfulResponse {
     #[doc="<p>Retrieves metadata about an object.</p>"]
     #[serde(rename="GetObjectInformation")]
@@ -922,7 +922,7 @@ pub struct BatchReadSuccessfulResponse {
 }
 
 #[doc="<p>A batch operation to remove a facet from an object.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchRemoveFacetFromObject {
     #[doc="<p>A reference to the object whose facet will be removed.</p>"]
     #[serde(rename="ObjectReference")]
@@ -933,11 +933,11 @@ pub struct BatchRemoveFacetFromObject {
 }
 
 #[doc="<p>An empty result that represents success.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchRemoveFacetFromObjectResponse;
 
 #[doc="<p>Represents the output of a <code>BatchUpdate</code> operation. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchUpdateObjectAttributes {
     #[doc="<p>Attributes update structure.</p>"]
     #[serde(rename="AttributeUpdates")]
@@ -948,7 +948,7 @@ pub struct BatchUpdateObjectAttributes {
 }
 
 #[doc="<p>Represents the output of a <code>BatchUpdate</code> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchUpdateObjectAttributesResponse {
     #[doc="<p>ID that is associated with the object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -957,7 +957,7 @@ pub struct BatchUpdateObjectAttributesResponse {
 }
 
 #[doc="<p>Represents the output of a <code>BatchWrite</code> operation. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchWriteOperation {
     #[doc="<p>A batch operation that adds a facet to an object.</p>"]
     #[serde(rename="AddFacetToObject")]
@@ -1018,7 +1018,7 @@ pub struct BatchWriteOperation {
 }
 
 #[doc="<p>Represents the output of a <code>BatchWrite</code> response operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchWriteOperationResponse {
     #[doc="<p>The result of an add facet to object batch operation.</p>"]
     #[serde(rename="AddFacetToObject")]
@@ -1078,7 +1078,7 @@ pub struct BatchWriteOperationResponse {
     pub update_object_attributes: Option<BatchUpdateObjectAttributesResponse>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchWriteRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a>. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1088,7 +1088,7 @@ pub struct BatchWriteRequest {
     pub operations: Vec<BatchWriteOperation>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchWriteResponse {
     #[doc="<p>A list of all the responses for each batch write.</p>"]
     #[serde(rename="Responses")]
@@ -1096,7 +1096,7 @@ pub struct BatchWriteResponse {
     pub responses: Option<Vec<BatchWriteOperationResponse>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDirectoryRequest {
     #[doc="<p>The name of the <a>Directory</a>. Should be unique per account, per region.</p>"]
     #[serde(rename="Name")]
@@ -1106,7 +1106,7 @@ pub struct CreateDirectoryRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDirectoryResponse {
     #[doc="<p>The ARN of the published schema in the <a>Directory</a>. Once a published schema is copied into the directory, it has its own ARN, which is referred to applied schema ARN. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="AppliedSchemaArn")]
@@ -1122,7 +1122,7 @@ pub struct CreateDirectoryResponse {
     pub object_identifier: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFacetRequest {
     #[doc="<p>The attributes that are associated with the <a>Facet</a>.</p>"]
     #[serde(rename="Attributes")]
@@ -1139,10 +1139,10 @@ pub struct CreateFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFacetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIndexRequest {
     #[doc="<p>The ARN of the directory where the index should be created.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1163,7 +1163,7 @@ pub struct CreateIndexRequest {
     pub parent_reference: Option<ObjectReference>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -1171,7 +1171,7 @@ pub struct CreateIndexResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateObjectRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> in which the object will be created. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1193,7 +1193,7 @@ pub struct CreateObjectRequest {
     pub schema_facets: Vec<SchemaFacet>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateObjectResponse {
     #[doc="<p>The identifier that is associated with the object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -1201,14 +1201,14 @@ pub struct CreateObjectResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSchemaRequest {
     #[doc="<p>The name that is associated with the schema. This is unique to each account and in each region.</p>"]
     #[serde(rename="Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSchemaResponse {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the schema. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="SchemaArn")]
@@ -1216,7 +1216,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTypedLinkFacetRequest {
     #[doc="<p> <a>Facet</a> structure that is associated with the typed link facet.</p>"]
     #[serde(rename="Facet")]
@@ -1226,24 +1226,24 @@ pub struct CreateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTypedLinkFacetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDirectoryRequest {
     #[doc="<p>The ARN of the directory to delete.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDirectoryResponse {
     #[doc="<p>The ARN of the deleted directory.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFacetRequest {
     #[doc="<p>The name of the facet to delete.</p>"]
     #[serde(rename="Name")]
@@ -1253,10 +1253,10 @@ pub struct DeleteFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFacetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteObjectRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1266,17 +1266,17 @@ pub struct DeleteObjectRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteObjectResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSchemaRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the development schema. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="SchemaArn")]
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSchemaResponse {
     #[doc="<p>The input ARN that is returned as part of the response. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="SchemaArn")]
@@ -1284,7 +1284,7 @@ pub struct DeleteSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTypedLinkFacetRequest {
     #[doc="<p>The unique name of the typed link facet.</p>"]
     #[serde(rename="Name")]
@@ -1294,10 +1294,10 @@ pub struct DeleteTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTypedLinkFacetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachFromIndexRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the directory the index and object exist in.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1310,7 +1310,7 @@ pub struct DetachFromIndexRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachFromIndexResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>"]
     #[serde(rename="DetachedObjectIdentifier")]
@@ -1318,7 +1318,7 @@ pub struct DetachFromIndexResponse {
     pub detached_object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachObjectRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1331,7 +1331,7 @@ pub struct DetachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachObjectResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> that was detached from the object.</p>"]
     #[serde(rename="DetachedObjectIdentifier")]
@@ -1339,7 +1339,7 @@ pub struct DetachObjectResponse {
     pub detached_object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where both objects reside. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1352,10 +1352,10 @@ pub struct DetachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachPolicyResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachTypedLinkRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the directory where you want to detach the typed link.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1366,7 +1366,7 @@ pub struct DetachTypedLinkRequest {
 }
 
 #[doc="<p>Directory structure that includes the directory name and directory ARN.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Directory {
     #[doc="<p>The date and time when the directory was created.</p>"]
     #[serde(rename="CreationDateTime")]
@@ -1386,28 +1386,28 @@ pub struct Directory {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDirectoryRequest {
     #[doc="<p>The ARN of the directory to disable.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableDirectoryResponse {
     #[doc="<p>The ARN of the directory that has been disabled.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDirectoryRequest {
     #[doc="<p>The ARN of the directory to enable.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableDirectoryResponse {
     #[doc="<p>The ARN of the enabled directory.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1415,7 +1415,7 @@ pub struct EnableDirectoryResponse {
 }
 
 #[doc="<p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <a>Rule</a>s, and <code>ObjectTypes</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Facet {
     #[doc="<p>The name of the <a>Facet</a>.</p>"]
     #[serde(rename="Name")]
@@ -1479,7 +1479,7 @@ pub struct FacetAttributeReference {
 }
 
 #[doc="<p>A structure that contains information used to update an attribute.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FacetAttributeUpdate {
     #[doc="<p>The action to perform when updating the attribute.</p>"]
     #[serde(rename="Action")]
@@ -1491,21 +1491,21 @@ pub struct FacetAttributeUpdate {
     pub attribute: Option<FacetAttribute>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDirectoryRequest {
     #[doc="<p>The ARN of the directory.</p>"]
     #[serde(rename="DirectoryArn")]
     pub directory_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDirectoryResponse {
     #[doc="<p>Metadata about the directory.</p>"]
     #[serde(rename="Directory")]
     pub directory: Directory,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFacetRequest {
     #[doc="<p>The name of the facet to retrieve.</p>"]
     #[serde(rename="Name")]
@@ -1515,7 +1515,7 @@ pub struct GetFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFacetResponse {
     #[doc="<p>The <a>Facet</a> structure that is associated with the facet.</p>"]
     #[serde(rename="Facet")]
@@ -1523,7 +1523,7 @@ pub struct GetFacetResponse {
     pub facet: Option<Facet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetObjectInformationRequest {
     #[doc="<p>The consistency level at which to retrieve the object information.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1537,7 +1537,7 @@ pub struct GetObjectInformationRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetObjectInformationResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the specified object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -1549,14 +1549,14 @@ pub struct GetObjectInformationResponse {
     pub schema_facets: Option<Vec<SchemaFacet>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSchemaAsJsonRequest {
     #[doc="<p>The ARN of the schema to retrieve.</p>"]
     #[serde(rename="SchemaArn")]
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSchemaAsJsonResponse {
     #[doc="<p>The JSON representation of the schema document.</p>"]
     #[serde(rename="Document")]
@@ -1568,7 +1568,7 @@ pub struct GetSchemaAsJsonResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTypedLinkFacetInformationRequest {
     #[doc="<p>The unique name of the typed link facet.</p>"]
     #[serde(rename="Name")]
@@ -1578,7 +1578,7 @@ pub struct GetTypedLinkFacetInformationRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTypedLinkFacetInformationResponse {
     #[doc="<p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
     #[serde(rename="IdentityAttributeOrder")]
@@ -1587,7 +1587,7 @@ pub struct GetTypedLinkFacetInformationResponse {
 }
 
 #[doc="<p>Represents an index and an attached object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IndexAttachment {
     #[doc="<p>The indexed attribute values.</p>"]
     #[serde(rename="IndexedAttributes")]
@@ -1599,7 +1599,7 @@ pub struct IndexAttachment {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAppliedSchemaArnsRequest {
     #[doc="<p>The ARN of the directory you are listing.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1614,7 +1614,7 @@ pub struct ListAppliedSchemaArnsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAppliedSchemaArnsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -1626,7 +1626,7 @@ pub struct ListAppliedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedIndicesRequest {
     #[doc="<p>The consistency level to use for this operation.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1648,7 +1648,7 @@ pub struct ListAttachedIndicesRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAttachedIndicesResponse {
     #[doc="<p>The indices attached to the specified object.</p>"]
     #[serde(rename="IndexAttachments")]
@@ -1660,7 +1660,7 @@ pub struct ListAttachedIndicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDevelopmentSchemaArnsRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -1672,7 +1672,7 @@ pub struct ListDevelopmentSchemaArnsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDevelopmentSchemaArnsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -1684,7 +1684,7 @@ pub struct ListDevelopmentSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDirectoriesRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -1700,7 +1700,7 @@ pub struct ListDirectoriesRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDirectoriesResponse {
     #[doc="<p>Lists all directories that are associated with your account in pagination fashion.</p>"]
     #[serde(rename="Directories")]
@@ -1711,7 +1711,7 @@ pub struct ListDirectoriesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacetAttributesRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -1729,7 +1729,7 @@ pub struct ListFacetAttributesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacetAttributesResponse {
     #[doc="<p>The attributes attached to the facet.</p>"]
     #[serde(rename="Attributes")]
@@ -1741,7 +1741,7 @@ pub struct ListFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacetNamesRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -1756,7 +1756,7 @@ pub struct ListFacetNamesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFacetNamesResponse {
     #[doc="<p>The names of facets that exist within the schema.</p>"]
     #[serde(rename="FacetNames")]
@@ -1768,7 +1768,7 @@ pub struct ListFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIncomingTypedLinksRequest {
     #[doc="<p>The consistency level to execute the request at.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1798,7 +1798,7 @@ pub struct ListIncomingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIncomingTypedLinksResponse {
     #[doc="<p>Returns one or more typed link specifiers as output.</p>"]
     #[serde(rename="LinkSpecifiers")]
@@ -1810,7 +1810,7 @@ pub struct ListIncomingTypedLinksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIndexRequest {
     #[doc="<p>The consistency level to execute the request at.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1836,7 +1836,7 @@ pub struct ListIndexRequest {
     pub ranges_on_indexed_values: Option<Vec<ObjectAttributeRange>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListIndexResponse {
     #[doc="<p>The objects and indexed values attached to the index.</p>"]
     #[serde(rename="IndexAttachments")]
@@ -1848,7 +1848,7 @@ pub struct ListIndexResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectAttributesRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1874,7 +1874,7 @@ pub struct ListObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectAttributesResponse {
     #[doc="<p>Attributes map that is associated with the object. <code>AttributeArn</code> is the key, and attribute value is the value.</p>"]
     #[serde(rename="Attributes")]
@@ -1886,7 +1886,7 @@ pub struct ListObjectAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectChildrenRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1908,7 +1908,7 @@ pub struct ListObjectChildrenRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectChildrenResponse {
     #[doc="<p>Children structure, which is a map with key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>"]
     #[serde(rename="Children")]
@@ -1920,7 +1920,7 @@ pub struct ListObjectChildrenResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectParentPathsRequest {
     #[doc="<p>The ARN of the directory to which the parent path applies.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -1938,7 +1938,7 @@ pub struct ListObjectParentPathsRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectParentPathsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -1950,7 +1950,7 @@ pub struct ListObjectParentPathsResponse {
     pub path_to_object_identifiers_list: Option<Vec<PathToObjectIdentifiers>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectParentsRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -1972,7 +1972,7 @@ pub struct ListObjectParentsRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectParentsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -1984,7 +1984,7 @@ pub struct ListObjectParentsResponse {
     pub parents: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectPoliciesRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -2006,7 +2006,7 @@ pub struct ListObjectPoliciesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListObjectPoliciesResponse {
     #[doc="<p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>"]
     #[serde(rename="AttachedPolicyIds")]
@@ -2018,7 +2018,7 @@ pub struct ListObjectPoliciesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOutgoingTypedLinksRequest {
     #[doc="<p>The consistency level to execute the request at.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -2048,7 +2048,7 @@ pub struct ListOutgoingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOutgoingTypedLinksResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -2060,7 +2060,7 @@ pub struct ListOutgoingTypedLinksResponse {
     pub typed_link_specifiers: Option<Vec<TypedLinkSpecifier>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyAttachmentsRequest {
     #[doc="<p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>"]
     #[serde(rename="ConsistencyLevel")]
@@ -2082,7 +2082,7 @@ pub struct ListPolicyAttachmentsRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPolicyAttachmentsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -2094,7 +2094,7 @@ pub struct ListPolicyAttachmentsResponse {
     pub object_identifiers: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPublishedSchemaArnsRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -2106,7 +2106,7 @@ pub struct ListPublishedSchemaArnsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPublishedSchemaArnsResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -2118,7 +2118,7 @@ pub struct ListPublishedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. This is for future use and is not supported currently.</p>"]
     #[serde(rename="MaxResults")]
@@ -2133,7 +2133,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>"]
     #[serde(rename="NextToken")]
@@ -2145,7 +2145,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTypedLinkFacetAttributesRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -2163,7 +2163,7 @@ pub struct ListTypedLinkFacetAttributesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTypedLinkFacetAttributesResponse {
     #[doc="<p>An ordered set of attributes associate with the typed link.</p>"]
     #[serde(rename="Attributes")]
@@ -2175,7 +2175,7 @@ pub struct ListTypedLinkFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTypedLinkFacetNamesRequest {
     #[doc="<p>The maximum number of results to retrieve.</p>"]
     #[serde(rename="MaxResults")]
@@ -2190,7 +2190,7 @@ pub struct ListTypedLinkFacetNamesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTypedLinkFacetNamesResponse {
     #[doc="<p>The names of typed link facets that exist within the schema.</p>"]
     #[serde(rename="FacetNames")]
@@ -2202,7 +2202,7 @@ pub struct ListTypedLinkFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LookupPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a>. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -2220,7 +2220,7 @@ pub struct LookupPolicyRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LookupPolicyResponse {
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="NextToken")]
@@ -2233,7 +2233,7 @@ pub struct LookupPolicyResponse {
 }
 
 #[doc="<p>The action to take on the object attribute.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ObjectAttributeAction {
     #[doc="<p>A type that can be either <code>Update</code> or <code>Delete</code>.</p>"]
     #[serde(rename="ObjectAttributeActionType")]
@@ -2246,7 +2246,7 @@ pub struct ObjectAttributeAction {
 }
 
 #[doc="<p>A range of attributes.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ObjectAttributeRange {
     #[doc="<p>The key of the attribute that the attribute range covers.</p>"]
     #[serde(rename="AttributeKey")]
@@ -2259,7 +2259,7 @@ pub struct ObjectAttributeRange {
 }
 
 #[doc="<p>Structure that contains attribute update information.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ObjectAttributeUpdate {
     #[doc="<p>The action to perform as part of the attribute update.</p>"]
     #[serde(rename="ObjectAttributeAction")]
@@ -2281,7 +2281,7 @@ pub struct ObjectReference {
 }
 
 #[doc="<p>Returns the path to the <code>ObjectIdentifiers</code> that is associated with the directory.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PathToObjectIdentifiers {
     #[doc="<p>Lists <code>ObjectIdentifiers</code> starting from directory root to the object in the request.</p>"]
     #[serde(rename="ObjectIdentifiers")]
@@ -2294,7 +2294,7 @@ pub struct PathToObjectIdentifiers {
 }
 
 #[doc="<p>Contains the <code>PolicyType</code>, <code>PolicyId</code>, and the <code>ObjectIdentifier</code> to which it is attached. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies\">Policies</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyAttachment {
     #[doc="<p>The <code>ObjectIdentifier</code> that is associated with <code>PolicyAttachment</code>.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -2311,7 +2311,7 @@ pub struct PolicyAttachment {
 }
 
 #[doc="<p>Used when a regular object exists in a <a>Directory</a> and you want to find all of the policies that are associated with that object and the parent to that object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyToPath {
     #[doc="<p>The path that is referenced from the root.</p>"]
     #[serde(rename="Path")]
@@ -2323,7 +2323,7 @@ pub struct PolicyToPath {
     pub policies: Option<Vec<PolicyAttachment>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PublishSchemaRequest {
     #[doc="<p>The Amazon Resource Name (ARN) that is associated with the development schema. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="DevelopmentSchemaArn")]
@@ -2337,7 +2337,7 @@ pub struct PublishSchemaRequest {
     pub version: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PublishSchemaResponse {
     #[doc="<p>The ARN that is associated with the published schema. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="PublishedSchemaArn")]
@@ -2345,7 +2345,7 @@ pub struct PublishSchemaResponse {
     pub published_schema_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutSchemaFromJsonRequest {
     #[doc="<p>The replacement JSON schema.</p>"]
     #[serde(rename="Document")]
@@ -2355,7 +2355,7 @@ pub struct PutSchemaFromJsonRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutSchemaFromJsonResponse {
     #[doc="<p>The ARN of the schema to update.</p>"]
     #[serde(rename="Arn")]
@@ -2363,7 +2363,7 @@ pub struct PutSchemaFromJsonResponse {
     pub arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveFacetFromObjectRequest {
     #[doc="<p>The ARN of the directory in which the object resides.</p>"]
     #[serde(rename="DirectoryArn")]
@@ -2376,7 +2376,7 @@ pub struct RemoveFacetFromObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveFacetFromObjectResponse;
 
 #[doc="<p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>"]
@@ -2418,7 +2418,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource. Tagging is only supported for directories.</p>"]
     #[serde(rename="ResourceArn")]
@@ -2428,7 +2428,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceResponse;
 
 #[doc="<p>Represents the data for a typed attribute. You can set one, and only one, of the elements. Each attribute in an item is a name-value pair. Attributes have a single value.</p>"]
@@ -2461,7 +2461,7 @@ pub struct TypedAttributeValue {
 }
 
 #[doc="<p>A range of attribute values.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TypedAttributeValueRange {
     #[doc="<p>The inclusive or exclusive range end.</p>"]
     #[serde(rename="EndMode")]
@@ -2506,7 +2506,7 @@ pub struct TypedLinkAttributeDefinition {
 }
 
 #[doc="<p>Identifies the range of attributes that are used by a specified filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TypedLinkAttributeRange {
     #[doc="<p>The unique name of the typed link attribute.</p>"]
     #[serde(rename="AttributeName")]
@@ -2518,7 +2518,7 @@ pub struct TypedLinkAttributeRange {
 }
 
 #[doc="<p>Defines the typed links structure and its attributes. To create a typed link facet, use the <a>CreateTypedLinkFacet</a> API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TypedLinkFacet {
     #[doc="<p>A set of key-value pairs associated with the typed link. Typed link attributes are used when you have data values that are related to the link itself, and not to one of the two objects being linked. Identity attributes also serve to distinguish the link from others of the same type between the same objects.</p>"]
     #[serde(rename="Attributes")]
@@ -2532,7 +2532,7 @@ pub struct TypedLinkFacet {
 }
 
 #[doc="<p>A typed link facet attribute update.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TypedLinkFacetAttributeUpdate {
     #[doc="<p>The action to perform when updating the attribute.</p>"]
     #[serde(rename="Action")]
@@ -2570,7 +2570,7 @@ pub struct TypedLinkSpecifier {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource. Tagging is only supported for directories.</p>"]
     #[serde(rename="ResourceArn")]
@@ -2580,10 +2580,10 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateFacetRequest {
     #[doc="<p>List of attributes that need to be updated in a given schema <a>Facet</a>. Each attribute is followed by <code>AttributeAction</code>, which specifies the type of update operation to perform. </p>"]
     #[serde(rename="AttributeUpdates")]
@@ -2601,10 +2601,10 @@ pub struct UpdateFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateFacetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateObjectAttributesRequest {
     #[doc="<p>The attributes update structure.</p>"]
     #[serde(rename="AttributeUpdates")]
@@ -2617,7 +2617,7 @@ pub struct UpdateObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateObjectAttributesResponse {
     #[doc="<p>The <code>ObjectIdentifier</code> of the updated object.</p>"]
     #[serde(rename="ObjectIdentifier")]
@@ -2625,7 +2625,7 @@ pub struct UpdateObjectAttributesResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSchemaRequest {
     #[doc="<p>The name of the schema.</p>"]
     #[serde(rename="Name")]
@@ -2635,7 +2635,7 @@ pub struct UpdateSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateSchemaResponse {
     #[doc="<p>The ARN that is associated with the updated schema. For more information, see <a>arns</a>.</p>"]
     #[serde(rename="SchemaArn")]
@@ -2643,7 +2643,7 @@ pub struct UpdateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTypedLinkFacetRequest {
     #[doc="<p>Attributes update structure.</p>"]
     #[serde(rename="AttributeUpdates")]
@@ -2659,7 +2659,7 @@ pub struct UpdateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateTypedLinkFacetResponse;
 
 /// Errors returned by AddFacetToObject

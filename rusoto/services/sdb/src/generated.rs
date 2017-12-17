@@ -40,15 +40,21 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Attribute {
     #[doc="<p></p>"]
+    #[serde(rename="AlternateNameEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alternate_name_encoding: Option<String>,
     #[doc="<p></p>"]
+    #[serde(rename="AlternateValueEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alternate_value_encoding: Option<String>,
     #[doc="The name of the attribute."]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="The value of the attribute."]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -184,11 +190,13 @@ impl AttributeNameListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchDeleteAttributesRequest {
     #[doc="The name of the domain in which the attributes are being deleted."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
     #[doc="A list of items on which to perform the operation."]
+    #[serde(rename="Items")]
     pub items: Vec<DeletableItem>,
 }
 
@@ -211,11 +219,13 @@ impl BatchDeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchPutAttributesRequest {
     #[doc="The name of the domain in which the attributes are being stored."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
     #[doc="A list of items on which to perform the operation."]
+    #[serde(rename="Items")]
     pub items: Vec<ReplaceableItem>,
 }
 
@@ -238,9 +248,10 @@ impl BatchPutAttributesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDomainRequest {
     #[doc="The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, '_', '-', and '.'."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
 }
 
@@ -260,9 +271,12 @@ impl CreateDomainRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletableItem {
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -299,15 +313,21 @@ impl DeletableItemListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAttributesRequest {
     #[doc="A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items."]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
     #[doc="The name of the domain in which to perform the operation."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
     #[doc="The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted."]
+    #[serde(rename="Expected")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expected: Option<UpdateCondition>,
     #[doc="The name of the item. Similar to rows on a spreadsheet, items represent individual objects that contain one or more value-attribute pairs."]
+    #[serde(rename="ItemName")]
     pub item_name: String,
 }
 
@@ -339,9 +359,10 @@ impl DeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDomainRequest {
     #[doc="The name of the domain to delete."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
 }
 
@@ -361,9 +382,10 @@ impl DeleteDomainRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainMetadataRequest {
     #[doc="The name of the domain for which to display the metadata of."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
 }
 
@@ -383,21 +405,35 @@ impl DomainMetadataRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DomainMetadataResult {
     #[doc="The number of unique attribute names in the domain."]
+    #[serde(rename="AttributeNameCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_name_count: Option<i64>,
     #[doc="The total size of all unique attribute names in the domain, in bytes."]
+    #[serde(rename="AttributeNamesSizeBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_names_size_bytes: Option<i64>,
     #[doc="The number of all attribute name/value pairs in the domain."]
+    #[serde(rename="AttributeValueCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value_count: Option<i64>,
     #[doc="The total size of all attribute values in the domain, in bytes."]
+    #[serde(rename="AttributeValuesSizeBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_values_size_bytes: Option<i64>,
     #[doc="The number of all items in the domain."]
+    #[serde(rename="ItemCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub item_count: Option<i64>,
     #[doc="The total size of all item names in the domain, in bytes."]
+    #[serde(rename="ItemNamesSizeBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub item_names_size_bytes: Option<i64>,
     #[doc="The data and time when metadata was calculated, in Epoch (UNIX) seconds."]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<i64>,
 }
 
@@ -500,15 +536,21 @@ impl DomainNameListDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAttributesRequest {
     #[doc="The names of the attributes."]
+    #[serde(rename="AttributeNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_names: Option<Vec<String>>,
     #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
+    #[serde(rename="ConsistentRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub consistent_read: Option<bool>,
     #[doc="The name of the domain in which to perform the operation."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
     #[doc="The name of the item."]
+    #[serde(rename="ItemName")]
     pub item_name: String,
 }
 
@@ -539,9 +581,11 @@ impl GetAttributesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAttributesResult {
     #[doc="The list of attributes returned by the operation."]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
 }
 
@@ -603,13 +647,17 @@ impl IntegerDeserializer {
     }
 }
 #[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Item {
     #[doc="<p></p>"]
+    #[serde(rename="AlternateNameEncoding")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alternate_name_encoding: Option<String>,
     #[doc="A list of attributes."]
+    #[serde(rename="Attributes")]
     pub attributes: Vec<Attribute>,
     #[doc="The name of the item."]
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -691,11 +739,15 @@ impl ItemListDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDomainsRequest {
     #[doc="The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100."]
+    #[serde(rename="MaxNumberOfDomains")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_number_of_domains: Option<i64>,
     #[doc="A string informing Amazon SimpleDB where to start the next list of domain names."]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -721,11 +773,15 @@ impl ListDomainsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDomainsResult {
     #[doc="A list of domain names that match the expression."]
+    #[serde(rename="DomainNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_names: Option<Vec<String>>,
     #[doc="An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available."]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -790,15 +846,20 @@ impl LongDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutAttributesRequest {
     #[doc="The list of attributes."]
+    #[serde(rename="Attributes")]
     pub attributes: Vec<ReplaceableAttribute>,
     #[doc="The name of the domain in which to perform the operation."]
+    #[serde(rename="DomainName")]
     pub domain_name: String,
     #[doc="The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated."]
+    #[serde(rename="Expected")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expected: Option<UpdateCondition>,
     #[doc="The name of the item."]
+    #[serde(rename="ItemName")]
     pub item_name: String,
 }
 
@@ -829,13 +890,17 @@ impl PutAttributesRequestSerializer {
 }
 
 #[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceableAttribute {
     #[doc="The name of the replaceable attribute."]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>."]
+    #[serde(rename="Replace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replace: Option<bool>,
     #[doc="The value of the replaceable attribute."]
+    #[serde(rename="Value")]
     pub value: String,
 }
 
@@ -874,11 +939,13 @@ impl ReplaceableAttributeListSerializer {
 }
 
 #[doc="<p></p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceableItem {
     #[doc="The list of attributes for a replaceable item."]
+    #[serde(rename="Attributes")]
     pub attributes: Vec<ReplaceableAttribute>,
     #[doc="The name of the replaceable item."]
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -913,13 +980,18 @@ impl ReplaceableItemListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SelectRequest {
     #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
+    #[serde(rename="ConsistentRead")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub consistent_read: Option<bool>,
     #[doc="A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>."]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="The expression used to query the domain."]
+    #[serde(rename="SelectExpression")]
     pub select_expression: String,
 }
 
@@ -947,11 +1019,15 @@ impl SelectRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SelectResult {
     #[doc="A list of items that match the select expression."]
+    #[serde(rename="Items")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub items: Option<Vec<Item>>,
     #[doc="An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds."]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1016,13 +1092,19 @@ impl StringDeserializer {
     }
 }
 #[doc="<p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateCondition {
     #[doc="<p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>"]
+    #[serde(rename="Exists")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exists: Option<bool>,
     #[doc="<p>The name of the attribute involved in the condition.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The value of an attribute. This value can only be specified when the <code>Exists</code> parameter is equal to <code>true</code>.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 

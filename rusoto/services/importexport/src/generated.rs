@@ -40,9 +40,13 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="A discrete item that contains the description and URL of an artifact (such as a PDF)."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Artifact {
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename="URL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
 }
 
@@ -134,9 +138,12 @@ impl ArtifactListDeserializer {
     }
 }
 #[doc="Input structure for the CancelJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="JobId")]
     pub job_id: String,
 }
 
@@ -161,8 +168,10 @@ impl CancelJobInputSerializer {
 }
 
 #[doc="Output structure for the CancelJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobOutput {
+    #[serde(rename="Success")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub success: Option<bool>,
 }
 
@@ -223,12 +232,19 @@ impl CarrierDeserializer {
     }
 }
 #[doc="Input structure for the CreateJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="JobType")]
     pub job_type: String,
+    #[serde(rename="Manifest")]
     pub manifest: String,
+    #[serde(rename="ManifestAddendum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub manifest_addendum: Option<String>,
+    #[serde(rename="ValidateOnly")]
     pub validate_only: bool,
 }
 
@@ -261,13 +277,25 @@ impl CreateJobInputSerializer {
 }
 
 #[doc="Output structure for the CreateJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobOutput {
+    #[serde(rename="ArtifactList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_list: Option<Vec<Artifact>>,
+    #[serde(rename="JobId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_id: Option<String>,
+    #[serde(rename="JobType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_type: Option<String>,
+    #[serde(rename="Signature")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signature: Option<String>,
+    #[serde(rename="SignatureFileContents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signature_file_contents: Option<String>,
+    #[serde(rename="WarningMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub warning_message: Option<String>,
 }
 
@@ -405,19 +433,42 @@ impl GenericStringDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetShippingLabelInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="city")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub city: Option<String>,
+    #[serde(rename="company")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub company: Option<String>,
+    #[serde(rename="country")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub country: Option<String>,
+    #[serde(rename="jobIds")]
     pub job_ids: Vec<String>,
+    #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename="phoneNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub phone_number: Option<String>,
+    #[serde(rename="postalCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub postal_code: Option<String>,
+    #[serde(rename="stateOrProvince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_or_province: Option<String>,
+    #[serde(rename="street1")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub street_1: Option<String>,
+    #[serde(rename="street2")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub street_2: Option<String>,
+    #[serde(rename="street3")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub street_3: Option<String>,
 }
 
@@ -480,9 +531,13 @@ impl GetShippingLabelInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetShippingLabelOutput {
+    #[serde(rename="ShippingLabelURL")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shipping_label_url: Option<String>,
+    #[serde(rename="Warning")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub warning: Option<String>,
 }
 
@@ -534,9 +589,12 @@ impl GetShippingLabelOutputDeserializer {
     }
 }
 #[doc="Input structure for the GetStatus operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetStatusInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="JobId")]
     pub job_id: String,
 }
 
@@ -561,23 +619,55 @@ impl GetStatusInputSerializer {
 }
 
 #[doc="Output structure for the GetStatus operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetStatusOutput {
+    #[serde(rename="ArtifactList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_list: Option<Vec<Artifact>>,
+    #[serde(rename="Carrier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub carrier: Option<String>,
+    #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<String>,
+    #[serde(rename="CurrentManifest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_manifest: Option<String>,
+    #[serde(rename="ErrorCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_count: Option<i64>,
+    #[serde(rename="JobId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_id: Option<String>,
+    #[serde(rename="JobType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_type: Option<String>,
+    #[serde(rename="LocationCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location_code: Option<String>,
+    #[serde(rename="LocationMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location_message: Option<String>,
+    #[serde(rename="LogBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_bucket: Option<String>,
+    #[serde(rename="LogKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_key: Option<String>,
+    #[serde(rename="ProgressCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress_code: Option<String>,
+    #[serde(rename="ProgressMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress_message: Option<String>,
+    #[serde(rename="Signature")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signature: Option<String>,
+    #[serde(rename="SignatureFileContents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signature_file_contents: Option<String>,
+    #[serde(rename="TrackingNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tracking_number: Option<String>,
 }
 
@@ -721,11 +811,19 @@ impl IsTruncatedDeserializer {
     }
 }
 #[doc="Representation of a job returned by the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Job {
+    #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<String>,
+    #[serde(rename="IsCanceled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_canceled: Option<bool>,
+    #[serde(rename="JobId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_id: Option<String>,
+    #[serde(rename="JobType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_type: Option<String>,
 }
 
@@ -866,10 +964,16 @@ impl JobsListDeserializer {
     }
 }
 #[doc="Input structure for the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
+    #[serde(rename="MaxJobs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_jobs: Option<i64>,
 }
 
@@ -900,9 +1004,13 @@ impl ListJobsInputSerializer {
 }
 
 #[doc="Output structure for the ListJobs operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsOutput {
+    #[serde(rename="IsTruncated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_truncated: Option<bool>,
+    #[serde(rename="Jobs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub jobs: Option<Vec<Job>>,
 }
 
@@ -1107,12 +1215,18 @@ impl URLDeserializer {
     }
 }
 #[doc="Input structure for the UpateJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobInput {
+    #[serde(rename="APIVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub api_version: Option<String>,
+    #[serde(rename="JobId")]
     pub job_id: String,
+    #[serde(rename="JobType")]
     pub job_type: String,
+    #[serde(rename="Manifest")]
     pub manifest: String,
+    #[serde(rename="ValidateOnly")]
     pub validate_only: bool,
 }
 
@@ -1143,10 +1257,16 @@ impl UpdateJobInputSerializer {
 }
 
 #[doc="Output structure for the UpateJob operation."]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateJobOutput {
+    #[serde(rename="ArtifactList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_list: Option<Vec<Artifact>>,
+    #[serde(rename="Success")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub success: Option<bool>,
+    #[serde(rename="WarningMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub warning_message: Option<String>,
 }
 

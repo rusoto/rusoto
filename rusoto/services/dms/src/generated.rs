@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountQuota {
     #[doc="<p>The name of the AWS DMS quota for this AWS account.</p>"]
     #[serde(rename="AccountQuotaName")]
@@ -46,7 +46,7 @@ pub struct AccountQuota {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>"]
     #[serde(rename="ResourceArn")]
@@ -57,11 +57,11 @@ pub struct AddTagsToResourceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToResourceResponse;
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZone {
     #[doc="<p>The name of the availability zone.</p>"]
     #[serde(rename="Name")]
@@ -70,7 +70,7 @@ pub struct AvailabilityZone {
 }
 
 #[doc="<p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Certificate {
     #[doc="<p>The Amazon Resource Name (ARN) for the certificate.</p>"]
     #[serde(rename="CertificateArn")]
@@ -119,7 +119,7 @@ pub struct Certificate {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Connection {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -148,7 +148,7 @@ pub struct Connection {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEndpointMessage {
     #[doc="<p>The Amazon Resource Number (ARN) for the certificate.</p>"]
     #[serde(rename="CertificateArn")]
@@ -214,7 +214,7 @@ pub struct CreateEndpointMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEndpointResponse {
     #[doc="<p>The endpoint that was created.</p>"]
     #[serde(rename="Endpoint")]
@@ -223,7 +223,7 @@ pub struct CreateEndpointResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>"]
     #[serde(rename="Enabled")]
@@ -254,7 +254,7 @@ pub struct CreateEventSubscriptionMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEventSubscriptionResponse {
     #[doc="<p>The event subscription that was created.</p>"]
     #[serde(rename="EventSubscription")]
@@ -263,7 +263,7 @@ pub struct CreateEventSubscriptionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationInstanceMessage {
     #[doc="<p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
@@ -318,7 +318,7 @@ pub struct CreateReplicationInstanceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationInstanceResponse {
     #[doc="<p>The replication instance that was created.</p>"]
     #[serde(rename="ReplicationInstance")]
@@ -327,7 +327,7 @@ pub struct CreateReplicationInstanceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationSubnetGroupMessage {
     #[doc="<p>The description for the subnet group.</p>"]
     #[serde(rename="ReplicationSubnetGroupDescription")]
@@ -345,7 +345,7 @@ pub struct CreateReplicationSubnetGroupMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationSubnetGroupResponse {
     #[doc="<p>The replication subnet group that was created.</p>"]
     #[serde(rename="ReplicationSubnetGroup")]
@@ -354,7 +354,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
@@ -389,7 +389,7 @@ pub struct CreateReplicationTaskMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationTaskResponse {
     #[doc="<p>The replication task that was created.</p>"]
     #[serde(rename="ReplicationTask")]
@@ -397,14 +397,14 @@ pub struct CreateReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCertificateMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the deleted certificate.</p>"]
     #[serde(rename="CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCertificateResponse {
     #[doc="<p>The Secure Sockets Layer (SSL) certificate.</p>"]
     #[serde(rename="Certificate")]
@@ -413,7 +413,7 @@ pub struct DeleteCertificateResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEndpointMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -421,7 +421,7 @@ pub struct DeleteEndpointMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEndpointResponse {
     #[doc="<p>The endpoint that was deleted.</p>"]
     #[serde(rename="Endpoint")]
@@ -430,7 +430,7 @@ pub struct DeleteEndpointResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEventSubscriptionMessage {
     #[doc="<p>The name of the DMS event notification subscription to be deleted.</p>"]
     #[serde(rename="SubscriptionName")]
@@ -438,7 +438,7 @@ pub struct DeleteEventSubscriptionMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEventSubscriptionResponse {
     #[doc="<p>The event subscription that was deleted.</p>"]
     #[serde(rename="EventSubscription")]
@@ -447,7 +447,7 @@ pub struct DeleteEventSubscriptionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationInstanceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>"]
     #[serde(rename="ReplicationInstanceArn")]
@@ -455,7 +455,7 @@ pub struct DeleteReplicationInstanceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationInstanceResponse {
     #[doc="<p>The replication instance that was deleted.</p>"]
     #[serde(rename="ReplicationInstance")]
@@ -464,7 +464,7 @@ pub struct DeleteReplicationInstanceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationSubnetGroupMessage {
     #[doc="<p>The subnet group name of the replication instance.</p>"]
     #[serde(rename="ReplicationSubnetGroupIdentifier")]
@@ -472,11 +472,11 @@ pub struct DeleteReplicationSubnetGroupMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationSubnetGroupResponse;
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationTaskMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>"]
     #[serde(rename="ReplicationTaskArn")]
@@ -484,7 +484,7 @@ pub struct DeleteReplicationTaskMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationTaskResponse {
     #[doc="<p>The deleted replication task.</p>"]
     #[serde(rename="ReplicationTask")]
@@ -493,11 +493,11 @@ pub struct DeleteReplicationTaskResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountAttributesMessage;
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountAttributesResponse {
     #[doc="<p>Account quota information.</p>"]
     #[serde(rename="AccountQuotas")]
@@ -505,7 +505,7 @@ pub struct DescribeAccountAttributesResponse {
     pub account_quotas: Option<Vec<AccountQuota>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCertificatesMessage {
     #[doc="<p>Filters applied to the certificate described in the form of key-value pairs.</p>"]
     #[serde(rename="Filters")]
@@ -521,7 +521,7 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCertificatesResponse {
     #[doc="<p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>"]
     #[serde(rename="Certificates")]
@@ -534,7 +534,7 @@ pub struct DescribeCertificatesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConnectionsMessage {
     #[doc="<p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>"]
     #[serde(rename="Filters")]
@@ -551,7 +551,7 @@ pub struct DescribeConnectionsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConnectionsResponse {
     #[doc="<p>A description of the connections.</p>"]
     #[serde(rename="Connections")]
@@ -564,7 +564,7 @@ pub struct DescribeConnectionsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointTypesMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>"]
     #[serde(rename="Filters")]
@@ -581,7 +581,7 @@ pub struct DescribeEndpointTypesMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointTypesResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -594,7 +594,7 @@ pub struct DescribeEndpointTypesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointsMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>"]
     #[serde(rename="Filters")]
@@ -611,7 +611,7 @@ pub struct DescribeEndpointsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEndpointsResponse {
     #[doc="<p>Endpoint description.</p>"]
     #[serde(rename="Endpoints")]
@@ -624,7 +624,7 @@ pub struct DescribeEndpointsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventCategoriesMessage {
     #[doc="<p>Filters applied to the action.</p>"]
     #[serde(rename="Filters")]
@@ -637,7 +637,7 @@ pub struct DescribeEventCategoriesMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventCategoriesResponse {
     #[doc="<p>A list of event categories.</p>"]
     #[serde(rename="EventCategoryGroupList")]
@@ -646,7 +646,7 @@ pub struct DescribeEventCategoriesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p>Filters applied to the action.</p>"]
     #[serde(rename="Filters")]
@@ -667,7 +667,7 @@ pub struct DescribeEventSubscriptionsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventSubscriptionsResponse {
     #[doc="<p>A list of event subscriptions.</p>"]
     #[serde(rename="EventSubscriptionsList")]
@@ -680,7 +680,7 @@ pub struct DescribeEventSubscriptionsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The duration of the events to be listed.</p>"]
     #[serde(rename="Duration")]
@@ -721,7 +721,7 @@ pub struct DescribeEventsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsResponse {
     #[doc="<p>The events described.</p>"]
     #[serde(rename="Events")]
@@ -734,7 +734,7 @@ pub struct DescribeEventsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeOrderableReplicationInstancesMessage {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -747,7 +747,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeOrderableReplicationInstancesResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -760,7 +760,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRefreshSchemasStatusMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -768,7 +768,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRefreshSchemasStatusResponse {
     #[doc="<p>The status of the schema.</p>"]
     #[serde(rename="RefreshSchemasStatus")]
@@ -777,7 +777,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationInstancesMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>"]
     #[serde(rename="Filters")]
@@ -794,7 +794,7 @@ pub struct DescribeReplicationInstancesMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationInstancesResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -807,7 +807,7 @@ pub struct DescribeReplicationInstancesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationSubnetGroupsMessage {
     #[doc="<p>Filters applied to the describe action.</p>"]
     #[serde(rename="Filters")]
@@ -824,7 +824,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationSubnetGroupsResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -837,7 +837,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationTasksMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>"]
     #[serde(rename="Filters")]
@@ -854,7 +854,7 @@ pub struct DescribeReplicationTasksMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationTasksResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -867,7 +867,7 @@ pub struct DescribeReplicationTasksResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSchemasMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -883,7 +883,7 @@ pub struct DescribeSchemasMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSchemasResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -896,7 +896,7 @@ pub struct DescribeSchemasResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTableStatisticsMessage {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -912,7 +912,7 @@ pub struct DescribeTableStatisticsMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTableStatisticsResponse {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
@@ -937,7 +937,7 @@ pub struct DynamoDbSettings {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Endpoint {
     #[doc="<p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>"]
     #[serde(rename="CertificateArn")]
@@ -1010,7 +1010,7 @@ pub struct Endpoint {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Event {
     #[doc="<p>The date of the event.</p>"]
     #[serde(rename="Date")]
@@ -1035,7 +1035,7 @@ pub struct Event {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventCategoryGroup {
     #[doc="<p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>"]
     #[serde(rename="EventCategories")]
@@ -1048,7 +1048,7 @@ pub struct EventCategoryGroup {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventSubscription {
     #[doc="<p>The AWS DMS event notification subscription Id.</p>"]
     #[serde(rename="CustSubscriptionId")]
@@ -1089,7 +1089,7 @@ pub struct EventSubscription {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Filter {
     #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="Name")]
@@ -1099,7 +1099,7 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportCertificateMessage {
     #[doc="<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>"]
     #[serde(rename="CertificateIdentifier")]
@@ -1122,7 +1122,7 @@ pub struct ImportCertificateMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportCertificateResponse {
     #[doc="<p>The certificate to be uploaded.</p>"]
     #[serde(rename="Certificate")]
@@ -1131,7 +1131,7 @@ pub struct ImportCertificateResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>"]
     #[serde(rename="ResourceArn")]
@@ -1139,7 +1139,7 @@ pub struct ListTagsForResourceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>A list of tags for the resource.</p>"]
     #[serde(rename="TagList")]
@@ -1148,7 +1148,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEndpointMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>"]
     #[serde(rename="CertificateArn")]
@@ -1212,7 +1212,7 @@ pub struct ModifyEndpointMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEndpointResponse {
     #[doc="<p>The modified endpoint.</p>"]
     #[serde(rename="Endpoint")]
@@ -1221,7 +1221,7 @@ pub struct ModifyEndpointResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription. </p>"]
     #[serde(rename="Enabled")]
@@ -1245,7 +1245,7 @@ pub struct ModifyEventSubscriptionMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyEventSubscriptionResponse {
     #[doc="<p>The modified event subscription.</p>"]
     #[serde(rename="EventSubscription")]
@@ -1254,7 +1254,7 @@ pub struct ModifyEventSubscriptionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationInstanceMessage {
     #[doc="<p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
@@ -1302,7 +1302,7 @@ pub struct ModifyReplicationInstanceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationInstanceResponse {
     #[doc="<p>The modified replication instance.</p>"]
     #[serde(rename="ReplicationInstance")]
@@ -1311,7 +1311,7 @@ pub struct ModifyReplicationInstanceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationSubnetGroupMessage {
     #[doc="<p>The description of the replication instance subnet group.</p>"]
     #[serde(rename="ReplicationSubnetGroupDescription")]
@@ -1326,7 +1326,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationSubnetGroupResponse {
     #[doc="<p>The modified replication subnet group.</p>"]
     #[serde(rename="ReplicationSubnetGroup")]
@@ -1335,7 +1335,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
@@ -1363,7 +1363,7 @@ pub struct ModifyReplicationTaskMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationTaskResponse {
     #[doc="<p>The replication task that was modified.</p>"]
     #[serde(rename="ReplicationTask")]
@@ -1421,7 +1421,7 @@ pub struct MongoDbSettings {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OrderableReplicationInstance {
     #[doc="<p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="DefaultAllocatedStorage")]
@@ -1454,7 +1454,7 @@ pub struct OrderableReplicationInstance {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RefreshSchemasMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -1465,7 +1465,7 @@ pub struct RefreshSchemasMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RefreshSchemasResponse {
     #[doc="<p>The status of the refreshed schema.</p>"]
     #[serde(rename="RefreshSchemasStatus")]
@@ -1474,7 +1474,7 @@ pub struct RefreshSchemasResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RefreshSchemasStatus {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -1498,7 +1498,7 @@ pub struct RefreshSchemasStatus {
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReloadTablesMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance. </p>"]
     #[serde(rename="ReplicationTaskArn")]
@@ -1508,7 +1508,7 @@ pub struct ReloadTablesMessage {
     pub tables_to_reload: Vec<TableToReload>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReloadTablesResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication task. </p>"]
     #[serde(rename="ReplicationTaskArn")]
@@ -1517,7 +1517,7 @@ pub struct ReloadTablesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromResourceMessage {
     #[doc="<p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>"]
     #[serde(rename="ResourceArn")]
@@ -1528,11 +1528,11 @@ pub struct RemoveTagsFromResourceMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromResourceResponse;
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationInstance {
     #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
@@ -1613,7 +1613,7 @@ pub struct ReplicationInstance {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationPendingModifiedValues {
     #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
@@ -1634,7 +1634,7 @@ pub struct ReplicationPendingModifiedValues {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationSubnetGroup {
     #[doc="<p>The description of the replication subnet group.</p>"]
     #[serde(rename="ReplicationSubnetGroupDescription")]
@@ -1659,7 +1659,7 @@ pub struct ReplicationSubnetGroup {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationTask {
     #[doc="<p>The last error (failure) message generated for the replication instance.</p>"]
     #[serde(rename="LastFailureMessage")]
@@ -1720,7 +1720,7 @@ pub struct ReplicationTask {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationTaskStats {
     #[doc="<p>The elapsed time of the task, in milliseconds.</p>"]
     #[serde(rename="ElapsedTimeMillis")]
@@ -1782,7 +1782,7 @@ pub struct S3Settings {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
@@ -1797,7 +1797,7 @@ pub struct StartReplicationTaskMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartReplicationTaskResponse {
     #[doc="<p>The replication task started.</p>"]
     #[serde(rename="ReplicationTask")]
@@ -1806,7 +1806,7 @@ pub struct StartReplicationTaskResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopReplicationTaskMessage {
     #[doc="<p>The Amazon Resource Number(ARN) of the replication task to be stopped.</p>"]
     #[serde(rename="ReplicationTaskArn")]
@@ -1814,7 +1814,7 @@ pub struct StopReplicationTaskMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopReplicationTaskResponse {
     #[doc="<p>The replication task stopped.</p>"]
     #[serde(rename="ReplicationTask")]
@@ -1823,7 +1823,7 @@ pub struct StopReplicationTaskResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subnet {
     #[doc="<p>The Availability Zone of the subnet.</p>"]
     #[serde(rename="SubnetAvailabilityZone")]
@@ -1840,7 +1840,7 @@ pub struct Subnet {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SupportedEndpointType {
     #[doc="<p>The type of endpoint.</p>"]
     #[serde(rename="EndpointType")]
@@ -1857,7 +1857,7 @@ pub struct SupportedEndpointType {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableStatistics {
     #[doc="<p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>"]
     #[serde(rename="Ddls")]
@@ -1906,7 +1906,7 @@ pub struct TableStatistics {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TableToReload {
     #[doc="<p>The schema name of the table to be reloaded.</p>"]
     #[serde(rename="SchemaName")]
@@ -1932,7 +1932,7 @@ pub struct Tag {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestConnectionMessage {
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="EndpointArn")]
@@ -1943,7 +1943,7 @@ pub struct TestConnectionMessage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestConnectionResponse {
     #[doc="<p>The connection tested.</p>"]
     #[serde(rename="Connection")]
@@ -1952,7 +1952,7 @@ pub struct TestConnectionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcSecurityGroupMembership {
     #[doc="<p>The status of the VPC security group.</p>"]
     #[serde(rename="Status")]

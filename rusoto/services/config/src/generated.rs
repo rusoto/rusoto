@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Compliance {
     #[doc="<p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>"]
     #[serde(rename="ComplianceContributorCount")]
@@ -42,7 +42,7 @@ pub struct Compliance {
 }
 
 #[doc="<p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it, and it is noncompliant if any of these resources do not comply.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComplianceByConfigRule {
     #[doc="<p>Indicates whether the AWS Config rule is compliant.</p>"]
     #[serde(rename="Compliance")]
@@ -55,7 +55,7 @@ pub struct ComplianceByConfigRule {
 }
 
 #[doc="<p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComplianceByResource {
     #[doc="<p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>"]
     #[serde(rename="Compliance")]
@@ -72,7 +72,7 @@ pub struct ComplianceByResource {
 }
 
 #[doc="<p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComplianceContributorCount {
     #[doc="<p>Indicates whether the maximum count is reached.</p>"]
     #[serde(rename="CapExceeded")]
@@ -85,7 +85,7 @@ pub struct ComplianceContributorCount {
 }
 
 #[doc="<p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComplianceSummary {
     #[doc="<p>The time that AWS Config created the compliance summary.</p>"]
     #[serde(rename="ComplianceSummaryTimestamp")]
@@ -102,7 +102,7 @@ pub struct ComplianceSummary {
 }
 
 #[doc="<p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComplianceSummaryByResourceType {
     #[doc="<p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>"]
     #[serde(rename="ComplianceSummary")]
@@ -115,7 +115,7 @@ pub struct ComplianceSummaryByResourceType {
 }
 
 #[doc="<p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigExportDeliveryInfo {
     #[doc="<p>The time of the last attempted delivery.</p>"]
     #[serde(rename="lastAttemptTime")]
@@ -184,7 +184,7 @@ pub struct ConfigRule {
 }
 
 #[doc="<p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom Config rules.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigRuleEvaluationStatus {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>"]
     #[serde(rename="ConfigRuleArn")]
@@ -242,7 +242,7 @@ pub struct ConfigSnapshotDeliveryProperties {
 }
 
 #[doc="<p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigStreamDeliveryInfo {
     #[doc="<p>The error code from the last attempted delivery.</p>"]
     #[serde(rename="lastErrorCode")]
@@ -263,7 +263,7 @@ pub struct ConfigStreamDeliveryInfo {
 }
 
 #[doc="<p>A list that contains detailed configurations of a specified resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigurationItem {
     #[doc="<p>The 12 digit AWS account ID associated with the resource.</p>"]
     #[serde(rename="accountId")]
@@ -357,7 +357,7 @@ pub struct ConfigurationRecorder {
 }
 
 #[doc="<p>The current status of the configuration recorder.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfigurationRecorderStatus {
     #[doc="<p>The error code indicating that the recording failed.</p>"]
     #[serde(rename="lastErrorCode")]
@@ -394,7 +394,7 @@ pub struct ConfigurationRecorderStatus {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigRuleRequest {
     #[doc="<p>The name of the AWS Config rule that you want to delete.</p>"]
     #[serde(rename="ConfigRuleName")]
@@ -402,7 +402,7 @@ pub struct DeleteConfigRuleRequest {
 }
 
 #[doc="<p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteConfigurationRecorderRequest {
     #[doc="<p>The name of the configuration recorder to be deleted. You can retrieve the name of your configuration recorder by using the <code>DescribeConfigurationRecorders</code> action.</p>"]
     #[serde(rename="ConfigurationRecorderName")]
@@ -410,7 +410,7 @@ pub struct DeleteConfigurationRecorderRequest {
 }
 
 #[doc="<p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data in JSON format. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeliveryChannelRequest {
     #[doc="<p>The name of the delivery channel to delete.</p>"]
     #[serde(rename="DeliveryChannelName")]
@@ -418,7 +418,7 @@ pub struct DeleteDeliveryChannelRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEvaluationResultsRequest {
     #[doc="<p>The name of the Config rule for which you want to delete the evaluation results.</p>"]
     #[serde(rename="ConfigRuleName")]
@@ -426,11 +426,11 @@ pub struct DeleteEvaluationResultsRequest {
 }
 
 #[doc="<p>The output when you delete the evaluation results for the specified Config rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEvaluationResultsResponse;
 
 #[doc="<p>The input for the <a>DeliverConfigSnapshot</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeliverConfigSnapshotRequest {
     #[doc="<p>The name of the delivery channel through which the snapshot is delivered.</p>"]
     #[serde(rename="deliveryChannelName")]
@@ -438,7 +438,7 @@ pub struct DeliverConfigSnapshotRequest {
 }
 
 #[doc="<p>The output for the <a>DeliverConfigSnapshot</a> action in JSON format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeliverConfigSnapshotResponse {
     #[doc="<p>The ID of the snapshot that is being created.</p>"]
     #[serde(rename="configSnapshotId")]
@@ -472,7 +472,7 @@ pub struct DeliveryChannel {
 }
 
 #[doc="<p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeliveryChannelStatus {
     #[doc="<p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>"]
     #[serde(rename="configHistoryDeliveryInfo")]
@@ -493,7 +493,7 @@ pub struct DeliveryChannelStatus {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComplianceByConfigRuleRequest {
     #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>"]
     #[serde(rename="ComplianceTypes")]
@@ -510,7 +510,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComplianceByConfigRuleResponse {
     #[doc="<p>Indicates whether each of the specified AWS Config rules is compliant.</p>"]
     #[serde(rename="ComplianceByConfigRules")]
@@ -523,7 +523,7 @@ pub struct DescribeComplianceByConfigRuleResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComplianceByResourceRequest {
     #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>"]
     #[serde(rename="ComplianceTypes")]
@@ -548,7 +548,7 @@ pub struct DescribeComplianceByResourceRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeComplianceByResourceResponse {
     #[doc="<p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>"]
     #[serde(rename="ComplianceByResources")]
@@ -561,7 +561,7 @@ pub struct DescribeComplianceByResourceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
     #[doc="<p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>"]
     #[serde(rename="ConfigRuleNames")]
@@ -578,7 +578,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     #[doc="<p>Status information about your AWS managed Config rules.</p>"]
     #[serde(rename="ConfigRulesEvaluationStatus")]
@@ -591,7 +591,7 @@ pub struct DescribeConfigRuleEvaluationStatusResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigRulesRequest {
     #[doc="<p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>"]
     #[serde(rename="ConfigRuleNames")]
@@ -604,7 +604,7 @@ pub struct DescribeConfigRulesRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigRulesResponse {
     #[doc="<p>The details about your AWS Config rules.</p>"]
     #[serde(rename="ConfigRules")]
@@ -617,7 +617,7 @@ pub struct DescribeConfigRulesResponse {
 }
 
 #[doc="<p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationRecorderStatusRequest {
     #[doc="<p>The name(s) of the configuration recorder. If the name is not specified, the action returns the current status of all the configuration recorders associated with the account.</p>"]
     #[serde(rename="ConfigurationRecorderNames")]
@@ -626,7 +626,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 }
 
 #[doc="<p>The output for the <a>DescribeConfigurationRecorderStatus</a> action in JSON format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationRecorderStatusResponse {
     #[doc="<p>A list that contains status of the specified recorders.</p>"]
     #[serde(rename="ConfigurationRecordersStatus")]
@@ -635,7 +635,7 @@ pub struct DescribeConfigurationRecorderStatusResponse {
 }
 
 #[doc="<p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationRecordersRequest {
     #[doc="<p>A list of configuration recorder names.</p>"]
     #[serde(rename="ConfigurationRecorderNames")]
@@ -644,7 +644,7 @@ pub struct DescribeConfigurationRecordersRequest {
 }
 
 #[doc="<p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConfigurationRecordersResponse {
     #[doc="<p>A list that contains the descriptions of the specified configuration recorders.</p>"]
     #[serde(rename="ConfigurationRecorders")]
@@ -653,7 +653,7 @@ pub struct DescribeConfigurationRecordersResponse {
 }
 
 #[doc="<p>The input for the <a>DeliveryChannelStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryChannelStatusRequest {
     #[doc="<p>A list of delivery channel names.</p>"]
     #[serde(rename="DeliveryChannelNames")]
@@ -662,7 +662,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 }
 
 #[doc="<p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryChannelStatusResponse {
     #[doc="<p>A list that contains the status of a specified delivery channel.</p>"]
     #[serde(rename="DeliveryChannelsStatus")]
@@ -671,7 +671,7 @@ pub struct DescribeDeliveryChannelStatusResponse {
 }
 
 #[doc="<p>The input for the <a>DescribeDeliveryChannels</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryChannelsRequest {
     #[doc="<p>A list of delivery channel names.</p>"]
     #[serde(rename="DeliveryChannelNames")]
@@ -680,7 +680,7 @@ pub struct DescribeDeliveryChannelsRequest {
 }
 
 #[doc="<p>The output for the <a>DescribeDeliveryChannels</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDeliveryChannelsResponse {
     #[doc="<p>A list that contains the descriptions of the specified delivery channel.</p>"]
     #[serde(rename="DeliveryChannels")]
@@ -710,7 +710,7 @@ pub struct Evaluation {
 }
 
 #[doc="<p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related timestamps, and supplementary information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluationResult {
     #[doc="<p>Supplementary information about how the evaluation determined the compliance.</p>"]
     #[serde(rename="Annotation")]
@@ -739,7 +739,7 @@ pub struct EvaluationResult {
 }
 
 #[doc="<p>Uniquely identifies an evaluation result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluationResultIdentifier {
     #[doc="<p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>"]
     #[serde(rename="EvaluationResultQualifier")]
@@ -752,7 +752,7 @@ pub struct EvaluationResultIdentifier {
 }
 
 #[doc="<p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EvaluationResultQualifier {
     #[doc="<p>The name of the AWS Config rule that was used in the evaluation.</p>"]
     #[serde(rename="ConfigRuleName")]
@@ -769,7 +769,7 @@ pub struct EvaluationResultQualifier {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
     #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"]
     #[serde(rename="ComplianceTypes")]
@@ -789,7 +789,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     #[doc="<p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>"]
     #[serde(rename="EvaluationResults")]
@@ -802,7 +802,7 @@ pub struct GetComplianceDetailsByConfigRuleResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceDetailsByResourceRequest {
     #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"]
     #[serde(rename="ComplianceTypes")]
@@ -821,7 +821,7 @@ pub struct GetComplianceDetailsByResourceRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceDetailsByResourceResponse {
     #[doc="<p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>"]
     #[serde(rename="EvaluationResults")]
@@ -834,7 +834,7 @@ pub struct GetComplianceDetailsByResourceResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     #[doc="<p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>"]
     #[serde(rename="ComplianceSummary")]
@@ -843,7 +843,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceSummaryByResourceTypeRequest {
     #[doc="<p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>, and you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>"]
     #[serde(rename="ResourceTypes")]
@@ -852,7 +852,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     #[doc="<p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>"]
     #[serde(rename="ComplianceSummariesByResourceType")]
@@ -860,7 +860,7 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDiscoveredResourceCountsRequest {
     #[doc="<p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
     #[serde(rename="limit")]
@@ -876,7 +876,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDiscoveredResourceCountsResponse {
     #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
     #[serde(rename="nextToken")]
@@ -893,7 +893,7 @@ pub struct GetDiscoveredResourceCountsResponse {
 }
 
 #[doc="<p>The input for the <a>GetResourceConfigHistory</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetResourceConfigHistoryRequest {
     #[doc="<p>The chronological order for configuration items listed. By default the results are listed in reverse chronological order.</p>"]
     #[serde(rename="chronologicalOrder")]
@@ -924,7 +924,7 @@ pub struct GetResourceConfigHistoryRequest {
 }
 
 #[doc="<p>The output for the <a>GetResourceConfigHistory</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetResourceConfigHistoryResponse {
     #[doc="<p>A list that contains the configuration history of one or more resources.</p>"]
     #[serde(rename="configurationItems")]
@@ -937,7 +937,7 @@ pub struct GetResourceConfigHistoryResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDiscoveredResourcesRequest {
     #[doc="<p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>"]
     #[serde(rename="includeDeletedResources")]
@@ -965,7 +965,7 @@ pub struct ListDiscoveredResourcesRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDiscoveredResourcesResponse {
     #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
     #[serde(rename="nextToken")]
@@ -977,7 +977,7 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutConfigRuleRequest {
     #[doc="<p>The rule that you want to add to your account.</p>"]
     #[serde(rename="ConfigRule")]
@@ -985,7 +985,7 @@ pub struct PutConfigRuleRequest {
 }
 
 #[doc="<p>The input for the <a>PutConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutConfigurationRecorderRequest {
     #[doc="<p>The configuration recorder object that records each configuration change made to the resources.</p>"]
     #[serde(rename="ConfigurationRecorder")]
@@ -993,7 +993,7 @@ pub struct PutConfigurationRecorderRequest {
 }
 
 #[doc="<p>The input for the <a>PutDeliveryChannel</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutDeliveryChannelRequest {
     #[doc="<p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket, and to an Amazon SNS topic.</p>"]
     #[serde(rename="DeliveryChannel")]
@@ -1001,7 +1001,7 @@ pub struct PutDeliveryChannelRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEvaluationsRequest {
     #[doc="<p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>"]
     #[serde(rename="Evaluations")]
@@ -1017,7 +1017,7 @@ pub struct PutEvaluationsRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutEvaluationsResponse {
     #[doc="<p>Requests that failed because of a client or server error.</p>"]
     #[serde(rename="FailedEvaluations")]
@@ -1043,7 +1043,7 @@ pub struct RecordingGroup {
 }
 
 #[doc="<p>The relationship of the related resource to the main resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Relationship {
     #[doc="<p>The type of relationship with the related resource.</p>"]
     #[serde(rename="relationshipName")]
@@ -1064,7 +1064,7 @@ pub struct Relationship {
 }
 
 #[doc="<p>An object that contains the resource type and the number of resources.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceCount {
     #[doc="<p>The number of resources.</p>"]
     #[serde(rename="count")]
@@ -1077,7 +1077,7 @@ pub struct ResourceCount {
 }
 
 #[doc="<p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceIdentifier {
     #[doc="<p>The time that the resource was deleted.</p>"]
     #[serde(rename="resourceDeletionTime")]
@@ -1151,7 +1151,7 @@ pub struct SourceDetail {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartConfigRulesEvaluationRequest {
     #[doc="<p>The list of names of Config rules that you want to run evaluations for.</p>"]
     #[serde(rename="ConfigRuleNames")]
@@ -1160,11 +1160,11 @@ pub struct StartConfigRulesEvaluationRequest {
 }
 
 #[doc="<p>The output when you start the evaluation for the specified Config rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartConfigRulesEvaluationResponse;
 
 #[doc="<p>The input for the <a>StartConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartConfigurationRecorderRequest {
     #[doc="<p>The name of the recorder object that records each configuration change made to the resources.</p>"]
     #[serde(rename="ConfigurationRecorderName")]
@@ -1172,7 +1172,7 @@ pub struct StartConfigurationRecorderRequest {
 }
 
 #[doc="<p>The input for the <a>StopConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopConfigurationRecorderRequest {
     #[doc="<p>The name of the recorder object that records each configuration change made to the resources.</p>"]
     #[serde(rename="ConfigurationRecorderName")]

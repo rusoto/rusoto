@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Contains information about an alias.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AliasListEntry {
     #[doc="<p>String that contains the key ARN.</p>"]
     #[serde(rename="AliasArn")]
@@ -45,14 +45,14 @@ pub struct AliasListEntry {
     pub target_key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelKeyDeletionRequest {
     #[doc="<p>The unique identifier for the customer master key (CMK) for which to cancel deletion.</p> <p>To specify this value, use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul> <p>To obtain the unique key ID and key ARN for a given CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelKeyDeletionResponse {
     #[doc="<p>The unique identifier of the master key for which deletion is canceled.</p>"]
     #[serde(rename="KeyId")]
@@ -60,7 +60,7 @@ pub struct CancelKeyDeletionResponse {
     pub key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAliasRequest {
     #[doc="<p>String that contains the display name. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/AWS\" are reserved.</p>"]
     #[serde(rename="AliasName")]
@@ -70,7 +70,7 @@ pub struct CreateAliasRequest {
     pub target_key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateGrantRequest {
     #[doc="<p>A structure that you can use to allow certain operations in the grant only when the desired encryption context is present. For more information about encryption context, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="Constraints")]
@@ -100,7 +100,7 @@ pub struct CreateGrantRequest {
     pub retiring_principal: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateGrantResponse {
     #[doc="<p>The unique identifier for the grant.</p> <p>You can use the <code>GrantId</code> in a subsequent <a>RetireGrant</a> or <a>RevokeGrant</a> operation.</p>"]
     #[serde(rename="GrantId")]
@@ -112,7 +112,7 @@ pub struct CreateGrantResponse {
     pub grant_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateKeyRequest {
     #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you include a policy in the request and you intend to prevent the principal that is making the request from making a subsequent <a>PutKeyPolicy</a> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
@@ -140,7 +140,7 @@ pub struct CreateKeyRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateKeyResponse {
     #[doc="<p>Metadata associated with the CMK.</p>"]
     #[serde(rename="KeyMetadata")]
@@ -148,7 +148,7 @@ pub struct CreateKeyResponse {
     pub key_metadata: Option<KeyMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DecryptRequest {
     #[doc="<p>Ciphertext to be decrypted. The blob includes metadata.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -168,7 +168,7 @@ pub struct DecryptRequest {
     pub grant_tokens: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DecryptResponse {
     #[doc="<p>ARN of the key used to perform the decryption. This value is returned if no errors are encountered during the operation.</p>"]
     #[serde(rename="KeyId")]
@@ -184,21 +184,21 @@ pub struct DecryptResponse {
     pub plaintext: Option<Vec<u8>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAliasRequest {
     #[doc="<p>The alias to be deleted. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/AWS\" are reserved.</p>"]
     #[serde(rename="AliasName")]
     pub alias_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteImportedKeyMaterialRequest {
     #[doc="<p>The identifier of the CMK whose key material to delete. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeKeyRequest {
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
@@ -209,7 +209,7 @@ pub struct DescribeKeyRequest {
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeKeyResponse {
     #[doc="<p>Metadata associated with the key.</p>"]
     #[serde(rename="KeyMetadata")]
@@ -217,35 +217,35 @@ pub struct DescribeKeyResponse {
     pub key_metadata: Option<KeyMetadata>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableKeyRequest {
     #[doc="<p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableKeyRotationRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableKeyRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableKeyRotationRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EncryptRequest {
     #[doc="<p>Name-value pair that specifies the encryption context to be used for authenticated encryption. If used here, the same value must be supplied to the <code>Decrypt</code> API or decryption will fail. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a>.</p>"]
     #[serde(rename="EncryptionContext")]
@@ -268,7 +268,7 @@ pub struct EncryptRequest {
     pub plaintext: Vec<u8>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EncryptResponse {
     #[doc="<p>The encrypted plaintext. If you are using the CLI, the value is Base64 encoded. Otherwise, it is not encoded.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -284,7 +284,7 @@ pub struct EncryptResponse {
     pub key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataKeyRequest {
     #[doc="<p>A set of key-value pairs that represents additional authenticated data.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="EncryptionContext")]
@@ -307,7 +307,7 @@ pub struct GenerateDataKeyRequest {
     pub number_of_bytes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataKeyResponse {
     #[doc="<p>The encrypted data encryption key.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -331,7 +331,7 @@ pub struct GenerateDataKeyResponse {
     pub plaintext: Option<Vec<u8>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataKeyWithoutPlaintextRequest {
     #[doc="<p>A set of key-value pairs that represents additional authenticated data.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="EncryptionContext")]
@@ -354,7 +354,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     pub number_of_bytes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataKeyWithoutPlaintextResponse {
     #[doc="<p>The encrypted data encryption key.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -370,7 +370,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
     pub key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateRandomRequest {
     #[doc="<p>The length of the byte string.</p>"]
     #[serde(rename="NumberOfBytes")]
@@ -378,7 +378,7 @@ pub struct GenerateRandomRequest {
     pub number_of_bytes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateRandomResponse {
     #[doc="<p>The random byte string.</p>"]
     #[serde(rename="Plaintext")]
@@ -390,7 +390,7 @@ pub struct GenerateRandomResponse {
     pub plaintext: Option<Vec<u8>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKeyPolicyRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -400,7 +400,7 @@ pub struct GetKeyPolicyRequest {
     pub policy_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKeyPolicyResponse {
     #[doc="<p>A policy document in JSON format.</p>"]
     #[serde(rename="Policy")]
@@ -408,14 +408,14 @@ pub struct GetKeyPolicyResponse {
     pub policy: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKeyRotationStatusRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetKeyRotationStatusResponse {
     #[doc="<p>A Boolean value that specifies whether key rotation is enabled.</p>"]
     #[serde(rename="KeyRotationEnabled")]
@@ -423,7 +423,7 @@ pub struct GetKeyRotationStatusResponse {
     pub key_rotation_enabled: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetParametersForImportRequest {
     #[doc="<p>The identifier of the CMK into which you will import key material. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -436,7 +436,7 @@ pub struct GetParametersForImportRequest {
     pub wrapping_key_spec: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetParametersForImportResponse {
     #[doc="<p>The import token to send in a subsequent <a>ImportKeyMaterial</a> request.</p>"]
     #[serde(rename="ImportToken")]
@@ -478,7 +478,7 @@ pub struct GrantConstraints {
 }
 
 #[doc="<p>Contains information about an entry in a list of grants.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GrantListEntry {
     #[doc="<p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows.</p>"]
     #[serde(rename="Constraints")]
@@ -518,7 +518,7 @@ pub struct GrantListEntry {
     pub retiring_principal: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportKeyMaterialRequest {
     #[doc="<p>The encrypted key material to import. It must be encrypted with the public key that you received in the response to a previous <a>GetParametersForImport</a> request, using the wrapping algorithm that you specified in that request.</p>"]
     #[serde(rename="EncryptedKeyMaterial")]
@@ -549,11 +549,11 @@ pub struct ImportKeyMaterialRequest {
     pub valid_to: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportKeyMaterialResponse;
 
 #[doc="<p>Contains information about each entry in the key list.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyListEntry {
     #[doc="<p>ARN of the key.</p>"]
     #[serde(rename="KeyArn")]
@@ -566,7 +566,7 @@ pub struct KeyListEntry {
 }
 
 #[doc="<p>Contains metadata about a customer master key (CMK).</p> <p>This data type is used as a response element for the <a>CreateKey</a> and <a>DescribeKey</a> operations.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyMetadata {
     #[doc="<p>The twelve-digit account ID of the AWS account that owns the CMK.</p>"]
     #[serde(rename="AWSAccountId")]
@@ -621,7 +621,7 @@ pub struct KeyMetadata {
     pub valid_to: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAliasesRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
@@ -633,7 +633,7 @@ pub struct ListAliasesRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAliasesResponse {
     #[doc="<p>A list of key aliases in the user's account.</p>"]
     #[serde(rename="Aliases")]
@@ -649,7 +649,7 @@ pub struct ListAliasesResponse {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGrantsRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -664,7 +664,7 @@ pub struct ListGrantsRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGrantsResponse {
     #[doc="<p>A list of grants.</p>"]
     #[serde(rename="Grants")]
@@ -680,7 +680,7 @@ pub struct ListGrantsResponse {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListKeyPoliciesRequest {
     #[doc="<p>A unique identifier for the customer master key (CMK). You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -695,7 +695,7 @@ pub struct ListKeyPoliciesRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListKeyPoliciesResponse {
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
@@ -711,7 +711,7 @@ pub struct ListKeyPoliciesResponse {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListKeysRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p>"]
     #[serde(rename="Limit")]
@@ -723,7 +723,7 @@ pub struct ListKeysRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListKeysResponse {
     #[doc="<p>A list of keys.</p>"]
     #[serde(rename="Keys")]
@@ -739,7 +739,7 @@ pub struct ListKeysResponse {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourceTagsRequest {
     #[doc="<p>A unique identifier for the CMK whose tags you are listing. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -754,7 +754,7 @@ pub struct ListResourceTagsRequest {
     pub marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListResourceTagsResponse {
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p> <p>Do not assume or infer any information from this value.</p>"]
     #[serde(rename="NextMarker")]
@@ -770,7 +770,7 @@ pub struct ListResourceTagsResponse {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListRetirableGrantsRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
@@ -785,7 +785,7 @@ pub struct ListRetirableGrantsRequest {
     pub retiring_principal: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutKeyPolicyRequest {
     #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal that is making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
@@ -802,7 +802,7 @@ pub struct PutKeyPolicyRequest {
     pub policy_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReEncryptRequest {
     #[doc="<p>Ciphertext of the data to reencrypt.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -829,7 +829,7 @@ pub struct ReEncryptRequest {
     pub source_encryption_context: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReEncryptResponse {
     #[doc="<p>The reencrypted data.</p>"]
     #[serde(rename="CiphertextBlob")]
@@ -849,7 +849,7 @@ pub struct ReEncryptResponse {
     pub source_key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RetireGrantRequest {
     #[doc="<p>Unique identifier of the grant to retire. The grant ID is returned in the response to a <code>CreateGrant</code> operation.</p> <ul> <li> <p>Grant ID Example - 0123456789012345678901234567890123456789012345678901234567890123</p> </li> </ul>"]
     #[serde(rename="GrantId")]
@@ -865,7 +865,7 @@ pub struct RetireGrantRequest {
     pub key_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeGrantRequest {
     #[doc="<p>Identifier of the grant to be revoked.</p>"]
     #[serde(rename="GrantId")]
@@ -875,7 +875,7 @@ pub struct RevokeGrantRequest {
     pub key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduleKeyDeletionRequest {
     #[doc="<p>The unique identifier for the customer master key (CMK) to delete.</p> <p>To specify this value, use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul> <p>To obtain the unique key ID and key ARN for a given CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>"]
     #[serde(rename="KeyId")]
@@ -886,7 +886,7 @@ pub struct ScheduleKeyDeletionRequest {
     pub pending_window_in_days: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduleKeyDeletionResponse {
     #[doc="<p>The date and time after which AWS KMS deletes the customer master key (CMK).</p>"]
     #[serde(rename="DeletionDate")]
@@ -909,7 +909,7 @@ pub struct Tag {
     pub tag_value: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>A unique identifier for the CMK you are tagging. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -919,7 +919,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>A unique identifier for the CMK from which you are removing tags. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
@@ -929,7 +929,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAliasRequest {
     #[doc="<p>String that contains the name of the alias to be modified. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/aws\" are reserved.</p>"]
     #[serde(rename="AliasName")]
@@ -939,7 +939,7 @@ pub struct UpdateAliasRequest {
     pub target_key_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateKeyDescriptionRequest {
     #[doc="<p>New description for the CMK.</p>"]
     #[serde(rename="Description")]

@@ -113,7 +113,7 @@ pub struct AudioParameters {
 }
 
 #[doc="<p>The <code>CancelJobRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobRequest {
     #[doc="<p>The identifier of the job that you want to cancel.</p> <p>To get a list of the jobs (including their <code>jobId</code>) that have a status of <code>Submitted</code>, use the <a>ListJobsByStatus</a> API action.</p>"]
     #[serde(rename="Id")]
@@ -121,7 +121,7 @@ pub struct CancelJobRequest {
 }
 
 #[doc="<p>The response body contains a JSON object. If the job is successfully canceled, the value of <code>Success</code> is <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelJobResponse;
 
 #[doc="<p>The file format of the output captions. If you leave this value blank, Elastic Transcoder returns an error.</p>"]
@@ -176,14 +176,16 @@ pub struct Captions {
 }
 
 #[doc="<p>Settings for one clip in a composition. All jobs in a playlist must have the same clip settings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Clip {
     #[doc="<p>Settings that determine when a clip begins and how long it lasts.</p>"]
+    #[serde(rename="TimeSpan")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub time_span: Option<TimeSpan>,
 }
 
 #[doc="<p>The <code>CreateJobOutput</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobOutput {
     #[doc="<p>Information about the album art that you want Elastic Transcoder to add to the file during transcoding. You can specify up to twenty album artworks for each output. Settings for each artwork must be defined in the job for the current output.</p>"]
     #[serde(rename="AlbumArt")]
@@ -228,7 +230,7 @@ pub struct CreateJobOutput {
 }
 
 #[doc="<p>Information about the master playlist.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobPlaylist {
     #[doc="<p>The format of the output playlist. Valid formats include <code>HLSv3</code>, <code>HLSv4</code>, and <code>Smooth</code>.</p>"]
     #[serde(rename="Format")]
@@ -253,7 +255,7 @@ pub struct CreateJobPlaylist {
 }
 
 #[doc="<p>The <code>CreateJobRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobRequest {
     #[doc="<p>A section of the request body that provides information about the file that is being transcoded.</p>"]
     #[serde(rename="Input")]
@@ -289,7 +291,7 @@ pub struct CreateJobRequest {
 }
 
 #[doc="<p>The CreateJobResponse structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateJobResponse {
     #[doc="<p>A section of the response body that provides information about the job that is created.</p>"]
     #[serde(rename="Job")]
@@ -298,7 +300,7 @@ pub struct CreateJobResponse {
 }
 
 #[doc="<p>The <code>CreatePipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePipelineRequest {
     #[doc="<p>The AWS Key Management Service (AWS KMS) key that you want to use with this pipeline.</p> <p>If you use either <code>S3</code> or <code>S3-AWS-KMS</code> as your <code>Encryption:Mode</code>, you don't need to provide a key with your job because a default key, known as an AWS-KMS key, is created for you automatically. You need to provide an AWS-KMS key only if you want to use a non-default AWS-KMS key, or if you are using an <code>Encryption:Mode</code> of <code>AES-PKCS7</code>, <code>AES-CTR</code>, or <code>AES-GCM</code>.</p>"]
     #[serde(rename="AwsKmsKeyArn")]
@@ -332,7 +334,7 @@ pub struct CreatePipelineRequest {
 }
 
 #[doc="<p>When you create a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePipelineResponse {
     #[doc="<p>A section of the response body that provides information about the pipeline that is created.</p>"]
     #[serde(rename="Pipeline")]
@@ -345,7 +347,7 @@ pub struct CreatePipelineResponse {
 }
 
 #[doc="<p>The <code>CreatePresetRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePresetRequest {
     #[doc="<p>A section of the request body that specifies the audio parameters.</p>"]
     #[serde(rename="Audio")]
@@ -372,7 +374,7 @@ pub struct CreatePresetRequest {
 }
 
 #[doc="<p>The <code>CreatePresetResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePresetResponse {
     #[doc="<p>A section of the response body that provides information about the preset that is created.</p>"]
     #[serde(rename="Preset")]
@@ -385,7 +387,7 @@ pub struct CreatePresetResponse {
 }
 
 #[doc="<p>The <code>DeletePipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePipelineRequest {
     #[doc="<p>The identifier of the pipeline that you want to delete.</p>"]
     #[serde(rename="Id")]
@@ -393,11 +395,11 @@ pub struct DeletePipelineRequest {
 }
 
 #[doc="<p>The <code>DeletePipelineResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePipelineResponse;
 
 #[doc="<p>The <code>DeletePresetRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePresetRequest {
     #[doc="<p>The identifier of the preset for which you want to get detailed information.</p>"]
     #[serde(rename="Id")]
@@ -405,7 +407,7 @@ pub struct DeletePresetRequest {
 }
 
 #[doc="<p>The <code>DeletePresetResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePresetResponse;
 
 #[doc="<p>The detected properties of the input file. Elastic Transcoder identifies these values from the input file.</p>"]
@@ -497,7 +499,7 @@ pub struct InputCaptions {
 }
 
 #[doc="<p>A section of the response body that provides information about the job that is created.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Job {
     #[doc="<p>The Amazon Resource Name (ARN) for the job.</p>"]
     #[serde(rename="Arn")]
@@ -608,7 +610,7 @@ pub struct JobInput {
 }
 
 #[doc="<important> <p>Outputs recommended instead.</p> </important> <p>If you specified one output for a job, information about that output. If you specified multiple outputs for a job, the <code>Output</code> object lists information about the first output. This duplicates the information that is listed for the first output in the <code>Outputs</code> object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobOutput {
     #[doc="<p>The album art to be associated with the output file, if any.</p>"]
     #[serde(rename="AlbumArt")]
@@ -710,7 +712,7 @@ pub struct JobWatermark {
 }
 
 #[doc="<p>The <code>ListJobsByPipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsByPipelineRequest {
     #[doc="<p> To list jobs in chronological order by the date and time that they were submitted, enter <code>true</code>. To list jobs in reverse chronological order, enter <code>false</code>. </p>"]
     #[serde(rename="Ascending")]
@@ -726,7 +728,7 @@ pub struct ListJobsByPipelineRequest {
 }
 
 #[doc="<p>The <code>ListJobsByPipelineResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsByPipelineResponse {
     #[doc="<p>An array of <code>Job</code> objects that are in the specified pipeline.</p>"]
     #[serde(rename="Jobs")]
@@ -739,7 +741,7 @@ pub struct ListJobsByPipelineResponse {
 }
 
 #[doc="<p>The <code>ListJobsByStatusRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsByStatusRequest {
     #[doc="<p> To list jobs in chronological order by the date and time that they were submitted, enter <code>true</code>. To list jobs in reverse chronological order, enter <code>false</code>. </p>"]
     #[serde(rename="Ascending")]
@@ -755,7 +757,7 @@ pub struct ListJobsByStatusRequest {
 }
 
 #[doc="<p> The <code>ListJobsByStatusResponse</code> structure. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListJobsByStatusResponse {
     #[doc="<p>An array of <code>Job</code> objects that have the specified status.</p>"]
     #[serde(rename="Jobs")]
@@ -768,7 +770,7 @@ pub struct ListJobsByStatusResponse {
 }
 
 #[doc="<p>The <code>ListPipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPipelinesRequest {
     #[doc="<p>To list pipelines in chronological order by the date and time that they were created, enter <code>true</code>. To list pipelines in reverse chronological order, enter <code>false</code>.</p>"]
     #[serde(rename="Ascending")]
@@ -781,7 +783,7 @@ pub struct ListPipelinesRequest {
 }
 
 #[doc="<p>A list of the pipelines associated with the current AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPipelinesResponse {
     #[doc="<p>A value that you use to access the second and subsequent pages of results, if any. When the pipelines fit on one page or when you've reached the last page of results, the value of <code>NextPageToken</code> is <code>null</code>.</p>"]
     #[serde(rename="NextPageToken")]
@@ -794,7 +796,7 @@ pub struct ListPipelinesResponse {
 }
 
 #[doc="<p>The <code>ListPresetsRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPresetsRequest {
     #[doc="<p>To list presets in chronological order by the date and time that they were created, enter <code>true</code>. To list presets in reverse chronological order, enter <code>false</code>.</p>"]
     #[serde(rename="Ascending")]
@@ -807,7 +809,7 @@ pub struct ListPresetsRequest {
 }
 
 #[doc="<p>The <code>ListPresetsResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPresetsResponse {
     #[doc="<p>A value that you use to access the second and subsequent pages of results, if any. When the presets fit on one page or when you've reached the last page of results, the value of <code>NextPageToken</code> is <code>null</code>.</p>"]
     #[serde(rename="NextPageToken")]
@@ -858,7 +860,7 @@ pub struct Permission {
 }
 
 #[doc="<p>The pipeline (queue) that is used to manage jobs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Pipeline {
     #[doc="<p>The Amazon Resource Name (ARN) for the pipeline.</p>"]
     #[serde(rename="Arn")]
@@ -953,7 +955,7 @@ pub struct PlayReadyDrm {
 }
 
 #[doc="<p> Use Only for Fragmented MP4 or MPEG-TS Outputs. If you specify a preset for which the value of Container is <code>fmp4</code> (Fragmented MP4) or <code>ts</code> (MPEG-TS), Playlists contains information about the master playlists that you want Elastic Transcoder to create. We recommend that you create only one master playlist per output format. The maximum number of master playlists in a job is 30. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Playlist {
     #[doc="<p>The format of the output playlist. Valid formats include <code>HLSv3</code>, <code>HLSv4</code>, and <code>Smooth</code>.</p>"]
     #[serde(rename="Format")]
@@ -986,7 +988,7 @@ pub struct Playlist {
 }
 
 #[doc="<p>Presets are templates that contain most of the settings for transcoding media files from one format to another. Elastic Transcoder includes some default presets for common formats, for example, several iPod and iPhone versions. You can also create your own presets for formats that aren't included among the default presets. You specify which preset you want to use when you create a job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Preset {
     #[doc="<p>The Amazon Resource Name (ARN) for the preset.</p>"]
     #[serde(rename="Arn")]
@@ -1072,7 +1074,7 @@ pub struct PresetWatermark {
 }
 
 #[doc="<p>The <code>ReadJobRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadJobRequest {
     #[doc="<p>The identifier of the job for which you want to get detailed information.</p>"]
     #[serde(rename="Id")]
@@ -1080,7 +1082,7 @@ pub struct ReadJobRequest {
 }
 
 #[doc="<p>The <code>ReadJobResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadJobResponse {
     #[doc="<p>A section of the response body that provides information about the job.</p>"]
     #[serde(rename="Job")]
@@ -1089,7 +1091,7 @@ pub struct ReadJobResponse {
 }
 
 #[doc="<p>The <code>ReadPipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadPipelineRequest {
     #[doc="<p>The identifier of the pipeline to read.</p>"]
     #[serde(rename="Id")]
@@ -1097,7 +1099,7 @@ pub struct ReadPipelineRequest {
 }
 
 #[doc="<p>The <code>ReadPipelineResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadPipelineResponse {
     #[doc="<p>A section of the response body that provides information about the pipeline.</p>"]
     #[serde(rename="Pipeline")]
@@ -1110,7 +1112,7 @@ pub struct ReadPipelineResponse {
 }
 
 #[doc="<p>The <code>ReadPresetRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadPresetRequest {
     #[doc="<p>The identifier of the preset for which you want to get detailed information.</p>"]
     #[serde(rename="Id")]
@@ -1118,7 +1120,7 @@ pub struct ReadPresetRequest {
 }
 
 #[doc="<p>The <code>ReadPresetResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReadPresetResponse {
     #[doc="<p>A section of the response body that provides information about the preset.</p>"]
     #[serde(rename="Preset")]
@@ -1127,7 +1129,7 @@ pub struct ReadPresetResponse {
 }
 
 #[doc="<p> The <code>TestRoleRequest</code> structure. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestRoleRequest {
     #[doc="<p>The Amazon S3 bucket that contains media files to be transcoded. The action attempts to read from this bucket.</p>"]
     #[serde(rename="InputBucket")]
@@ -1144,7 +1146,7 @@ pub struct TestRoleRequest {
 }
 
 #[doc="<p>The <code>TestRoleResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestRoleResponse {
     #[doc="<p>If the <code>Success</code> element contains <code>false</code>, this value is an array of one or more error messages that were generated during the test process.</p>"]
     #[serde(rename="Messages")]
@@ -1207,7 +1209,7 @@ pub struct TimeSpan {
 }
 
 #[doc="<p>Details about the timing of a job.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Timing {
     #[doc="<p>The time the job finished transcoding, in epoch milliseconds.</p>"]
     #[serde(rename="FinishTimeMillis")]
@@ -1224,7 +1226,7 @@ pub struct Timing {
 }
 
 #[doc="<p>The <code>UpdatePipelineNotificationsRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineNotificationsRequest {
     #[doc="<p>The identifier of the pipeline for which you want to change notification settings.</p>"]
     #[serde(rename="Id")]
@@ -1235,7 +1237,7 @@ pub struct UpdatePipelineNotificationsRequest {
 }
 
 #[doc="<p>The <code>UpdatePipelineNotificationsResponse</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineNotificationsResponse {
     #[doc="<p>A section of the response body that provides information about the pipeline associated with this notification.</p>"]
     #[serde(rename="Pipeline")]
@@ -1244,7 +1246,7 @@ pub struct UpdatePipelineNotificationsResponse {
 }
 
 #[doc="<p>The <code>UpdatePipelineRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineRequest {
     #[doc="<p>The AWS Key Management Service (AWS KMS) key that you want to use with this pipeline.</p> <p>If you use either <code>S3</code> or <code>S3-AWS-KMS</code> as your <code>Encryption:Mode</code>, you don't need to provide a key with your job because a default key, known as an AWS-KMS key, is created for you automatically. You need to provide an AWS-KMS key only if you want to use a non-default AWS-KMS key, or if you are using an <code>Encryption:Mode</code> of <code>AES-PKCS7</code>, <code>AES-CTR</code>, or <code>AES-GCM</code>.</p>"]
     #[serde(rename="AwsKmsKeyArn")]
@@ -1280,7 +1282,7 @@ pub struct UpdatePipelineRequest {
 }
 
 #[doc="<p>When you update a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineResponse {
     #[doc="<p>The pipeline updated by this <code>UpdatePipelineResponse</code> call.</p>"]
     #[serde(rename="Pipeline")]
@@ -1293,7 +1295,7 @@ pub struct UpdatePipelineResponse {
 }
 
 #[doc="<p>The <code>UpdatePipelineStatusRequest</code> structure.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineStatusRequest {
     #[doc="<p>The identifier of the pipeline to update.</p>"]
     #[serde(rename="Id")]
@@ -1304,7 +1306,7 @@ pub struct UpdatePipelineStatusRequest {
 }
 
 #[doc="<p>When you update status for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdatePipelineStatusResponse {
     #[doc="<p>A section of the response body that provides information about the pipeline.</p>"]
     #[serde(rename="Pipeline")]
@@ -1378,7 +1380,7 @@ pub struct VideoParameters {
 }
 
 #[doc="<p>Elastic Transcoder returns a warning if the resources used by your pipeline are not in the same region as the pipeline.</p> <p>Using resources in the same region, such as your Amazon S3 buckets, Amazon SNS notification topics, and AWS KMS key, reduces processing time and prevents cross-regional charges.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Warning {
     #[doc="<p>The code of the cross-regional warning.</p>"]
     #[serde(rename="Code")]

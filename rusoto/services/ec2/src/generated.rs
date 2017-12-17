@@ -40,13 +40,18 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>Contains the parameters for accepting the quote.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptReservedInstancesExchangeQuoteRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Convertible Reserved Instances to exchange for other Convertible Reserved Instances of the same or higher value.</p>"]
+    #[serde(rename="ReservedInstanceIds")]
     pub reserved_instance_ids: Vec<String>,
     #[doc="<p>The configurations of the Convertible Reserved Instance offerings that you are purchasing in this exchange.</p>"]
+    #[serde(rename="TargetConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
@@ -81,9 +86,11 @@ impl AcceptReservedInstancesExchangeQuoteRequestSerializer {
 }
 
 #[doc="<p>The result of the exchange and whether it was <code>successful</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptReservedInstancesExchangeQuoteResult {
     #[doc="<p>The ID of the successful exchange.</p>"]
+    #[serde(rename="ExchangeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exchange_id: Option<String>,
 }
 
@@ -131,11 +138,15 @@ impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AcceptVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -162,9 +173,11 @@ impl AcceptVpcPeeringConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AcceptVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AcceptVpcPeeringConnectionResult {
     #[doc="<p>Information about the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnection")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
 }
 
@@ -213,11 +226,15 @@ impl AcceptVpcPeeringConnectionResultDeserializer {
     }
 }
 #[doc="<p>Describes an account attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountAttribute {
     #[doc="<p>The name of the account attribute.</p>"]
+    #[serde(rename="AttributeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_name: Option<String>,
     #[doc="<p>One or more values for the account attribute.</p>"]
+    #[serde(rename="AttributeValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_values: Option<Vec<AccountAttributeValue>>,
 }
 
@@ -320,9 +337,11 @@ impl AccountAttributeNameStringListSerializer {
 }
 
 #[doc="<p>Describes a value of an account attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountAttributeValue {
     #[doc="<p>The value of the attribute.</p>"]
+    #[serde(rename="AttributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value: Option<String>,
 }
 
@@ -412,15 +431,23 @@ impl AccountAttributeValueListDeserializer {
     }
 }
 #[doc="<p>Describes a running instance in a Spot fleet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActiveInstance {
     #[doc="<p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>"]
+    #[serde(rename="InstanceHealth")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_health: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the Spot instance request.</p>"]
+    #[serde(rename="SpotInstanceRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_request_id: Option<String>,
 }
 
@@ -536,23 +563,39 @@ impl ActivityStatusDeserializer {
     }
 }
 #[doc="<p>Describes an Elastic IP address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Address {
     #[doc="<p>The ID representing the allocation of the address for use with EC2-VPC.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>The ID representing the association of the address with an instance in a VPC.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>Indicates whether this Elastic IP address is for use with instances in EC2-Classic (<code>standard</code>) or instances in a VPC (<code>vpc</code>).</p>"]
+    #[serde(rename="Domain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain: Option<String>,
     #[doc="<p>The ID of the instance that the address is associated with (if any).</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The ID of the AWS account that owns the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_owner_id: Option<String>,
     #[doc="<p>The private IP address associated with the Elastic IP address.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -671,13 +714,19 @@ impl AddressListDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AllocateAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AllocateAddressRequest {
     #[doc="<p>[EC2-VPC] The Elastic IP address to recover.</p>"]
+    #[serde(rename="Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub address: Option<String>,
     #[doc="<p>Set to <code>vpc</code> to allocate the address for use with instances in a VPC.</p> <p>Default: The address is for use with instances in EC2-Classic.</p>"]
+    #[serde(rename="Domain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -708,13 +757,19 @@ impl AllocateAddressRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AllocateAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AllocateAddressResult {
     #[doc="<p>[EC2-VPC] The ID that AWS assigns to represent the allocation of the Elastic IP address for use with instances in a VPC.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>Indicates whether this Elastic IP address is for use with instances in EC2-Classic (<code>standard</code>) or instances in a VPC (<code>vpc</code>).</p>"]
+    #[serde(rename="Domain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain: Option<String>,
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -769,17 +824,24 @@ impl AllocateAddressResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AllocateHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AllocateHostsRequest {
     #[doc="<p>This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID.</p> <p>Default: Enabled</p>"]
+    #[serde(rename="AutoPlacement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_placement: Option<String>,
     #[doc="<p>The Availability Zone for the Dedicated Hosts.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Specify the instance type that you want your Dedicated Hosts to be configured for. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>"]
+    #[serde(rename="InstanceType")]
     pub instance_type: String,
     #[doc="<p>The number of Dedicated Hosts you want to allocate to your account with these parameters.</p>"]
+    #[serde(rename="Quantity")]
     pub quantity: i64,
 }
 
@@ -812,9 +874,11 @@ impl AllocateHostsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AllocateHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AllocateHostsResult {
     #[doc="<p>The ID of the allocated Dedicated Host. This is used when you want to launch an instance onto a specific host.</p>"]
+    #[serde(rename="HostIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_ids: Option<Vec<String>>,
 }
 
@@ -915,13 +979,18 @@ impl ArchitectureValuesDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssignIpv6AddressesRequest {
     #[doc="<p>The number of IPv6 addresses to assign to the network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>"]
+    #[serde(rename="Ipv6AddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses to be assigned to the network interface. You can't use this option if you're specifying a number of IPv6 addresses.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
 }
 
@@ -950,11 +1019,15 @@ impl AssignIpv6AddressesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssignIpv6AddressesResult {
     #[doc="<p>The IPv6 addresses assigned to the network interface.</p>"]
+    #[serde(rename="AssignedIpv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assigned_ipv_6_addresses: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
 }
 
@@ -1007,15 +1080,22 @@ impl AssignIpv6AddressesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AssignPrivateIpAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssignPrivateIpAddressesRequest {
     #[doc="<p>Indicates whether to allow an IP address that is already assigned to another network interface or instance to be reassigned to the specified network interface.</p>"]
+    #[serde(rename="AllowReassignment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_reassignment: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
     #[doc="<p>One or more IP addresses to be assigned as a secondary private IP address to the network interface. You can't specify this parameter when also specifying a number of secondary IP addresses.</p> <p>If you don't specify an IP address, Amazon EC2 automatically selects an IP address within the subnet range.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_addresses: Option<Vec<String>>,
     #[doc="<p>The number of secondary IP addresses to assign to the network interface. You can't specify this parameter when also specifying private IP addresses.</p>"]
+    #[serde(rename="SecondaryPrivateIpAddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secondary_private_ip_address_count: Option<i64>,
 }
 
@@ -1051,21 +1131,35 @@ impl AssignPrivateIpAddressesRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for AssociateAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateAddressRequest {
     #[doc="<p>[EC2-VPC] The allocation ID. This is required for EC2-VPC.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>[EC2-VPC] For a VPC in an EC2-Classic account, specify true to allow an Elastic IP address that is already associated with an instance or network interface to be reassociated with the specified instance or network interface. Otherwise, the operation fails. In a VPC in an EC2-VPC-only account, reassociation is automatic, therefore you can specify false to ensure the operation fails if the Elastic IP address is already associated with another resource.</p>"]
+    #[serde(rename="AllowReassociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_reassociation: Option<bool>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance. This is required for EC2-Classic. For EC2-VPC, you can specify either the instance ID or the network interface ID, but not both. The operation fails if you specify an instance ID unless exactly one network interface is attached.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the network interface. If the instance has more than one network interface, you must specify a network interface ID.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>[EC2-VPC] The primary or secondary private IP address to associate with the Elastic IP address. If no private IP address is specified, the Elastic IP address is associated with the primary private IP address.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The Elastic IP address. This is required for EC2-Classic.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -1112,9 +1206,11 @@ impl AssociateAddressRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AssociateAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateAddressResult {
     #[doc="<p>[EC2-VPC] The ID that represents the association of the Elastic IP address with an instance.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
 }
 
@@ -1161,13 +1257,17 @@ impl AssociateAddressResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AssociateDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateDhcpOptionsRequest {
     #[doc="<p>The ID of the DHCP options set, or <code>default</code> to associate no DHCP options with the VPC.</p>"]
+    #[serde(rename="DhcpOptionsId")]
     pub dhcp_options_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -1193,11 +1293,13 @@ impl AssociateDhcpOptionsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateIamInstanceProfileRequest {
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
     pub iam_instance_profile: IamInstanceProfileSpecification,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
@@ -1222,9 +1324,11 @@ impl AssociateIamInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateIamInstanceProfileResult {
     #[doc="<p>Information about the IAM instance profile association.</p>"]
+    #[serde(rename="IamInstanceProfileAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
 }
 
@@ -1271,13 +1375,17 @@ impl AssociateIamInstanceProfileResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AssociateRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -1304,9 +1412,11 @@ impl AssociateRouteTableRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AssociateRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateRouteTableResult {
     #[doc="<p>The route table association ID (needed to disassociate the route table).</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
 }
 
@@ -1352,11 +1462,13 @@ impl AssociateRouteTableResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateSubnetCidrBlockRequest {
     #[doc="<p>The IPv6 CIDR block for your subnet. The subnet must have a /64 prefix length.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
     pub ipv_6_cidr_block: String,
     #[doc="<p>The ID of your subnet.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -1378,11 +1490,15 @@ impl AssociateSubnetCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateSubnetCidrBlockResult {
     #[doc="<p>Information about the IPv6 CIDR block association.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -1431,11 +1547,14 @@ impl AssociateSubnetCidrBlockResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateVpcCidrBlockRequest {
     #[doc="<p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.</p>"]
+    #[serde(rename="AmazonProvidedIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -1459,11 +1578,15 @@ impl AssociateVpcCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AssociateVpcCidrBlockResult {
     #[doc="<p>Information about the IPv6 CIDR block association.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association: Option<VpcIpv6CidrBlockAssociation>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -1525,15 +1648,20 @@ impl AssociationIdListSerializer {
 }
 
 #[doc="<p>Contains the parameters for AttachClassicLinkVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachClassicLinkVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of one or more of the VPC's security groups. You cannot specify security groups from a different VPC.</p>"]
+    #[serde(rename="Groups")]
     pub groups: Vec<String>,
     #[doc="<p>The ID of an EC2-Classic instance to link to the ClassicLink-enabled VPC.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The ID of a ClassicLink-enabled VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -1563,9 +1691,11 @@ impl AttachClassicLinkVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AttachClassicLinkVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachClassicLinkVpcResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -1612,13 +1742,17 @@ impl AttachClassicLinkVpcResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AttachInternetGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
+    #[serde(rename="InternetGatewayId")]
     pub internet_gateway_id: String,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -1645,15 +1779,20 @@ impl AttachInternetGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for AttachNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachNetworkInterfaceRequest {
     #[doc="<p>The index of the device for the network interface attachment.</p>"]
+    #[serde(rename="DeviceIndex")]
     pub device_index: i64,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
 }
 
@@ -1682,9 +1821,11 @@ impl AttachNetworkInterfaceRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AttachNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachNetworkInterfaceResult {
     #[doc="<p>The ID of the network interface attachment.</p>"]
+    #[serde(rename="AttachmentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_id: Option<String>,
 }
 
@@ -1731,15 +1872,20 @@ impl AttachNetworkInterfaceResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for AttachVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachVolumeRequest {
     #[doc="<p>The device name to expose to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="Device")]
     pub device: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The ID of the EBS volume. The volume and instance must be within the same Availability Zone.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -1768,13 +1914,17 @@ impl AttachVolumeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for AttachVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="VpnGatewayId")]
     pub vpn_gateway_id: String,
 }
 
@@ -1801,9 +1951,11 @@ impl AttachVpnGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of AttachVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttachVpnGatewayResult {
     #[doc="<p>Information about the attachment.</p>"]
+    #[serde(rename="VpcAttachment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_attachment: Option<VpcAttachment>,
 }
 
@@ -1865,9 +2017,11 @@ impl AttachmentStatusDeserializer {
     }
 }
 #[doc="<p>Describes a value for a resource attribute that is a Boolean value.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttributeBooleanValue {
     #[doc="<p>The attribute value. The valid values are <code>true</code> or <code>false</code>.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<bool>,
 }
 
@@ -1932,9 +2086,11 @@ impl AttributeBooleanValueSerializer {
 }
 
 #[doc="<p>Describes a value for a resource attribute that is a String.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttributeValue {
     #[doc="<p>The attribute value. Note that the value is case-sensitive.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -1998,25 +2154,42 @@ impl AttributeValueSerializer {
 }
 
 #[doc="<p>Contains the parameters for AuthorizeSecurityGroupEgress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeSecurityGroupEgressRequest {
     #[doc="<p>The CIDR IPv4 address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>"]
+    #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
     pub group_id: String,
     #[doc="<p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>"]
+    #[serde(rename="IpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>The name of a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_name: Option<String>,
     #[doc="<p>The AWS account number for a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
 }
 
@@ -2070,27 +2243,47 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for AuthorizeSecurityGroupIngress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeSecurityGroupIngressRequest {
     #[doc="<p>The CIDR IPv4 address range. You can't specify this parameter when specifying a source security group.</p>"]
+    #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. For the ICMP/ICMPv6 type number, use <code>-1</code> to specify all types.</p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group. Required for a nondefault VPC.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>A set of IP permissions. Can be used to specify multiple rules in a single command.</p>"]
+    #[serde(rename="IpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). (VPC only) Use <code>-1</code> to specify all protocols. If you specify <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6), traffic on all ports is allowed, regardless of any ports you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For protocol <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed.</p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead. For EC2-VPC, the source security group must be in the same VPC.</p>"]
+    #[serde(rename="SourceSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_name: Option<String>,
     #[doc="<p>[EC2-Classic] The AWS account number for the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code number. For the ICMP/ICMPv6 code number, use <code>-1</code> to specify all codes.</p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
 }
 
@@ -2164,15 +2357,23 @@ impl AutoPlacementDeserializer {
     }
 }
 #[doc="<p>Describes an Availability Zone.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZone {
     #[doc="<p>Any messages about the Availability Zone.</p>"]
+    #[serde(rename="Messages")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub messages: Option<Vec<AvailabilityZoneMessage>>,
     #[doc="<p>The name of the region.</p>"]
+    #[serde(rename="RegionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub region_name: Option<String>,
     #[doc="<p>The state of the Availability Zone.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The name of the Availability Zone.</p>"]
+    #[serde(rename="ZoneName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub zone_name: Option<String>,
 }
 
@@ -2272,9 +2473,11 @@ impl AvailabilityZoneListDeserializer {
     }
 }
 #[doc="<p>Describes a message about an Availability Zone.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZoneMessage {
     #[doc="<p>The message about the Availability Zone.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -2377,11 +2580,15 @@ impl AvailabilityZoneStateDeserializer {
     }
 }
 #[doc="<p>The capacity information for instances launched onto the Dedicated Host.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailableCapacity {
     #[doc="<p>The total number of instances that the Dedicated Host supports.</p>"]
+    #[serde(rename="AvailableInstanceCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_instance_capacity: Option<Vec<InstanceCapacity>>,
     #[doc="<p>The number of vCPUs available on the Dedicated Host.</p>"]
+    #[serde(rename="AvailableVCpus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_v_cpus: Option<i64>,
 }
 
@@ -2512,8 +2719,14 @@ impl BlobDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BlobAttributeValue {
+    #[serde(rename="Value")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub value: Option<Vec<u8>>,
 }
 
@@ -2538,15 +2751,23 @@ impl BlobAttributeValueSerializer {
 }
 
 #[doc="<p>Describes a block device mapping.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BlockDeviceMapping {
     #[doc="<p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>"]
+    #[serde(rename="Ebs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs: Option<EbsBlockDevice>,
     #[doc="<p>Suppresses the specified device included in the block device mapping of the AMI.</p>"]
+    #[serde(rename="NoDevice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub no_device: Option<String>,
     #[doc="<p>The virtual device name (<code>ephemeral</code>N). Instance store volumes are numbered starting from 0. An instance type with 2 available instance store volumes can specify mappings for <code>ephemeral0</code> and <code>ephemeral1</code>.The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume.</p> <p>Constraints: For M3 instances, you must specify instance store volumes in the block device mapping for the instance. When you launch an M3 instance, we ignore any instance store volumes specified in the block device mapping for the AMI.</p>"]
+    #[serde(rename="VirtualName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtual_name: Option<String>,
 }
 
@@ -2727,13 +2948,17 @@ impl BundleIdStringListSerializer {
 }
 
 #[doc="<p>Contains the parameters for BundleInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BundleInstanceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance to bundle.</p> <p>Type: String</p> <p>Default: None</p> <p>Required: Yes</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The bucket in which to store the AMI. You can specify a bucket that you already own or a new bucket that Amazon EC2 creates on your behalf. If you specify a bucket that belongs to someone else, Amazon EC2 returns an error.</p>"]
+    #[serde(rename="Storage")]
     pub storage: Storage,
 }
 
@@ -2759,9 +2984,11 @@ impl BundleInstanceRequestSerializer {
 }
 
 #[doc="<p>Contains the output of BundleInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BundleInstanceResult {
     #[doc="<p>Information about the bundle task.</p>"]
+    #[serde(rename="BundleTask")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_task: Option<BundleTask>,
 }
 
@@ -2809,23 +3036,39 @@ impl BundleInstanceResultDeserializer {
     }
 }
 #[doc="<p>Describes a bundle task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BundleTask {
     #[doc="<p>The ID of the bundle task.</p>"]
+    #[serde(rename="BundleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_id: Option<String>,
     #[doc="<p>If the task fails, a description of the error.</p>"]
+    #[serde(rename="BundleTaskError")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_task_error: Option<BundleTaskError>,
     #[doc="<p>The ID of the instance associated with this bundle task.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The level of task completion, as a percent (for example, 20%).</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>The time this task started.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>The state of the task.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The Amazon S3 storage locations.</p>"]
+    #[serde(rename="Storage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storage: Option<Storage>,
     #[doc="<p>The time of the most recent update for the task.</p>"]
+    #[serde(rename="UpdateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_time: Option<String>,
 }
 
@@ -2901,11 +3144,15 @@ impl BundleTaskDeserializer {
     }
 }
 #[doc="<p>Describes an error for <a>BundleInstance</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BundleTaskError {
     #[doc="<p>The error code.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>The error message.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -3024,11 +3271,14 @@ impl CancelBatchErrorCodeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CancelBundleTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelBundleTaskRequest {
     #[doc="<p>The ID of the bundle task.</p>"]
+    #[serde(rename="BundleId")]
     pub bundle_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -3053,9 +3303,11 @@ impl CancelBundleTaskRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CancelBundleTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelBundleTaskResult {
     #[doc="<p>Information about the bundle task.</p>"]
+    #[serde(rename="BundleTask")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_task: Option<BundleTask>,
 }
 
@@ -3103,13 +3355,18 @@ impl CancelBundleTaskResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CancelConversionTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelConversionRequest {
     #[doc="<p>The ID of the conversion task.</p>"]
+    #[serde(rename="ConversionTaskId")]
     pub conversion_task_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The reason for canceling the conversion task.</p>"]
+    #[serde(rename="ReasonMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason_message: Option<String>,
 }
 
@@ -3138,9 +3395,10 @@ impl CancelConversionRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CancelExportTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelExportTaskRequest {
     #[doc="<p>The ID of the export task. This is the ID returned by <code>CreateInstanceExportTask</code>.</p>"]
+    #[serde(rename="ExportTaskId")]
     pub export_task_id: String,
 }
 
@@ -3161,13 +3419,19 @@ impl CancelExportTaskRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CancelImportTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelImportTaskRequest {
     #[doc="<p>The reason for canceling the task.</p>"]
+    #[serde(rename="CancelReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_reason: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the import image or import snapshot task to be canceled.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
 }
 
@@ -3198,13 +3462,19 @@ impl CancelImportTaskRequestSerializer {
 }
 
 #[doc="<p>Contains the output for CancelImportTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelImportTaskResult {
     #[doc="<p>The ID of the task being canceled.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
     #[doc="<p>The current state of the task being canceled.</p>"]
+    #[serde(rename="PreviousState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_state: Option<String>,
     #[doc="<p>The current state of the task being canceled.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -3258,9 +3528,10 @@ impl CancelImportTaskResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CancelReservedInstancesListing.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelReservedInstancesListingRequest {
     #[doc="<p>The ID of the Reserved Instance listing.</p>"]
+    #[serde(rename="ReservedInstancesListingId")]
     pub reserved_instances_listing_id: String,
 }
 
@@ -3281,9 +3552,11 @@ impl CancelReservedInstancesListingRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CancelReservedInstancesListing.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelReservedInstancesListingResult {
     #[doc="<p>The Reserved Instance listing.</p>"]
+    #[serde(rename="ReservedInstancesListings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
@@ -3330,11 +3603,13 @@ impl CancelReservedInstancesListingResultDeserializer {
     }
 }
 #[doc="<p>Describes a Spot fleet error.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotFleetRequestsError {
     #[doc="<p>The error code.</p>"]
+    #[serde(rename="Code")]
     pub code: String,
     #[doc="<p>The description for the error code.</p>"]
+    #[serde(rename="Message")]
     pub message: String,
 }
 
@@ -3384,11 +3659,13 @@ impl CancelSpotFleetRequestsErrorDeserializer {
     }
 }
 #[doc="<p>Describes a Spot fleet request that was not successfully canceled.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotFleetRequestsErrorItem {
     #[doc="<p>The error.</p>"]
+    #[serde(rename="Error")]
     pub error: CancelSpotFleetRequestsError,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
 }
 
@@ -3483,13 +3760,17 @@ impl CancelSpotFleetRequestsErrorSetDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CancelSpotFleetRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotFleetRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Spot fleet requests.</p>"]
+    #[serde(rename="SpotFleetRequestIds")]
     pub spot_fleet_request_ids: Vec<String>,
     #[doc="<p>Indicates whether to terminate instances for a Spot fleet request if it is canceled successfully.</p>"]
+    #[serde(rename="TerminateInstances")]
     pub terminate_instances: bool,
 }
 
@@ -3517,11 +3798,15 @@ impl CancelSpotFleetRequestsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CancelSpotFleetRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotFleetRequestsResponse {
     #[doc="<p>Information about the Spot fleet requests that are successfully canceled.</p>"]
+    #[serde(rename="SuccessfulFleetRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub successful_fleet_requests: Option<Vec<CancelSpotFleetRequestsSuccessItem>>,
     #[doc="<p>Information about the Spot fleet requests that are not successfully canceled.</p>"]
+    #[serde(rename="UnsuccessfulFleetRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful_fleet_requests: Option<Vec<CancelSpotFleetRequestsErrorItem>>,
 }
 
@@ -3571,13 +3856,16 @@ impl CancelSpotFleetRequestsResponseDeserializer {
     }
 }
 #[doc="<p>Describes a Spot fleet request that was successfully canceled.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotFleetRequestsSuccessItem {
     #[doc="<p>The current state of the Spot fleet request.</p>"]
+    #[serde(rename="CurrentSpotFleetRequestState")]
     pub current_spot_fleet_request_state: String,
     #[doc="<p>The previous state of the Spot fleet request.</p>"]
+    #[serde(rename="PreviousSpotFleetRequestState")]
     pub previous_spot_fleet_request_state: String,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
 }
 
@@ -3691,11 +3979,14 @@ impl CancelSpotInstanceRequestStateDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CancelSpotInstanceRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotInstanceRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more Spot instance request IDs.</p>"]
+    #[serde(rename="SpotInstanceRequestIds")]
     pub spot_instance_request_ids: Vec<String>,
 }
 
@@ -3723,9 +4014,11 @@ impl CancelSpotInstanceRequestsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CancelSpotInstanceRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelSpotInstanceRequestsResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
+    #[serde(rename="CancelledSpotInstanceRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancelled_spot_instance_requests: Option<Vec<CancelledSpotInstanceRequest>>,
 }
 
@@ -3772,11 +4065,15 @@ impl CancelSpotInstanceRequestsResultDeserializer {
     }
 }
 #[doc="<p>Describes a request to cancel a Spot instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CancelledSpotInstanceRequest {
     #[doc="<p>The ID of the Spot instance request.</p>"]
+    #[serde(rename="SpotInstanceRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>The state of the Spot instance request.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -3869,11 +4166,15 @@ impl CancelledSpotInstanceRequestListDeserializer {
     }
 }
 #[doc="<p>Describes the ClassicLink DNS support status of a VPC.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClassicLinkDnsSupport {
     #[doc="<p>Indicates whether ClassicLink DNS support is enabled for the VPC.</p>"]
+    #[serde(rename="ClassicLinkDnsSupported")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_dns_supported: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -3967,15 +4268,23 @@ impl ClassicLinkDnsSupportListDeserializer {
     }
 }
 #[doc="<p>Describes a linked EC2-Classic instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClassicLinkInstance {
     #[doc="<p>A list of security groups.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>Any tags assigned to the instance.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -4076,15 +4385,23 @@ impl ClassicLinkInstanceListDeserializer {
     }
 }
 #[doc="<p>Describes the client-specific data.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ClientData {
     #[doc="<p>A user-defined comment about the disk upload.</p>"]
+    #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comment: Option<String>,
     #[doc="<p>The time that the disk upload ends.</p>"]
+    #[serde(rename="UploadEnd")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_end: Option<String>,
     #[doc="<p>The size of the uploaded disk image, in GiB.</p>"]
+    #[serde(rename="UploadSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_size: Option<f64>,
     #[doc="<p>The time that the disk upload starts.</p>"]
+    #[serde(rename="UploadStart")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_start: Option<String>,
 }
 
@@ -4119,13 +4436,17 @@ impl ClientDataSerializer {
 }
 
 #[doc="<p>Contains the parameters for ConfirmProductInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfirmProductInstanceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The product code. This must be a product code that you own.</p>"]
+    #[serde(rename="ProductCode")]
     pub product_code: String,
 }
 
@@ -4152,11 +4473,15 @@ impl ConfirmProductInstanceRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ConfirmProductInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfirmProductInstanceResult {
     #[doc="<p>The AWS account ID of the instance owner. This is only present if the product code is attached to the instance.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The return value of the request. Returns <code>true</code> if the specified product code is owned by the requester and associated with the specified instance.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -4233,21 +4558,33 @@ impl ConversionIdStringListSerializer {
 }
 
 #[doc="<p>Describes a conversion task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConversionTask {
     #[doc="<p>The ID of the conversion task.</p>"]
+    #[serde(rename="ConversionTaskId")]
     pub conversion_task_id: String,
     #[doc="<p>The time when the task expires. If the upload isn't complete before the expiration time, we automatically cancel the task.</p>"]
+    #[serde(rename="ExpirationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_time: Option<String>,
     #[doc="<p>If the task is for importing an instance, this contains information about the import instance task.</p>"]
+    #[serde(rename="ImportInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_instance: Option<ImportInstanceTaskDetails>,
     #[doc="<p>If the task is for importing a volume, this contains information about the import volume task.</p>"]
+    #[serde(rename="ImportVolume")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_volume: Option<ImportVolumeTaskDetails>,
     #[doc="<p>The state of the conversion task.</p>"]
+    #[serde(rename="State")]
     pub state: String,
     #[doc="<p>The status message related to the conversion task.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>Any tags assigned to the task.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -4333,23 +4670,36 @@ impl ConversionTaskStateDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CopyImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyImageRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>A description for the new AMI in the destination region.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the destination snapshots of the copied image should be encrypted. The default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when encrypting the snapshots of an image during a copy operation. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of the new AMI in the destination region.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The ID of the AMI to copy.</p>"]
+    #[serde(rename="SourceImageId")]
     pub source_image_id: String,
     #[doc="<p>The name of the region that contains the AMI to copy.</p>"]
+    #[serde(rename="SourceRegion")]
     pub source_region: String,
 }
 
@@ -4394,9 +4744,11 @@ impl CopyImageRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CopyImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyImageResult {
     #[doc="<p>The ID of the new AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
 }
 
@@ -4443,23 +4795,37 @@ impl CopyImageResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CopySnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopySnapshotRequest {
     #[doc="<p>A description for the EBS snapshot.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The destination region to use in the <code>PresignedUrl</code> parameter of a snapshot copy operation. This parameter is only valid for specifying the destination region in a <code>PresignedUrl</code> parameter, where it is required.</p> <note> <p> <code>CopySnapshot</code> sends the snapshot copy to the regional endpoint that you send the HTTP request to, such as <code>ec2.us-east-1.amazonaws.com</code> (in the AWS CLI, this is specified with the <code>--region</code> parameter or the default region in your AWS configuration file).</p> </note>"]
+    #[serde(rename="DestinationRegion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_region: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot using this flag, but you cannot use it to create an unencrypted copy from an encrypted snapshot. Your default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when creating the snapshot copy. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The pre-signed URL that facilitates copying an encrypted snapshot. This parameter is only required when copying an encrypted snapshot with the Amazon EC2 Query API; it is available as an optional parameter in all other cases. The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>"]
+    #[serde(rename="PresignedUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub presigned_url: Option<String>,
     #[doc="<p>The ID of the region that contains the snapshot to be copied.</p>"]
+    #[serde(rename="SourceRegion")]
     pub source_region: String,
     #[doc="<p>The ID of the EBS snapshot to copy.</p>"]
+    #[serde(rename="SourceSnapshotId")]
     pub source_snapshot_id: String,
 }
 
@@ -4506,9 +4872,11 @@ impl CopySnapshotRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CopySnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopySnapshotResult {
     #[doc="<p>The ID of the new snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
 }
 
@@ -4555,15 +4923,20 @@ impl CopySnapshotResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateCustomerGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCustomerGatewayRequest {
     #[doc="<p>For devices that support BGP, the customer gateway's BGP ASN.</p> <p>Default: 65000</p>"]
+    #[serde(rename="BgpAsn")]
     pub bgp_asn: i64,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The Internet-routable IP address for the customer gateway's outside interface. The address must be static.</p>"]
+    #[serde(rename="PublicIp")]
     pub public_ip: String,
     #[doc="<p>The type of VPN connection that this customer gateway supports (<code>ipsec.1</code>).</p>"]
+    #[serde(rename="Type")]
     pub type_: String,
 }
 
@@ -4592,9 +4965,11 @@ impl CreateCustomerGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateCustomerGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCustomerGatewayResult {
     #[doc="<p>Information about the customer gateway.</p>"]
+    #[serde(rename="CustomerGateway")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateway: Option<CustomerGateway>,
 }
 
@@ -4642,9 +5017,11 @@ impl CreateCustomerGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateDefaultVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDefaultVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -4667,9 +5044,11 @@ impl CreateDefaultVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateDefaultVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDefaultVpcResult {
     #[doc="<p>Information about the VPC.</p>"]
+    #[serde(rename="Vpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc: Option<Vpc>,
 }
 
@@ -4715,11 +5094,14 @@ impl CreateDefaultVpcResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDhcpOptionsRequest {
     #[doc="<p>A DHCP configuration option.</p>"]
+    #[serde(rename="DhcpConfigurations")]
     pub dhcp_configurations: Vec<NewDhcpConfiguration>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -4747,9 +5129,11 @@ impl CreateDhcpOptionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDhcpOptionsResult {
     #[doc="<p>A set of DHCP options.</p>"]
+    #[serde(rename="DhcpOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_options: Option<DhcpOptions>,
 }
 
@@ -4796,13 +5180,18 @@ impl CreateDhcpOptionsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEgressOnlyInternetGatewayRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC for which to create the egress-only Internet gateway.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -4830,11 +5219,15 @@ impl CreateEgressOnlyInternetGatewayRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEgressOnlyInternetGatewayResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Information about the egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGateway")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway: Option<EgressOnlyInternetGateway>,
 }
 
@@ -4885,19 +5278,26 @@ impl CreateEgressOnlyInternetGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFlowLogsRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The ARN for the IAM role that's used to post flow logs to a CloudWatch Logs log group.</p>"]
+    #[serde(rename="DeliverLogsPermissionArn")]
     pub deliver_logs_permission_arn: String,
     #[doc="<p>The name of the CloudWatch log group.</p>"]
+    #[serde(rename="LogGroupName")]
     pub log_group_name: String,
     #[doc="<p>One or more subnet, network interface, or VPC IDs.</p> <p>Constraints: Maximum of 1000 resources</p>"]
+    #[serde(rename="ResourceIds")]
     pub resource_ids: Vec<String>,
     #[doc="<p>The type of resource on which to create the flow log.</p>"]
+    #[serde(rename="ResourceType")]
     pub resource_type: String,
     #[doc="<p>The type of traffic to log.</p>"]
+    #[serde(rename="TrafficType")]
     pub traffic_type: String,
 }
 
@@ -4931,13 +5331,19 @@ impl CreateFlowLogsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFlowLogsResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The IDs of the flow logs.</p>"]
+    #[serde(rename="FlowLogIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub flow_log_ids: Option<Vec<String>>,
     #[doc="<p>Information about the flow logs that could not be created successfully.</p>"]
+    #[serde(rename="Unsuccessful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -4993,19 +5399,30 @@ impl CreateFlowLogsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFpgaImageRequest {
     #[doc="<p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>A description for the AFI.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The location of the encrypted design checkpoint in Amazon S3. The input must be a tarball.</p>"]
+    #[serde(rename="InputStorageLocation")]
     pub input_storage_location: StorageLocation,
     #[doc="<p>The location in Amazon S3 for the output logs.</p>"]
+    #[serde(rename="LogsStorageLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logs_storage_location: Option<StorageLocation>,
     #[doc="<p>A name for the AFI.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -5047,11 +5464,15 @@ impl CreateFpgaImageRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFpgaImageResult {
     #[doc="<p>The global FPGA image identifier (AGFI ID).</p>"]
+    #[serde(rename="FpgaImageGlobalId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_image_global_id: Option<String>,
     #[doc="<p>The FPGA image identifier (AFI ID).</p>"]
+    #[serde(rename="FpgaImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_image_id: Option<String>,
 }
 
@@ -5103,19 +5524,29 @@ impl CreateFpgaImageResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateImageRequest {
     #[doc="<p>Information about one or more block device mappings.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for the new image.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>A name for the new image.</p> <p>Constraints: 3-128 alphanumeric characters, parentheses (()), square brackets ([]), spaces ( ), periods (.), slashes (/), dashes (-), single quotes ('), at-signs (@), or underscores(_)</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>By default, Amazon EC2 attempts to shut down and reboot the instance before creating the image. If the 'No Reboot' option is set, Amazon EC2 doesn't shut down the instance before creating the image. When this option is used, file system integrity on the created image can't be guaranteed.</p>"]
+    #[serde(rename="NoReboot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub no_reboot: Option<bool>,
 }
 
@@ -5157,9 +5588,11 @@ impl CreateImageRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateImageResult {
     #[doc="<p>The ID of the new AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
 }
 
@@ -5206,15 +5639,22 @@ impl CreateImageResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateInstanceExportTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceExportTaskRequest {
     #[doc="<p>A description for the conversion task or the resource being exported. The maximum length is 255 bytes.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The format and location for an instance export task.</p>"]
+    #[serde(rename="ExportToS3Task")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_to_s3_task: Option<ExportToS3TaskSpecification>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The target virtualization environment.</p>"]
+    #[serde(rename="TargetEnvironment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_environment: Option<String>,
 }
 
@@ -5250,9 +5690,11 @@ impl CreateInstanceExportTaskRequestSerializer {
 }
 
 #[doc="<p>Contains the output for CreateInstanceExportTask.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInstanceExportTaskResult {
     #[doc="<p>Information about the instance export task.</p>"]
+    #[serde(rename="ExportTask")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_task: Option<ExportTask>,
 }
 
@@ -5300,9 +5742,11 @@ impl CreateInstanceExportTaskResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateInternetGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -5325,9 +5769,11 @@ impl CreateInternetGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateInternetGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateInternetGatewayResult {
     #[doc="<p>Information about the Internet gateway.</p>"]
+    #[serde(rename="InternetGateway")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub internet_gateway: Option<InternetGateway>,
 }
 
@@ -5375,11 +5821,14 @@ impl CreateInternetGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateKeyPair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A unique name for the key pair.</p> <p>Constraints: Up to 255 ASCII characters</p>"]
+    #[serde(rename="KeyName")]
     pub key_name: String,
 }
 
@@ -5404,13 +5853,17 @@ impl CreateKeyPairRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateNatGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNatGatewayRequest {
     #[doc="<p>The allocation ID of an Elastic IP address to associate with the NAT gateway. If the Elastic IP address is associated with another resource, you must first disassociate it.</p>"]
+    #[serde(rename="AllocationId")]
     pub allocation_id: String,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p> <p>Constraint: Maximum 64 ASCII characters.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The subnet in which to create the NAT gateway.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -5437,11 +5890,15 @@ impl CreateNatGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateNatGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNatGatewayResult {
     #[doc="<p>Unique, case-sensitive identifier to ensure the idempotency of the request. Only returned if a client token was provided in the request.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Information about the NAT gateway.</p>"]
+    #[serde(rename="NatGateway")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway: Option<NatGateway>,
 }
 
@@ -5493,27 +5950,42 @@ impl CreateNatGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateNetworkAclEntry.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkAclEntryRequest {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether this is an egress rule (rule is applied to traffic leaving the subnet).</p>"]
+    #[serde(rename="Egress")]
     pub egress: bool,
     #[doc="<p>ICMP protocol: The ICMP or ICMPv6 type and code. Required if specifying the ICMP protocol, or protocol 58 (ICMPv6) with an IPv6 CIDR block.</p>"]
+    #[serde(rename="IcmpTypeCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation (for example <code>2001:db8:1234:1a00::/64</code>).</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>The ID of the network ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
     pub network_acl_id: String,
     #[doc="<p>TCP or UDP protocols: The range of ports the rule applies to.</p>"]
+    #[serde(rename="PortRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port_range: Option<PortRange>,
     #[doc="<p>The protocol. A value of <code>-1</code> or <code>all</code> means all protocols. If you specify <code>all</code>, <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, or <code>icmp</code>, traffic on all ports is allowed, regardless of any ports or ICMP types or codes you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv4 CIDR block, traffic for all ICMP types and codes allowed, regardless of any that you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv6 CIDR block, you must specify an ICMP type and code.</p>"]
+    #[serde(rename="Protocol")]
     pub protocol: String,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
+    #[serde(rename="RuleAction")]
     pub rule_action: String,
     #[doc="<p>The rule number for the entry (for example, 100). ACL entries are processed in ascending order by rule number.</p> <p>Constraints: Positive integer from 1 to 32766. The range 32767 to 65535 is reserved for internal use.</p>"]
+    #[serde(rename="RuleNumber")]
     pub rule_number: i64,
 }
 
@@ -5564,11 +6036,14 @@ impl CreateNetworkAclEntryRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateNetworkAcl.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkAclRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -5593,9 +6068,11 @@ impl CreateNetworkAclRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateNetworkAcl.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkAclResult {
     #[doc="<p>Information about the network ACL.</p>"]
+    #[serde(rename="NetworkAcl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acl: Option<NetworkAcl>,
 }
 
@@ -5643,17 +6120,25 @@ impl CreateNetworkAclResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateNetworkInterfacePermission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkInterfacePermissionRequest {
     #[doc="<p>The AWS account ID.</p>"]
+    #[serde(rename="AwsAccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_account_id: Option<String>,
     #[doc="<p>The AWS service. Currently not supported.</p>"]
+    #[serde(rename="AwsService")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_service: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
     #[doc="<p>The type of permission to grant.</p>"]
+    #[serde(rename="Permission")]
     pub permission: String,
 }
 
@@ -5688,9 +6173,11 @@ impl CreateNetworkInterfacePermissionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateNetworkInterfacePermission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkInterfacePermissionResult {
     #[doc="<p>Information about the permission for the network interface.</p>"]
+    #[serde(rename="InterfacePermission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub interface_permission: Option<NetworkInterfacePermission>,
 }
 
@@ -5737,25 +6224,42 @@ impl CreateNetworkInterfacePermissionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkInterfaceRequest {
     #[doc="<p>A description for the network interface.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<String>>,
     #[doc="<p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses. If your subnet has the <code>AssignIpv6AddressOnCreation</code> attribute set to <code>true</code>, you can specify <code>0</code> to override this setting.</p>"]
+    #[serde(rename="Ipv6AddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The primary private IPv4 address of the network interface. If you don't specify an IPv4 address, Amazon EC2 selects one for you from the subnet's IPv4 CIDR range. If you specify an IP address, you cannot indicate any IP addresses specified in <code>privateIpAddresses</code> as primary (only one IP address can be designated as primary).</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
     #[doc="<p>The number of secondary private IPv4 addresses to assign to a network interface. When you specify a number of secondary IPv4 addresses, Amazon EC2 selects these IP addresses within the subnet's IPv4 CIDR range. You can't specify this option and specify more than one private IP address using <code>privateIpAddresses</code>.</p> <p>The number of IP addresses you can assign to a network interface varies by instance type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI\">IP Addresses Per ENI Per Instance Type</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[serde(rename="SecondaryPrivateIpAddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet to associate with the network interface.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -5815,9 +6319,11 @@ impl CreateNetworkInterfaceRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateNetworkInterfaceResult {
     #[doc="<p>Information about the network interface.</p>"]
+    #[serde(rename="NetworkInterface")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface: Option<NetworkInterface>,
 }
 
@@ -5865,13 +6371,17 @@ impl CreateNetworkInterfaceResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreatePlacementGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePlacementGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A name for the placement group.</p> <p>Constraints: Up to 255 ASCII characters</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>The placement strategy.</p>"]
+    #[serde(rename="Strategy")]
     pub strategy: String,
 }
 
@@ -5898,15 +6408,19 @@ impl CreatePlacementGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateReservedInstancesListing.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReservedInstancesListingRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
     pub client_token: String,
     #[doc="<p>The number of instances that are a part of a Reserved Instance account to be listed in the Reserved Instance Marketplace. This number should be less than or equal to the instance count associated with the Reserved Instance ID specified in this call.</p>"]
+    #[serde(rename="InstanceCount")]
     pub instance_count: i64,
     #[doc="<p>A list specifying the price of the Standard Reserved Instance for each month remaining in the Reserved Instance term.</p>"]
+    #[serde(rename="PriceSchedules")]
     pub price_schedules: Vec<PriceScheduleSpecification>,
     #[doc="<p>The ID of the active Standard Reserved Instance.</p>"]
+    #[serde(rename="ReservedInstancesId")]
     pub reserved_instances_id: String,
 }
 
@@ -5936,9 +6450,11 @@ impl CreateReservedInstancesListingRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateReservedInstancesListing.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReservedInstancesListingResult {
     #[doc="<p>Information about the Standard Reserved Instance listing.</p>"]
+    #[serde(rename="ReservedInstancesListings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
@@ -5985,27 +6501,46 @@ impl CreateReservedInstancesListingResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRouteRequest {
     #[doc="<p>The IPv4 CIDR address block used for the destination match. Routing decisions are based on the most specific match.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR block used for the destination match. Routing decisions are based on the most specific match.</p>"]
+    #[serde(rename="DestinationIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>[IPv6 traffic only] The ID of an egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway_id: Option<String>,
     #[doc="<p>The ID of an Internet gateway or virtual private gateway attached to your VPC.</p>"]
+    #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<String>,
     #[doc="<p>The ID of a NAT instance in your VPC. The operation fails if you specify an instance ID unless exactly one network interface is attached.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>[IPv4 traffic only] The ID of a NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_id: Option<String>,
     #[doc="<p>The ID of a network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The ID of the route table for the route.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
     #[doc="<p>The ID of a VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -6062,9 +6597,11 @@ impl CreateRouteRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRouteResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -6111,11 +6648,14 @@ impl CreateRouteResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -6140,9 +6680,11 @@ impl CreateRouteTableRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateRouteTableResult {
     #[doc="<p>Information about the route table.</p>"]
+    #[serde(rename="RouteTable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table: Option<RouteTable>,
 }
 
@@ -6190,15 +6732,21 @@ impl CreateRouteTableResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateSecurityGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSecurityGroupRequest {
     #[doc="<p>A description for the security group. This is informational only.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>"]
+    #[serde(rename="Description")]
     pub description: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The name of the security group.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
     #[doc="<p>[EC2-VPC] The ID of the VPC. Required for EC2-VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -6229,9 +6777,11 @@ impl CreateSecurityGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateSecurityGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSecurityGroupResult {
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
 }
 
@@ -6278,13 +6828,18 @@ impl CreateSecurityGroupResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateSnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSnapshotRequest {
     #[doc="<p>A description for the snapshot.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -6313,13 +6868,18 @@ impl CreateSnapshotRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateSpotDatafeedSubscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSpotDatafeedSubscriptionRequest {
     #[doc="<p>The Amazon S3 bucket in which to store the Spot instance data feed.</p>"]
+    #[serde(rename="Bucket")]
     pub bucket: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A prefix for the data feed file names.</p>"]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
 }
 
@@ -6348,9 +6908,11 @@ impl CreateSpotDatafeedSubscriptionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateSpotDatafeedSubscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSpotDatafeedSubscriptionResult {
     #[doc="<p>The Spot instance data feed subscription.</p>"]
+    #[serde(rename="SpotDatafeedSubscription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
 }
 
@@ -6397,17 +6959,25 @@ impl CreateSpotDatafeedSubscriptionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateSubnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubnetRequest {
     #[doc="<p>The Availability Zone for the subnet.</p> <p>Default: AWS selects one for you. If you create more than one subnet in your VPC, we may not necessarily select a different zone for each subnet.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The IPv4 network range for the subnet, in CIDR notation. For example, <code>10.0.0.0/24</code>.</p>"]
+    #[serde(rename="CidrBlock")]
     pub cidr_block: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IPv6 network range for the subnet, in CIDR notation. The subnet size must use a /64 prefix length.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -6442,9 +7012,11 @@ impl CreateSubnetRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateSubnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSubnetResult {
     #[doc="<p>Information about the subnet.</p>"]
+    #[serde(rename="Subnet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet: Option<Subnet>,
 }
 
@@ -6491,13 +7063,17 @@ impl CreateSubnetResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IDs of one or more resources to tag. For example, ami-1a2b3c4d.</p>"]
+    #[serde(rename="Resources")]
     pub resources: Vec<String>,
     #[doc="<p>One or more tags. The <code>value</code> parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -6524,11 +7100,15 @@ impl CreateTagsRequestSerializer {
 }
 
 #[doc="<p>Describes the user or group to be added or removed from the permissions for a volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVolumePermission {
     #[doc="<p>The specific group that is to be added or removed from a volume's list of create volume permissions.</p>"]
+    #[serde(rename="Group")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group: Option<String>,
     #[doc="<p>The specific AWS account ID that is to be added or removed from a volume's list of create volume permissions.</p>"]
+    #[serde(rename="UserId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id: Option<String>,
 }
 
@@ -6655,11 +7235,15 @@ impl CreateVolumePermissionListSerializer {
 }
 
 #[doc="<p>Describes modifications to the permissions for a volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVolumePermissionModifications {
     #[doc="<p>Adds a specific AWS account ID or group to a volume's list of create volume permissions.</p>"]
+    #[serde(rename="Add")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub add: Option<Vec<CreateVolumePermission>>,
     #[doc="<p>Removes a specific AWS account ID or group from a volume's list of create volume permissions.</p>"]
+    #[serde(rename="Remove")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remove: Option<Vec<CreateVolumePermission>>,
 }
 
@@ -6688,25 +7272,42 @@ impl CreateVolumePermissionModificationsSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVolumeRequest {
     #[doc="<p>The Availability Zone in which to create the volume. Use <a>DescribeAvailabilityZones</a> to list the Availability Zones that are currently available to you.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the volume should be encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or vice versa. If your AMI uses encrypted volumes, you can only launch it on supported instance types. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>Only valid for Provisioned IOPS SSD volumes. The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB.</p> <p>Constraint: Range is 100 to 20000 for Provisioned IOPS SSD volumes </p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16384 for <code>gp2</code>, 4-16384 for <code>io1</code>, 500-16384 for <code>st1</code>, 500-16384 for <code>sc1</code>, and 1-1024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
     #[doc="<p>The snapshot from which to create the volume.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The tags to apply to the volume during creation.</p>"]
+    #[serde(rename="TagSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_specifications: Option<Vec<TagSpecification>>,
     #[doc="<p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Default: <code>standard</code> </p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -6760,19 +7361,29 @@ impl CreateVolumeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateVpcEndpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcEndpointRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>"]
+    #[serde(rename="PolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route table IDs.</p>"]
+    #[serde(rename="RouteTableIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_ids: Option<Vec<String>>,
     #[doc="<p>The AWS service name, in the form <code>com.amazonaws.<i>region</i>.<i>service</i> </code>. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request.</p>"]
+    #[serde(rename="ServiceName")]
     pub service_name: String,
     #[doc="<p>The ID of the VPC in which the endpoint will be used.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -6812,11 +7423,15 @@ impl CreateVpcEndpointRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateVpcEndpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcEndpointResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Information about the endpoint.</p>"]
+    #[serde(rename="VpcEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_endpoint: Option<VpcEndpoint>,
 }
 
@@ -6868,15 +7483,23 @@ impl CreateVpcEndpointResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The AWS account ID of the owner of the peer VPC.</p> <p>Default: Your AWS account ID</p>"]
+    #[serde(rename="PeerOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub peer_owner_id: Option<String>,
     #[doc="<p>The ID of the VPC with which you are creating the VPC peering connection.</p>"]
+    #[serde(rename="PeerVpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub peer_vpc_id: Option<String>,
     #[doc="<p>The ID of the requester VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -6911,9 +7534,11 @@ impl CreateVpcPeeringConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcPeeringConnectionResult {
     #[doc="<p>Information about the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnection")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
 }
 
@@ -6962,15 +7587,22 @@ impl CreateVpcPeeringConnectionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcRequest {
     #[doc="<p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block.</p>"]
+    #[serde(rename="AmazonProvidedIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
     #[doc="<p>The IPv4 network range for the VPC, in CIDR notation. For example, <code>10.0.0.0/16</code>.</p>"]
+    #[serde(rename="CidrBlock")]
     pub cidr_block: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The tenancy options for instances launched into the VPC. For <code>default</code>, instances are launched with shared tenancy by default. You can launch instances with any tenancy into a shared tenancy VPC. For <code>dedicated</code>, instances are launched as dedicated tenancy instances by default. You can only launch instances with a tenancy of <code>dedicated</code> or <code>host</code> into a dedicated tenancy VPC. </p> <p> <b>Important:</b> The <code>host</code> value cannot be used with this parameter. Use the <code>default</code> or <code>dedicated</code> values only.</p> <p>Default: <code>default</code> </p>"]
+    #[serde(rename="InstanceTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_tenancy: Option<String>,
 }
 
@@ -7003,9 +7635,11 @@ impl CreateVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpcResult {
     #[doc="<p>Information about the VPC.</p>"]
+    #[serde(rename="Vpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc: Option<Vpc>,
 }
 
@@ -7051,17 +7685,24 @@ impl CreateVpcResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateVpnConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpnConnectionRequest {
     #[doc="<p>The ID of the customer gateway.</p>"]
+    #[serde(rename="CustomerGatewayId")]
     pub customer_gateway_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the VPN connection requires static routes. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="Options")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub options: Option<VpnConnectionOptionsSpecification>,
     #[doc="<p>The type of VPN connection (<code>ipsec.1</code>).</p>"]
+    #[serde(rename="Type")]
     pub type_: String,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="VpnGatewayId")]
     pub vpn_gateway_id: String,
 }
 
@@ -7097,9 +7738,11 @@ impl CreateVpnConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateVpnConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpnConnectionResult {
     #[doc="<p>Information about the VPN connection.</p>"]
+    #[serde(rename="VpnConnection")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_connection: Option<VpnConnection>,
 }
 
@@ -7147,11 +7790,13 @@ impl CreateVpnConnectionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for CreateVpnConnectionRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpnConnectionRouteRequest {
     #[doc="<p>The CIDR block associated with the local subnet of the customer network.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
     pub destination_cidr_block: String,
     #[doc="<p>The ID of the VPN connection.</p>"]
+    #[serde(rename="VpnConnectionId")]
     pub vpn_connection_id: String,
 }
 
@@ -7174,13 +7819,18 @@ impl CreateVpnConnectionRouteRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for CreateVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpnGatewayRequest {
     #[doc="<p>The Availability Zone for the virtual private gateway.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The type of VPN connection this virtual private gateway supports.</p>"]
+    #[serde(rename="Type")]
     pub type_: String,
 }
 
@@ -7209,9 +7859,11 @@ impl CreateVpnGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of CreateVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateVpnGatewayResult {
     #[doc="<p>Information about the virtual private gateway.</p>"]
+    #[serde(rename="VpnGateway")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_gateway: Option<VpnGateway>,
 }
 
@@ -7273,19 +7925,31 @@ impl CurrencyCodeValuesDeserializer {
     }
 }
 #[doc="<p>Describes a customer gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CustomerGateway {
     #[doc="<p>The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p>"]
+    #[serde(rename="BgpAsn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bgp_asn: Option<String>,
     #[doc="<p>The ID of the customer gateway.</p>"]
+    #[serde(rename="CustomerGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateway_id: Option<String>,
     #[doc="<p>The Internet-routable IP address of the customer gateway's outside interface.</p>"]
+    #[serde(rename="IpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address: Option<String>,
     #[doc="<p>The current state of the customer gateway (<code>pending | available | deleting | deleted</code>).</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the customer gateway.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection the customer gateway supports (<code>ipsec.1</code>).</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
 }
 
@@ -7432,11 +8096,14 @@ impl DateTimeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteCustomerGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCustomerGatewayRequest {
     #[doc="<p>The ID of the customer gateway.</p>"]
+    #[serde(rename="CustomerGatewayId")]
     pub customer_gateway_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -7461,11 +8128,14 @@ impl DeleteCustomerGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDhcpOptionsRequest {
     #[doc="<p>The ID of the DHCP options set.</p>"]
+    #[serde(rename="DhcpOptionsId")]
     pub dhcp_options_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -7489,11 +8159,14 @@ impl DeleteDhcpOptionsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEgressOnlyInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayId")]
     pub egress_only_internet_gateway_id: String,
 }
 
@@ -7517,9 +8190,11 @@ impl DeleteEgressOnlyInternetGatewayRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEgressOnlyInternetGatewayResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="ReturnCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_code: Option<bool>,
 }
 
@@ -7567,9 +8242,10 @@ impl DeleteEgressOnlyInternetGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFlowLogsRequest {
     #[doc="<p>One or more flow log IDs.</p>"]
+    #[serde(rename="FlowLogIds")]
     pub flow_log_ids: Vec<String>,
 }
 
@@ -7591,9 +8267,11 @@ impl DeleteFlowLogsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DeleteFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFlowLogsResult {
     #[doc="<p>Information about the flow logs that could not be deleted successfully.</p>"]
+    #[serde(rename="Unsuccessful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -7641,11 +8319,14 @@ impl DeleteFlowLogsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteInternetGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
+    #[serde(rename="InternetGatewayId")]
     pub internet_gateway_id: String,
 }
 
@@ -7670,11 +8351,14 @@ impl DeleteInternetGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteKeyPair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
     pub key_name: String,
 }
 
@@ -7699,9 +8383,10 @@ impl DeleteKeyPairRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteNatGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNatGatewayRequest {
     #[doc="<p>The ID of the NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
     pub nat_gateway_id: String,
 }
 
@@ -7722,9 +8407,11 @@ impl DeleteNatGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DeleteNatGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNatGatewayResult {
     #[doc="<p>The ID of the NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_id: Option<String>,
 }
 
@@ -7771,15 +8458,20 @@ impl DeleteNatGatewayResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteNetworkAclEntry.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNetworkAclEntryRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the rule is an egress rule.</p>"]
+    #[serde(rename="Egress")]
     pub egress: bool,
     #[doc="<p>The ID of the network ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
     pub network_acl_id: String,
     #[doc="<p>The rule number of the entry to delete.</p>"]
+    #[serde(rename="RuleNumber")]
     pub rule_number: i64,
 }
 
@@ -7808,11 +8500,14 @@ impl DeleteNetworkAclEntryRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteNetworkAcl.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNetworkAclRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
     pub network_acl_id: String,
 }
 
@@ -7837,13 +8532,18 @@ impl DeleteNetworkAclRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteNetworkInterfacePermission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNetworkInterfacePermissionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specify <code>true</code> to remove the permission even if the network interface is attached to an instance.</p>"]
+    #[serde(rename="Force")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force: Option<bool>,
     #[doc="<p>The ID of the network interface permission.</p>"]
+    #[serde(rename="NetworkInterfacePermissionId")]
     pub network_interface_permission_id: String,
 }
 
@@ -7872,9 +8572,11 @@ impl DeleteNetworkInterfacePermissionRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DeleteNetworkInterfacePermission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNetworkInterfacePermissionResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds, otherwise returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -7922,11 +8624,14 @@ impl DeleteNetworkInterfacePermissionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteNetworkInterfaceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
 }
 
@@ -7951,11 +8656,14 @@ impl DeleteNetworkInterfaceRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeletePlacementGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePlacementGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The name of the placement group.</p>"]
+    #[serde(rename="GroupName")]
     pub group_name: String,
 }
 
@@ -7980,15 +8688,22 @@ impl DeletePlacementGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRouteRequest {
     #[doc="<p>The IPv4 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>"]
+    #[serde(rename="DestinationIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
 }
 
@@ -8021,11 +8736,14 @@ impl DeleteRouteRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
 }
 
@@ -8050,13 +8768,19 @@ impl DeleteRouteTableRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteSecurityGroup.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSecurityGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the security group. Required for a nondefault VPC.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group. You can specify either the security group name or the security group ID.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
 }
 
@@ -8087,11 +8811,14 @@ impl DeleteSecurityGroupRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteSnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSnapshotRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
     pub snapshot_id: String,
 }
 
@@ -8116,9 +8843,11 @@ impl DeleteSnapshotRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteSpotDatafeedSubscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSpotDatafeedSubscriptionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -8141,11 +8870,14 @@ impl DeleteSpotDatafeedSubscriptionRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteSubnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSubnetRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -8170,13 +8902,18 @@ impl DeleteSubnetRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the resource. For example, ami-1a2b3c4d. You can specify more than one resource ID.</p>"]
+    #[serde(rename="Resources")]
     pub resources: Vec<String>,
     #[doc="<p>One or more tags to delete. If you omit the <code>value</code> parameter, we delete the tag regardless of its value. If you specify this parameter with an empty string as the value, we delete the key only if its value is an empty string.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -8205,11 +8942,14 @@ impl DeleteTagsRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVolumeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -8234,11 +8974,14 @@ impl DeleteVolumeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteVpcEndpoints.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpcEndpointsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more endpoint IDs.</p>"]
+    #[serde(rename="VpcEndpointIds")]
     pub vpc_endpoint_ids: Vec<String>,
 }
 
@@ -8264,9 +9007,11 @@ impl DeleteVpcEndpointsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DeleteVpcEndpoints.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpcEndpointsResult {
     #[doc="<p>Information about the endpoints that were not successfully deleted.</p>"]
+    #[serde(rename="Unsuccessful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -8314,11 +9059,14 @@ impl DeleteVpcEndpointsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
     pub vpc_peering_connection_id: String,
 }
 
@@ -8343,9 +9091,11 @@ impl DeleteVpcPeeringConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DeleteVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpcPeeringConnectionResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -8393,11 +9143,14 @@ impl DeleteVpcPeeringConnectionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DeleteVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -8422,11 +9175,14 @@ impl DeleteVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteVpnConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpnConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPN connection.</p>"]
+    #[serde(rename="VpnConnectionId")]
     pub vpn_connection_id: String,
 }
 
@@ -8451,11 +9207,13 @@ impl DeleteVpnConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteVpnConnectionRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpnConnectionRouteRequest {
     #[doc="<p>The CIDR block associated with the local subnet of the customer network.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
     pub destination_cidr_block: String,
     #[doc="<p>The ID of the VPN connection.</p>"]
+    #[serde(rename="VpnConnectionId")]
     pub vpn_connection_id: String,
 }
 
@@ -8478,11 +9236,14 @@ impl DeleteVpnConnectionRouteRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeleteVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="VpnGatewayId")]
     pub vpn_gateway_id: String,
 }
 
@@ -8507,11 +9268,14 @@ impl DeleteVpnGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DeregisterImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterImageRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
 }
 
@@ -8536,11 +9300,15 @@ impl DeregisterImageRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeAccountAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountAttributesRequest {
     #[doc="<p>One or more account attribute names.</p>"]
+    #[serde(rename="AttributeNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_names: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -8570,9 +9338,11 @@ impl DescribeAccountAttributesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeAccountAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAccountAttributesResult {
     #[doc="<p>Information about one or more account attributes.</p>"]
+    #[serde(rename="AccountAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_attributes: Option<Vec<AccountAttribute>>,
 }
 
@@ -8621,15 +9391,23 @@ impl DescribeAccountAttributesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressesRequest {
     #[doc="<p>[EC2-VPC] One or more allocation IDs.</p> <p>Default: Describes all your Elastic IP addresses.</p>"]
+    #[serde(rename="AllocationIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>allocation-id</code> - [EC2-VPC] The allocation ID for the address.</p> </li> <li> <p> <code>association-id</code> - [EC2-VPC] The association ID for the address.</p> </li> <li> <p> <code>domain</code> - Indicates whether the address is for use in EC2-Classic (<code>standard</code>) or in a VPC (<code>vpc</code>).</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-id</code> - [EC2-VPC] The ID of the network interface that the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-owner-id</code> - The AWS account ID of the owner.</p> </li> <li> <p> <code>private-ip-address</code> - [EC2-VPC] The private IP address associated with the Elastic IP address.</p> </li> <li> <p> <code>public-ip</code> - The Elastic IP address.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>[EC2-Classic] One or more Elastic IP addresses.</p> <p>Default: Describes all your Elastic IP addresses.</p>"]
+    #[serde(rename="PublicIps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ips: Option<Vec<String>>,
 }
 
@@ -8667,9 +9445,11 @@ impl DescribeAddressesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAddressesResult {
     #[doc="<p>Information about one or more Elastic IP addresses.</p>"]
+    #[serde(rename="Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub addresses: Option<Vec<Address>>,
 }
 
@@ -8716,13 +9496,19 @@ impl DescribeAddressesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeAvailabilityZones.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAvailabilityZonesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>message</code> - Information about the Availability Zone.</p> </li> <li> <p> <code>region-name</code> - The name of the region for the Availability Zone (for example, <code>us-east-1</code>).</p> </li> <li> <p> <code>state</code> - The state of the Availability Zone (<code>available</code> | <code>information</code> | <code>impaired</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>zone-name</code> - The name of the Availability Zone (for example, <code>us-east-1a</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The names of one or more Availability Zones.</p>"]
+    #[serde(rename="ZoneNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub zone_names: Option<Vec<String>>,
 }
 
@@ -8755,9 +9541,11 @@ impl DescribeAvailabilityZonesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeAvailabiltyZones.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeAvailabilityZonesResult {
     #[doc="<p>Information about one or more Availability Zones.</p>"]
+    #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
@@ -8806,13 +9594,19 @@ impl DescribeAvailabilityZonesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeBundleTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBundleTasksRequest {
     #[doc="<p>One or more bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>"]
+    #[serde(rename="BundleIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bundle-id</code> - The ID of the bundle task.</p> </li> <li> <p> <code>error-code</code> - If the task failed, the error code returned.</p> </li> <li> <p> <code>error-message</code> - If the task failed, the error message returned.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>progress</code> - The level of task completion, as a percentage (for example, 20%).</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket to store the AMI.</p> </li> <li> <p> <code>s3-prefix</code> - The beginning of the AMI name.</p> </li> <li> <p> <code>start-time</code> - The time the task started (for example, 2013-09-15T17:15:20.000Z).</p> </li> <li> <p> <code>state</code> - The state of the task (<code>pending</code> | <code>waiting-for-shutdown</code> | <code>bundling</code> | <code>storing</code> | <code>cancelling</code> | <code>complete</code> | <code>failed</code>).</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update for the task.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
 }
 
@@ -8845,9 +9639,11 @@ impl DescribeBundleTasksRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeBundleTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeBundleTasksResult {
     #[doc="<p>Information about one or more bundle tasks.</p>"]
+    #[serde(rename="BundleTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_tasks: Option<Vec<BundleTask>>,
 }
 
@@ -8895,17 +9691,27 @@ impl DescribeBundleTasksResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeClassicLinkInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClassicLinkInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>group-id</code> - The ID of a VPC security group that's associated with the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is linked to.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more instance IDs. Must be instances linked to a VPC through ClassicLink.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the instance IDs parameter in the same request.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -8946,11 +9752,15 @@ impl DescribeClassicLinkInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeClassicLinkInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeClassicLinkInstancesResult {
     #[doc="<p>Information about one or more linked EC2-Classic instances.</p>"]
+    #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<Vec<ClassicLinkInstance>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9044,11 +9854,15 @@ impl DescribeConversionTaskListDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeConversionTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConversionTasksRequest {
     #[doc="<p>One or more conversion task IDs.</p>"]
+    #[serde(rename="ConversionTaskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conversion_task_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -9078,9 +9892,11 @@ impl DescribeConversionTasksRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeConversionTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeConversionTasksResult {
     #[doc="<p>Information about the conversion tasks.</p>"]
+    #[serde(rename="ConversionTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conversion_tasks: Option<Vec<ConversionTask>>,
 }
 
@@ -9126,13 +9942,19 @@ impl DescribeConversionTasksResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeCustomerGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCustomerGatewaysRequest {
     #[doc="<p>One or more customer gateway IDs.</p> <p>Default: Describes all your customer gateways.</p>"]
+    #[serde(rename="CustomerGatewayIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateway_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bgp-asn</code> - The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of the customer gateway.</p> </li> <li> <p> <code>ip-address</code> - The IP address of the customer gateway's Internet-routable external interface.</p> </li> <li> <p> <code>state</code> - The state of the customer gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>type</code> - The type of customer gateway. Currently, the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
 }
 
@@ -9167,9 +9989,11 @@ impl DescribeCustomerGatewaysRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeCustomerGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCustomerGatewaysResult {
     #[doc="<p>Information about one or more customer gateways.</p>"]
+    #[serde(rename="CustomerGateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateways: Option<Vec<CustomerGateway>>,
 }
 
@@ -9217,13 +10041,19 @@ impl DescribeCustomerGatewaysResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDhcpOptionsRequest {
     #[doc="<p>The IDs of one or more DHCP options sets.</p> <p>Default: Describes all your DHCP options sets.</p>"]
+    #[serde(rename="DhcpOptionsIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_options_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>key</code> - The key for one of the options (for example, <code>domain-name</code>).</p> </li> <li> <p> <code>value</code> - The value for one of the options.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
 }
 
@@ -9256,9 +10086,11 @@ impl DescribeDhcpOptionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeDhcpOptions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeDhcpOptionsResult {
     #[doc="<p>Information about one or more DHCP options sets.</p>"]
+    #[serde(rename="DhcpOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_options: Option<Vec<DhcpOptions>>,
 }
 
@@ -9305,15 +10137,23 @@ impl DescribeDhcpOptionsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEgressOnlyInternetGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more egress-only Internet gateway IDs.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9352,11 +10192,15 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEgressOnlyInternetGatewaysResult {
     #[doc="<p>Information about the egress-only Internet gateways.</p>"]
+    #[serde(rename="EgressOnlyInternetGateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateways: Option<Vec<EgressOnlyInternetGateway>>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9406,17 +10250,27 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticGpusRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more Elastic GPU IDs.</p>"]
+    #[serde(rename="ElasticGpuIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_ids: Option<Vec<String>>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone in which the Elastic GPU resides.</p> </li> <li> <p> <code>elastic-gpu-health</code> - The status of the Elastic GPU (<code>OK</code> | <code>IMPAIRED</code>).</p> </li> <li> <p> <code>elastic-gpu-state</code> - The state of the Elastic GPU (<code>ATTACHED</code>).</p> </li> <li> <p> <code>elastic-gpu-type</code> - The type of Elastic GPU; for example, <code>eg1.medium</code>.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance to which the Elastic GPU is associated.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to request the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9456,13 +10310,19 @@ impl DescribeElasticGpusRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeElasticGpusResult {
     #[doc="<p>Information about the Elastic GPUs.</p>"]
+    #[serde(rename="ElasticGpuSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_set: Option<Vec<ElasticGpus>>,
     #[doc="<p>The total number of items to return. If the total number of items available is more than the value specified in max-items then a Next-Token will be provided in the output that you can use to resume pagination.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9518,9 +10378,11 @@ impl DescribeElasticGpusResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeExportTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksRequest {
     #[doc="<p>One or more export task IDs.</p>"]
+    #[serde(rename="ExportTaskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_task_ids: Option<Vec<String>>,
 }
 
@@ -9544,9 +10406,11 @@ impl DescribeExportTasksRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeExportTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeExportTasksResult {
     #[doc="<p>Information about the export tasks.</p>"]
+    #[serde(rename="ExportTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_tasks: Option<Vec<ExportTask>>,
 }
 
@@ -9594,15 +10458,23 @@ impl DescribeExportTasksResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFlowLogsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>deliver-log-status</code> - The status of the logs delivery (<code>SUCCESS</code> | <code>FAILED</code>).</p> </li> <li> <p> <code>flow-log-id</code> - The ID of the flow log.</p> </li> <li> <p> <code>log-group-name</code> - The name of the log group.</p> </li> <li> <p> <code>resource-id</code> - The ID of the VPC, subnet, or network interface.</p> </li> <li> <p> <code>traffic-type</code> - The type of traffic (<code>ACCEPT</code> | <code>REJECT</code> | <code>ALL</code>)</p> </li> </ul>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<Filter>>,
     #[doc="<p>One or more flow log IDs.</p>"]
+    #[serde(rename="FlowLogIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub flow_log_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the flow log IDs parameter in the same request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9639,11 +10511,15 @@ impl DescribeFlowLogsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeFlowLogs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFlowLogsResult {
     #[doc="<p>Information about the flow logs.</p>"]
+    #[serde(rename="FlowLogs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub flow_logs: Option<Vec<FlowLog>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9693,19 +10569,31 @@ impl DescribeFlowLogsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFpgaImagesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The creation time of the AFI.</p> </li> <li> <p> <code>fpga-image-id</code> - The FPGA image identifier (AFI ID).</p> </li> <li> <p> <code>fpga-image-global-id</code> - The global FPGA image identifier (AGFI ID).</p> </li> <li> <p> <code>name</code> - The name of the AFI.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the AFI owner.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>shell-version</code> - The version of the AWS Shell that was used to create the bitstream.</p> </li> <li> <p> <code>state</code> - The state of the AFI (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more AFI IDs.</p>"]
+    #[serde(rename="FpgaImageIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_image_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Filters the AFI by owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code>).</p>"]
+    #[serde(rename="Owners")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owners: Option<Vec<String>>,
 }
 
@@ -9750,11 +10638,15 @@ impl DescribeFpgaImagesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFpgaImagesResult {
     #[doc="<p>Information about one or more FPGA images.</p>"]
+    #[serde(rename="FpgaImages")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_images: Option<Vec<FpgaImage>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9805,19 +10697,31 @@ impl DescribeFpgaImagesResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostReservationOfferingsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<Filter>>,
     #[doc="<p>This is the maximum duration of the reservation you'd like to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 94608000 for three years.</p>"]
+    #[serde(rename="MaxDuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_duration: Option<i64>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>This is the minimum duration of the reservation you'd like to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 31536000 for one year.</p>"]
+    #[serde(rename="MinDuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_duration: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the reservation offering.</p>"]
+    #[serde(rename="OfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_id: Option<String>,
 }
 
@@ -9860,11 +10764,15 @@ impl DescribeHostReservationOfferingsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostReservationOfferingsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the offerings.</p>"]
+    #[serde(rename="OfferingSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_set: Option<Vec<HostOffering>>,
 }
 
@@ -9916,15 +10824,23 @@ impl DescribeHostReservationOfferingsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostReservationsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<Filter>>,
     #[doc="<p>One or more host reservation IDs.</p>"]
+    #[serde(rename="HostReservationIdSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_reservation_id_set: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -9962,11 +10878,15 @@ impl DescribeHostReservationsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostReservationsResult {
     #[doc="<p>Details about the reservation's configuration.</p>"]
+    #[serde(rename="HostReservationSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_reservation_set: Option<Vec<HostReservation>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10018,15 +10938,23 @@ impl DescribeHostReservationsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance</p> </li> <li> <p> <code>state</code>- The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> </ul>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<Filter>>,
     #[doc="<p>The IDs of the Dedicated Hosts. The IDs are used for targeted instance launches.</p>"]
+    #[serde(rename="HostIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error. You cannot specify this parameter and the host IDs parameter in the same request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10063,11 +10991,15 @@ impl DescribeHostsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeHostsResult {
     #[doc="<p>Information about the Dedicated Hosts.</p>"]
+    #[serde(rename="Hosts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hosts: Option<Vec<Host>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10117,15 +11049,23 @@ impl DescribeHostsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIamInstanceProfileAssociationsRequest {
     #[doc="<p>One or more IAM instance profile associations.</p>"]
+    #[serde(rename="AssociationIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_ids: Option<Vec<String>>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>state</code> - The state of the association (<code>associating</code> | <code>associated</code> | <code>disassociating</code> | <code>disassociated</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to request the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10163,11 +11103,15 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIamInstanceProfileAssociationsResult {
     #[doc="<p>Information about one or more IAM instance profile associations.</p>"]
+    #[serde(rename="IamInstanceProfileAssociations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile_associations: Option<Vec<IamInstanceProfileAssociation>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10218,9 +11162,11 @@ impl DescribeIamInstanceProfileAssociationsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdFormatRequest {
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
+    #[serde(rename="Resource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource: Option<String>,
 }
 
@@ -10243,9 +11189,11 @@ impl DescribeIdFormatRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdFormatResult {
     #[doc="<p>Information about the ID format for the resource.</p>"]
+    #[serde(rename="Statuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statuses: Option<Vec<IdFormat>>,
 }
 
@@ -10292,11 +11240,14 @@ impl DescribeIdFormatResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeIdentityIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityIdFormatRequest {
     #[doc="<p>The ARN of the principal, which can be an IAM role, IAM user, or the root user.</p>"]
+    #[serde(rename="PrincipalArn")]
     pub principal_arn: String,
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
+    #[serde(rename="Resource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource: Option<String>,
 }
 
@@ -10321,9 +11272,11 @@ impl DescribeIdentityIdFormatRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeIdentityIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeIdentityIdFormatResult {
     #[doc="<p>Information about the ID format for the resources.</p>"]
+    #[serde(rename="Statuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statuses: Option<Vec<IdFormat>>,
 }
 
@@ -10370,13 +11323,17 @@ impl DescribeIdentityIdFormatResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeImageAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImageAttributeRequest {
     #[doc="<p>The AMI attribute.</p> <p> <b>Note</b>: Depending on your account privileges, the <code>blockDeviceMapping</code> attribute may return a <code>Client.AuthFailure</code> error. If this happens, use <a>DescribeImages</a> to get information about the block device mapping for the AMI.</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
 }
 
@@ -10403,17 +11360,27 @@ impl DescribeImageAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeImages.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImagesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>"]
+    #[serde(rename="ExecutableUsers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub executable_users: Option<Vec<String>>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more image IDs.</p> <p>Default: Describes all images available to you.</p>"]
+    #[serde(rename="ImageIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_ids: Option<Vec<String>>,
     #[doc="<p>Filters the images by the owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>). Omitting this option returns all images for which you have launch permissions, regardless of ownership.</p>"]
+    #[serde(rename="Owners")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owners: Option<Vec<String>>,
 }
 
@@ -10456,9 +11423,11 @@ impl DescribeImagesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeImages.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImagesResult {
     #[doc="<p>Information about one or more images.</p>"]
+    #[serde(rename="Images")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub images: Option<Vec<Image>>,
 }
 
@@ -10505,17 +11474,27 @@ impl DescribeImagesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeImportImageTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImportImageTasksRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Filter tasks using the <code>task-state</code> filter and one of the following values: active, completed, deleting, deleted.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>A list of import image task IDs.</p>"]
+    #[serde(rename="ImportTaskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>A token that indicates the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10556,11 +11535,15 @@ impl DescribeImportImageTasksRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeImportImageTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImportImageTasksResult {
     #[doc="<p>A list of zero or more import image tasks that are currently active or were completed or canceled in the previous 7 days.</p>"]
+    #[serde(rename="ImportImageTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_image_tasks: Option<Vec<ImportImageTask>>,
     #[doc="<p>The token to use to get the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10612,17 +11595,27 @@ impl DescribeImportImageTasksResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeImportSnapshotTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImportSnapshotTasksRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>A list of import snapshot task IDs.</p>"]
+    #[serde(rename="ImportTaskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>A token that indicates the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10663,11 +11656,15 @@ impl DescribeImportSnapshotTasksRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeImportSnapshotTasks.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeImportSnapshotTasksResult {
     #[doc="<p>A list of zero or more import snapshot tasks that are currently active or were completed or canceled in the previous 7 days.</p>"]
+    #[serde(rename="ImportSnapshotTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_snapshot_tasks: Option<Vec<ImportSnapshotTask>>,
     #[doc="<p>The token to use to get the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10720,13 +11717,17 @@ impl DescribeImportSnapshotTasksResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeInstanceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstanceAttributeRequest {
     #[doc="<p>The instance attribute.</p> <p>Note: The <code>enaSupport</code> attribute is not supported at this time.</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
@@ -10753,19 +11754,31 @@ impl DescribeInstanceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DescribeInstanceStatus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstanceStatusRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code> | <code>system-reboot</code> | <code>system-maintenance</code> | <code>instance-retirement</code> | <code>instance-stop</code>).</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The code for the instance state, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-status.reachability</code> - Filters on instance status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>instance-status.status</code> - The status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> <li> <p> <code>system-status.reachability</code> - Filters on system status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>system-status.status</code> - The system status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>When <code>true</code>, includes the health status for all instances. When <code>false</code>, includes the health status for running instances only.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="IncludeAllInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub include_all_instances: Option<bool>,
     #[doc="<p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 100 explicitly specified instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10810,11 +11823,15 @@ impl DescribeInstanceStatusRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeInstanceStatus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstanceStatusResult {
     #[doc="<p>One or more instance status descriptions.</p>"]
+    #[serde(rename="InstanceStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_statuses: Option<Vec<InstanceStatus>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10866,17 +11883,27 @@ impl DescribeInstanceStatusResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows \"User Initiated [date]\" when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance's reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you'll get one reservation ID. If you launch ten instances using the same launch request, you'll also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device for the instance (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of root device that the instance uses (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p>"]
+    #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter or tag filters in the same call.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to request the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -10917,11 +11944,15 @@ impl DescribeInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInstancesResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Zero or more reservations.</p>"]
+    #[serde(rename="Reservations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reservations: Option<Vec<Reservation>>,
 }
 
@@ -10973,13 +12004,19 @@ impl DescribeInstancesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeInternetGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInternetGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>available</code>). Present only if a VPC is attached.</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>internet-gateway-id</code> - The ID of the Internet gateway.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Internet gateway IDs.</p> <p>Default: Describes all your Internet gateways.</p>"]
+    #[serde(rename="InternetGatewayIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub internet_gateway_ids: Option<Vec<String>>,
 }
 
@@ -11012,9 +12049,11 @@ impl DescribeInternetGatewaysRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeInternetGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeInternetGatewaysResult {
     #[doc="<p>Information about one or more Internet gateways.</p>"]
+    #[serde(rename="InternetGateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub internet_gateways: Option<Vec<InternetGateway>>,
 }
 
@@ -11062,13 +12101,19 @@ impl DescribeInternetGatewaysResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeKeyPairs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeKeyPairsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>fingerprint</code> - The fingerprint of the key pair.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more key pair names.</p> <p>Default: Describes all your key pairs.</p>"]
+    #[serde(rename="KeyNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_names: Option<Vec<String>>,
 }
 
@@ -11101,9 +12146,11 @@ impl DescribeKeyPairsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeKeyPairs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeKeyPairsResult {
     #[doc="<p>Information about one or more key pairs.</p>"]
+    #[serde(rename="KeyPairs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_pairs: Option<Vec<KeyPairInfo>>,
 }
 
@@ -11150,17 +12197,27 @@ impl DescribeKeyPairsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeMovingAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMovingAddressesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>moving-status</code> - The status of the Elastic IP address (<code>MovingToVpc</code> | <code>RestoringToClassic</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value outside of this range, an error is returned.</p> <p>Default: If no value is provided, the default is 1000.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more Elastic IP addresses.</p>"]
+    #[serde(rename="PublicIps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ips: Option<Vec<String>>,
 }
 
@@ -11201,11 +12258,15 @@ impl DescribeMovingAddressesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeMovingAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMovingAddressesResult {
     #[doc="<p>The status for each Elastic IP address.</p>"]
+    #[serde(rename="MovingAddressStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub moving_address_statuses: Option<Vec<MovingAddressStatus>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -11257,15 +12318,23 @@ impl DescribeMovingAddressesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNatGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNatGatewaysRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul>"]
+    #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>One or more NAT gateway IDs.</p>"]
+    #[serde(rename="NatGatewayIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_ids: Option<Vec<String>>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -11302,11 +12371,15 @@ impl DescribeNatGatewaysRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeNatGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNatGatewaysResult {
     #[doc="<p>Information about the NAT gateways.</p>"]
+    #[serde(rename="NatGateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateways: Option<Vec<NatGateway>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -11358,13 +12431,19 @@ impl DescribeNatGatewaysResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNetworkAcls.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkAclsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.association-id</code> - The ID of an association ID for the ACL.</p> </li> <li> <p> <code>association.network-acl-id</code> - The ID of the network ACL involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>default</code> - Indicates whether the ACL is the default network ACL for the VPC.</p> </li> <li> <p> <code>entry.cidr</code> - The IPv4 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.egress</code> - Indicates whether the entry applies to egress traffic.</p> </li> <li> <p> <code>entry.icmp.code</code> - The ICMP code specified in the entry, if any.</p> </li> <li> <p> <code>entry.icmp.type</code> - The ICMP type specified in the entry, if any.</p> </li> <li> <p> <code>entry.ipv6-cidr</code> - The IPv6 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.port-range.from</code> - The start of the port range specified in the entry. </p> </li> <li> <p> <code>entry.port-range.to</code> - The end of the port range specified in the entry. </p> </li> <li> <p> <code>entry.protocol</code> - The protocol specified in the entry (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>entry.rule-action</code> - Allows or denies the matching traffic (<code>allow</code> | <code>deny</code>).</p> </li> <li> <p> <code>entry.rule-number</code> - The number of an entry (in other words, rule) in the ACL's set of entries.</p> </li> <li> <p> <code>network-acl-id</code> - The ID of the network ACL.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network ACL.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more network ACL IDs.</p> <p>Default: Describes all your network ACLs.</p>"]
+    #[serde(rename="NetworkAclIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acl_ids: Option<Vec<String>>,
 }
 
@@ -11397,9 +12476,11 @@ impl DescribeNetworkAclsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeNetworkAcls.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkAclsResult {
     #[doc="<p>Information about one or more network ACLs.</p>"]
+    #[serde(rename="NetworkAcls")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acls: Option<Vec<NetworkAcl>>,
 }
 
@@ -11447,13 +12528,18 @@ impl DescribeNetworkAclsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNetworkInterfaceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfaceAttributeRequest {
     #[doc="<p>The attribute of the network interface. This parameter is required.</p>"]
+    #[serde(rename="Attribute")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
 }
 
@@ -11482,17 +12568,27 @@ impl DescribeNetworkInterfaceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeNetworkInterfaceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfaceAttributeResult {
     #[doc="<p>The attachment (if any) of the network interface.</p>"]
+    #[serde(rename="Attachment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment: Option<NetworkInterfaceAttachment>,
     #[doc="<p>The description of the network interface.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<AttributeValue>,
     #[doc="<p>The security groups associated with the network interface.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>Indicates whether source/destination checking is enabled.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<AttributeBooleanValue>,
 }
 
@@ -11559,15 +12655,23 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNetworkInterfacePermissions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfacePermissionsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>network-interface-permission.network-interface-permission-id</code> - The ID of the permission.</p> </li> <li> <p> <code>network-interface-permission.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface-permission.aws-account-id</code> - The AWS account ID.</p> </li> <li> <p> <code>network-interface-permission.aws-service</code> - The AWS service.</p> </li> <li> <p> <code>network-interface-permission.permission</code> - The type of permission (<code>INSTANCE-ATTACH</code> | <code>EIP-ASSOCIATE</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. If this parameter is not specified, up to 50 results are returned by default.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>One or more network interface permission IDs.</p>"]
+    #[serde(rename="NetworkInterfacePermissionIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_permission_ids: Option<Vec<String>>,
     #[doc="<p>The token to request the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -11608,11 +12712,15 @@ impl DescribeNetworkInterfacePermissionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeNetworkInterfacePermissions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfacePermissionsResult {
     #[doc="<p>The network interface permissions.</p>"]
+    #[serde(rename="NetworkInterfacePermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_permissions: Option<Vec<NetworkInterfacePermission>>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -11663,13 +12771,19 @@ impl DescribeNetworkInterfacePermissionsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeNetworkInterfaces.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfacesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-desk-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more network interface IDs.</p> <p>Default: Describes all your network interfaces.</p>"]
+    #[serde(rename="NetworkInterfaceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_ids: Option<Vec<String>>,
 }
 
@@ -11704,9 +12818,11 @@ impl DescribeNetworkInterfacesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeNetworkInterfaces.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeNetworkInterfacesResult {
     #[doc="<p>Information about one or more network interfaces.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<NetworkInterface>>,
 }
 
@@ -11755,13 +12871,19 @@ impl DescribeNetworkInterfacesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribePlacementGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePlacementGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more placement group names.</p> <p>Default: Describes all your placement groups, or only those otherwise specified.</p>"]
+    #[serde(rename="GroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_names: Option<Vec<String>>,
 }
 
@@ -11794,9 +12916,11 @@ impl DescribePlacementGroupsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribePlacementGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePlacementGroupsResult {
     #[doc="<p>One or more placement groups.</p>"]
+    #[serde(rename="PlacementGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_groups: Option<Vec<PlacementGroup>>,
 }
 
@@ -11844,17 +12968,27 @@ impl DescribePlacementGroupsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribePrefixLists.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePrefixListsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>prefix-list-id</code>: The ID of a prefix list.</p> </li> <li> <p> <code>prefix-list-name</code>: The name of a prefix list.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more prefix list IDs.</p>"]
+    #[serde(rename="PrefixListIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_ids: Option<Vec<String>>,
 }
 
@@ -11895,11 +13029,15 @@ impl DescribePrefixListsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribePrefixLists.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribePrefixListsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>All available prefix lists.</p>"]
+    #[serde(rename="PrefixLists")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_lists: Option<Vec<PrefixList>>,
 }
 
@@ -11951,13 +13089,19 @@ impl DescribePrefixListsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeRegions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRegionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the region (for example, <code>us-east-1</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The names of one or more regions.</p>"]
+    #[serde(rename="RegionNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub region_names: Option<Vec<String>>,
 }
 
@@ -11990,9 +13134,11 @@ impl DescribeRegionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeRegions.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRegionsResult {
     #[doc="<p>Information about one or more regions.</p>"]
+    #[serde(rename="Regions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub regions: Option<Vec<Region>>,
 }
 
@@ -12039,13 +13185,19 @@ impl DescribeRegionsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeReservedInstancesListings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesListingsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances.</p> </li> <li> <p> <code>reserved-instances-listing-id</code> - The ID of the Reserved Instances listing.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instance listing (<code>pending</code> | <code>active</code> | <code>cancelled</code> | <code>closed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Reserved Instance IDs.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>One or more Reserved Instance listing IDs.</p>"]
+    #[serde(rename="ReservedInstancesListingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_listing_id: Option<String>,
 }
 
@@ -12077,9 +13229,11 @@ impl DescribeReservedInstancesListingsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeReservedInstancesListings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesListingsResult {
     #[doc="<p>Information about the Reserved Instance listing.</p>"]
+    #[serde(rename="ReservedInstancesListings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
@@ -12126,13 +13280,19 @@ impl DescribeReservedInstancesListingsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeReservedInstancesModifications.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesModificationsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>client-token</code> - The idempotency token for the modification request.</p> </li> <li> <p> <code>create-date</code> - The time when the modification request was created.</p> </li> <li> <p> <code>effective-date</code> - The time when the modification becomes effective.</p> </li> <li> <p> <code>modification-result.reserved-instances-id</code> - The ID for the Reserved Instances created as part of the modification request. This ID is only available when the status of the modification is <code>fulfilled</code>.</p> </li> <li> <p> <code>modification-result.target-configuration.availability-zone</code> - The Availability Zone for the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-count </code> - The number of new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-type</code> - The instance type of the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.platform</code> - The network platform of the new Reserved Instances (<code>EC2-Classic</code> | <code>EC2-VPC</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances modified.</p> </li> <li> <p> <code>reserved-instances-modification-id</code> - The ID of the modification request.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instances modification request (<code>processing</code> | <code>fulfilled</code> | <code>failed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> <li> <p> <code>update-date</code> - The time when the modification request was last updated.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>IDs for the submitted modification request.</p>"]
+    #[serde(rename="ReservedInstancesModificationIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_modification_ids: Option<Vec<String>>,
 }
 
@@ -12169,11 +13329,15 @@ impl DescribeReservedInstancesModificationsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeReservedInstancesModifications.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesModificationsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The Reserved Instance modification information.</p>"]
+    #[serde(rename="ReservedInstancesModifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_modifications: Option<Vec<ReservedInstancesModification>>,
 }
 
@@ -12224,37 +13388,67 @@ impl DescribeReservedInstancesModificationsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeReservedInstancesOfferings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesOfferingsRequest {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (for example, one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>marketplace</code> - Set to <code>true</code> to show only Reserved Instance Marketplace offerings. When this filter is not used, which is the default behavior, all offerings from both AWS and the Reserved Instance Marketplace are listed.</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC. (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code> Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>) </p> </li> <li> <p> <code>reserved-instances-offering-id</code> - The Reserved Instances offering ID.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Availability Zone</code> or <code>Region</code>).</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>Include Reserved Instance Marketplace offerings in the response.</p>"]
+    #[serde(rename="IncludeMarketplace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub include_marketplace: Option<bool>,
     #[doc="<p>The tenancy of the instances covered by the reservation. A Reserved Instance with a tenancy of <code>dedicated</code> is applied to instances that run in a VPC on single-tenant hardware (i.e., Dedicated Instances).</p> <p> <b>Important:</b> The <code>host</code> value cannot be used with this parameter. Use the <code>default</code> or <code>dedicated</code> values only.</p> <p>Default: <code>default</code> </p>"]
+    #[serde(rename="InstanceTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type that the reservation will cover (for example, <code>m1.small</code>). For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The maximum duration (in seconds) to filter when searching for offerings.</p> <p>Default: 94608000 (3 years)</p>"]
+    #[serde(rename="MaxDuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_duration: Option<i64>,
     #[doc="<p>The maximum number of instances to filter when searching for offerings.</p> <p>Default: 20</p>"]
+    #[serde(rename="MaxInstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_instance_count: Option<i64>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. The maximum is 100.</p> <p>Default: 100</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The minimum duration (in seconds) to filter when searching for offerings.</p> <p>Default: 2592000 (1 month)</p>"]
+    #[serde(rename="MinDuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_duration: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The offering class of the Reserved Instance. Can be <code>standard</code> or <code>convertible</code>.</p>"]
+    #[serde(rename="OfferingClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type. If you are using tools that predate the 2011-11-01 API version, you only have access to the <code>Medium Utilization</code> Reserved Instance offering type. </p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the description are for use with Amazon VPC.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>One or more Reserved Instances offering IDs.</p>"]
+    #[serde(rename="ReservedInstancesOfferingIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_offering_ids: Option<Vec<String>>,
 }
 
@@ -12339,11 +13533,15 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeReservedInstancesOfferings.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesOfferingsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of Reserved Instances offerings.</p>"]
+    #[serde(rename="ReservedInstancesOfferings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_offerings: Option<Vec<ReservedInstancesOffering>>,
 }
 
@@ -12394,17 +13592,27 @@ impl DescribeReservedInstancesOfferingsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeReservedInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>end</code> - The time when the Reserved Instance expires (for example, 2015-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Region</code> or <code>Availability Zone</code>).</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code>Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instance.</p> </li> <li> <p> <code>start</code> - The time at which the Reserved Instance purchase request was placed (for example, 2014-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>state</code> - The state of the Reserved Instance (<code>payment-pending</code> | <code>active</code> | <code>payment-failed</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>Describes whether the Reserved Instance is Standard or Convertible.</p>"]
+    #[serde(rename="OfferingClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type. If you are using tools that predate the 2011-11-01 API version, you only have access to the <code>Medium Utilization</code> Reserved Instance offering type.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>One or more Reserved Instance IDs.</p> <p>Default: Describes all your Reserved Instances, or only those otherwise specified.</p>"]
+    #[serde(rename="ReservedInstancesIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_ids: Option<Vec<String>>,
 }
 
@@ -12447,9 +13655,11 @@ impl DescribeReservedInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output for DescribeReservedInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedInstancesResult {
     #[doc="<p>A list of Reserved Instances.</p>"]
+    #[serde(rename="ReservedInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances: Option<Vec<ReservedInstances>>,
 }
 
@@ -12498,13 +13708,19 @@ impl DescribeReservedInstancesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeRouteTables.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRouteTablesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.route-table-association-id</code> - The ID of an association ID for the route table.</p> </li> <li> <p> <code>association.route-table-id</code> - The ID of the route table involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>association.main</code> - Indicates whether the route table is the main route table for the VPC (<code>true</code> | <code>false</code>). Route tables that do not have an association ID are not returned in the response.</p> </li> <li> <p> <code>route-table-id</code> - The ID of the route table.</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The IPv4 CIDR range specified in a route in the table.</p> </li> <li> <p> <code>route.destination-ipv6-cidr-block</code> - The IPv6 CIDR range specified in a route in the route table.</p> </li> <li> <p> <code>route.destination-prefix-list-id</code> - The ID (prefix) of the AWS service specified in a route in the table.</p> </li> <li> <p> <code>route.egress-only-internet-gateway-id</code> - The ID of an egress-only Internet gateway specified in a route in the route table.</p> </li> <li> <p> <code>route.gateway-id</code> - The ID of a gateway specified in a route in the table.</p> </li> <li> <p> <code>route.instance-id</code> - The ID of an instance specified in a route in the table.</p> </li> <li> <p> <code>route.nat-gateway-id</code> - The ID of a NAT gateway.</p> </li> <li> <p> <code>route.origin</code> - Describes how the route was created. <code>CreateRouteTable</code> indicates that the route was automatically created when the route table was created; <code>CreateRoute</code> indicates that the route was manually added to the route table; <code>EnableVgwRoutePropagation</code> indicates that the route was propagated by route propagation.</p> </li> <li> <p> <code>route.state</code> - The state of a route in the route table (<code>active</code> | <code>blackhole</code>). The blackhole state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, the specified NAT instance has been terminated, and so on).</p> </li> <li> <p> <code>route.vpc-peering-connection-id</code> - The ID of a VPC peering connection specified in a route in the table.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the route table.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more route table IDs.</p> <p>Default: Describes all your route tables.</p>"]
+    #[serde(rename="RouteTableIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_ids: Option<Vec<String>>,
 }
 
@@ -12537,9 +13753,11 @@ impl DescribeRouteTablesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeRouteTables.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeRouteTablesResult {
     #[doc="<p>Information about one or more route tables.</p>"]
+    #[serde(rename="RouteTables")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_tables: Option<Vec<RouteTable>>,
 }
 
@@ -12587,23 +13805,37 @@ impl DescribeRouteTablesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeScheduledInstanceAvailability.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScheduledInstanceAvailabilityRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
+    #[serde(rename="FirstSlotStartTimeRange")]
     pub first_slot_start_time_range: SlotDateTimeRangeRequest,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 300. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The maximum available duration, in hours. This value must be greater than <code>MinSlotDurationInHours</code> and less than 1,720.</p>"]
+    #[serde(rename="MaxSlotDurationInHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_slot_duration_in_hours: Option<i64>,
     #[doc="<p>The minimum available duration, in hours. The minimum required duration is 1,200 hours per year. For example, the minimum daily schedule is 4 hours, the minimum weekly schedule is 24 hours, and the minimum monthly schedule is 100 hours.</p>"]
+    #[serde(rename="MinSlotDurationInHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_slot_duration_in_hours: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The schedule recurrence.</p>"]
+    #[serde(rename="Recurrence")]
     pub recurrence: ScheduledInstanceRecurrenceRequest,
 }
 
@@ -12659,11 +13891,15 @@ impl DescribeScheduledInstanceAvailabilityRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeScheduledInstanceAvailability.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScheduledInstanceAvailabilityResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the available Scheduled Instances.</p>"]
+    #[serde(rename="ScheduledInstanceAvailabilitySet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_instance_availability_set: Option<Vec<ScheduledInstanceAvailability>>,
 }
 
@@ -12714,19 +13950,31 @@ impl DescribeScheduledInstanceAvailabilityResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScheduledInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 100. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more Scheduled Instance IDs.</p>"]
+    #[serde(rename="ScheduledInstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_instance_ids: Option<Vec<String>>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
+    #[serde(rename="SlotStartTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slot_start_time_range: Option<SlotStartTimeRangeRequest>,
 }
 
@@ -12776,11 +14024,15 @@ impl DescribeScheduledInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScheduledInstancesResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the Scheduled Instances.</p>"]
+    #[serde(rename="ScheduledInstanceSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
 }
 
@@ -12832,11 +14084,14 @@ impl DescribeScheduledInstancesResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSecurityGroupReferencesRequest {
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more security group IDs in your account.</p>"]
+    #[serde(rename="GroupId")]
     pub group_id: Vec<String>,
 }
 
@@ -12859,9 +14114,11 @@ impl DescribeSecurityGroupReferencesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSecurityGroupReferencesResult {
     #[doc="<p>Information about the VPCs with the referencing security groups.</p>"]
+    #[serde(rename="SecurityGroupReferenceSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_reference_set: Option<Vec<SecurityGroupReference>>,
 }
 
@@ -12910,15 +14167,23 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSecurityGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSecurityGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which the security group allows access.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - The start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for the permission (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - The end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been granted permission.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the security group.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the security group.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more security group IDs. Required for security groups in a nondefault VPC.</p> <p>Default: Describes all your security groups.</p>"]
+    #[serde(rename="GroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_ids: Option<Vec<String>>,
     #[doc="<p>[EC2-Classic and default VPC only] One or more security group names. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>"]
+    #[serde(rename="GroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_names: Option<Vec<String>>,
 }
 
@@ -12956,9 +14221,11 @@ impl DescribeSecurityGroupsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSecurityGroups.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSecurityGroupsResult {
     #[doc="<p>Information about one or more security groups.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<SecurityGroup>>,
 }
 
@@ -13006,13 +14273,17 @@ impl DescribeSecurityGroupsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSnapshotAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotAttributeRequest {
     #[doc="<p>The snapshot attribute you would like to view.</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
     pub snapshot_id: String,
 }
 
@@ -13039,13 +14310,19 @@ impl DescribeSnapshotAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSnapshotAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotAttributeResult {
     #[doc="<p>A list of permissions for creating volumes from the snapshot.</p>"]
+    #[serde(rename="CreateVolumePermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_volume_permissions: Option<Vec<CreateVolumePermission>>,
     #[doc="<p>A list of product codes.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
 }
 
@@ -13101,21 +14378,35 @@ impl DescribeSnapshotAttributeResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSnapshots.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of snapshot results returned by <code>DescribeSnapshots</code> in paginated output. When this parameter is used, <code>DescribeSnapshots</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeSnapshots</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeSnapshots</code> returns all results. You cannot specify this parameter and the snapshot IDs parameter in the same request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeSnapshots</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Returns the snapshots owned by the specified owner. Multiple owners can be specified.</p>"]
+    #[serde(rename="OwnerIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_ids: Option<Vec<String>>,
     #[doc="<p>One or more AWS accounts IDs that can create volumes from the snapshot.</p>"]
+    #[serde(rename="RestorableByUserIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub restorable_by_user_ids: Option<Vec<String>>,
     #[doc="<p>One or more snapshot IDs.</p> <p>Default: Describes snapshots for which you have launch permissions.</p>"]
+    #[serde(rename="SnapshotIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_ids: Option<Vec<String>>,
 }
 
@@ -13166,11 +14457,15 @@ impl DescribeSnapshotsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSnapshots.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotsResult {
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeSnapshots</code> request. When the results of a <code>DescribeSnapshots</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
+    #[serde(rename="Snapshots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
@@ -13222,9 +14517,11 @@ impl DescribeSnapshotsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotDatafeedSubscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotDatafeedSubscriptionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -13247,9 +14544,11 @@ impl DescribeSpotDatafeedSubscriptionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotDatafeedSubscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotDatafeedSubscriptionResult {
     #[doc="<p>The Spot instance data feed subscription.</p>"]
+    #[serde(rename="SpotDatafeedSubscription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
 }
 
@@ -13296,15 +14595,22 @@ impl DescribeSpotDatafeedSubscriptionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotFleetInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
 }
 
@@ -13337,13 +14643,17 @@ impl DescribeSpotFleetInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotFleetInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetInstancesResponse {
     #[doc="<p>The running instances. Note that this list is refreshed periodically and might be out of date.</p>"]
+    #[serde(rename="ActiveInstances")]
     pub active_instances: Vec<ActiveInstance>,
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
 }
 
@@ -13400,19 +14710,29 @@ impl DescribeSpotFleetInstancesResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotFleetRequestHistory.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetRequestHistoryRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The type of events to describe. By default, all events are described.</p>"]
+    #[serde(rename="EventType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_type: Option<String>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
     #[doc="<p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="StartTime")]
     pub start_time: String,
 }
 
@@ -13451,17 +14771,23 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotFleetRequestHistory.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetRequestHistoryResponse {
     #[doc="<p>Information about the events in the history of the Spot fleet request.</p>"]
+    #[serde(rename="HistoryRecords")]
     pub history_records: Vec<HistoryRecord>,
     #[doc="<p>The last date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). All records up to this time were retrieved.</p> <p>If <code>nextToken</code> indicates that there are more results, this value is not present.</p>"]
+    #[serde(rename="LastEvaluatedTime")]
     pub last_evaluated_time: String,
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
     #[doc="<p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="StartTime")]
     pub start_time: String,
 }
 
@@ -13526,15 +14852,23 @@ impl DescribeSpotFleetRequestHistoryResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotFleetRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The IDs of the Spot fleet requests.</p>"]
+    #[serde(rename="SpotFleetRequestIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_fleet_request_ids: Option<Vec<String>>,
 }
 
@@ -13570,11 +14904,14 @@ impl DescribeSpotFleetRequestsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotFleetRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotFleetRequestsResponse {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the configuration of your Spot fleet.</p>"]
+    #[serde(rename="SpotFleetRequestConfigs")]
     pub spot_fleet_request_configs: Vec<SpotFleetRequestConfig>,
 }
 
@@ -13627,13 +14964,19 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotInstanceRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotInstanceRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the Amazon EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the Amazon EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the Amazon EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of the Amazon EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether monitoring is enabled for the Spot instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot bid status information can help you track your Amazon EC2 Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the bid is launched.</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Spot instance request IDs.</p>"]
+    #[serde(rename="SpotInstanceRequestIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_request_ids: Option<Vec<String>>,
 }
 
@@ -13668,9 +15011,11 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotInstanceRequests.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotInstanceRequestsResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
+    #[serde(rename="SpotInstanceRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
@@ -13719,25 +15064,43 @@ impl DescribeSpotInstanceRequestsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSpotPriceHistory.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotPriceHistoryRequest {
     #[doc="<p>Filters the results by the specified Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The date and time, up to the current date, from which to stop retrieving the price history data, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone for which prices should be returned.</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>product-description</code> - The product description for the Spot price (<code>Linux/UNIX</code> | <code>SUSE Linux</code> | <code>Windows</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Windows (Amazon VPC)</code>).</p> </li> <li> <p> <code>spot-price</code> - The Spot price. The value must match exactly (or use wildcards; greater than or less than comparison is not supported).</p> </li> <li> <p> <code>timestamp</code> - The timestamp of the Spot price history, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). You can use wildcards (* and ?). Greater than or less than comparison is not supported.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>Filters the results by the specified instance types. Note that T2 and HS1 instance types are not supported.</p>"]
+    #[serde(rename="InstanceTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_types: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Filters the results by the specified basic product descriptions.</p>"]
+    #[serde(rename="ProductDescriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_descriptions: Option<Vec<String>>,
     #[doc="<p>The date and time, up to the past 90 days, from which to start retrieving the price history data, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
 }
 
@@ -13797,11 +15160,15 @@ impl DescribeSpotPriceHistoryRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSpotPriceHistory.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSpotPriceHistoryResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The historical Spot prices.</p>"]
+    #[serde(rename="SpotPriceHistory")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price_history: Option<Vec<SpotPrice>>,
 }
 
@@ -13852,15 +15219,22 @@ impl DescribeSpotPriceHistoryResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStaleSecurityGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -13892,11 +15266,15 @@ impl DescribeStaleSecurityGroupsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeStaleSecurityGroupsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the stale security groups.</p>"]
+    #[serde(rename="StaleSecurityGroupSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stale_security_group_set: Option<Vec<StaleSecurityGroup>>,
 }
 
@@ -13949,13 +15327,19 @@ impl DescribeStaleSecurityGroupsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubnetsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availabilityZone</code> - The Availability Zone for the subnet. You can also use <code>availability-zone</code> as the filter name.</p> </li> <li> <p> <code>available-ip-address-count</code> - The number of IPv4 addresses in the subnet that are available.</p> </li> <li> <p> <code>cidrBlock</code> - The IPv4 CIDR block of the subnet. The CIDR block you specify must exactly match the subnet's CIDR block for information to be returned for the subnet. You can also use <code>cidr</code> or <code>cidr-block</code> as the filter names.</p> </li> <li> <p> <code>defaultForAz</code> - Indicates whether this is the default subnet for the Availability Zone. You can also use <code>default-for-az</code> as the filter name.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - An association ID for an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>state</code> - The state of the subnet (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the subnet.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more subnet IDs.</p> <p>Default: Describes all your subnets.</p>"]
+    #[serde(rename="SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
 }
 
@@ -13988,9 +15372,11 @@ impl DescribeSubnetsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeSubnets.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSubnetsResult {
     #[doc="<p>Information about one or more subnets.</p>"]
+    #[serde(rename="Subnets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnets: Option<Vec<Subnet>>,
 }
 
@@ -14037,15 +15423,23 @@ impl DescribeSubnetsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The resource ID.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dhcp-options</code> | <code>image</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -14081,11 +15475,15 @@ impl DescribeTagsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeTags.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return..</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of tags.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<TagDescription>>,
 }
 
@@ -14137,13 +15535,18 @@ impl DescribeTagsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVolumeAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumeAttributeRequest {
     #[doc="<p>The attribute of the volume. This parameter is required.</p>"]
+    #[serde(rename="Attribute")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -14172,13 +15575,19 @@ impl DescribeVolumeAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVolumeAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumeAttributeResult {
     #[doc="<p>The state of <code>autoEnableIO</code> attribute.</p>"]
+    #[serde(rename="AutoEnableIO")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_enable_io: Option<AttributeBooleanValue>,
     #[doc="<p>A list of product codes.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -14235,17 +15644,27 @@ impl DescribeVolumeAttributeResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVolumeStatus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumeStatusRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>action.code</code> - The action code for the event (for example, <code>enable-volume-io</code>).</p> </li> <li> <p> <code>action.description</code> - A description of the action.</p> </li> <li> <p> <code>action.event-id</code> - The event ID associated with the action.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.event-id</code> - The event ID.</p> </li> <li> <p> <code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> | <code>io-performance:severely-degraded</code> | <code>io-performance:stalled</code>).</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the event.</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the event.</p> </li> <li> <p> <code>volume-status.details-name</code> - The cause for <code>volume-status.status</code> (<code>io-enabled</code> | <code>io-performance</code>).</p> </li> <li> <p> <code>volume-status.details-status</code> - The status of <code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>normal</code> | <code>degraded</code> | <code>severely-degraded</code> | <code>stalled</code>).</p> </li> <li> <p> <code>volume-status.status</code> - The status of the volume (<code>ok</code> | <code>impaired</code> | <code>warning</code> | <code>insufficient-data</code>).</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumeStatus</code> in paginated output. When this parameter is used, the request only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeVolumeStatus</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeVolumeStatus</code> request. When the results of the request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs.</p> <p>Default: Describes all your volumes.</p>"]
+    #[serde(rename="VolumeIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -14286,11 +15705,15 @@ impl DescribeVolumeStatusRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVolumeStatus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumeStatusResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of volumes.</p>"]
+    #[serde(rename="VolumeStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_statuses: Option<Vec<VolumeStatusItem>>,
 }
 
@@ -14341,17 +15764,27 @@ impl DescribeVolumeStatusResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesModificationsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. Supported filters: <code>volume-id</code>, <code>modification-state</code>, <code>target-size</code>, <code>target-iops</code>, <code>target-volume-type</code>, <code>original-size</code>, <code>original-iops</code>, <code>original-volume-type</code>, <code>start-time</code>. </p>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results (up to a limit of 500) to be returned in a paginated request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned by a previous paginated request.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs for which in-progress modifications will be described.</p>"]
+    #[serde(rename="VolumeIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -14391,11 +15824,15 @@ impl DescribeVolumesModificationsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesModificationsResult {
     #[doc="<p>Token for pagination, null if there are no more results </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of returned <a>VolumeModification</a> objects.</p>"]
+    #[serde(rename="VolumesModifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes_modifications: Option<Vec<VolumeModification>>,
 }
 
@@ -14448,17 +15885,27 @@ impl DescribeVolumesModificationsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVolumes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name that is exposed to the instance (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 500; if <code>MaxResults</code> is given a value larger than 500, only 500 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeVolumes</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs.</p>"]
+    #[serde(rename="VolumeIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -14499,11 +15946,15 @@ impl DescribeVolumesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVolumes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVolumesResult {
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeVolumes</code> request. When the results of a <code>DescribeVolumes</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the volumes.</p>"]
+    #[serde(rename="Volumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes: Option<Vec<Volume>>,
 }
 
@@ -14554,13 +16005,17 @@ impl DescribeVolumesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcAttributeRequest {
     #[doc="<p>The VPC attribute.</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -14587,13 +16042,19 @@ impl DescribeVpcAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcAttributeResult {
     #[doc="<p>Indicates whether the instances launched in the VPC get DNS hostnames. If this attribute is <code>true</code>, instances in the VPC get DNS hostnames; otherwise, they do not.</p>"]
+    #[serde(rename="EnableDnsHostnames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether DNS resolution is enabled for the VPC. If this attribute is <code>true</code>, the Amazon DNS server resolves DNS hostnames for your instances to their corresponding IP addresses; otherwise, it does not.</p>"]
+    #[serde(rename="EnableDnsSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_dns_support: Option<AttributeBooleanValue>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -14650,13 +16111,19 @@ impl DescribeVpcAttributeResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more VPC IDs.</p>"]
+    #[serde(rename="VpcIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_ids: Option<Vec<String>>,
 }
 
@@ -14688,11 +16155,15 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcClassicLinkDnsSupportResult {
     #[doc="<p>The token to use when requesting the next set of items.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the ClassicLink DNS support status of the VPCs.</p>"]
+    #[serde(rename="Vpcs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpcs: Option<Vec<ClassicLinkDnsSupport>>,
 }
 
@@ -14743,13 +16214,19 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>is-classic-link-enabled</code> - Whether the VPC is enabled for ClassicLink (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPCs for which you want to describe the ClassicLink status.</p>"]
+    #[serde(rename="VpcIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_ids: Option<Vec<String>>,
 }
 
@@ -14782,9 +16259,11 @@ impl DescribeVpcClassicLinkRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcClassicLinkResult {
     #[doc="<p>The ClassicLink status of one or more VPCs.</p>"]
+    #[serde(rename="Vpcs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpcs: Option<Vec<VpcClassicLink>>,
 }
 
@@ -14832,13 +16311,19 @@ impl DescribeVpcClassicLinkResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcEndpointServices.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcEndpointServicesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -14869,11 +16354,15 @@ impl DescribeVpcEndpointServicesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcEndpointServices.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcEndpointServicesResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of supported AWS services.</p>"]
+    #[serde(rename="ServiceNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_names: Option<Vec<String>>,
 }
 
@@ -14926,17 +16415,27 @@ impl DescribeVpcEndpointServicesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcEndpoints.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcEndpointsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the AWS service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>One or more endpoint IDs.</p>"]
+    #[serde(rename="VpcEndpointIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_endpoint_ids: Option<Vec<String>>,
 }
 
@@ -14977,11 +16476,15 @@ impl DescribeVpcEndpointsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcEndpoints.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcEndpointsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Information about the endpoints.</p>"]
+    #[serde(rename="VpcEndpoints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_endpoints: Option<Vec<VpcEndpoint>>,
 }
 
@@ -15033,13 +16536,19 @@ impl DescribeVpcEndpointsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcPeeringConnections.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcPeeringConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the peer VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester's VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPC peering connection IDs.</p> <p>Default: Describes all your VPC peering connections.</p>"]
+    #[serde(rename="VpcPeeringConnectionIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_ids: Option<Vec<String>>,
 }
 
@@ -15074,9 +16583,11 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcPeeringConnections.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcPeeringConnectionsResult {
     #[doc="<p>Information about the VPC peering connections.</p>"]
+    #[serde(rename="VpcPeeringConnections")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connections: Option<Vec<VpcPeeringConnection>>,
 }
 
@@ -15123,13 +16634,19 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpcs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC's CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPC IDs.</p> <p>Default: Describes all your VPCs.</p>"]
+    #[serde(rename="VpcIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_ids: Option<Vec<String>>,
 }
 
@@ -15162,9 +16679,11 @@ impl DescribeVpcsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpcs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpcsResult {
     #[doc="<p>Information about one or more VPCs.</p>"]
+    #[serde(rename="Vpcs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpcs: Option<Vec<Vpc>>,
 }
 
@@ -15211,13 +16730,19 @@ impl DescribeVpcsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpnConnections.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpnConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPN connection IDs.</p> <p>Default: Describes your VPN connections.</p>"]
+    #[serde(rename="VpnConnectionIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_connection_ids: Option<Vec<String>>,
 }
 
@@ -15252,9 +16777,11 @@ impl DescribeVpnConnectionsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpnConnections.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpnConnectionsResult {
     #[doc="<p>Information about one or more VPN connections.</p>"]
+    #[serde(rename="VpnConnections")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_connections: Option<Vec<VpnConnection>>,
 }
 
@@ -15302,13 +16829,19 @@ impl DescribeVpnConnectionsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DescribeVpnGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpnGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul>"]
+    #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more virtual private gateway IDs.</p> <p>Default: Describes all your virtual private gateways.</p>"]
+    #[serde(rename="VpnGatewayIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_gateway_ids: Option<Vec<String>>,
 }
 
@@ -15341,9 +16874,11 @@ impl DescribeVpnGatewaysRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DescribeVpnGateways.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeVpnGatewaysResult {
     #[doc="<p>Information about one or more virtual private gateways.</p>"]
+    #[serde(rename="VpnGateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_gateways: Option<Vec<VpnGateway>>,
 }
 
@@ -15391,13 +16926,17 @@ impl DescribeVpnGatewaysResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DetachClassicLinkVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachClassicLinkVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance to unlink from the VPC.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The ID of the VPC to which the instance is linked.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -15424,9 +16963,11 @@ impl DetachClassicLinkVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DetachClassicLinkVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachClassicLinkVpcResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -15473,13 +17014,17 @@ impl DetachClassicLinkVpcResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DetachInternetGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
+    #[serde(rename="InternetGatewayId")]
     pub internet_gateway_id: String,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -15506,13 +17051,18 @@ impl DetachInternetGatewayRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DetachNetworkInterface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachNetworkInterfaceRequest {
     #[doc="<p>The ID of the attachment.</p>"]
+    #[serde(rename="AttachmentId")]
     pub attachment_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether to force a detachment.</p>"]
+    #[serde(rename="Force")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force: Option<bool>,
 }
 
@@ -15541,17 +17091,26 @@ impl DetachNetworkInterfaceRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DetachVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachVolumeRequest {
     #[doc="<p>The device name.</p>"]
+    #[serde(rename="Device")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Forces detachment if the previous detachment attempt did not occur cleanly (for example, logging into an instance, unmounting the volume, and detaching normally). This option can lead to data loss or a corrupted file system. Use this option only as a last resort to detach a volume from a failed instance. The instance won't have an opportunity to flush file system caches or file system metadata. If you use this option, you must perform file system check and repair procedures.</p>"]
+    #[serde(rename="Force")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -15588,13 +17147,17 @@ impl DetachVolumeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DetachVpnGateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DetachVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="VpnGatewayId")]
     pub vpn_gateway_id: String,
 }
 
@@ -15635,11 +17198,15 @@ impl DeviceTypeDeserializer {
     }
 }
 #[doc="<p>Describes a DHCP configuration option.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DhcpConfiguration {
     #[doc="<p>The name of a DHCP option.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>One or more values for the DHCP option.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<AttributeValue>>,
 }
 
@@ -15770,13 +17337,19 @@ impl DhcpConfigurationValueListDeserializer {
     }
 }
 #[doc="<p>Describes a set of DHCP options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DhcpOptions {
     #[doc="<p>One or more DHCP options in the set.</p>"]
+    #[serde(rename="DhcpConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_configurations: Option<Vec<DhcpConfiguration>>,
     #[doc="<p>The ID of the set of DHCP options.</p>"]
+    #[serde(rename="DhcpOptionsId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_options_id: Option<String>,
     #[doc="<p>Any tags assigned to the DHCP options set.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -15885,11 +17458,13 @@ impl DhcpOptionsListDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DisableVgwRoutePropagation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableVgwRoutePropagationRequest {
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="GatewayId")]
     pub gateway_id: String,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
 }
 
@@ -15912,9 +17487,11 @@ impl DisableVgwRoutePropagationRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for DisableVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableVpcClassicLinkDnsSupportRequest {
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -15937,9 +17514,11 @@ impl DisableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DisableVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableVpcClassicLinkDnsSupportResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -15987,11 +17566,14 @@ impl DisableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DisableVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -16016,9 +17598,11 @@ impl DisableVpcClassicLinkRequestSerializer {
 }
 
 #[doc="<p>Contains the output of DisableVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisableVpcClassicLinkResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -16065,13 +17649,19 @@ impl DisableVpcClassicLinkResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DisassociateAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateAddressRequest {
     #[doc="<p>[EC2-VPC] The association ID. Required for EC2-VPC.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>[EC2-Classic] The Elastic IP address. Required for EC2-Classic.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -16101,9 +17691,10 @@ impl DisassociateAddressRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateIamInstanceProfileRequest {
     #[doc="<p>The ID of the IAM instance profile association.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
 }
 
@@ -16123,9 +17714,11 @@ impl DisassociateIamInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateIamInstanceProfileResult {
     #[doc="<p>Information about the IAM instance profile association.</p>"]
+    #[serde(rename="IamInstanceProfileAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
 }
 
@@ -16172,11 +17765,14 @@ impl DisassociateIamInstanceProfileResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for DisassociateRouteTable.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateRouteTableRequest {
     #[doc="<p>The association ID representing the current association between the route table and subnet.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
 }
 
@@ -16200,9 +17796,10 @@ impl DisassociateRouteTableRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateSubnetCidrBlockRequest {
     #[doc="<p>The association ID for the CIDR block.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
 }
 
@@ -16222,11 +17819,15 @@ impl DisassociateSubnetCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateSubnetCidrBlockResult {
     #[doc="<p>Information about the IPv6 CIDR block association.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -16276,9 +17877,10 @@ impl DisassociateSubnetCidrBlockResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateVpcCidrBlockRequest {
     #[doc="<p>The association ID for the CIDR block.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
 }
 
@@ -16298,11 +17900,15 @@ impl DisassociateVpcCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DisassociateVpcCidrBlockResult {
     #[doc="<p>Information about the IPv6 CIDR block association.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association: Option<VpcIpv6CidrBlockAssociation>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -16352,13 +17958,19 @@ impl DisassociateVpcCidrBlockResultDeserializer {
     }
 }
 #[doc="<p>Describes a disk image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiskImage {
     #[doc="<p>A description of the disk image.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Information about the disk image.</p>"]
+    #[serde(rename="Image")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image: Option<DiskImageDetail>,
     #[doc="<p>Information about the volume.</p>"]
+    #[serde(rename="Volume")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume: Option<VolumeDetail>,
 }
 
@@ -16391,15 +18003,20 @@ impl DiskImageSerializer {
 }
 
 #[doc="<p>Describes a disk image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiskImageDescription {
     #[doc="<p>The checksum computed for the disk image.</p>"]
+    #[serde(rename="Checksum")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub checksum: Option<String>,
     #[doc="<p>The disk image format.</p>"]
+    #[serde(rename="Format")]
     pub format: String,
     #[doc="<p>A presigned URL for the import manifest stored in Amazon S3. For information about creating a presigned URL for an Amazon S3 object, read the \"Query String Request Authentication Alternative\" section of the <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html\">Authenticating REST Requests</a> topic in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
+    #[serde(rename="ImportManifestUrl")]
     pub import_manifest_url: String,
     #[doc="<p>The size of the disk image, in GiB.</p>"]
+    #[serde(rename="Size")]
     pub size: i64,
 }
 
@@ -16457,13 +18074,16 @@ impl DiskImageDescriptionDeserializer {
     }
 }
 #[doc="<p>Describes a disk image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiskImageDetail {
     #[doc="<p>The size of the disk image, in GiB.</p>"]
+    #[serde(rename="Bytes")]
     pub bytes: i64,
     #[doc="<p>The disk image format.</p>"]
+    #[serde(rename="Format")]
     pub format: String,
     #[doc="<p>A presigned URL for the import manifest stored in Amazon S3 and presented here as an Amazon S3 presigned URL. For information about creating a presigned URL for an Amazon S3 object, read the \"Query String Request Authentication Alternative\" section of the <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html\">Authenticating REST Requests</a> topic in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
+    #[serde(rename="ImportManifestUrl")]
     pub import_manifest_url: String,
 }
 
@@ -16514,11 +18134,14 @@ impl DiskImageListSerializer {
 }
 
 #[doc="<p>Describes a disk image volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DiskImageVolumeDescription {
     #[doc="<p>The volume identifier.</p>"]
+    #[serde(rename="Id")]
     pub id: String,
     #[doc="<p>The size of the volume, in GiB.</p>"]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
 }
 
@@ -16595,19 +18218,31 @@ impl DoubleDeserializer {
     }
 }
 #[doc="<p>Describes a block device for an EBS volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EbsBlockDevice {
     #[doc="<p>Indicates whether the EBS volume is deleted on instance termination.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the EBS volume is encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code>, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code>, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
+    #[serde(rename="VolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size: Option<i64>,
     #[doc="<p>The volume type: <code>gp2</code>, <code>io1</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code>.</p> <p>Default: <code>standard</code> </p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -16713,15 +18348,23 @@ impl EbsBlockDeviceSerializer {
 }
 
 #[doc="<p>Describes a parameter used to set up an EBS volume in a block device mapping.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EbsInstanceBlockDevice {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
+    #[serde(rename="AttachTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attach_time: Option<String>,
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The attachment state.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The ID of the EBS volume.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -16782,11 +18425,15 @@ impl EbsInstanceBlockDeviceDeserializer {
     }
 }
 #[doc="<p>Describes information used to set up an EBS volume specified in a block device mapping.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EbsInstanceBlockDeviceSpecification {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The ID of the EBS volume.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -16813,11 +18460,15 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
 }
 
 #[doc="<p>Describes an egress-only Internet gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EgressOnlyInternetGateway {
     #[doc="<p>Information about the attachment of the egress-only Internet gateway.</p>"]
+    #[serde(rename="Attachments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
     #[doc="<p>The ID of the egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway_id: Option<String>,
 }
 
@@ -16934,15 +18585,23 @@ impl EgressOnlyInternetGatewayListDeserializer {
     }
 }
 #[doc="<p>Describes the association between an instance and an Elastic GPU.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticGpuAssociation {
     #[doc="<p>The ID of the association.</p>"]
+    #[serde(rename="ElasticGpuAssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_association_id: Option<String>,
     #[doc="<p>The state of the association between the instance and the Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuAssociationState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_association_state: Option<String>,
     #[doc="<p>The time the Elastic GPU was associated with the instance.</p>"]
+    #[serde(rename="ElasticGpuAssociationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_association_time: Option<String>,
     #[doc="<p>The ID of the Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_id: Option<String>,
 }
 
@@ -17046,9 +18705,11 @@ impl ElasticGpuAssociationListDeserializer {
     }
 }
 #[doc="<p>Describes the status of an Elastic GPU.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticGpuHealth {
     #[doc="<p>The health status.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -17149,9 +18810,10 @@ impl ElasticGpuSetDeserializer {
     }
 }
 #[doc="<p>A specification for an Elastic GPU.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticGpuSpecification {
     #[doc="<p>The type of Elastic GPU.</p>"]
+    #[serde(rename="Type")]
     pub type_: String,
 }
 
@@ -17212,19 +18874,31 @@ impl ElasticGpuStatusDeserializer {
     }
 }
 #[doc="<p>Describes an Elastic GPU.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticGpus {
     #[doc="<p>The Availability Zone in the which the Elastic GPU resides.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The status of the Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuHealth")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_health: Option<ElasticGpuHealth>,
     #[doc="<p>The ID of the Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_id: Option<String>,
     #[doc="<p>The state of the Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_state: Option<String>,
     #[doc="<p>The type of Elastic GPU.</p>"]
+    #[serde(rename="ElasticGpuType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_type: Option<String>,
     #[doc="<p>The ID of the instance to which the Elastic GPU is attached.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
 }
 
@@ -17295,11 +18969,13 @@ impl ElasticGpusDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for EnableVgwRoutePropagation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVgwRoutePropagationRequest {
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="GatewayId")]
     pub gateway_id: String,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
 }
 
@@ -17322,11 +18998,14 @@ impl EnableVgwRoutePropagationRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for EnableVolumeIO.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVolumeIORequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -17351,9 +19030,11 @@ impl EnableVolumeIORequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for EnableVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVpcClassicLinkDnsSupportRequest {
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -17376,9 +19057,11 @@ impl EnableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[doc="<p>Contains the output of EnableVpcClassicLinkDnsSupport.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVpcClassicLinkDnsSupportResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -17426,11 +19109,14 @@ impl EnableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for EnableVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -17455,9 +19141,11 @@ impl EnableVpcClassicLinkRequestSerializer {
 }
 
 #[doc="<p>Contains the output of EnableVpcClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnableVpcClassicLinkResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -17518,13 +19206,19 @@ impl EventCodeDeserializer {
     }
 }
 #[doc="<p>Describes a Spot fleet event.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventInformation {
     #[doc="<p>The description of the event.</p>"]
+    #[serde(rename="EventDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_description: Option<String>,
     #[doc="<p>The event.</p> <p>The following are the <code>error</code> events.</p> <ul> <li> <p> <code>iamFleetRoleInvalid</code> - The Spot fleet did not have the required permissions either to launch or terminate an instance.</p> </li> <li> <p> <code>launchSpecTemporarilyBlacklisted</code> - The configuration is not valid and several attempts to launch instances have failed. For more information, see the description of the event.</p> </li> <li> <p> <code>spotFleetRequestConfigurationInvalid</code> - The configuration is not valid. For more information, see the description of the event.</p> </li> <li> <p> <code>spotInstanceCountLimitExceeded</code> - You've reached the limit on the number of Spot instances that you can launch.</p> </li> </ul> <p>The following are the <code>fleetRequestChange</code> events.</p> <ul> <li> <p> <code>active</code> - The Spot fleet has been validated and Amazon EC2 is attempting to maintain the target number of running Spot instances.</p> </li> <li> <p> <code>cancelled</code> - The Spot fleet is canceled and has no running Spot instances. The Spot fleet will be deleted two days after its instances were terminated.</p> </li> <li> <p> <code>cancelled_running</code> - The Spot fleet is canceled and will not launch additional Spot instances, but its existing Spot instances continue to run until they are interrupted or terminated.</p> </li> <li> <p> <code>cancelled_terminating</code> - The Spot fleet is canceled and its Spot instances are terminating.</p> </li> <li> <p> <code>expired</code> - The Spot fleet request has expired. A subsequent event indicates that the instances were terminated, if the request was created with <code>TerminateInstancesWithExpiration</code> set.</p> </li> <li> <p> <code>modify_in_progress</code> - A request to modify the Spot fleet request was accepted and is in progress.</p> </li> <li> <p> <code>modify_successful</code> - The Spot fleet request was modified.</p> </li> <li> <p> <code>price_update</code> - The bid price for a launch configuration was adjusted because it was too high. This change is permanent.</p> </li> <li> <p> <code>submitted</code> - The Spot fleet request is being evaluated and Amazon EC2 is preparing to launch the target number of Spot instances.</p> </li> </ul> <p>The following are the <code>instanceChange</code> events.</p> <ul> <li> <p> <code>launched</code> - A bid was fulfilled and a new instance was launched.</p> </li> <li> <p> <code>terminated</code> - An instance was terminated by the user.</p> </li> </ul>"]
+    #[serde(rename="EventSubType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_sub_type: Option<String>,
     #[doc="<p>The ID of the instance. This information is available only for <code>instanceChange</code> events.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
 }
 
@@ -17634,19 +19328,31 @@ impl ExportEnvironmentDeserializer {
     }
 }
 #[doc="<p>Describes an instance export task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportTask {
     #[doc="<p>A description of the resource being exported.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the export task.</p>"]
+    #[serde(rename="ExportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_task_id: Option<String>,
     #[doc="<p>Information about the export task.</p>"]
+    #[serde(rename="ExportToS3Task")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_to_s3_task: Option<ExportToS3Task>,
     #[doc="<p>Information about the instance to export.</p>"]
+    #[serde(rename="InstanceExportDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_export_details: Option<InstanceExportDetails>,
     #[doc="<p>The state of the export task.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The status message related to the export task.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -17782,15 +19488,23 @@ impl ExportTaskStateDeserializer {
     }
 }
 #[doc="<p>Describes the format and location for an instance export task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportToS3Task {
     #[doc="<p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>"]
+    #[serde(rename="ContainerFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_format: Option<String>,
     #[doc="<p>The format for the exported image.</p>"]
+    #[serde(rename="DiskImageFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_image_format: Option<String>,
     #[doc="<p>The S3 bucket for the destination image. The destination bucket must exist and grant WRITE and READ_ACP permissions to the AWS account <code>vm-import-export@amazon.com</code>.</p>"]
+    #[serde(rename="S3Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_bucket: Option<String>,
     #[doc="<p>The encryption key for your S3 bucket.</p>"]
+    #[serde(rename="S3Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key: Option<String>,
 }
 
@@ -17851,15 +19565,23 @@ impl ExportToS3TaskDeserializer {
     }
 }
 #[doc="<p>Describes an instance export task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ExportToS3TaskSpecification {
     #[doc="<p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>"]
+    #[serde(rename="ContainerFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_format: Option<String>,
     #[doc="<p>The format for the exported image.</p>"]
+    #[serde(rename="DiskImageFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_image_format: Option<String>,
     #[doc="<p>The S3 bucket for the destination image. The destination bucket must exist and grant WRITE and READ_ACP permissions to the AWS account <code>vm-import-export@amazon.com</code>.</p>"]
+    #[serde(rename="S3Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_bucket: Option<String>,
     #[doc="<p>The image is written to a single object in the S3 bucket at the S3 key s3prefix + exportTaskId + '.' + diskImageFormat.</p>"]
+    #[serde(rename="S3Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_prefix: Option<String>,
 }
 
@@ -17894,11 +19616,15 @@ impl ExportToS3TaskSpecificationSerializer {
 }
 
 #[doc="<p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria, such as tags, attributes, or IDs.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Filter {
     #[doc="<p>The name of the filter. Filter names are case-sensitive.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>One or more filter values. Filter values are case-sensitive.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
@@ -17966,25 +19692,43 @@ impl FloatDeserializer {
     }
 }
 #[doc="<p>Describes a flow log.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FlowLog {
     #[doc="<p>The date and time the flow log was created.</p>"]
+    #[serde(rename="CreationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<String>,
     #[doc="<p>Information about the error that occurred. <code>Rate limited</code> indicates that CloudWatch logs throttling has been applied for one or more network interfaces, or that you've reached the limit on the number of CloudWatch Logs log groups that you can create. <code>Access error</code> indicates that the IAM role associated with the flow log does not have sufficient permissions to publish to CloudWatch Logs. <code>Unknown error</code> indicates an internal error.</p>"]
+    #[serde(rename="DeliverLogsErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deliver_logs_error_message: Option<String>,
     #[doc="<p>The ARN of the IAM role that posts logs to CloudWatch Logs.</p>"]
+    #[serde(rename="DeliverLogsPermissionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deliver_logs_permission_arn: Option<String>,
     #[doc="<p>The status of the logs delivery (<code>SUCCESS</code> | <code>FAILED</code>).</p>"]
+    #[serde(rename="DeliverLogsStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deliver_logs_status: Option<String>,
     #[doc="<p>The flow log ID.</p>"]
+    #[serde(rename="FlowLogId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub flow_log_id: Option<String>,
     #[doc="<p>The status of the flow log (<code>ACTIVE</code>).</p>"]
+    #[serde(rename="FlowLogStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub flow_log_status: Option<String>,
     #[doc="<p>The name of the flow log group.</p>"]
+    #[serde(rename="LogGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<String>,
     #[doc="<p>The ID of the resource on which the flow log was created.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
     #[doc="<p>The type of traffic captured for the flow log.</p>"]
+    #[serde(rename="TrafficType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub traffic_type: Option<String>,
 }
 
@@ -18109,33 +19853,59 @@ impl FlowLogSetDeserializer {
     }
 }
 #[doc="<p>Describes an Amazon FPGA image (AFI).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FpgaImage {
     #[doc="<p>The date and time the AFI was created.</p>"]
+    #[serde(rename="CreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<String>,
     #[doc="<p>The description of the AFI.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The global FPGA image identifier (AGFI ID).</p>"]
+    #[serde(rename="FpgaImageGlobalId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_image_global_id: Option<String>,
     #[doc="<p>The FPGA image identifier (AFI ID).</p>"]
+    #[serde(rename="FpgaImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fpga_image_id: Option<String>,
     #[doc="<p>The name of the AFI.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The alias of the AFI owner. Possible values include <code>self</code>, <code>amazon</code>, and <code>aws-marketplace</code>.</p>"]
+    #[serde(rename="OwnerAlias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_alias: Option<String>,
     #[doc="<p>The AWS account ID of the AFI owner.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>Information about the PCI bus.</p>"]
+    #[serde(rename="PciId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pci_id: Option<PciId>,
     #[doc="<p>The product codes for the AFI.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The version of the AWS Shell that was used to create the bitstream.</p>"]
+    #[serde(rename="ShellVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shell_version: Option<String>,
     #[doc="<p>Information about the state of the AFI.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<FpgaImageState>,
     #[doc="<p>Any tags assigned to the AFI.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The time of the most recent update to the AFI.</p>"]
+    #[serde(rename="UpdateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_time: Option<String>,
 }
 
@@ -18282,11 +20052,15 @@ impl FpgaImageListDeserializer {
     }
 }
 #[doc="<p>Describes the state of the bitstream generation process for an Amazon FPGA image (AFI).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FpgaImageState {
     #[doc="<p>The state. The following are the possible values:</p> <ul> <li> <p> <code>pending</code> - AFI bitstream generation is in progress.</p> </li> <li> <p> <code>available</code> - The AFI is available for use.</p> </li> <li> <p> <code>failed</code> - AFI bitstream generation failed.</p> </li> <li> <p> <code>unavailable</code> - The AFI is no longer available for use.</p> </li> </ul>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>If the state is <code>failed</code>, this is the error message.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -18366,11 +20140,14 @@ impl GatewayTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for GetConsoleOutput.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConsoleOutputRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
@@ -18395,13 +20172,19 @@ impl GetConsoleOutputRequestSerializer {
 }
 
 #[doc="<p>Contains the output of GetConsoleOutput.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConsoleOutputResult {
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The console output, Base64-encoded. If using a command line tool, the tool decodes the output for you.</p>"]
+    #[serde(rename="Output")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output: Option<String>,
     #[doc="<p>The time the output was last updated.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -18456,13 +20239,18 @@ impl GetConsoleOutputResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for the request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConsoleScreenshotRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>When set to <code>true</code>, acts as keystroke input and wakes up an instance that's in standby or \"sleep\" mode.</p>"]
+    #[serde(rename="WakeUp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub wake_up: Option<bool>,
 }
 
@@ -18491,11 +20279,15 @@ impl GetConsoleScreenshotRequestSerializer {
 }
 
 #[doc="<p>Contains the output of the request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetConsoleScreenshotResult {
     #[doc="<p>The data that comprises the image.</p>"]
+    #[serde(rename="ImageData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_data: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
 }
 
@@ -18545,11 +20337,13 @@ impl GetConsoleScreenshotResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetHostReservationPurchasePreviewRequest {
     #[doc="<p>The ID/s of the Dedicated Host/s that the reservation will be associated with.</p>"]
+    #[serde(rename="HostIdSet")]
     pub host_id_set: Vec<String>,
     #[doc="<p>The offering ID of the reservation.</p>"]
+    #[serde(rename="OfferingId")]
     pub offering_id: String,
 }
 
@@ -18572,15 +20366,23 @@ impl GetHostReservationPurchasePreviewRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetHostReservationPurchasePreviewResult {
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The purchase information of the Dedicated Host Reservation and the Dedicated Hosts associated with it.</p>"]
+    #[serde(rename="Purchase")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub purchase: Option<Vec<Purchase>>,
     #[doc="<p>The potential total hourly price of the reservation per hour.</p>"]
+    #[serde(rename="TotalHourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_hourly_price: Option<String>,
     #[doc="<p>The potential total upfront price. This is billed immediately.</p>"]
+    #[serde(rename="TotalUpfrontPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_upfront_price: Option<String>,
 }
 
@@ -18643,11 +20445,14 @@ impl GetHostReservationPurchasePreviewResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for GetPasswordData.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPasswordDataRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Windows instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
@@ -18672,13 +20477,19 @@ impl GetPasswordDataRequestSerializer {
 }
 
 #[doc="<p>Contains the output of GetPasswordData.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPasswordDataResult {
     #[doc="<p>The ID of the Windows instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The password of the instance.</p>"]
+    #[serde(rename="PasswordData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password_data: Option<String>,
     #[doc="<p>The time the data was last updated.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -18733,13 +20544,18 @@ impl GetPasswordDataResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for GetReservedInstanceExchangeQuote.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetReservedInstancesExchangeQuoteRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Convertible Reserved Instances to exchange.</p>"]
+    #[serde(rename="ReservedInstanceIds")]
     pub reserved_instance_ids: Vec<String>,
     #[doc="<p>The configuration requirements of the Convertible Reserved Instances to exchange for your current Convertible Reserved Instances.</p>"]
+    #[serde(rename="TargetConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
@@ -18772,25 +20588,43 @@ impl GetReservedInstancesExchangeQuoteRequestSerializer {
 }
 
 #[doc="<p>Contains the output of GetReservedInstancesExchangeQuote.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetReservedInstancesExchangeQuoteResult {
     #[doc="<p>The currency of the transaction.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>If <code>true</code>, the exchange is valid. If <code>false</code>, the exchange cannot be completed.</p>"]
+    #[serde(rename="IsValidExchange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_valid_exchange: Option<bool>,
     #[doc="<p>The new end date of the reservation term.</p>"]
+    #[serde(rename="OutputReservedInstancesWillExpireAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_reserved_instances_will_expire_at: Option<String>,
     #[doc="<p>The total true upfront charge for the exchange.</p>"]
+    #[serde(rename="PaymentDue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payment_due: Option<String>,
     #[doc="<p>The cost associated with the Reserved Instance.</p>"]
+    #[serde(rename="ReservedInstanceValueRollup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instance_value_rollup: Option<ReservationValue>,
     #[doc="<p>The configuration of your Convertible Reserved Instances.</p>"]
+    #[serde(rename="ReservedInstanceValueSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instance_value_set: Option<Vec<ReservedInstanceReservationValue>>,
     #[doc="<p>The cost associated with the Reserved Instance.</p>"]
+    #[serde(rename="TargetConfigurationValueRollup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configuration_value_rollup: Option<ReservationValue>,
     #[doc="<p>The values of the target Convertible Reserved Instances.</p>"]
+    #[serde(rename="TargetConfigurationValueSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configuration_value_set: Option<Vec<TargetReservationValue>>,
     #[doc="<p>Describes the reason why the exchange cannot be completed.</p>"]
+    #[serde(rename="ValidationFailureReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub validation_failure_reason: Option<String>,
 }
 
@@ -18885,11 +20719,15 @@ impl GroupIdStringListSerializer {
 }
 
 #[doc="<p>Describes a security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GroupIdentifier {
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>The name of the security group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
 }
 
@@ -19039,13 +20877,16 @@ impl GroupNameStringListSerializer {
 }
 
 #[doc="<p>Describes an event in the history of the Spot fleet request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HistoryRecord {
     #[doc="<p>Information about the event.</p>"]
+    #[serde(rename="EventInformation")]
     pub event_information: EventInformation,
     #[doc="<p>The event type.</p> <ul> <li> <p> <code>error</code> - Indicates an error with the Spot fleet request.</p> </li> <li> <p> <code>fleetRequestChange</code> - Indicates a change in the status or configuration of the Spot fleet request.</p> </li> <li> <p> <code>instanceChange</code> - Indicates that an instance was launched or terminated.</p> </li> </ul>"]
+    #[serde(rename="EventType")]
     pub event_type: String,
     #[doc="<p>The date and time of the event, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="Timestamp")]
     pub timestamp: String,
 }
 
@@ -19142,25 +20983,43 @@ impl HistoryRecordsDeserializer {
     }
 }
 #[doc="<p>Describes the properties of the Dedicated Host.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Host {
     #[doc="<p>Whether auto-placement is on or off.</p>"]
+    #[serde(rename="AutoPlacement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_placement: Option<String>,
     #[doc="<p>The Availability Zone of the Dedicated Host.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of new instances that can be launched onto the Dedicated Host.</p>"]
+    #[serde(rename="AvailableCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_capacity: Option<AvailableCapacity>,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The ID of the Dedicated Host.</p>"]
+    #[serde(rename="HostId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_id: Option<String>,
     #[doc="<p>The hardware specifications of the Dedicated Host.</p>"]
+    #[serde(rename="HostProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_properties: Option<HostProperties>,
     #[doc="<p>The reservation ID of the Dedicated Host. This returns a <code>null</code> response if the Dedicated Host doesn't have an associated reservation.</p>"]
+    #[serde(rename="HostReservationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The IDs and instance type that are currently running on the Dedicated Host.</p>"]
+    #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<Vec<HostInstance>>,
     #[doc="<p>The Dedicated Host's state.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -19245,11 +21104,15 @@ impl HostDeserializer {
     }
 }
 #[doc="<p>Describes an instance running on a Dedicated Host.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HostInstance {
     #[doc="<p>the IDs of instances that are running on the Dedicated Host.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The instance type size (for example, <code>m3.medium</code>) of the running instance.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
 }
 
@@ -19382,21 +21245,35 @@ impl HostListDeserializer {
     }
 }
 #[doc="<p>Details about the Dedicated Host Reservation offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HostOffering {
     #[doc="<p>The currency of the offering.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the offering (in seconds).</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The hourly price of the offering.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance family of the offering.</p>"]
+    #[serde(rename="InstanceFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_family: Option<String>,
     #[doc="<p>The ID of the offering.</p>"]
+    #[serde(rename="OfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_id: Option<String>,
     #[doc="<p>The available payment option.</p>"]
+    #[serde(rename="PaymentOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payment_option: Option<String>,
     #[doc="<p>The upfront price of the offering. Does not apply to No Upfront offerings.</p>"]
+    #[serde(rename="UpfrontPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upfront_price: Option<String>,
 }
 
@@ -19511,15 +21388,23 @@ impl HostOfferingSetDeserializer {
     }
 }
 #[doc="<p>Describes properties of a Dedicated Host.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HostProperties {
     #[doc="<p>The number of cores on the Dedicated Host.</p>"]
+    #[serde(rename="Cores")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cores: Option<i64>,
     #[doc="<p>The instance type size that the Dedicated Host supports (for example, <code>m3.medium</code>).</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The number of sockets on the Dedicated Host.</p>"]
+    #[serde(rename="Sockets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sockets: Option<i64>,
     #[doc="<p>The number of vCPUs on the Dedicated Host.</p>"]
+    #[serde(rename="TotalVCpus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_v_cpus: Option<i64>,
 }
 
@@ -19578,33 +21463,59 @@ impl HostPropertiesDeserializer {
     }
 }
 #[doc="<p>Details about the Dedicated Host Reservation and associated Dedicated Hosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct HostReservation {
     #[doc="<p>The number of Dedicated Hosts the reservation is associated with.</p>"]
+    #[serde(rename="Count")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub count: Option<i64>,
     #[doc="<p>The currency in which the <code>upfrontPrice</code> and <code>hourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The length of the reservation's term, specified in seconds. Can be <code>31536000 (1 year)</code> | <code>94608000 (3 years)</code>.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The date and time that the reservation ends.</p>"]
+    #[serde(rename="End")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end: Option<String>,
     #[doc="<p>The IDs of the Dedicated Hosts associated with the reservation.</p>"]
+    #[serde(rename="HostIdSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_id_set: Option<Vec<String>>,
     #[doc="<p>The ID of the reservation that specifies the associated Dedicated Hosts.</p>"]
+    #[serde(rename="HostReservationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The hourly price of the reservation.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance family of the Dedicated Host Reservation. The instance family on the Dedicated Host must be the same in order for it to benefit from the reservation.</p>"]
+    #[serde(rename="InstanceFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_family: Option<String>,
     #[doc="<p>The ID of the reservation. This remains the same regardless of which Dedicated Hosts are associated with it.</p>"]
+    #[serde(rename="OfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_id: Option<String>,
     #[doc="<p>The payment option selected for this reservation.</p>"]
+    #[serde(rename="PaymentOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payment_option: Option<String>,
     #[doc="<p>The date and time that the reservation started.</p>"]
+    #[serde(rename="Start")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<String>,
     #[doc="<p>The state of the reservation.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The upfront price of the reservation.</p>"]
+    #[serde(rename="UpfrontPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upfront_price: Option<String>,
 }
 
@@ -19771,11 +21682,15 @@ impl HypervisorTypeDeserializer {
     }
 }
 #[doc="<p>Describes an IAM instance profile.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IamInstanceProfile {
     #[doc="<p>The Amazon Resource Name (ARN) of the instance profile.</p>"]
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The ID of the instance profile.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
 }
 
@@ -19824,17 +21739,27 @@ impl IamInstanceProfileDeserializer {
     }
 }
 #[doc="<p>Describes an association between an IAM instance profile and an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IamInstanceProfileAssociation {
     #[doc="<p>The ID of the association.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfile>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The state of the association.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The time the IAM instance profile was associated with the instance.</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -19953,11 +21878,15 @@ impl IamInstanceProfileAssociationStateDeserializer {
     }
 }
 #[doc="<p>Describes an IAM instance profile.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IamInstanceProfileSpecification {
     #[doc="<p>The Amazon Resource Name (ARN) of the instance profile.</p>"]
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The name of the instance profile.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -20029,11 +21958,15 @@ impl IamInstanceProfileSpecificationSerializer {
 }
 
 #[doc="<p>Describes the ICMP type and code.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IcmpTypeCode {
     #[doc="<p>The ICMP code. A value of -1 means all codes for the specified ICMP type.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<i64>,
     #[doc="<p>The ICMP type. A value of -1 means all types.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<i64>,
 }
 
@@ -20104,13 +22037,19 @@ impl IcmpTypeCodeSerializer {
 }
 
 #[doc="<p>Describes the ID format for a resource.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IdFormat {
     #[doc="<p>The date in UTC at which you are permanently switched over to using longer IDs. If a deadline is not yet available for this resource type, this field is not returned.</p>"]
+    #[serde(rename="Deadline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deadline: Option<String>,
     #[doc="<p>The type of resource.</p>"]
+    #[serde(rename="Resource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource: Option<String>,
     #[doc="<p>Indicates whether longer IDs (17-character IDs) are enabled for the resource.</p>"]
+    #[serde(rename="UseLongIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub use_long_ids: Option<bool>,
 }
 
@@ -20206,55 +22145,103 @@ impl IdFormatListDeserializer {
     }
 }
 #[doc="<p>Describes an image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Image {
     #[doc="<p>The architecture of the image.</p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>Any block device mapping entries.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The date and time the image was created.</p>"]
+    #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<String>,
     #[doc="<p>The description of the AMI that was provided during image creation.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with ENA is enabled.</p>"]
+    #[serde(rename="EnaSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ena_support: Option<bool>,
     #[doc="<p>The hypervisor type of the image.</p>"]
+    #[serde(rename="Hypervisor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hypervisor: Option<String>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The location of the AMI.</p>"]
+    #[serde(rename="ImageLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_location: Option<String>,
     #[doc="<p>The AWS account alias (for example, <code>amazon</code>, <code>self</code>) or the AWS account ID of the AMI owner.</p>"]
+    #[serde(rename="ImageOwnerAlias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_owner_alias: Option<String>,
     #[doc="<p>The type of image.</p>"]
+    #[serde(rename="ImageType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_type: Option<String>,
     #[doc="<p>The kernel associated with the image, if any. Only applicable for machine images.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the AMI that was provided during image creation.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The AWS account ID of the image owner.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The value is <code>Windows</code> for Windows AMIs; otherwise blank.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>Any product codes associated with the AMI.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>Indicates whether the image has public launch permissions. The value is <code>true</code> if this image has public launch permissions or <code>false</code> if it has only implicit and explicit launch permissions.</p>"]
+    #[serde(rename="Public")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public: Option<bool>,
     #[doc="<p>The RAM disk associated with the image, if any. Only applicable for machine images.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The device name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
+    #[serde(rename="RootDeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_name: Option<String>,
     #[doc="<p>The type of root device used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>"]
+    #[serde(rename="RootDeviceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_type: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<String>,
     #[doc="<p>The current state of the AMI. If the state is <code>available</code>, the image is successfully registered and can be used to launch an instance.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The reason for the state change.</p>"]
+    #[serde(rename="StateReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_reason: Option<StateReason>,
     #[doc="<p>Any tags assigned to the image.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of virtualization of the AMI.</p>"]
+    #[serde(rename="VirtualizationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtualization_type: Option<String>,
 }
 
@@ -20404,23 +22391,39 @@ impl ImageDeserializer {
     }
 }
 #[doc="<p>Describes an image attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageAttribute {
     #[doc="<p>One or more block device mapping entries.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for the AMI.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<AttributeValue>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The kernel ID.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<AttributeValue>,
     #[doc="<p>One or more launch permissions.</p>"]
+    #[serde(rename="LaunchPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_permissions: Option<Vec<LaunchPermission>>,
     #[doc="<p>One or more product codes.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The RAM disk ID.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<AttributeValue>,
     #[doc="<p>Indicates whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<AttributeValue>,
 }
 
@@ -20502,19 +22505,31 @@ impl ImageAttributeDeserializer {
     }
 }
 #[doc="<p>Describes the disk container object for an import image task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageDiskContainer {
     #[doc="<p>The description of the disk image.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The block device mapping for the disk.</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>The format of the disk image being imported.</p> <p>Valid values: <code>RAW</code> | <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>"]
+    #[serde(rename="Format")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub format: Option<String>,
     #[doc="<p>The ID of the EBS snapshot to be used for importing the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The URL to the Amazon S3-based disk image being imported. The URL can either be a https URL (https://..) or an Amazon S3 URL (s3://..)</p>"]
+    #[serde(rename="Url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
     #[doc="<p>The S3 bucket for the disk image.</p>"]
+    #[serde(rename="UserBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_bucket: Option<UserBucket>,
 }
 
@@ -20651,27 +22666,47 @@ impl ImageTypeValuesDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ImportImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportImageRequest {
     #[doc="<p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>The client-specific data.</p>"]
+    #[serde(rename="ClientData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_data: Option<ClientData>,
     #[doc="<p>The token to enable idempotency for VM import requests.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>A description string for the import image task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Information about the disk containers.</p>"]
+    #[serde(rename="DiskContainers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_containers: Option<Vec<ImageDiskContainer>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The target hypervisor platform.</p> <p>Valid values: <code>xen</code> </p>"]
+    #[serde(rename="Hypervisor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hypervisor: Option<String>,
     #[doc="<p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p> <b>Note:</b> You may only use BYOL if you have existing licenses with rights to use these licenses in a third party cloud like AWS. For more information, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image\">Prerequisites</a> in the VM Import/Export User Guide.</p> <p>Valid values: <code>AWS</code> | <code>BYOL</code> </p>"]
+    #[serde(rename="LicenseType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub license_type: Option<String>,
     #[doc="<p>The operating system of the virtual machine.</p> <p>Valid values: <code>Windows</code> | <code>Linux</code> </p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>The name of the role to use when not using the default role, 'vmimport'.</p>"]
+    #[serde(rename="RoleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_name: Option<String>,
 }
 
@@ -20732,29 +22767,51 @@ impl ImportImageRequestSerializer {
 }
 
 #[doc="<p>Contains the output for ImportImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportImageResult {
     #[doc="<p>The architecture of the virtual machine.</p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>A description of the import task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The target hypervisor of the import task.</p>"]
+    #[serde(rename="Hypervisor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hypervisor: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) created by the import task.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The task ID of the import image task.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
     #[doc="<p>The license type of the virtual machine.</p>"]
+    #[serde(rename="LicenseType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub license_type: Option<String>,
     #[doc="<p>The operating system of the virtual machine.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>The progress of the task.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
+    #[serde(rename="SnapshotDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_details: Option<Vec<SnapshotDetail>>,
     #[doc="<p>A brief status of the task.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>A detailed status message of the import task.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -20842,29 +22899,51 @@ impl ImportImageResultDeserializer {
     }
 }
 #[doc="<p>Describes an import image task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportImageTask {
     #[doc="<p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>A description of the import task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The target hypervisor for the import task.</p> <p>Valid values: <code>xen</code> </p>"]
+    #[serde(rename="Hypervisor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hypervisor: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) of the imported virtual machine.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The ID of the import image task.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
     #[doc="<p>The license type of the virtual machine.</p>"]
+    #[serde(rename="LicenseType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub license_type: Option<String>,
     #[doc="<p>The description string for the import image task.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>The percentage of progress of the import image task.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
+    #[serde(rename="SnapshotDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_details: Option<Vec<SnapshotDetail>>,
     #[doc="<p>A brief status for the import image task.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>A descriptive status message for the import image task.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -20993,29 +23072,51 @@ impl ImportImageTaskListDeserializer {
     }
 }
 #[doc="<p>Describes the launch specification for VM import.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportInstanceLaunchSpecification {
     #[doc="<p>Reserved.</p>"]
+    #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
     #[doc="<p>The architecture of the instance.</p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>One or more security group IDs.</p>"]
+    #[serde(rename="GroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_ids: Option<Vec<String>>,
     #[doc="<p>One or more security group names.</p>"]
+    #[serde(rename="GroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_names: Option<Vec<String>>,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
+    #[serde(rename="InstanceInitiatedShutdownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_initiated_shutdown_behavior: Option<String>,
     #[doc="<p>The instance type. For more information about the instance types that you can import, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#vmimport-instance-types\">Instance Types</a> in the VM Import/Export User Guide.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>Indicates whether monitoring is enabled.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<bool>,
     #[doc="<p>The placement information for the instance.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<Placement>,
     #[doc="<p>[EC2-VPC] An available IP address from the IP address range of the subnet.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the subnet in which to launch the instance.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The user data to make available to the instance. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<UserData>,
 }
 
@@ -21082,17 +23183,26 @@ impl ImportInstanceLaunchSpecificationSerializer {
 }
 
 #[doc="<p>Contains the parameters for ImportInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportInstanceRequest {
     #[doc="<p>A description for the instance being imported.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The disk image.</p>"]
+    #[serde(rename="DiskImages")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_images: Option<Vec<DiskImage>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The launch specification.</p>"]
+    #[serde(rename="LaunchSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_specification: Option<ImportInstanceLaunchSpecification>,
     #[doc="<p>The instance operating system.</p>"]
+    #[serde(rename="Platform")]
     pub platform: String,
 }
 
@@ -21133,9 +23243,11 @@ impl ImportInstanceRequestSerializer {
 }
 
 #[doc="<p>Contains the output for ImportInstance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportInstanceResult {
     #[doc="<p>Information about the conversion task.</p>"]
+    #[serde(rename="ConversionTask")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conversion_task: Option<ConversionTask>,
 }
 
@@ -21183,15 +23295,22 @@ impl ImportInstanceResultDeserializer {
     }
 }
 #[doc="<p>Describes an import instance task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportInstanceTaskDetails {
     #[doc="<p>A description of the task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The instance operating system.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>One or more volumes.</p>"]
+    #[serde(rename="Volumes")]
     pub volumes: Vec<ImportInstanceVolumeDetailItem>,
 }
 
@@ -21252,21 +23371,30 @@ impl ImportInstanceTaskDetailsDeserializer {
     }
 }
 #[doc="<p>Describes an import volume task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportInstanceVolumeDetailItem {
     #[doc="<p>The Availability Zone where the resulting instance will reside.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>The number of bytes converted so far.</p>"]
+    #[serde(rename="BytesConverted")]
     pub bytes_converted: i64,
     #[doc="<p>A description of the task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The image.</p>"]
+    #[serde(rename="Image")]
     pub image: DiskImageDescription,
     #[doc="<p>The status of the import of this particular disk image.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
     #[doc="<p>The status information or errors related to the disk image.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>The volume.</p>"]
+    #[serde(rename="Volume")]
     pub volume: DiskImageVolumeDescription,
 }
 
@@ -21379,13 +23507,22 @@ impl ImportInstanceVolumeDetailSetDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ImportKeyPair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A unique name for the key pair.</p>"]
+    #[serde(rename="KeyName")]
     pub key_name: String,
     #[doc="<p>The public key. For API calls, the text must be base64-encoded. For command line tools, base64 encoding is performed for you.</p>"]
+    #[serde(rename="PublicKeyMaterial")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub public_key_material: Vec<u8>,
 }
 
@@ -21414,11 +23551,15 @@ impl ImportKeyPairRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ImportKeyPair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportKeyPairResult {
     #[doc="<p>The MD5 public key fingerprint as specified in section 4 of RFC 4716.</p>"]
+    #[serde(rename="KeyFingerprint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_fingerprint: Option<String>,
     #[doc="<p>The key pair name you provided.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
 }
 
@@ -21470,19 +23611,31 @@ impl ImportKeyPairResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ImportSnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportSnapshotRequest {
     #[doc="<p>The client-specific data.</p>"]
+    #[serde(rename="ClientData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_data: Option<ClientData>,
     #[doc="<p>Token to enable idempotency for VM import requests.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The description string for the import snapshot task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Information about the disk container.</p>"]
+    #[serde(rename="DiskContainer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_container: Option<SnapshotDiskContainer>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The name of the role to use when not using the default role, 'vmimport'.</p>"]
+    #[serde(rename="RoleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_name: Option<String>,
 }
 
@@ -21527,13 +23680,19 @@ impl ImportSnapshotRequestSerializer {
 }
 
 #[doc="<p>Contains the output for ImportSnapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportSnapshotResult {
     #[doc="<p>A description of the import snapshot task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the import snapshot task.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
     #[doc="<p>Information about the import snapshot task.</p>"]
+    #[serde(rename="SnapshotTaskDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_task_detail: Option<SnapshotTaskDetail>,
 }
 
@@ -21589,13 +23748,19 @@ impl ImportSnapshotResultDeserializer {
     }
 }
 #[doc="<p>Describes an import snapshot task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportSnapshotTask {
     #[doc="<p>A description of the import snapshot task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the import snapshot task.</p>"]
+    #[serde(rename="ImportTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub import_task_id: Option<String>,
     #[doc="<p>Describes an import snapshot task.</p>"]
+    #[serde(rename="SnapshotTaskDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_task_detail: Option<SnapshotTaskDetail>,
 }
 
@@ -21704,17 +23869,24 @@ impl ImportTaskIdListSerializer {
 }
 
 #[doc="<p>Contains the parameters for ImportVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportVolumeRequest {
     #[doc="<p>The Availability Zone for the resulting EBS volume.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>A description of the volume.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The disk image.</p>"]
+    #[serde(rename="Image")]
     pub image: DiskImageDetail,
     #[doc="<p>The volume size.</p>"]
+    #[serde(rename="Volume")]
     pub volume: VolumeDetail,
 }
 
@@ -21745,9 +23917,11 @@ impl ImportVolumeRequestSerializer {
 }
 
 #[doc="<p>Contains the output for ImportVolume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportVolumeResult {
     #[doc="<p>Information about the conversion task.</p>"]
+    #[serde(rename="ConversionTask")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conversion_task: Option<ConversionTask>,
 }
 
@@ -21795,17 +23969,23 @@ impl ImportVolumeResultDeserializer {
     }
 }
 #[doc="<p>Describes an import volume task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImportVolumeTaskDetails {
     #[doc="<p>The Availability Zone where the resulting volume will reside.</p>"]
+    #[serde(rename="AvailabilityZone")]
     pub availability_zone: String,
     #[doc="<p>The number of bytes converted so far.</p>"]
+    #[serde(rename="BytesConverted")]
     pub bytes_converted: i64,
     #[doc="<p>The description you provided when starting the import volume task.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The image.</p>"]
+    #[serde(rename="Image")]
     pub image: DiskImageDescription,
     #[doc="<p>The volume.</p>"]
+    #[serde(rename="Volume")]
     pub volume: DiskImageVolumeDescription,
 }
 
@@ -21869,85 +24049,163 @@ impl ImportVolumeTaskDetailsDeserializer {
     }
 }
 #[doc="<p>Describes an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Instance {
     #[doc="<p>The AMI launch index, which can be used to find this instance in the launch group.</p>"]
+    #[serde(rename="AmiLaunchIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ami_launch_index: Option<i64>,
     #[doc="<p>The architecture of the image.</p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>Any block device mapping entries for the instance.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     #[doc="<p>The idempotency token you provided when you launched the instance, if applicable.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The Elastic GPU associated with the instance.</p>"]
+    #[serde(rename="ElasticGpuAssociations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_associations: Option<Vec<ElasticGpuAssociation>>,
     #[doc="<p>Specifies whether enhanced networking with ENA is enabled.</p>"]
+    #[serde(rename="EnaSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ena_support: Option<bool>,
     #[doc="<p>The hypervisor type of the instance.</p>"]
+    #[serde(rename="Hypervisor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hypervisor: Option<String>,
     #[doc="<p>The IAM instance profile associated with the instance, if applicable.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfile>,
     #[doc="<p>The ID of the AMI used to launch the instance.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>Indicates whether this is a Spot instance or a Scheduled Instance.</p>"]
+    #[serde(rename="InstanceLifecycle")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_lifecycle: Option<String>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The kernel associated with this instance, if applicable.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair, if this instance was launched with an associated key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>The time the instance was launched.</p>"]
+    #[serde(rename="LaunchTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_time: Option<String>,
     #[doc="<p>The monitoring for the instance.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<Monitoring>,
     #[doc="<p>[EC2-VPC] One or more network interfaces for the instance.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<InstanceNetworkInterface>>,
     #[doc="<p>The location where the instance launched, if applicable.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<Placement>,
     #[doc="<p>The value is <code>Windows</code> for Windows instances; otherwise blank.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>(IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the <code>running</code> state. </p> <p>[EC2-VPC] The Amazon-provided DNS server will resolve Amazon-provided private DNS hostnames if you've enabled DNS resolution and DNS hostnames in your VPC. If you are not using the Amazon-provided DNS server in your VPC, your custom domain name servers must resolve the hostname as appropriate.</p>"]
+    #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address assigned to the instance.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The product codes attached to this instance, if applicable.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>(IPv4 only) The public DNS name assigned to the instance. This name is not available until the instance enters the <code>running</code> state. For EC2-VPC, this name is only available if you've enabled DNS hostnames for your VPC.</p>"]
+    #[serde(rename="PublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_dns_name: Option<String>,
     #[doc="<p>The public IPv4 address assigned to the instance, if applicable.</p>"]
+    #[serde(rename="PublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip_address: Option<String>,
     #[doc="<p>The RAM disk associated with this instance, if applicable.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The root device name (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
+    #[serde(rename="RootDeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_name: Option<String>,
     #[doc="<p>The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>"]
+    #[serde(rename="RootDeviceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_type: Option<String>,
     #[doc="<p>One or more security groups for the instance.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>Specifies whether to enable an instance launched in a VPC to perform NAT. This controls whether source/destination checking is enabled on the instance. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<bool>,
     #[doc="<p>If the request is a Spot instance request, the ID of the request.</p>"]
+    #[serde(rename="SpotInstanceRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<String>,
     #[doc="<p>The current state of the instance.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<InstanceState>,
     #[doc="<p>The reason for the most recent state transition.</p>"]
+    #[serde(rename="StateReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_reason: Option<StateReason>,
     #[doc="<p>The reason for the most recent state transition. This might be an empty string.</p>"]
+    #[serde(rename="StateTransitionReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_transition_reason: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the subnet in which the instance is running.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the instance.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The virtualization type of the instance.</p>"]
+    #[serde(rename="VirtualizationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtualization_type: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the VPC in which the instance is running.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -22161,37 +24419,67 @@ impl InstanceDeserializer {
     }
 }
 #[doc="<p>Describes an instance attribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceAttribute {
     #[doc="<p>The block device mapping of the instance.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     #[doc="<p>If the value is <code>true</code>, you can't terminate the instance through the Amazon EC2 console, CLI, or API; otherwise, you can.</p>"]
+    #[serde(rename="DisableApiTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disable_api_termination: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O.</p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether enhanced networking with ENA is enabled.</p>"]
+    #[serde(rename="EnaSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ena_support: Option<AttributeBooleanValue>,
     #[doc="<p>The security groups associated with the instance.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
+    #[serde(rename="InstanceInitiatedShutdownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_initiated_shutdown_behavior: Option<AttributeValue>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<AttributeValue>,
     #[doc="<p>The kernel ID.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<AttributeValue>,
     #[doc="<p>A list of product codes.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The RAM disk ID.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<AttributeValue>,
     #[doc="<p>The name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
+    #[serde(rename="RootDeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_name: Option<AttributeValue>,
     #[doc="<p>Indicates whether source/destination checking is enabled. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<AttributeValue>,
     #[doc="<p>The user data.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<AttributeValue>,
 }
 
@@ -22306,11 +24594,15 @@ impl InstanceAttributeDeserializer {
     }
 }
 #[doc="<p>Describes a block device mapping.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceBlockDeviceMapping {
     #[doc="<p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>"]
+    #[serde(rename="Ebs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs: Option<EbsInstanceBlockDevice>,
 }
 
@@ -22405,15 +24697,23 @@ impl InstanceBlockDeviceMappingListDeserializer {
     }
 }
 #[doc="<p>Describes a block device mapping entry.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceBlockDeviceMappingSpecification {
     #[doc="<p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>"]
+    #[serde(rename="Ebs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs: Option<EbsInstanceBlockDeviceSpecification>,
     #[doc="<p>suppress the specified device included in the block device mapping.</p>"]
+    #[serde(rename="NoDevice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub no_device: Option<String>,
     #[doc="<p>The virtual device name.</p>"]
+    #[serde(rename="VirtualName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtual_name: Option<String>,
 }
 
@@ -22465,13 +24765,19 @@ impl InstanceBlockDeviceMappingSpecificationListSerializer {
 }
 
 #[doc="<p>Information about the instance type that the Dedicated Host supports.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceCapacity {
     #[doc="<p>The number of instances that can still be launched onto the Dedicated Host.</p>"]
+    #[serde(rename="AvailableCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_capacity: Option<i64>,
     #[doc="<p>The instance type size supported by the Dedicated Host.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The total number of instances that can be launched onto the Dedicated Host.</p>"]
+    #[serde(rename="TotalCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_capacity: Option<i64>,
 }
 
@@ -22528,11 +24834,15 @@ impl InstanceCapacityDeserializer {
     }
 }
 #[doc="<p>Describes a Reserved Instance listing state.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceCount {
     #[doc="<p>The number of listed Reserved Instances in the state specified by the <code>state</code>.</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The states of the listed Reserved Instances.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -22625,11 +24935,15 @@ impl InstanceCountListDeserializer {
     }
 }
 #[doc="<p>Describes an instance to export.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceExportDetails {
     #[doc="<p>The ID of the resource being exported.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The target virtualization environment.</p>"]
+    #[serde(rename="TargetEnvironment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_environment: Option<String>,
 }
 
@@ -22748,9 +25062,11 @@ impl InstanceIdStringListSerializer {
 }
 
 #[doc="<p>Describes an IPv6 address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceIpv6Address {
     #[doc="<p>The IPv6 address.</p>"]
+    #[serde(rename="Ipv6Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address: Option<String>,
 }
 
@@ -22923,11 +25239,15 @@ impl InstanceListDeserializer {
     }
 }
 #[doc="<p>Describes the monitoring of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceMonitoring {
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The monitoring for the instance.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<Monitoring>,
 }
 
@@ -23019,37 +25339,67 @@ impl InstanceMonitoringListDeserializer {
     }
 }
 #[doc="<p>Describes a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceNetworkInterface {
     #[doc="<p>The association information for an Elastic IPv4 associated with the network interface.</p>"]
+    #[serde(rename="Association")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association: Option<InstanceNetworkInterfaceAssociation>,
     #[doc="<p>The network interface attachment.</p>"]
+    #[serde(rename="Attachment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment: Option<InstanceNetworkInterfaceAttachment>,
     #[doc="<p>The description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>One or more security groups.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>One or more IPv6 addresses associated with the network interface.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The MAC address.</p>"]
+    #[serde(rename="MacAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mac_address: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The ID of the AWS account that created the network interface.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The private DNS name.</p>"]
+    #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses associated with the network interface.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_addresses: Option<Vec<InstancePrivateIpAddress>>,
     #[doc="<p>Indicates whether to validate network traffic to or from this network interface.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<bool>,
     #[doc="<p>The status of the network interface.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -23156,13 +25506,19 @@ impl InstanceNetworkInterfaceDeserializer {
     }
 }
 #[doc="<p>Describes association information for an Elastic IP address (IPv4).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceNetworkInterfaceAssociation {
     #[doc="<p>The ID of the owner of the Elastic IP address.</p>"]
+    #[serde(rename="IpOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_owner_id: Option<String>,
     #[doc="<p>The public DNS name.</p>"]
+    #[serde(rename="PublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_dns_name: Option<String>,
     #[doc="<p>The public IP address or Elastic IP address bound to the network interface.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -23218,17 +25574,27 @@ impl InstanceNetworkInterfaceAssociationDeserializer {
     }
 }
 #[doc="<p>Describes a network interface attachment.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceNetworkInterfaceAttachment {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
+    #[serde(rename="AttachTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attach_time: Option<String>,
     #[doc="<p>The ID of the network interface attachment.</p>"]
+    #[serde(rename="AttachmentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The index of the device on the instance for the network interface attachment.</p>"]
+    #[serde(rename="DeviceIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_index: Option<i64>,
     #[doc="<p>The attachment state.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -23336,31 +25702,55 @@ impl InstanceNetworkInterfaceListDeserializer {
     }
 }
 #[doc="<p>Describes a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceNetworkInterfaceSpecification {
     #[doc="<p>Indicates whether to assign a public IPv4 address to an instance you launch in a VPC. The public IP address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>"]
+    #[serde(rename="AssociatePublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associate_public_ip_address: Option<bool>,
     #[doc="<p>If set to <code>true</code>, the interface is deleted when the instance is terminated. You can specify <code>true</code> only if creating a new network interface when launching an instance.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The description of the network interface. Applies only if creating a network interface when launching an instance.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The index of the device on the instance for the network interface attachment. If you are specifying a network interface in a <a>RunInstances</a> request, you must provide the device index.</p>"]
+    #[serde(rename="DeviceIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_index: Option<i64>,
     #[doc="<p>The IDs of the security groups for the network interface. Applies only if creating a network interface when launching an instance.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<String>>,
     #[doc="<p>A number of IPv6 addresses to assign to the network interface. Amazon EC2 chooses the IPv6 addresses from the range of the subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>"]
+    #[serde(rename="Ipv6AddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more IPv6 addresses to assign to the network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The private IPv4 address of the network interface. Applies only if creating a network interface when launching an instance. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses to assign to the network interface. Only one private IPv4 address can be designated as primary. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
     #[doc="<p>The number of secondary private IPv4 addresses. You can't specify this option and specify more than one private IP address using the private IP addresses option. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
+    #[serde(rename="SecondaryPrivateIpAddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet associated with the network string. Applies only if creating a network interface when launching an instance.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -23584,15 +25974,23 @@ impl InstanceNetworkInterfaceSpecificationListSerializer {
 }
 
 #[doc="<p>Describes a private IPv4 address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstancePrivateIpAddress {
     #[doc="<p>The association information for an Elastic IP address for the network interface.</p>"]
+    #[serde(rename="Association")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association: Option<InstanceNetworkInterfaceAssociation>,
     #[doc="<p>Indicates whether this IPv4 address is the primary private IP address of the network interface.</p>"]
+    #[serde(rename="Primary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary: Option<bool>,
     #[doc="<p>The private IPv4 DNS name.</p>"]
+    #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address of the network interface.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
 }
 
@@ -23694,11 +26092,15 @@ impl InstancePrivateIpAddressListDeserializer {
     }
 }
 #[doc="<p>Describes the current state of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceState {
     #[doc="<p>The low byte represents the state. The high byte is an opaque internal value and should be ignored.</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<i64>,
     #[doc="<p>The current state of the instance.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -23749,13 +26151,19 @@ impl InstanceStateDeserializer {
     }
 }
 #[doc="<p>Describes an instance state change.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceStateChange {
     #[doc="<p>The current state of the instance.</p>"]
+    #[serde(rename="CurrentState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_state: Option<InstanceState>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The previous state of the instance.</p>"]
+    #[serde(rename="PreviousState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_state: Option<InstanceState>,
 }
 
@@ -23867,19 +26275,31 @@ impl InstanceStateNameDeserializer {
     }
 }
 #[doc="<p>Describes the status of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceStatus {
     #[doc="<p>The Availability Zone of the instance.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>Any scheduled events associated with the instance.</p>"]
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<InstanceStatusEvent>>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The intended state of the instance. <a>DescribeInstanceStatus</a> requires that an instance be in the <code>running</code> state.</p>"]
+    #[serde(rename="InstanceState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_state: Option<InstanceState>,
     #[doc="<p>Reports impaired functionality that stems from issues internal to the instance, such as impaired reachability.</p>"]
+    #[serde(rename="InstanceStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_status: Option<InstanceStatusSummary>,
     #[doc="<p>Reports impaired functionality that stems from issues related to the systems that support an instance, such as hardware failures and network connectivity problems.</p>"]
+    #[serde(rename="SystemStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub system_status: Option<InstanceStatusSummary>,
 }
 
@@ -23951,13 +26371,19 @@ impl InstanceStatusDeserializer {
     }
 }
 #[doc="<p>Describes the instance status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceStatusDetails {
     #[doc="<p>The time when a status check failed. For an instance that was launched and impaired, this is the time when the instance was launched.</p>"]
+    #[serde(rename="ImpairedSince")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub impaired_since: Option<String>,
     #[doc="<p>The type of instance status.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The status.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -24055,15 +26481,23 @@ impl InstanceStatusDetailsListDeserializer {
     }
 }
 #[doc="<p>Describes a scheduled event for an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceStatusEvent {
     #[doc="<p>The event code.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>A description of the event.</p> <p>After a scheduled event is completed, it can still be described for up to a week. If the event has been completed, this description starts with the following text: [Completed].</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The latest scheduled end time for the event.</p>"]
+    #[serde(rename="NotAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_after: Option<String>,
     #[doc="<p>The earliest scheduled start time for the event.</p>"]
+    #[serde(rename="NotBefore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_before: Option<String>,
 }
 
@@ -24204,11 +26638,15 @@ impl InstanceStatusListDeserializer {
     }
 }
 #[doc="<p>Describes the status of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceStatusSummary {
     #[doc="<p>The system instance health or application instance health.</p>"]
+    #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Vec<InstanceStatusDetails>>,
     #[doc="<p>The status.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -24312,13 +26750,19 @@ impl InterfacePermissionTypeDeserializer {
     }
 }
 #[doc="<p>Describes an Internet gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InternetGateway {
     #[doc="<p>Any VPCs attached to the Internet gateway.</p>"]
+    #[serde(rename="Attachments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
+    #[serde(rename="InternetGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub internet_gateway_id: Option<String>,
     #[doc="<p>Any tags assigned to the Internet gateway.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -24373,11 +26817,15 @@ impl InternetGatewayDeserializer {
     }
 }
 #[doc="<p>Describes the attachment of a VPC to an Internet gateway or an egress-only Internet gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InternetGatewayAttachment {
     #[doc="<p>The current state of the attachment.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -24512,21 +26960,35 @@ impl InternetGatewayListDeserializer {
     }
 }
 #[doc="<p>Describes a security group rule.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IpPermission {
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types.</p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). </p> <p>[EC2-VPC only] Use <code>-1</code> to specify all protocols. When authorizing security group rules, specifying <code>-1</code> or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6) allows traffic on all ports, regardless of any port range you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed when authorizing rules. </p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>One or more IPv4 ranges.</p>"]
+    #[serde(rename="IpRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_ranges: Option<Vec<IpRange>>,
     #[doc="<p>[EC2-VPC only] One or more IPv6 ranges.</p>"]
+    #[serde(rename="Ipv6Ranges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_ranges: Option<Vec<Ipv6Range>>,
     #[doc="<p>(Valid for <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupEgress</a> and <a>DescribeSecurityGroups</a> only) One or more prefix list IDs for an AWS service. In an <a>AuthorizeSecurityGroupEgress</a> request, this is the AWS service that you want to access through a VPC endpoint from instances associated with the security group.</p>"]
+    #[serde(rename="PrefixListIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_ids: Option<Vec<PrefixListId>>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes for the specified ICMP type.</p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
     #[doc="<p>One or more security group and AWS account ID pairs.</p>"]
+    #[serde(rename="UserIdGroupPairs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
@@ -24699,9 +27161,11 @@ impl IpPermissionListSerializer {
 }
 
 #[doc="<p>Describes an IPv4 range.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IpRange {
     #[doc="<p>The IPv4 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv4 address, use the /32 prefix.</p>"]
+    #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<String>,
 }
 
@@ -24913,9 +27377,11 @@ impl Ipv6AddressListSerializer {
 }
 
 #[doc="<p>Describes an IPv6 CIDR block.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Ipv6CidrBlock {
     #[doc="<p>The IPv6 CIDR block.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
 }
 
@@ -25003,9 +27469,11 @@ impl Ipv6CidrBlockSetDeserializer {
     }
 }
 #[doc="<p>[EC2-VPC only] Describes an IPv6 range.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Ipv6Range {
     #[doc="<p>The IPv6 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv6 address, use the /128 prefix.</p>"]
+    #[serde(rename="CidrIpv6")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ipv_6: Option<String>,
 }
 
@@ -25135,13 +27603,19 @@ impl KeyNameStringListSerializer {
 }
 
 #[doc="<p>Describes a key pair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyPair {
     #[doc="<p>The SHA-1 digest of the DER encoded private key.</p>"]
+    #[serde(rename="KeyFingerprint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_fingerprint: Option<String>,
     #[doc="<p>An unencrypted PEM encoded RSA private key.</p>"]
+    #[serde(rename="KeyMaterial")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_material: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
 }
 
@@ -25197,11 +27671,15 @@ impl KeyPairDeserializer {
     }
 }
 #[doc="<p>Describes a key pair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyPairInfo {
     #[doc="<p>If you used <a>CreateKeyPair</a> to create the key pair, this is the SHA-1 digest of the DER encoded private key. If you used <a>ImportKeyPair</a> to provide AWS the public key, this is the MD5 public key fingerprint as specified in section 4 of RFC4716.</p>"]
+    #[serde(rename="KeyFingerprint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_fingerprint: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
 }
 
@@ -25294,11 +27772,15 @@ impl KeyPairListDeserializer {
     }
 }
 #[doc="<p>Describes a launch permission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchPermission {
     #[doc="<p>The name of the group.</p>"]
+    #[serde(rename="Group")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group: Option<String>,
     #[doc="<p>The AWS account ID.</p>"]
+    #[serde(rename="UserId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id: Option<String>,
 }
 
@@ -25424,11 +27906,15 @@ impl LaunchPermissionListSerializer {
 }
 
 #[doc="<p>Describes a launch permission modification.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchPermissionModifications {
     #[doc="<p>The AWS account ID to add to the list of launch permissions for the AMI.</p>"]
+    #[serde(rename="Add")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub add: Option<Vec<LaunchPermission>>,
     #[doc="<p>The AWS account ID to remove from the list of launch permissions for the AMI.</p>"]
+    #[serde(rename="Remove")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remove: Option<Vec<LaunchPermission>>,
 }
 
@@ -25457,36 +27943,66 @@ impl LaunchPermissionModificationsSerializer {
 }
 
 #[doc="<p>Describes the launch specification for an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
+    #[serde(rename="AddressingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information for the instance.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the subnet in which to launch the instance.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -25687,11 +28203,13 @@ impl LongDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ModifyHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHostsRequest {
     #[doc="<p>Specify whether to enable or disable auto-placement.</p>"]
+    #[serde(rename="AutoPlacement")]
     pub auto_placement: String,
     #[doc="<p>The host IDs of the Dedicated Hosts you want to modify.</p>"]
+    #[serde(rename="HostIds")]
     pub host_ids: Vec<String>,
 }
 
@@ -25715,11 +28233,15 @@ impl ModifyHostsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ModifyHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyHostsResult {
     #[doc="<p>The IDs of the Dedicated Hosts that were successfully modified.</p>"]
+    #[serde(rename="Successful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub successful: Option<Vec<String>>,
     #[doc="<p>The IDs of the Dedicated Hosts that could not be modified. Check whether the setting you requested can be used.</p>"]
+    #[serde(rename="Unsuccessful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -25772,11 +28294,13 @@ impl ModifyHostsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters of ModifyIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyIdFormatRequest {
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
+    #[serde(rename="Resource")]
     pub resource: String,
     #[doc="<p>Indicate whether the resource should use longer IDs (17-character IDs).</p>"]
+    #[serde(rename="UseLongIds")]
     pub use_long_ids: bool,
 }
 
@@ -25799,13 +28323,16 @@ impl ModifyIdFormatRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters of ModifyIdentityIdFormat.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyIdentityIdFormatRequest {
     #[doc="<p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. Specify <code>all</code> to modify the ID format for all IAM users, IAM roles, and the root user of the account.</p>"]
+    #[serde(rename="PrincipalArn")]
     pub principal_arn: String,
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
+    #[serde(rename="Resource")]
     pub resource: String,
     #[doc="<p>Indicates whether the resource should use longer IDs (17-character IDs)</p>"]
+    #[serde(rename="UseLongIds")]
     pub use_long_ids: bool,
 }
 
@@ -25830,27 +28357,46 @@ impl ModifyIdentityIdFormatRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyImageAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyImageAttributeRequest {
     #[doc="<p>The name of the attribute to modify.</p>"]
+    #[serde(rename="Attribute")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute: Option<String>,
     #[doc="<p>A description for the AMI.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<AttributeValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
     #[doc="<p>A launch permission modification.</p>"]
+    #[serde(rename="LaunchPermission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_permission: Option<LaunchPermissionModifications>,
     #[doc="<p>The operation type.</p>"]
+    #[serde(rename="OperationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub operation_type: Option<String>,
     #[doc="<p>One or more product codes. After you add a product code to an AMI, it can't be removed. This is only valid when modifying the <code>productCodes</code> attribute.</p>"]
+    #[serde(rename="ProductCodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_codes: Option<Vec<String>>,
     #[doc="<p>One or more user groups. This is only valid when modifying the <code>launchPermission</code> attribute.</p>"]
+    #[serde(rename="UserGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_groups: Option<Vec<String>>,
     #[doc="<p>One or more AWS account IDs. This is only valid when modifying the <code>launchPermission</code> attribute.</p>"]
+    #[serde(rename="UserIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     #[doc="<p>The value of the attribute being modified. This is only valid when modifying the <code>description</code> attribute.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -25914,39 +28460,70 @@ impl ModifyImageAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyInstanceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyInstanceAttributeRequest {
     #[doc="<p>The name of the attribute.</p>"]
+    #[serde(rename="Attribute")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute: Option<String>,
     #[doc="<p>Modifies the <code>DeleteOnTermination</code> attribute for volumes that are currently attached. The volume must be owned by the caller. If no value is specified for <code>DeleteOnTermination</code>, the default is <code>true</code> and the volume is deleted when the instance is terminated.</p> <p>To add instance store volumes to an Amazon EBS-backed instance, you must add them when you launch the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html#Using_OverridingAMIBDM\">Updating the Block Device Mapping when Launching an Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMappingSpecification>>,
     #[doc="<p>If the value is <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. You cannot use this parameter for Spot Instances.</p>"]
+    #[serde(rename="DisableApiTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disable_api_termination: Option<AttributeBooleanValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<AttributeBooleanValue>,
     #[doc="<p>Set to <code>true</code> to enable enhanced networking with ENA for the instance.</p> <p>This option is supported only for HVM instances. Specifying this option with a PV instance can make it unreachable.</p>"]
+    #[serde(rename="EnaSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ena_support: Option<AttributeBooleanValue>,
     #[doc="<p>[EC2-VPC] Changes the security groups of the instance. You must specify at least one security group, even if it's just the default security group for the VPC. You must specify the security group ID, not the security group name.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<String>>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>Specifies whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
+    #[serde(rename="InstanceInitiatedShutdownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_initiated_shutdown_behavior: Option<AttributeValue>,
     #[doc="<p>Changes the instance type to the specified value. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a>. If the instance type is not valid, the error returned is <code>InvalidInstanceAttributeValue</code>.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<AttributeValue>,
     #[doc="<p>Changes the instance's kernel to the specified value. We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedKernels.html\">PV-GRUB</a>.</p>"]
+    #[serde(rename="Kernel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel: Option<AttributeValue>,
     #[doc="<p>Changes the instance's RAM disk to the specified value. We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedKernels.html\">PV-GRUB</a>.</p>"]
+    #[serde(rename="Ramdisk")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk: Option<AttributeValue>,
     #[doc="<p>Specifies whether source/destination checking is enabled. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<AttributeBooleanValue>,
     #[doc="<p>Set to <code>simple</code> to enable enhanced networking with the Intel 82599 Virtual Function interface for the instance.</p> <p>There is no way to disable enhanced networking with the Intel 82599 Virtual Function interface at this time.</p> <p>This option is supported only for HVM instances. Specifying this option with a PV instance can make it unreachable.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<AttributeValue>,
     #[doc="<p>Changes the instance's user data to the specified value. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<BlobAttributeValue>,
     #[doc="<p>A new value for the attribute. Use only with the <code>kernel</code>, <code>ramdisk</code>, <code>userData</code>, <code>disableApiTermination</code>, or <code>instanceInitiatedShutdownBehavior</code> attribute.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -26045,15 +28622,22 @@ impl ModifyInstanceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyInstancePlacement.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyInstancePlacementRequest {
     #[doc="<p>The new affinity setting for the instance.</p>"]
+    #[serde(rename="Affinity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub affinity: Option<String>,
     #[doc="<p>The ID of the Dedicated Host that the instance will have affinity with.</p>"]
+    #[serde(rename="HostId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_id: Option<String>,
     #[doc="<p>The ID of the instance that you are modifying.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
     #[doc="<p>The tenancy of the instance that you are modifying.</p>"]
+    #[serde(rename="Tenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tenancy: Option<String>,
 }
 
@@ -26086,9 +28670,11 @@ impl ModifyInstancePlacementRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ModifyInstancePlacement.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyInstancePlacementResult {
     #[doc="<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -26135,19 +28721,30 @@ impl ModifyInstancePlacementResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ModifyNetworkInterfaceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyNetworkInterfaceAttributeRequest {
     #[doc="<p>Information about the interface attachment. If modifying the 'delete on termination' attribute, you must specify the ID of the interface attachment.</p>"]
+    #[serde(rename="Attachment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment: Option<NetworkInterfaceAttachmentChanges>,
     #[doc="<p>A description for the network interface.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<AttributeValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Changes the security groups for the network interface. The new set of groups you specify replaces the current set. You must specify at least one group, even if it's just the default security group in the VPC. You must specify the ID of the security group, not the name.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
     #[doc="<p>Indicates whether source/destination checking is enabled. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<AttributeBooleanValue>,
 }
 
@@ -26196,13 +28793,17 @@ impl ModifyNetworkInterfaceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyReservedInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReservedInstancesRequest {
     #[doc="<p>A unique, case-sensitive token you provide to ensure idempotency of your modification request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The IDs of the Reserved Instances to modify.</p>"]
+    #[serde(rename="ReservedInstancesIds")]
     pub reserved_instances_ids: Vec<String>,
     #[doc="<p>The configuration settings for the Reserved Instances to modify.</p>"]
+    #[serde(rename="TargetConfigurations")]
     pub target_configurations: Vec<ReservedInstancesConfiguration>,
 }
 
@@ -26235,9 +28836,11 @@ impl ModifyReservedInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ModifyReservedInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReservedInstancesResult {
     #[doc="<p>The ID for the modification.</p>"]
+    #[serde(rename="ReservedInstancesModificationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_modification_id: Option<String>,
 }
 
@@ -26285,21 +28888,34 @@ impl ModifyReservedInstancesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ModifySnapshotAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySnapshotAttributeRequest {
     #[doc="<p>The snapshot attribute to modify.</p> <note> <p>Only volume creation permissions may be modified at the customer level.</p> </note>"]
+    #[serde(rename="Attribute")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute: Option<String>,
     #[doc="<p>A JSON representation of the snapshot attribute modification.</p>"]
+    #[serde(rename="CreateVolumePermission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_volume_permission: Option<CreateVolumePermissionModifications>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The group to modify for the snapshot.</p>"]
+    #[serde(rename="GroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_names: Option<Vec<String>>,
     #[doc="<p>The type of operation to perform to the attribute.</p>"]
+    #[serde(rename="OperationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub operation_type: Option<String>,
     #[doc="<p>The ID of the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
     pub snapshot_id: String,
     #[doc="<p>The account ID to modify for the snapshot.</p>"]
+    #[serde(rename="UserIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_ids: Option<Vec<String>>,
 }
 
@@ -26349,13 +28965,18 @@ impl ModifySnapshotAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifySpotFleetRequest.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySpotFleetRequestRequest {
     #[doc="<p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>"]
+    #[serde(rename="ExcessCapacityTerminationPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub excess_capacity_termination_policy: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
     #[doc="<p>The size of the fleet.</p>"]
+    #[serde(rename="TargetCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_capacity: Option<i64>,
 }
 
@@ -26384,9 +29005,11 @@ impl ModifySpotFleetRequestRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ModifySpotFleetRequest.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySpotFleetRequestResponse {
     #[doc="<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -26433,13 +29056,18 @@ impl ModifySpotFleetRequestResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ModifySubnetAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifySubnetAttributeRequest {
     #[doc="<p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address). </p> <p>If you enable the IPv6 addressing feature for your subnet, your network interface or instance only receives an IPv6 address if it's created using version <code>2016-11-15</code> or later of the Amazon EC2 API.</p>"]
+    #[serde(rename="AssignIpv6AddressOnCreation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assign_ipv_6_address_on_creation: Option<AttributeBooleanValue>,
     #[doc="<p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned a public IPv4 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives a public IPv4 address).</p>"]
+    #[serde(rename="MapPublicIpOnLaunch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub map_public_ip_on_launch: Option<AttributeBooleanValue>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
     pub subnet_id: String,
 }
 
@@ -26474,13 +29102,18 @@ impl ModifySubnetAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyVolumeAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVolumeAttributeRequest {
     #[doc="<p>Indicates whether the volume should be auto-enabled for I/O operations.</p>"]
+    #[serde(rename="AutoEnableIO")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_enable_io: Option<AttributeBooleanValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
 }
 
@@ -26509,16 +29142,25 @@ impl ModifyVolumeAttributeRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVolumeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Target IOPS rate of the volume to be modified.</p> <p>Only valid for Provisioned IOPS SSD (<code>io1</code>) volumes. For more information about <code>io1</code> IOPS configuration, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops</a>.</p> <p>Default: If no IOPS value is specified, the existing value is retained. </p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html</a>.</p> <p>Default: If no size is specified, the existing size is retained. </p>"]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
+    #[serde(rename="VolumeId")]
     pub volume_id: String,
     #[doc="<p>Target EBS volume type of the volume to be modified</p> <p> The API does not support modifications for volume type <code>standard</code>. You also cannot change the type of a volume to <code>standard</code>. </p> <p>Default: If no type is specified, the existing type is retained. </p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -26554,9 +29196,11 @@ impl ModifyVolumeRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVolumeResult {
     #[doc="<p>A <a>VolumeModification</a> object.</p>"]
+    #[serde(rename="VolumeModification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_modification: Option<VolumeModification>,
 }
 
@@ -26604,13 +29248,18 @@ impl ModifyVolumeResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ModifyVpcAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVpcAttributeRequest {
     #[doc="<p>Indicates whether the instances launched in the VPC get DNS hostnames. If enabled, instances in the VPC get DNS hostnames; otherwise, they do not.</p> <p>You cannot modify the DNS resolution and DNS hostnames attributes in the same request. Use separate requests for each attribute. You can only enable DNS hostnames if you've enabled DNS support.</p>"]
+    #[serde(rename="EnableDnsHostnames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether the DNS resolution is supported for the VPC. If enabled, queries to the Amazon provided DNS server at the 169.254.169.253 IP address, or the reserved IP address at the base of the VPC network range \"plus two\" will succeed. If disabled, the Amazon provided DNS service in the VPC that resolves public DNS hostnames to IP addresses is not enabled.</p> <p>You cannot modify the DNS resolution and DNS hostnames attributes in the same request. Use separate requests for each attribute.</p>"]
+    #[serde(rename="EnableDnsSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_dns_support: Option<AttributeBooleanValue>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
     pub vpc_id: String,
 }
 
@@ -26645,19 +29294,30 @@ impl ModifyVpcAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ModifyVpcEndpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVpcEndpointRequest {
     #[doc="<p>One or more route tables IDs to associate with the endpoint.</p>"]
+    #[serde(rename="AddRouteTableIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub add_route_table_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>A policy document to attach to the endpoint. The policy must be in valid JSON format.</p>"]
+    #[serde(rename="PolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route table IDs to disassociate from the endpoint.</p>"]
+    #[serde(rename="RemoveRouteTableIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remove_route_table_ids: Option<Vec<String>>,
     #[doc="<p>Specify <code>true</code> to reset the policy document to the default policy. The default policy allows access to the service.</p>"]
+    #[serde(rename="ResetPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reset_policy: Option<bool>,
     #[doc="<p>The ID of the endpoint.</p>"]
+    #[serde(rename="VpcEndpointId")]
     pub vpc_endpoint_id: String,
 }
 
@@ -26700,9 +29360,11 @@ impl ModifyVpcEndpointRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ModifyVpcEndpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVpcEndpointResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -26748,15 +29410,22 @@ impl ModifyVpcEndpointResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVpcPeeringConnectionOptionsRequest {
     #[doc="<p>The VPC peering connection options for the accepter VPC.</p>"]
+    #[serde(rename="AccepterPeeringConnectionOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accepter_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The VPC peering connection options for the requester VPC.</p>"]
+    #[serde(rename="RequesterPeeringConnectionOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
     pub vpc_peering_connection_id: String,
 }
 
@@ -26794,11 +29463,15 @@ impl ModifyVpcPeeringConnectionOptionsRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyVpcPeeringConnectionOptionsResult {
     #[doc="<p>Information about the VPC peering connection options for the accepter VPC.</p>"]
+    #[serde(rename="AccepterPeeringConnectionOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accepter_peering_connection_options: Option<PeeringConnectionOptions>,
     #[doc="<p>Information about the VPC peering connection options for the requester VPC.</p>"]
+    #[serde(rename="RequesterPeeringConnectionOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_peering_connection_options: Option<PeeringConnectionOptions>,
 }
 
@@ -26848,11 +29521,14 @@ impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for MonitorInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MonitorInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -26878,9 +29554,11 @@ impl MonitorInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of MonitorInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MonitorInstancesResult {
     #[doc="<p>The monitoring information.</p>"]
+    #[serde(rename="InstanceMonitorings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
 }
 
@@ -26928,9 +29606,11 @@ impl MonitorInstancesResultDeserializer {
     }
 }
 #[doc="<p>Describes the monitoring of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Monitoring {
     #[doc="<p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -26991,11 +29671,14 @@ impl MonitoringStateDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for MoveAddressToVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MoveAddressToVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
     pub public_ip: String,
 }
 
@@ -27020,11 +29703,15 @@ impl MoveAddressToVpcRequestSerializer {
 }
 
 #[doc="<p>Contains the output of MoveAddressToVpc.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MoveAddressToVpcResult {
     #[doc="<p>The allocation ID for the Elastic IP address.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>The status of the move of the IP address.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -27089,11 +29776,15 @@ impl MoveStatusDeserializer {
     }
 }
 #[doc="<p>Describes the status of a moving Elastic IP address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MovingAddressStatus {
     #[doc="<p>The status of the Elastic IP address that's being moved to the EC2-VPC platform, or restored to the EC2-Classic platform.</p>"]
+    #[serde(rename="MoveStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub move_status: Option<String>,
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -27186,27 +29877,47 @@ impl MovingAddressStatusSetDeserializer {
     }
 }
 #[doc="<p>Describes a NAT gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NatGateway {
     #[doc="<p>The date and time the NAT gateway was created.</p>"]
+    #[serde(rename="CreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<String>,
     #[doc="<p>The date and time the NAT gateway was deleted, if applicable.</p>"]
+    #[serde(rename="DeleteTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_time: Option<String>,
     #[doc="<p>If the NAT gateway could not be created, specifies the error code for the failure. (<code>InsufficientFreeAddressesInSubnet</code> | <code>Gateway.NotAttached</code> | <code>InvalidAllocationID.NotFound</code> | <code>Resource.AlreadyAssociated</code> | <code>InternalError</code> | <code>InvalidSubnetID.NotFound</code>)</p>"]
+    #[serde(rename="FailureCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_code: Option<String>,
     #[doc="<p>If the NAT gateway could not be created, specifies the error message for the failure, that corresponds to the error code.</p> <ul> <li> <p>For InsufficientFreeAddressesInSubnet: \"Subnet has insufficient free addresses to create this NAT gateway\"</p> </li> <li> <p>For Gateway.NotAttached: \"Network vpc-xxxxxxxx has no Internet gateway attached\"</p> </li> <li> <p>For InvalidAllocationID.NotFound: \"Elastic IP address eipalloc-xxxxxxxx could not be associated with this NAT gateway\"</p> </li> <li> <p>For Resource.AlreadyAssociated: \"Elastic IP address eipalloc-xxxxxxxx is already associated\"</p> </li> <li> <p>For InternalError: \"Network interface eni-xxxxxxxx, created and used internally by this NAT gateway is in an invalid state. Please try again.\"</p> </li> <li> <p>For InvalidSubnetID.NotFound: \"The specified subnet subnet-xxxxxxxx does not exist or could not be found.\"</p> </li> </ul>"]
+    #[serde(rename="FailureMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_message: Option<String>,
     #[doc="<p>Information about the IP addresses and network interface associated with the NAT gateway.</p>"]
+    #[serde(rename="NatGatewayAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_addresses: Option<Vec<NatGatewayAddress>>,
     #[doc="<p>The ID of the NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_id: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="ProvisionedBandwidth")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_bandwidth: Option<ProvisionedBandwidth>,
     #[doc="<p>The state of the NAT gateway.</p> <ul> <li> <p> <code>pending</code>: The NAT gateway is being created and is not ready to process traffic.</p> </li> <li> <p> <code>failed</code>: The NAT gateway could not be created. Check the <code>failureCode</code> and <code>failureMessage</code> fields for the reason.</p> </li> <li> <p> <code>available</code>: The NAT gateway is able to process traffic. This status remains until you delete the NAT gateway, and does not indicate the health of the NAT gateway.</p> </li> <li> <p> <code>deleting</code>: The NAT gateway is in the process of being terminated and may still be processing traffic.</p> </li> <li> <p> <code>deleted</code>: The NAT gateway has been terminated and is no longer processing traffic.</p> </li> </ul>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the subnet in which the NAT gateway is located.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The ID of the VPC in which the NAT gateway is located.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -27292,15 +30003,23 @@ impl NatGatewayDeserializer {
     }
 }
 #[doc="<p>Describes the IP addresses and network interface associated with a NAT gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NatGatewayAddress {
     #[doc="<p>The allocation ID of the Elastic IP address that's associated with the NAT gateway.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>The ID of the network interface associated with the NAT gateway.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The private IP address associated with the Elastic IP address.</p>"]
+    #[serde(rename="PrivateIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip: Option<String>,
     #[doc="<p>The Elastic IP address associated with the NAT gateway.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -27456,19 +30175,31 @@ impl NatGatewayStateDeserializer {
     }
 }
 #[doc="<p>Describes a network ACL.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkAcl {
     #[doc="<p>Any associations between the network ACL and one or more subnets</p>"]
+    #[serde(rename="Associations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associations: Option<Vec<NetworkAclAssociation>>,
     #[doc="<p>One or more entries (rules) in the network ACL.</p>"]
+    #[serde(rename="Entries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entries: Option<Vec<NetworkAclEntry>>,
     #[doc="<p>Indicates whether this is the default network ACL for the VPC.</p>"]
+    #[serde(rename="IsDefault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default: Option<bool>,
     #[doc="<p>The ID of the network ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acl_id: Option<String>,
     #[doc="<p>Any tags assigned to the network ACL.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC for the network ACL.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -27535,13 +30266,19 @@ impl NetworkAclDeserializer {
     }
 }
 #[doc="<p>Describes an association between a network ACL and a subnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkAclAssociation {
     #[doc="<p>The ID of the association between a network ACL and a subnet.</p>"]
+    #[serde(rename="NetworkAclAssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acl_association_id: Option<String>,
     #[doc="<p>The ID of the network ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_acl_id: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -27639,23 +30376,39 @@ impl NetworkAclAssociationListDeserializer {
     }
 }
 #[doc="<p>Describes an entry in a network ACL.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkAclEntry {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation.</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>Indicates whether the rule is an egress rule (applied to traffic leaving the subnet).</p>"]
+    #[serde(rename="Egress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress: Option<bool>,
     #[doc="<p>ICMP protocol: The ICMP type and code.</p>"]
+    #[serde(rename="IcmpTypeCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>TCP or UDP protocols: The range of ports the rule applies to.</p>"]
+    #[serde(rename="PortRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port_range: Option<PortRange>,
     #[doc="<p>The protocol. A value of <code>-1</code> means all protocols.</p>"]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
+    #[serde(rename="RuleAction")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_action: Option<String>,
     #[doc="<p>The rule number for the entry. ACL entries are processed in ascending order by rule number.</p>"]
+    #[serde(rename="RuleNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_number: Option<i64>,
 }
 
@@ -27814,47 +30567,87 @@ impl NetworkAclListDeserializer {
     }
 }
 #[doc="<p>Describes a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterface {
     #[doc="<p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>"]
+    #[serde(rename="Association")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association: Option<NetworkInterfaceAssociation>,
     #[doc="<p>The network interface attachment.</p>"]
+    #[serde(rename="Attachment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment: Option<NetworkInterfaceAttachment>,
     #[doc="<p>The Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>A description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Any security groups for the network interface.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The type of interface.</p>"]
+    #[serde(rename="InterfaceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub interface_type: Option<String>,
     #[doc="<p>The IPv6 addresses associated with the network interface.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<NetworkInterfaceIpv6Address>>,
     #[doc="<p>The MAC address.</p>"]
+    #[serde(rename="MacAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mac_address: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The AWS account ID of the owner of the network interface.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The private DNS name.</p>"]
+    #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The private IPv4 addresses associated with the network interface.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_addresses: Option<Vec<NetworkInterfacePrivateIpAddress>>,
     #[doc="<p>The ID of the entity that launched the instance on your behalf (for example, AWS Management Console or Auto Scaling).</p>"]
+    #[serde(rename="RequesterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is being managed by AWS.</p>"]
+    #[serde(rename="RequesterManaged")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_managed: Option<bool>,
     #[doc="<p>Indicates whether traffic to or from the instance is validated.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<bool>,
     #[doc="<p>The status of the network interface.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the network interface.</p>"]
+    #[serde(rename="TagSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_set: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -27982,17 +30775,27 @@ impl NetworkInterfaceDeserializer {
     }
 }
 #[doc="<p>Describes association information for an Elastic IP address (IPv4 only).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfaceAssociation {
     #[doc="<p>The allocation ID.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>The association ID.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>The ID of the Elastic IP address owner.</p>"]
+    #[serde(rename="IpOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_owner_id: Option<String>,
     #[doc="<p>The public DNS name.</p>"]
+    #[serde(rename="PublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_dns_name: Option<String>,
     #[doc="<p>The address of the Elastic IP address bound to the network interface.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -28055,21 +30858,35 @@ impl NetworkInterfaceAssociationDeserializer {
     }
 }
 #[doc="<p>Describes a network interface attachment.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfaceAttachment {
     #[doc="<p>The timestamp indicating when the attachment initiated.</p>"]
+    #[serde(rename="AttachTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attach_time: Option<String>,
     #[doc="<p>The ID of the network interface attachment.</p>"]
+    #[serde(rename="AttachmentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The device index of the network interface attachment on the instance.</p>"]
+    #[serde(rename="DeviceIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_index: Option<i64>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The AWS account ID of the owner of the instance.</p>"]
+    #[serde(rename="InstanceOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_owner_id: Option<String>,
     #[doc="<p>The attachment state.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -28143,11 +30960,15 @@ impl NetworkInterfaceAttachmentDeserializer {
     }
 }
 #[doc="<p>Describes an attachment change.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfaceAttachmentChanges {
     #[doc="<p>The ID of the network interface attachment.</p>"]
+    #[serde(rename="AttachmentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
 }
 
@@ -28186,9 +31007,11 @@ impl NetworkInterfaceIdListSerializer {
 }
 
 #[doc="<p>Describes an IPv6 address associated with a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfaceIpv6Address {
     #[doc="<p>The IPv6 address.</p>"]
+    #[serde(rename="Ipv6Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address: Option<String>,
 }
 
@@ -28319,19 +31142,31 @@ impl NetworkInterfaceListDeserializer {
     }
 }
 #[doc="<p>Describes a permission for a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfacePermission {
     #[doc="<p>The AWS account ID.</p>"]
+    #[serde(rename="AwsAccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_account_id: Option<String>,
     #[doc="<p>The AWS service.</p>"]
+    #[serde(rename="AwsService")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_service: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The ID of the network interface permission.</p>"]
+    #[serde(rename="NetworkInterfacePermissionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_permission_id: Option<String>,
     #[doc="<p>The type of permission.</p>"]
+    #[serde(rename="Permission")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub permission: Option<String>,
     #[doc="<p>Information about the state of the permission.</p>"]
+    #[serde(rename="PermissionState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub permission_state: Option<NetworkInterfacePermissionState>,
 }
 
@@ -28455,11 +31290,15 @@ impl NetworkInterfacePermissionListDeserializer {
     }
 }
 #[doc="<p>Describes the state of a network interface permission.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfacePermissionState {
     #[doc="<p>The state of the permission.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>A status message, if applicable.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -28524,15 +31363,23 @@ impl NetworkInterfacePermissionStateCodeDeserializer {
     }
 }
 #[doc="<p>Describes the private IPv4 address of a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NetworkInterfacePrivateIpAddress {
     #[doc="<p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>"]
+    #[serde(rename="Association")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association: Option<NetworkInterfaceAssociation>,
     #[doc="<p>Indicates whether this IPv4 address is the primary private IPv4 address of the network interface.</p>"]
+    #[serde(rename="Primary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary: Option<bool>,
     #[doc="<p>The private DNS name.</p>"]
+    #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
 }
 
@@ -28662,9 +31509,13 @@ impl NetworkInterfaceTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NewDhcpConfiguration {
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
@@ -28825,15 +31676,23 @@ impl PaymentOptionDeserializer {
     }
 }
 #[doc="<p>Describes the data that identifies an Amazon FPGA image (AFI) on the PCI bus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PciId {
     #[doc="<p>The ID of the device.</p>"]
+    #[serde(rename="DeviceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_id: Option<String>,
     #[doc="<p>The ID of the subsystem.</p>"]
+    #[serde(rename="SubsystemId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subsystem_id: Option<String>,
     #[doc="<p>The ID of the vendor for the subsystem.</p>"]
+    #[serde(rename="SubsystemVendorId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subsystem_vendor_id: Option<String>,
     #[doc="<p>The ID of the vendor.</p>"]
+    #[serde(rename="VendorId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vendor_id: Option<String>,
 }
 
@@ -28893,13 +31752,19 @@ impl PciIdDeserializer {
     }
 }
 #[doc="<p>Describes the VPC peering connection options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PeeringConnectionOptions {
     #[doc="<p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>"]
+    #[serde(rename="AllowDnsResolutionFromRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from an EC2-Classic instance that's linked to a local VPC via ClassicLink to instances in a peer VPC.</p>"]
+    #[serde(rename="AllowEgressFromLocalClassicLinkToRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from instances in a local VPC to an EC2-Classic instance that's linked to a peer VPC via ClassicLink.</p>"]
+    #[serde(rename="AllowEgressFromLocalVpcToRemoteClassicLink")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
@@ -28957,13 +31822,19 @@ impl PeeringConnectionOptionsDeserializer {
     }
 }
 #[doc="<p>The VPC peering connection options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PeeringConnectionOptionsRequest {
     #[doc="<p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>"]
+    #[serde(rename="AllowDnsResolutionFromRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from an EC2-Classic instance that's linked to a local VPC via ClassicLink to instances in a peer VPC.</p>"]
+    #[serde(rename="AllowEgressFromLocalClassicLinkToRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from instances in a local VPC to an EC2-Classic instance that's linked to a peer VPC via ClassicLink.</p>"]
+    #[serde(rename="AllowEgressFromLocalVpcToRemoteClassicLink")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
@@ -29008,19 +31879,31 @@ impl PermissionGroupDeserializer {
     }
 }
 #[doc="<p>Describes the placement of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Placement {
     #[doc="<p>The affinity setting for the instance on the Dedicated Host. This parameter is not supported for the <a>ImportInstance</a> command.</p>"]
+    #[serde(rename="Affinity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub affinity: Option<String>,
     #[doc="<p>The Availability Zone of the instance.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The name of the placement group the instance is in (for cluster compute instances).</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>The ID of the Dedicated Host on which the instance resides. This parameter is not supported for the <a>ImportInstance</a> command.</p>"]
+    #[serde(rename="HostId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_id: Option<String>,
     #[doc="<p>Reserved for future use.</p>"]
+    #[serde(rename="SpreadDomain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spread_domain: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for the <a>ImportInstance</a> command.</p>"]
+    #[serde(rename="Tenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tenancy: Option<String>,
 }
 
@@ -29126,13 +32009,19 @@ impl PlacementSerializer {
 }
 
 #[doc="<p>Describes a placement group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlacementGroup {
     #[doc="<p>The name of the placement group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>The state of the placement group.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The placement strategy.</p>"]
+    #[serde(rename="Strategy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub strategy: Option<String>,
 }
 
@@ -29284,11 +32173,15 @@ impl PlatformValuesDeserializer {
     }
 }
 #[doc="<p>Describes a range of ports.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PortRange {
     #[doc="<p>The first port in the range.</p>"]
+    #[serde(rename="From")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from: Option<i64>,
     #[doc="<p>The last port in the range.</p>"]
+    #[serde(rename="To")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to: Option<i64>,
 }
 
@@ -29359,13 +32252,19 @@ impl PortRangeSerializer {
 }
 
 #[doc="<p>Describes prefixes for AWS services.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PrefixList {
     #[doc="<p>The IP address range of the AWS service.</p>"]
+    #[serde(rename="Cidrs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidrs: Option<Vec<String>>,
     #[doc="<p>The ID of the prefix.</p>"]
+    #[serde(rename="PrefixListId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_id: Option<String>,
     #[doc="<p>The name of the prefix.</p>"]
+    #[serde(rename="PrefixListName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_name: Option<String>,
 }
 
@@ -29421,9 +32320,11 @@ impl PrefixListDeserializer {
     }
 }
 #[doc="<p>The ID of the prefix.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PrefixListId {
     #[doc="<p>The ID of the prefix.</p>"]
+    #[serde(rename="PrefixListId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_id: Option<String>,
 }
 
@@ -29623,15 +32524,23 @@ impl PrefixListSetDeserializer {
     }
 }
 #[doc="<p>Describes the price for a Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PriceSchedule {
     #[doc="<p>The current price schedule, as determined by the term remaining for the Reserved Instance in the listing.</p> <p>A specific price schedule is always in effect, but only one price schedule can be active at any time. Take, for example, a Reserved Instance listing that has five months remaining in its term. When you specify price schedules for five months and two months, this means that schedule 1, covering the first three months of the remaining term, will be active during months 5, 4, and 3. Then schedule 2, covering the last two months of the term, will be active for months 2 and 1.</p>"]
+    #[serde(rename="Active")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub active: Option<bool>,
     #[doc="<p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The fixed price for the term.</p>"]
+    #[serde(rename="Price")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub price: Option<f64>,
     #[doc="<p>The number of months remaining in the reservation. For example, 2 is the second to the last month before the capacity reservation expires.</p>"]
+    #[serde(rename="Term")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub term: Option<i64>,
 }
 
@@ -29730,13 +32639,19 @@ impl PriceScheduleListDeserializer {
     }
 }
 #[doc="<p>Describes the price for a Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PriceScheduleSpecification {
     #[doc="<p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The fixed price for the term.</p>"]
+    #[serde(rename="Price")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub price: Option<f64>,
     #[doc="<p>The number of months remaining in the reservation. For example, 2 is the second to the last month before the capacity reservation expires.</p>"]
+    #[serde(rename="Term")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub term: Option<i64>,
 }
 
@@ -29779,11 +32694,15 @@ impl PriceScheduleSpecificationListSerializer {
 }
 
 #[doc="<p>Describes a Reserved Instance offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PricingDetail {
     #[doc="<p>The number of reservations available for the price.</p>"]
+    #[serde(rename="Count")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub count: Option<i64>,
     #[doc="<p>The price per instance.</p>"]
+    #[serde(rename="Price")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub price: Option<f64>,
 }
 
@@ -29888,11 +32807,14 @@ impl PrivateIpAddressConfigSetSerializer {
 }
 
 #[doc="<p>Describes a secondary private IPv4 address for a network interface.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PrivateIpAddressSpecification {
     #[doc="<p>Indicates whether the private IPv4 address is the primary private IPv4 address. Only one IPv4 address can be designated as primary.</p>"]
+    #[serde(rename="Primary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary: Option<bool>,
     #[doc="<p>The private IPv4 addresses.</p>"]
+    #[serde(rename="PrivateIpAddress")]
     pub private_ip_address: String,
 }
 
@@ -30029,11 +32951,15 @@ impl PrivateIpAddressStringListSerializer {
 }
 
 #[doc="<p>Describes a product code.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProductCode {
     #[doc="<p>The product code.</p>"]
+    #[serde(rename="ProductCodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_code_id: Option<String>,
     #[doc="<p>The type of product code.</p>"]
+    #[serde(rename="ProductCodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_code_type: Option<String>,
 }
 
@@ -30164,9 +33090,11 @@ impl ProductDescriptionListSerializer {
 }
 
 #[doc="<p>Describes a virtual private gateway propagating route.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PropagatingVgw {
     #[doc="<p>The ID of the virtual private gateway (VGW).</p>"]
+    #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<String>,
 }
 
@@ -30254,17 +33182,27 @@ impl PropagatingVgwListDeserializer {
     }
 }
 #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProvisionedBandwidth {
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="ProvisionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provision_time: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="Provisioned")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="RequestTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_time: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="Requested")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -30340,23 +33278,39 @@ impl PublicIpStringListSerializer {
 }
 
 #[doc="<p>Describes the result of the purchase.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Purchase {
     #[doc="<p>The currency in which the <code>UpfrontPrice</code> and <code>HourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the reservation's term in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The IDs of the Dedicated Hosts associated with the reservation.</p>"]
+    #[serde(rename="HostIdSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_id_set: Option<Vec<String>>,
     #[doc="<p>The ID of the reservation.</p>"]
+    #[serde(rename="HostReservationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The hourly price of the reservation per hour.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance family on the Dedicated Host that the reservation can be associated with.</p>"]
+    #[serde(rename="InstanceFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_family: Option<String>,
     #[doc="<p>The payment option for the reservation.</p>"]
+    #[serde(rename="PaymentOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payment_option: Option<String>,
     #[doc="<p>The upfront price of the reservation.</p>"]
+    #[serde(rename="UpfrontPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upfront_price: Option<String>,
 }
 
@@ -30435,17 +33389,25 @@ impl PurchaseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseHostReservationRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code>, <code>LimitPrice</code>, and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The ID/s of the Dedicated Host/s that the reservation will be associated with.</p>"]
+    #[serde(rename="HostIdSet")]
     pub host_id_set: Vec<String>,
     #[doc="<p>The specified limit is checked against the total upfront cost of the reservation (calculated as the offering's upfront cost multiplied by the host count). If the total upfront cost is greater than the specified price limit, the request will fail. This is used to ensure that the purchase does not exceed the expected upfront cost of the purchase. At this time, the only supported currency is <code>USD</code>. For example, to indicate a limit price of USD 100, specify 100.00.</p>"]
+    #[serde(rename="LimitPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit_price: Option<String>,
     #[doc="<p>The ID of the offering.</p>"]
+    #[serde(rename="OfferingId")]
     pub offering_id: String,
 }
 
@@ -30480,17 +33442,27 @@ impl PurchaseHostReservationRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseHostReservationResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> </p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>Describes the details of the purchase.</p>"]
+    #[serde(rename="Purchase")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub purchase: Option<Vec<Purchase>>,
     #[doc="<p>The total hourly price of the reservation calculated per hour.</p>"]
+    #[serde(rename="TotalHourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_hourly_price: Option<String>,
     #[doc="<p>The total amount that will be charged to your account when you purchase the reservation.</p>"]
+    #[serde(rename="TotalUpfrontPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_upfront_price: Option<String>,
 }
 
@@ -30556,11 +33528,13 @@ impl PurchaseHostReservationResultDeserializer {
     }
 }
 #[doc="<p>Describes a request to purchase Scheduled Instances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseRequest {
     #[doc="<p>The number of instances.</p>"]
+    #[serde(rename="InstanceCount")]
     pub instance_count: i64,
     #[doc="<p>The purchase token.</p>"]
+    #[serde(rename="PurchaseToken")]
     pub purchase_token: String,
 }
 
@@ -30595,15 +33569,21 @@ impl PurchaseRequestSetSerializer {
 }
 
 #[doc="<p>Contains the parameters for PurchaseReservedInstancesOffering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedInstancesOfferingRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The number of Reserved Instances to purchase.</p>"]
+    #[serde(rename="InstanceCount")]
     pub instance_count: i64,
     #[doc="<p>Specified for Reserved Instance Marketplace offerings to limit the total order and ensure that the Reserved Instances are not purchased at unexpected prices.</p>"]
+    #[serde(rename="LimitPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit_price: Option<ReservedInstanceLimitPrice>,
     #[doc="<p>The ID of the Reserved Instance offering to purchase.</p>"]
+    #[serde(rename="ReservedInstancesOfferingId")]
     pub reserved_instances_offering_id: String,
 }
 
@@ -30635,9 +33615,11 @@ impl PurchaseReservedInstancesOfferingRequestSerializer {
 }
 
 #[doc="<p>Contains the output of PurchaseReservedInstancesOffering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedInstancesOfferingResult {
     #[doc="<p>The IDs of the purchased Reserved Instances.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
 }
 
@@ -30686,13 +33668,18 @@ impl PurchaseReservedInstancesOfferingResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for PurchaseScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseScheduledInstancesRequest {
     #[doc="<p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more purchase requests.</p>"]
+    #[serde(rename="PurchaseRequests")]
     pub purchase_requests: Vec<PurchaseRequest>,
 }
 
@@ -30722,9 +33709,11 @@ impl PurchaseScheduledInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of PurchaseScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseScheduledInstancesResult {
     #[doc="<p>Information about the Scheduled Instances.</p>"]
+    #[serde(rename="ScheduledInstanceSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
 }
 
@@ -30879,11 +33868,14 @@ impl ReasonCodesListSerializer {
 }
 
 #[doc="<p>Contains the parameters for RebootInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -30909,11 +33901,15 @@ impl RebootInstancesRequestSerializer {
 }
 
 #[doc="<p>Describes a recurring charge.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecurringCharge {
     #[doc="<p>The amount of the recurring charge.</p>"]
+    #[serde(rename="Amount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub amount: Option<f64>,
     #[doc="<p>The frequency of the recurring charge.</p>"]
+    #[serde(rename="Frequency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub frequency: Option<String>,
 }
 
@@ -31018,11 +34014,15 @@ impl RecurringChargesListDeserializer {
     }
 }
 #[doc="<p>Describes a region.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Region {
     #[doc="<p>The region service endpoint.</p>"]
+    #[serde(rename="Endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<String>,
     #[doc="<p>The name of the region.</p>"]
+    #[serde(rename="RegionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub region_name: Option<String>,
 }
 
@@ -31126,33 +34126,58 @@ impl RegionNameStringListSerializer {
 }
 
 #[doc="<p>Contains the parameters for RegisterImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterImageRequest {
     #[doc="<p>The architecture of the AMI.</p> <p>Default: For Amazon EBS-backed AMIs, <code>i386</code>. For instance store-backed AMIs, the architecture specified in the manifest file.</p>"]
+    #[serde(rename="Architecture")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub architecture: Option<String>,
     #[doc="<p>The billing product codes. Your account must be authorized to specify billing product codes. Otherwise, you can use the AWS Marketplace to bill for the use of an AMI.</p>"]
+    #[serde(rename="BillingProducts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub billing_products: Option<Vec<String>>,
     #[doc="<p>One or more block device mapping entries.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for your AMI.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Set to <code>true</code> to enable enhanced networking with ENA for the AMI and any instances that you launch from the AMI.</p> <p>This option is supported only for HVM AMIs. Specifying this option with a PV AMI can make instances launched from the AMI unreachable.</p>"]
+    #[serde(rename="EnaSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ena_support: Option<bool>,
     #[doc="<p>The full path to your AMI manifest in Amazon S3 storage.</p>"]
+    #[serde(rename="ImageLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_location: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>A name for your AMI.</p> <p>Constraints: 3-128 alphanumeric characters, parentheses (()), square brackets ([]), spaces ( ), periods (.), slashes (/), dashes (-), single quotes ('), at-signs (@), or underscores(_)</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The ID of the RAM disk.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The name of the root device (for example, <code>/dev/sda1</code>, or <code>/dev/xvda</code>).</p>"]
+    #[serde(rename="RootDeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_device_name: Option<String>,
     #[doc="<p>Set to <code>simple</code> to enable enhanced networking with the Intel 82599 Virtual Function interface for the AMI and any instances that you launch from the AMI.</p> <p>There is no way to disable <code>sriovNetSupport</code> at this time.</p> <p>This option is supported only for HVM AMIs. Specifying this option with a PV AMI can make instances launched from the AMI unreachable.</p>"]
+    #[serde(rename="SriovNetSupport")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sriov_net_support: Option<String>,
     #[doc="<p>The type of virtualization.</p> <p>Default: <code>paravirtual</code> </p>"]
+    #[serde(rename="VirtualizationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtualization_type: Option<String>,
 }
 
@@ -31225,9 +34250,11 @@ impl RegisterImageRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RegisterImage.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterImageResult {
     #[doc="<p>The ID of the newly registered AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
 }
 
@@ -31274,11 +34301,14 @@ impl RegisterImageResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for RejectVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
     pub vpc_peering_connection_id: String,
 }
 
@@ -31303,9 +34333,11 @@ impl RejectVpcPeeringConnectionRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RejectVpcPeeringConnection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RejectVpcPeeringConnectionResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
+    #[serde(rename="Return")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub return_: Option<bool>,
 }
 
@@ -31353,13 +34385,19 @@ impl RejectVpcPeeringConnectionResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ReleaseAddress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReleaseAddressRequest {
     #[doc="<p>[EC2-VPC] The allocation ID. Required for EC2-VPC.</p>"]
+    #[serde(rename="AllocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_id: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>[EC2-Classic] The Elastic IP address. Required for EC2-Classic.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
 }
 
@@ -31390,9 +34428,10 @@ impl ReleaseAddressRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ReleaseHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReleaseHostsRequest {
     #[doc="<p>The IDs of the Dedicated Hosts you want to release.</p>"]
+    #[serde(rename="HostIds")]
     pub host_ids: Vec<String>,
 }
 
@@ -31414,11 +34453,15 @@ impl ReleaseHostsRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ReleaseHosts.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReleaseHostsResult {
     #[doc="<p>The IDs of the Dedicated Hosts that were successfully released.</p>"]
+    #[serde(rename="Successful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub successful: Option<Vec<String>>,
     #[doc="<p>The IDs of the Dedicated Hosts that could not be released, including an error message.</p>"]
+    #[serde(rename="Unsuccessful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -31470,11 +34513,13 @@ impl ReleaseHostsResultDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceIamInstanceProfileAssociationRequest {
     #[doc="<p>The ID of the existing IAM instance profile association.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
     pub iam_instance_profile: IamInstanceProfileSpecification,
 }
 
@@ -31501,9 +34546,11 @@ impl ReplaceIamInstanceProfileAssociationRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceIamInstanceProfileAssociationResult {
     #[doc="<p>Information about the IAM instance profile association.</p>"]
+    #[serde(rename="IamInstanceProfileAssociation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
 }
 
@@ -31550,13 +34597,17 @@ impl ReplaceIamInstanceProfileAssociationResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ReplaceNetworkAclAssociation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceNetworkAclAssociationRequest {
     #[doc="<p>The ID of the current association between the original network ACL and the subnet.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the new network ACL to associate with the subnet.</p>"]
+    #[serde(rename="NetworkAclId")]
     pub network_acl_id: String,
 }
 
@@ -31583,9 +34634,11 @@ impl ReplaceNetworkAclAssociationRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ReplaceNetworkAclAssociation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceNetworkAclAssociationResult {
     #[doc="<p>The ID of the new association.</p>"]
+    #[serde(rename="NewAssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_association_id: Option<String>,
 }
 
@@ -31634,27 +34687,42 @@ impl ReplaceNetworkAclAssociationResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ReplaceNetworkAclEntry.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceNetworkAclEntryRequest {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether to replace the egress rule.</p> <p>Default: If no value is specified, we replace the ingress rule.</p>"]
+    #[serde(rename="Egress")]
     pub egress: bool,
     #[doc="<p>ICMP protocol: The ICMP or ICMPv6 type and code. Required if specifying the ICMP (1) protocol, or protocol 58 (ICMPv6) with an IPv6 CIDR block.</p>"]
+    #[serde(rename="IcmpTypeCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation (for example <code>2001:bd8:1234:1a00::/64</code>).</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>The ID of the ACL.</p>"]
+    #[serde(rename="NetworkAclId")]
     pub network_acl_id: String,
     #[doc="<p>TCP or UDP protocols: The range of ports the rule applies to. Required if specifying TCP (6) or UDP (17) for the protocol.</p>"]
+    #[serde(rename="PortRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port_range: Option<PortRange>,
     #[doc="<p>The IP protocol. You can specify <code>all</code> or <code>-1</code> to mean all protocols. If you specify <code>all</code>, <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, or <code>icmp</code>, traffic on all ports is allowed, regardless of any ports or ICMP types or codes you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv4 CIDR block, traffic for all ICMP types and codes allowed, regardless of any that you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv6 CIDR block, you must specify an ICMP type and code.</p>"]
+    #[serde(rename="Protocol")]
     pub protocol: String,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
+    #[serde(rename="RuleAction")]
     pub rule_action: String,
     #[doc="<p>The rule number of the entry to replace.</p>"]
+    #[serde(rename="RuleNumber")]
     pub rule_number: i64,
 }
 
@@ -31705,27 +34773,46 @@ impl ReplaceNetworkAclEntryRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ReplaceRoute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceRouteRequest {
     #[doc="<p>The IPv4 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.</p>"]
+    #[serde(rename="DestinationIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>[IPv6 traffic only] The ID of an egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway_id: Option<String>,
     #[doc="<p>The ID of an Internet gateway or virtual private gateway.</p>"]
+    #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<String>,
     #[doc="<p>The ID of a NAT instance in your VPC.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>[IPv4 traffic only] The ID of a NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_id: Option<String>,
     #[doc="<p>The ID of a network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
     #[doc="<p>The ID of a VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -31782,13 +34869,17 @@ impl ReplaceRouteRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ReplaceRouteTableAssociation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceRouteTableAssociationRequest {
     #[doc="<p>The association ID.</p>"]
+    #[serde(rename="AssociationId")]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the new route table to associate with the subnet.</p>"]
+    #[serde(rename="RouteTableId")]
     pub route_table_id: String,
 }
 
@@ -31815,9 +34906,11 @@ impl ReplaceRouteTableAssociationRequestSerializer {
 }
 
 #[doc="<p>Contains the output of ReplaceRouteTableAssociation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplaceRouteTableAssociationResult {
     #[doc="<p>The ID of the new association.</p>"]
+    #[serde(rename="NewAssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_association_id: Option<String>,
 }
 
@@ -31866,21 +34959,32 @@ impl ReplaceRouteTableAssociationResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ReportInstanceStatus.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReportInstanceStatusRequest {
     #[doc="<p>Descriptive text about the health state of your instance.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The time at which the reported instance health state ended.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>One or more instances.</p>"]
+    #[serde(rename="Instances")]
     pub instances: Vec<String>,
     #[doc="<p>One or more reason codes that describes the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems which I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems which I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems which I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul>"]
+    #[serde(rename="ReasonCodes")]
     pub reason_codes: Vec<String>,
     #[doc="<p>The time at which the reported instance health state began.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>The status of all instances listed.</p>"]
+    #[serde(rename="Status")]
     pub status: String,
 }
 
@@ -31947,11 +35051,14 @@ impl RequestHostIdSetSerializer {
 }
 
 #[doc="<p>Contains the parameters for RequestSpotFleet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestSpotFleetRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The configuration for the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestConfig")]
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
 }
 
@@ -31979,9 +35086,10 @@ impl RequestSpotFleetRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RequestSpotFleet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestSpotFleetResponse {
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
 }
 
@@ -32028,29 +35136,50 @@ impl RequestSpotFleetResponseDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for RequestSpotInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestSpotInstancesRequest {
     #[doc="<p>The user-specified name for a logical grouping of bids.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to bids for Spot Instances of the same instance type. Any additional Spot instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot instance request (all instances are terminated, the bid is expired, or the bid falls below current market), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZoneGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone_group: Option<String>,
     #[doc="<p>The required duration for the Spot instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p> <p>The duration period starts as soon as your Spot instance receives its instance ID. At the end of the duration period, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates.</p> <p>Note that you can't specify an Availability Zone group or a launch group if you specify a duration.</p>"]
+    #[serde(rename="BlockDurationMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_duration_minutes: Option<i64>,
     #[doc="<p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of Spot instances to launch.</p> <p>Default: 1</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p> <p>Default: Instances are launched and terminated individually</p>"]
+    #[serde(rename="LaunchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_group: Option<String>,
     #[doc="<p>The launch specification.</p>"]
+    #[serde(rename="LaunchSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_specification: Option<RequestSpotLaunchSpecification>,
     #[doc="<p>The maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>"]
+    #[serde(rename="SpotPrice")]
     pub spot_price: String,
     #[doc="<p>The Spot instance request type.</p> <p>Default: <code>one-time</code> </p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p> <p>Default: The request is effective indefinitely.</p>"]
+    #[serde(rename="ValidFrom")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_from: Option<String>,
     #[doc="<p>The end date of the request. If this is a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached.</p> <p>Default: The request is effective indefinitely.</p>"]
+    #[serde(rename="ValidUntil")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_until: Option<String>,
 }
 
@@ -32114,9 +35243,11 @@ impl RequestSpotInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RequestSpotInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestSpotInstancesResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
+    #[serde(rename="SpotInstanceRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
@@ -32164,39 +35295,71 @@ impl RequestSpotInstancesResultDeserializer {
     }
 }
 #[doc="<p>Describes the launch specification for an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RequestSpotLaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
+    #[serde(rename="AddressingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>Indicates whether basic or detailed monitoring is enabled for the instance.</p> <p>Default: Disabled</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information for the instance.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security group IDs.</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet in which to launch the instance.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -32294,17 +35457,27 @@ impl RequestSpotLaunchSpecificationSerializer {
 }
 
 #[doc="<p>Describes a reservation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Reservation {
     #[doc="<p>[EC2-Classic only] One or more security groups.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>One or more instances.</p>"]
+    #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<Vec<Instance>>,
     #[doc="<p>The ID of the AWS account that owns the reservation.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The ID of the requester that launched the instances on your behalf (for example, AWS Management Console or Auto Scaling).</p>"]
+    #[serde(rename="RequesterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_id: Option<String>,
     #[doc="<p>The ID of the reservation.</p>"]
+    #[serde(rename="ReservationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reservation_id: Option<String>,
 }
 
@@ -32424,13 +35597,19 @@ impl ReservationStateDeserializer {
     }
 }
 #[doc="<p>The cost associated with the Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservationValue {
     #[doc="<p>The hourly rate of the reservation.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The balance of the total value (the sum of remainingUpfrontValue + hourlyPrice * number of hours remaining).</p>"]
+    #[serde(rename="RemainingTotalValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remaining_total_value: Option<String>,
     #[doc="<p>The remaining upfront cost of the reservation.</p>"]
+    #[serde(rename="RemainingUpfrontValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remaining_upfront_value: Option<String>,
 }
 
@@ -32499,11 +35678,15 @@ impl ReservedInstanceIdSetSerializer {
 }
 
 #[doc="<p>Describes the limit price of a Reserved Instance offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstanceLimitPrice {
     #[doc="<p>Used for Reserved Instance Marketplace offerings. Specifies the limit price on the total order (instanceCount * price).</p>"]
+    #[serde(rename="Amount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub amount: Option<f64>,
     #[doc="<p>The currency in which the <code>limitPrice</code> amount is specified. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
 }
 
@@ -32530,11 +35713,15 @@ impl ReservedInstanceLimitPriceSerializer {
 }
 
 #[doc="<p>The total value of the Convertible Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstanceReservationValue {
     #[doc="<p>The total value of the Convertible Reserved Instance that you are exchanging.</p>"]
+    #[serde(rename="ReservationValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reservation_value: Option<ReservationValue>,
     #[doc="<p>The ID of the Convertible Reserved Instance that you are exchanging.</p>"]
+    #[serde(rename="ReservedInstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instance_id: Option<String>,
 }
 
@@ -32644,43 +35831,79 @@ impl ReservedInstanceStateDeserializer {
     }
 }
 #[doc="<p>Describes a Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstances {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The currency of the Reserved Instance. It's specified using ISO 4217 standard currency codes. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the Reserved Instance, in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The time when the Reserved Instance expires.</p>"]
+    #[serde(rename="End")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end: Option<String>,
     #[doc="<p>The purchase price of the Reserved Instance.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f32>,
     #[doc="<p>The number of reservations purchased.</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The tenancy of the instance.</p>"]
+    #[serde(rename="InstanceTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type on which the Reserved Instance can be used.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The offering class of the Reserved Instance.</p>"]
+    #[serde(rename="OfferingClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The Reserved Instance product platform description.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The recurring charge tag assigned to the resource.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The ID of the Reserved Instance.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>The scope of the Reserved Instance.</p>"]
+    #[serde(rename="Scope")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scope: Option<String>,
     #[doc="<p>The date and time the Reserved Instance started.</p>"]
+    #[serde(rename="Start")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<String>,
     #[doc="<p>The state of the Reserved Instance purchase.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The usage price of the Reserved Instance, per hour.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f32>,
 }
 
@@ -32804,17 +36027,27 @@ impl ReservedInstancesDeserializer {
     }
 }
 #[doc="<p>Describes the configuration settings for the modified Reserved Instances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesConfiguration {
     #[doc="<p>The Availability Zone for the modified Reserved Instances.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of modified Reserved Instances.</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The instance type for the modified Reserved Instances.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The network platform of the modified Reserved Instances, which is either EC2-Classic or EC2-VPC.</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>Whether the Reserved Instance is applied to instances in a region or instances in a specific Availability Zone.</p>"]
+    #[serde(rename="Scope")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scope: Option<String>,
 }
 
@@ -32925,9 +36158,11 @@ impl ReservedInstancesConfigurationListSerializer {
 }
 
 #[doc="<p>Describes the ID of a Reserved Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesId {
     #[doc="<p>The ID of the Reserved Instance.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
 }
 
@@ -33028,27 +36263,47 @@ impl ReservedInstancesListDeserializer {
     }
 }
 #[doc="<p>Describes a Reserved Instance listing.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesListing {
     #[doc="<p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The time the listing was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The number of instances in this state.</p>"]
+    #[serde(rename="InstanceCounts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_counts: Option<Vec<InstanceCount>>,
     #[doc="<p>The price of the Reserved Instance listing.</p>"]
+    #[serde(rename="PriceSchedules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub price_schedules: Option<Vec<PriceSchedule>>,
     #[doc="<p>The ID of the Reserved Instance.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>The ID of the Reserved Instance listing.</p>"]
+    #[serde(rename="ReservedInstancesListingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_listing_id: Option<String>,
     #[doc="<p>The status of the Reserved Instance listing.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The reason for the current status of the Reserved Instance listing. The response can be blank.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The last modified timestamp of the listing.</p>"]
+    #[serde(rename="UpdateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_date: Option<String>,
 }
 
@@ -33177,25 +36432,43 @@ impl ReservedInstancesListingListDeserializer {
     }
 }
 #[doc="<p>Describes a Reserved Instance modification.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesModification {
     #[doc="<p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The time when the modification request was created.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The time for the modification to become effective.</p>"]
+    #[serde(rename="EffectiveDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub effective_date: Option<String>,
     #[doc="<p>Contains target configurations along with their corresponding new Reserved Instance IDs.</p>"]
+    #[serde(rename="ModificationResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modification_results: Option<Vec<ReservedInstancesModificationResult>>,
     #[doc="<p>The IDs of one or more Reserved Instances.</p>"]
+    #[serde(rename="ReservedInstancesIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_ids: Option<Vec<ReservedInstancesId>>,
     #[doc="<p>A unique ID for the Reserved Instance modification.</p>"]
+    #[serde(rename="ReservedInstancesModificationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_modification_id: Option<String>,
     #[doc="<p>The status of the Reserved Instances modification request.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The reason for the status.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>The time when the modification request was last updated.</p>"]
+    #[serde(rename="UpdateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_date: Option<String>,
 }
 
@@ -33330,11 +36603,15 @@ impl ReservedInstancesModificationListDeserializer {
     }
 }
 #[doc="<p>Describes the modification request/s.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesModificationResult {
     #[doc="<p>The ID for the Reserved Instances that were created as part of the modification request. This field is only available when the modification is fulfilled.</p>"]
+    #[serde(rename="ReservedInstancesId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>The target Reserved Instances configurations supplied as part of the modification request.</p>"]
+    #[serde(rename="TargetConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configuration: Option<ReservedInstancesConfiguration>,
 }
 
@@ -33428,37 +36705,67 @@ impl ReservedInstancesModificationResultListDeserializer {
     }
 }
 #[doc="<p>Describes a Reserved Instance offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedInstancesOffering {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The currency of the Reserved Instance offering you are purchasing. It's specified using ISO 4217 standard currency codes. At this time, the only supported currency is <code>USD</code>.</p>"]
+    #[serde(rename="CurrencyCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the Reserved Instance, in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The purchase price of the Reserved Instance.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f32>,
     #[doc="<p>The tenancy of the instance.</p>"]
+    #[serde(rename="InstanceTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type on which the Reserved Instance can be used.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>Indicates whether the offering is available through the Reserved Instance Marketplace (resale) or AWS. If it's a Reserved Instance Marketplace offering, this is <code>true</code>.</p>"]
+    #[serde(rename="Marketplace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marketplace: Option<bool>,
     #[doc="<p>If <code>convertible</code> it can be exchanged for Reserved Instances of the same or higher monetary value, with different configurations. If <code>standard</code>, it is not possible to perform an exchange.</p>"]
+    #[serde(rename="OfferingClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The pricing details of the Reserved Instance offering.</p>"]
+    #[serde(rename="PricingDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pricing_details: Option<Vec<PricingDetail>>,
     #[doc="<p>The Reserved Instance product platform description.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The recurring charge tag assigned to the resource.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The ID of the Reserved Instance offering. This is the offering ID used in <a>GetReservedInstancesExchangeQuote</a> to confirm that an exchange can be made.</p>"]
+    #[serde(rename="ReservedInstancesOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_instances_offering_id: Option<String>,
     #[doc="<p>Whether the Reserved Instance is applied to instances in a region or an Availability Zone.</p>"]
+    #[serde(rename="Scope")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scope: Option<String>,
     #[doc="<p>The usage price of the Reserved Instance, per hour.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f32>,
 }
 
@@ -33665,13 +36972,17 @@ impl ReservedIntancesIdsDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for ResetImageAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetImageAttributeRequest {
     #[doc="<p>The attribute to reset (currently you can only reset the launch permission attribute).</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
 }
 
@@ -33698,13 +37009,17 @@ impl ResetImageAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ResetInstanceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetInstanceAttributeRequest {
     #[doc="<p>The attribute to reset.</p> <important> <p>You can only reset the following attributes: <code>kernel</code> | <code>ramdisk</code> | <code>sourceDestCheck</code>. To change an instance attribute, use <a>ModifyInstanceAttribute</a>.</p> </important>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
     pub instance_id: String,
 }
 
@@ -33731,13 +37046,18 @@ impl ResetInstanceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ResetNetworkInterfaceAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetNetworkInterfaceAttributeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
     #[doc="<p>The source/destination checking attribute. Resets the value to <code>true</code>.</p>"]
+    #[serde(rename="SourceDestCheck")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_dest_check: Option<String>,
 }
 
@@ -33766,13 +37086,17 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for ResetSnapshotAttribute.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetSnapshotAttributeRequest {
     #[doc="<p>The attribute to reset. Currently, only the attribute for permission to create volumes can be reset.</p>"]
+    #[serde(rename="Attribute")]
     pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The ID of the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
     pub snapshot_id: String,
 }
 
@@ -33919,11 +37243,14 @@ impl RestorableByStringListSerializer {
 }
 
 #[doc="<p>Contains the parameters for RestoreAddressToClassic.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreAddressToClassicRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
     pub public_ip: String,
 }
 
@@ -33948,11 +37275,15 @@ impl RestoreAddressToClassicRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RestoreAddressToClassic.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RestoreAddressToClassicResult {
     #[doc="<p>The Elastic IP address.</p>"]
+    #[serde(rename="PublicIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip: Option<String>,
     #[doc="<p>The move status for the IP address.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -34003,25 +37334,42 @@ impl RestoreAddressToClassicResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for RevokeSecurityGroupEgress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeSecurityGroupEgressRequest {
     #[doc="<p>The CIDR IP address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>"]
+    #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
     pub group_id: String,
     #[doc="<p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>"]
+    #[serde(rename="IpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>The name of a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_name: Option<String>,
     #[doc="<p>The AWS account number for a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
 }
 
@@ -34075,27 +37423,47 @@ impl RevokeSecurityGroupEgressRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for RevokeSecurityGroupIngress.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeSecurityGroupIngressRequest {
     #[doc="<p>The CIDR IP address range. You can't specify this parameter when specifying a source security group.</p>"]
+    #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. For the ICMP type number, use <code>-1</code> to specify all ICMP types.</p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group. Required for a security group in a nondefault VPC.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>A set of IP permissions. You can't specify a source security group and a CIDR IP address range.</p>"]
+    #[serde(rename="IpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). Use <code>-1</code> to specify all.</p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. For EC2-VPC, the source security group must be in the same VPC. To revoke a specific rule for an IP protocol and port range, use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_name: Option<String>,
     #[doc="<p>[EC2-Classic] The AWS account ID of the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. To revoke a specific rule for an IP protocol and port range, use a set of IP permissions instead.</p>"]
+    #[serde(rename="SourceSecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP code number. For the ICMP code number, use <code>-1</code> to specify all ICMP codes for the ICMP type.</p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
 }
 
@@ -34155,31 +37523,55 @@ impl RevokeSecurityGroupIngressRequestSerializer {
 }
 
 #[doc="<p>Describes a route in a route table.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Route {
     #[doc="<p>The IPv4 CIDR block used for the destination match.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR block used for the destination match.</p>"]
+    #[serde(rename="DestinationIpv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>The prefix of the AWS service.</p>"]
+    #[serde(rename="DestinationPrefixListId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_prefix_list_id: Option<String>,
     #[doc="<p>The ID of the egress-only Internet gateway.</p>"]
+    #[serde(rename="EgressOnlyInternetGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub egress_only_internet_gateway_id: Option<String>,
     #[doc="<p>The ID of a gateway attached to your VPC.</p>"]
+    #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<String>,
     #[doc="<p>The ID of a NAT instance in your VPC.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The AWS account ID of the owner of the instance.</p>"]
+    #[serde(rename="InstanceOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_owner_id: Option<String>,
     #[doc="<p>The ID of a NAT gateway.</p>"]
+    #[serde(rename="NatGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nat_gateway_id: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>Describes how the route was created.</p> <ul> <li> <p> <code>CreateRouteTable</code> - The route was automatically created when the route table was created.</p> </li> <li> <p> <code>CreateRoute</code> - The route was manually added to the route table.</p> </li> <li> <p> <code>EnableVgwRoutePropagation</code> - The route was propagated by route propagation.</p> </li> </ul>"]
+    #[serde(rename="Origin")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub origin: Option<String>,
     #[doc="<p>The state of the route. The <code>blackhole</code> state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, or the specified NAT instance has been terminated).</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -34346,19 +37738,31 @@ impl RouteStateDeserializer {
     }
 }
 #[doc="<p>Describes a route table.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RouteTable {
     #[doc="<p>The associations between the route table and one or more subnets.</p>"]
+    #[serde(rename="Associations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associations: Option<Vec<RouteTableAssociation>>,
     #[doc="<p>Any virtual private gateway (VGW) propagating routes.</p>"]
+    #[serde(rename="PropagatingVgws")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub propagating_vgws: Option<Vec<PropagatingVgw>>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_id: Option<String>,
     #[doc="<p>The routes in the route table.</p>"]
+    #[serde(rename="Routes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub routes: Option<Vec<Route>>,
     #[doc="<p>Any tags assigned to the route table.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -34425,15 +37829,23 @@ impl RouteTableDeserializer {
     }
 }
 #[doc="<p>Describes an association between a route table and a subnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RouteTableAssociation {
     #[doc="<p>Indicates whether this is the main route table.</p>"]
+    #[serde(rename="Main")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub main: Option<bool>,
     #[doc="<p>The ID of the association between a route table and a subnet.</p>"]
+    #[serde(rename="RouteTableAssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_association_id: Option<String>,
     #[doc="<p>The ID of the route table.</p>"]
+    #[serde(rename="RouteTableId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_id: Option<String>,
     #[doc="<p>The ID of the subnet. A subnet ID is not returned for an implicit association.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -34589,9 +38001,10 @@ impl RuleActionDeserializer {
     }
 }
 #[doc="<p>Describes the monitoring of an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunInstancesMonitoringEnabled {
     #[doc="<p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>"]
+    #[serde(rename="Enabled")]
     pub enabled: bool,
 }
 
@@ -34653,61 +38066,112 @@ impl RunInstancesMonitoringEnabledSerializer {
 }
 
 #[doc="<p>Contains the parameters for RunInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunInstancesRequest {
     #[doc="<p>Reserved.</p>"]
+    #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
     #[doc="<p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p> <p>Constraints: Maximum 64 ASCII characters</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="DisableApiTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disable_api_termination: Option<bool>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>An Elastic GPU to associate with the instance.</p>"]
+    #[serde(rename="ElasticGpuSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elastic_gpu_specification: Option<Vec<ElasticGpuSpecification>>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>.</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>"]
+    #[serde(rename="InstanceInitiatedShutdownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_initiated_shutdown_behavior: Option<String>,
     #[doc="<p>The instance type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>m1.small</code> </p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>[EC2-VPC] A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>"]
+    #[serde(rename="Ipv6AddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address_count: Option<i64>,
     #[doc="<p>[EC2-VPC] Specify one or more IPv6 addresses from the range of the subnet to associate with the primary network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The ID of the kernel.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html\"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can't connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>The maximum number of instances to launch. If you specify more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the largest possible number of instances above <code>MinCount</code>.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href=\"http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2\">How many instances can I run in Amazon EC2</a> in the Amazon EC2 FAQ.</p>"]
+    #[serde(rename="MaxCount")]
     pub max_count: i64,
     #[doc="<p>The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href=\"http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2\">How many instances can I run in Amazon EC2</a> in the Amazon EC2 General FAQ.</p>"]
+    #[serde(rename="MinCount")]
     pub min_count: i64,
     #[doc="<p>The monitoring for the instance.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement for the instance.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<Placement>,
     #[doc="<p>[EC2-VPC] The primary IPv4 address. You must specify a value from the IPv4 address range of the subnet.</p> <p>Only one private IP address can be designated as primary. You can't specify this option if you've specified the option to designate a private IP address as the primary IP address in a network interface specification. You cannot specify this option if you're launching more than one instance in the request.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The ID of the RAM disk.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html\"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security group IDs. You can create a security group using <a>CreateSecurityGroup</a>.</p> <p>Default: Amazon EC2 uses the default security group.</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>[EC2-Classic, default VPC] One or more security group names. For a nondefault VPC, you must use security group IDs instead.</p> <p>Default: Amazon EC2 uses the default security group.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<String>>,
     #[doc="<p>[EC2-VPC] The ID of the subnet to launch the instance into.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>"]
+    #[serde(rename="TagSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_specifications: Option<Vec<TagSpecification>>,
     #[doc="<p>The user data to make available to the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html\">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data\">Adding User Data</a> (Windows). If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -34850,17 +38314,25 @@ impl RunInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for RunScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunScheduledInstancesRequest {
     #[doc="<p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>The number of instances.</p> <p>Default: 1</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The launch specification. You must match the instance type, Availability Zone, network, and platform of the schedule that you purchased.</p>"]
+    #[serde(rename="LaunchSpecification")]
     pub launch_specification: ScheduledInstancesLaunchSpecification,
     #[doc="<p>The Scheduled Instance ID.</p>"]
+    #[serde(rename="ScheduledInstanceId")]
     pub scheduled_instance_id: String,
 }
 
@@ -34898,9 +38370,11 @@ impl RunScheduledInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of RunScheduledInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RunScheduledInstancesResult {
     #[doc="<p>The IDs of the newly launched instances.</p>"]
+    #[serde(rename="InstanceIdSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id_set: Option<Vec<String>>,
 }
 
@@ -34948,17 +38422,31 @@ impl RunScheduledInstancesResultDeserializer {
     }
 }
 #[doc="<p>Describes the storage parameters for S3 and S3 buckets for an instance store-backed AMI.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3Storage {
     #[doc="<p>The access key ID of the owner of the bucket. Before you specify a value for your access key ID, review and follow the guidance in <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html\">Best Practices for Managing AWS Access Keys</a>.</p>"]
+    #[serde(rename="AWSAccessKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_access_key_id: Option<String>,
     #[doc="<p>The bucket in which to store the AMI. You can specify a bucket that you already own or a new bucket that Amazon EC2 creates on your behalf. If you specify a bucket that belongs to someone else, Amazon EC2 returns an error.</p>"]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="<p>The beginning of the file name of the AMI.</p>"]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="<p>An Amazon S3 upload policy that gives Amazon EC2 permission to upload items into Amazon S3 on your behalf.</p>"]
+    #[serde(rename="UploadPolicy")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub upload_policy: Option<Vec<u8>>,
     #[doc="<p>The signature of the JSON document.</p>"]
+    #[serde(rename="UploadPolicySignature")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_policy_signature: Option<String>,
 }
 
@@ -35059,37 +38547,67 @@ impl S3StorageSerializer {
 }
 
 #[doc="<p>Describes a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstance {
     #[doc="<p>The Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The date when the Scheduled Instance was purchased.</p>"]
+    #[serde(rename="CreateDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<String>,
     #[doc="<p>The hourly price for a single instance.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The number of instances.</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p>"]
+    #[serde(rename="NetworkPlatform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_platform: Option<String>,
     #[doc="<p>The time for the next schedule to start.</p>"]
+    #[serde(rename="NextSlotStartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_slot_start_time: Option<String>,
     #[doc="<p>The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>The time that the previous schedule ended or will end.</p>"]
+    #[serde(rename="PreviousSlotEndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_slot_end_time: Option<String>,
     #[doc="<p>The schedule recurrence.</p>"]
+    #[serde(rename="Recurrence")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurrence: Option<ScheduledInstanceRecurrence>,
     #[doc="<p>The Scheduled Instance ID.</p>"]
+    #[serde(rename="ScheduledInstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_instance_id: Option<String>,
     #[doc="<p>The number of hours in the schedule.</p>"]
+    #[serde(rename="SlotDurationInHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slot_duration_in_hours: Option<i64>,
     #[doc="<p>The end date for the Scheduled Instance.</p>"]
+    #[serde(rename="TermEndDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub term_end_date: Option<String>,
     #[doc="<p>The start date for the Scheduled Instance.</p>"]
+    #[serde(rename="TermStartDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub term_start_date: Option<String>,
     #[doc="<p>The total number of hours for a single instance for the entire term.</p>"]
+    #[serde(rename="TotalScheduledInstanceHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_scheduled_instance_hours: Option<i64>,
 }
 
@@ -35200,33 +38718,59 @@ impl ScheduledInstanceDeserializer {
     }
 }
 #[doc="<p>Describes a schedule that is available for your Scheduled Instances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstanceAvailability {
     #[doc="<p>The Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of available instances.</p>"]
+    #[serde(rename="AvailableInstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_instance_count: Option<i64>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
+    #[serde(rename="FirstSlotStartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub first_slot_start_time: Option<String>,
     #[doc="<p>The hourly price for a single instance.</p>"]
+    #[serde(rename="HourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance type. You can specify one of the C3, C4, M4, or R3 instance types.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The maximum term. The only possible value is 365 days.</p>"]
+    #[serde(rename="MaxTermDurationInDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_term_duration_in_days: Option<i64>,
     #[doc="<p>The minimum term. The only possible value is 365 days.</p>"]
+    #[serde(rename="MinTermDurationInDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_term_duration_in_days: Option<i64>,
     #[doc="<p>The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p>"]
+    #[serde(rename="NetworkPlatform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_platform: Option<String>,
     #[doc="<p>The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p>"]
+    #[serde(rename="Platform")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform: Option<String>,
     #[doc="<p>The purchase token. This token expires in two hours.</p>"]
+    #[serde(rename="PurchaseToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub purchase_token: Option<String>,
     #[doc="<p>The schedule recurrence.</p>"]
+    #[serde(rename="Recurrence")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurrence: Option<ScheduledInstanceRecurrence>,
     #[doc="<p>The number of hours in the schedule.</p>"]
+    #[serde(rename="SlotDurationInHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slot_duration_in_hours: Option<i64>,
     #[doc="<p>The total number of hours for a single instance for the entire term.</p>"]
+    #[serde(rename="TotalScheduledInstanceHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_scheduled_instance_hours: Option<i64>,
 }
 
@@ -35382,17 +38926,27 @@ impl ScheduledInstanceIdRequestSetSerializer {
 }
 
 #[doc="<p>Describes the recurring schedule for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstanceRecurrence {
     #[doc="<p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>"]
+    #[serde(rename="Frequency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub frequency: Option<String>,
     #[doc="<p>The interval quantity. The interval unit depends on the value of <code>frequency</code>. For example, every 2 weeks or every 2 months.</p>"]
+    #[serde(rename="Interval")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub interval: Option<i64>,
     #[doc="<p>The days. For a monthly schedule, this is one or more days of the month (1-31). For a weekly schedule, this is one or more days of the week (1-7, where 1 is Sunday).</p>"]
+    #[serde(rename="OccurrenceDaySet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_day_set: Option<Vec<i64>>,
     #[doc="<p>Indicates whether the occurrence is relative to the end of the specified week or month.</p>"]
+    #[serde(rename="OccurrenceRelativeToEnd")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_relative_to_end: Option<bool>,
     #[doc="<p>The unit for <code>occurrenceDaySet</code> (<code>DayOfWeek</code> or <code>DayOfMonth</code>).</p>"]
+    #[serde(rename="OccurrenceUnit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_unit: Option<String>,
 }
 
@@ -35458,17 +39012,27 @@ impl ScheduledInstanceRecurrenceDeserializer {
     }
 }
 #[doc="<p>Describes the recurring schedule for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstanceRecurrenceRequest {
     #[doc="<p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>"]
+    #[serde(rename="Frequency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub frequency: Option<String>,
     #[doc="<p>The interval quantity. The interval unit depends on the value of <code>Frequency</code>. For example, every 2 weeks or every 2 months.</p>"]
+    #[serde(rename="Interval")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub interval: Option<i64>,
     #[doc="<p>The days. For a monthly schedule, this is one or more days of the month (1-31). For a weekly schedule, this is one or more days of the week (1-7, where 1 is Sunday). You can't specify this value with a daily schedule. If the occurrence is relative to the end of the month, you can specify only a single day.</p>"]
+    #[serde(rename="OccurrenceDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_days: Option<Vec<i64>>,
     #[doc="<p>Indicates whether the occurrence is relative to the end of the specified week or month. You can't specify this value with a daily schedule.</p>"]
+    #[serde(rename="OccurrenceRelativeToEnd")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_relative_to_end: Option<bool>,
     #[doc="<p>The unit for <code>OccurrenceDays</code> (<code>DayOfWeek</code> or <code>DayOfMonth</code>). This value is required for a monthly schedule. You can't specify <code>DayOfWeek</code> with a weekly schedule. You can't specify this value with a daily schedule.</p>"]
+    #[serde(rename="OccurrenceUnit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub occurrence_unit: Option<String>,
 }
 
@@ -35549,15 +39113,23 @@ impl ScheduledInstanceSetDeserializer {
     }
 }
 #[doc="<p>Describes a block device mapping for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesBlockDeviceMapping {
     #[doc="<p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>Parameters used to set up EBS volumes automatically when the instance is launched.</p>"]
+    #[serde(rename="Ebs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs: Option<ScheduledInstancesEbs>,
     #[doc="<p>Suppresses the specified device included in the block device mapping of the AMI.</p>"]
+    #[serde(rename="NoDevice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub no_device: Option<String>,
     #[doc="<p>The virtual device name (<code>ephemeral</code>N). Instance store volumes are numbered starting from 0. An instance type with two available instance store volumes can specify mappings for <code>ephemeral0</code> and <code>ephemeral1</code>.The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume.</p> <p>Constraints: For M3 instances, you must specify instance store volumes in the block device mapping for the instance. When you launch an M3 instance, we ignore any instance store volumes specified in the block device mapping for the AMI.</p>"]
+    #[serde(rename="VirtualName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub virtual_name: Option<String>,
 }
 
@@ -35607,19 +39179,31 @@ impl ScheduledInstancesBlockDeviceMappingSetSerializer {
 }
 
 #[doc="<p>Describes an EBS volume for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesEbs {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the volume is encrypted. You can attached encrypted volumes only to instances that support them.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For io1 volumes, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code> volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about <code>gp2</code> baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code>volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
+    #[serde(rename="VolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size: Option<i64>,
     #[doc="<p>The volume type. <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, Throughput Optimized HDD for <code>st1</code>, Cold HDD for <code>sc1</code>, or <code>standard</code> for Magnetic.</p> <p>Default: <code>standard</code> </p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -35662,11 +39246,15 @@ impl ScheduledInstancesEbsSerializer {
 }
 
 #[doc="<p>Describes an IAM instance profile for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesIamInstanceProfile {
     #[doc="<p>The Amazon Resource Name (ARN).</p>"]
+    #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -35693,9 +39281,11 @@ impl ScheduledInstancesIamInstanceProfileSerializer {
 }
 
 #[doc="<p>Describes an IPv6 address.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesIpv6Address {
     #[doc="<p>The IPv6 address.</p>"]
+    #[serde(rename="Ipv6Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address: Option<String>,
 }
 
@@ -35730,35 +39320,62 @@ impl ScheduledInstancesIpv6AddressListSerializer {
 }
 
 #[doc="<p>Describes the launch specification for a Scheduled Instance.</p> <p>If you are launching the Scheduled Instance in EC2-VPC, you must specify the ID of the subnet. You can specify the subnet using either <code>SubnetId</code> or <code>NetworkInterface</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesLaunchSpecification {
     #[doc="<p>One or more block device mapping entries.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<ScheduledInstancesBlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<ScheduledInstancesIamInstanceProfile>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI).</p>"]
+    #[serde(rename="ImageId")]
     pub image_id: String,
     #[doc="<p>The instance type.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>Enable or disable monitoring for the instances.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<ScheduledInstancesMonitoring>,
     #[doc="<p>One or more network interfaces.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<ScheduledInstancesNetworkInterface>>,
     #[doc="<p>The placement information.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<ScheduledInstancesPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet in which to launch the instances.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The base64-encoded MIME user data.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
 }
 
@@ -35847,9 +39464,11 @@ impl ScheduledInstancesLaunchSpecificationSerializer {
 }
 
 #[doc="<p>Describes whether monitoring is enabled for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesMonitoring {
     #[doc="<p>Indicates whether monitoring is enabled.</p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
 }
 
@@ -35872,31 +39491,55 @@ impl ScheduledInstancesMonitoringSerializer {
 }
 
 #[doc="<p>Describes a network interface for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesNetworkInterface {
     #[doc="<p>Indicates whether to assign a public IPv4 address to instances launched in a VPC. The public IPv4 address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>"]
+    #[serde(rename="AssociatePublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associate_public_ip_address: Option<bool>,
     #[doc="<p>Indicates whether to delete the interface when the instance is terminated.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The index of the device for the network interface attachment.</p>"]
+    #[serde(rename="DeviceIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_index: Option<i64>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
+    #[serde(rename="Groups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub groups: Option<Vec<String>>,
     #[doc="<p>The number of IPv6 addresses to assign to the network interface. The IPv6 addresses are automatically selected from the subnet range.</p>"]
+    #[serde(rename="Ipv6AddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses from the subnet range.</p>"]
+    #[serde(rename="Ipv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_addresses: Option<Vec<ScheduledInstancesIpv6Address>>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The private IPv4 addresses.</p>"]
+    #[serde(rename="PrivateIpAddressConfigs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address_configs: Option<Vec<ScheduledInstancesPrivateIpAddressConfig>>,
     #[doc="<p>The number of secondary private IPv4 addresses.</p>"]
+    #[serde(rename="SecondaryPrivateIpAddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
 }
 
@@ -35984,11 +39627,15 @@ impl ScheduledInstancesNetworkInterfaceSetSerializer {
 }
 
 #[doc="<p>Describes the placement for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesPlacement {
     #[doc="<p>The Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The name of the placement group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
 }
 
@@ -36015,11 +39662,15 @@ impl ScheduledInstancesPlacementSerializer {
 }
 
 #[doc="<p>Describes a private IPv4 address for a Scheduled Instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScheduledInstancesPrivateIpAddressConfig {
     #[doc="<p>Indicates whether this is a primary IPv4 address. Otherwise, this is a secondary IPv4 address.</p>"]
+    #[serde(rename="Primary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary: Option<bool>,
     #[doc="<p>The IPv4 address.</p>"]
+    #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
 }
 
@@ -36072,23 +39723,39 @@ impl ScopeDeserializer {
     }
 }
 #[doc="<p>Describes a security group</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SecurityGroup {
     #[doc="<p>A description of the security group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>The name of the security group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>One or more inbound rules associated with the security group.</p>"]
+    #[serde(rename="IpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>[EC2-VPC] One or more outbound rules associated with the security group.</p>"]
+    #[serde(rename="IpPermissionsEgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_permissions_egress: Option<Vec<IpPermission>>,
     #[doc="<p>The AWS account ID of the owner of the security group.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>Any tags assigned to the security group.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>[EC2-VPC] The ID of the VPC for the security group.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -36259,13 +39926,17 @@ impl SecurityGroupListDeserializer {
     }
 }
 #[doc="<p>Describes a VPC with a security group that references your security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SecurityGroupReference {
     #[doc="<p>The ID of your security group.</p>"]
+    #[serde(rename="GroupId")]
     pub group_id: String,
     #[doc="<p>The ID of the VPC with the referencing security group.</p>"]
+    #[serde(rename="ReferencingVpcId")]
     pub referencing_vpc_id: String,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -36374,11 +40045,13 @@ impl SecurityGroupStringListSerializer {
 }
 
 #[doc="<p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SlotDateTimeRangeRequest {
     #[doc="<p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>"]
+    #[serde(rename="EarliestTime")]
     pub earliest_time: String,
     #[doc="<p>The latest date and time, in UTC, for the Scheduled Instance to start. This value must be later than or equal to the earliest date and at most three months in the future.</p>"]
+    #[serde(rename="LatestTime")]
     pub latest_time: String,
 }
 
@@ -36401,11 +40074,15 @@ impl SlotDateTimeRangeRequestSerializer {
 }
 
 #[doc="<p>Describes the time period for a Scheduled Instance to start its first schedule.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SlotStartTimeRangeRequest {
     #[doc="<p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>"]
+    #[serde(rename="EarliestTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub earliest_time: Option<String>,
     #[doc="<p>The latest date and time, in UTC, for the Scheduled Instance to start.</p>"]
+    #[serde(rename="LatestTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_time: Option<String>,
 }
 
@@ -36432,35 +40109,63 @@ impl SlotStartTimeRangeRequestSerializer {
 }
 
 #[doc="<p>Describes a snapshot.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Snapshot {
     #[doc="<p>The data encryption key identifier for the snapshot. This value is a unique identifier that corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy. Because data encryption keys are inherited by volumes created from snapshots, and vice versa, if snapshots share the same data encryption key identifier, then they belong to the same volume/snapshot lineage. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>"]
+    #[serde(rename="DataEncryptionKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_encryption_key_id: Option<String>,
     #[doc="<p>The description for the snapshot.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Indicates whether the snapshot is encrypted.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the parent volume.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p> Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console. </p>"]
+    #[serde(rename="OwnerAlias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_alias: Option<String>,
     #[doc="<p>The AWS account ID of the EBS snapshot owner.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The progress of the snapshot, as a percentage.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>The ID of the snapshot. Each snapshot receives a unique identifier when it is created.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The time stamp when the snapshot was initiated.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>The snapshot state.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the error occurred. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>"]
+    #[serde(rename="StateMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_message: Option<String>,
     #[doc="<p>Any tags assigned to the snapshot.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the volume that was used to create the snapshot. Snapshots created by the <a>CopySnapshot</a> action have an arbitrary volume ID that should not be used for any purpose.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p>"]
+    #[serde(rename="VolumeSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size: Option<i64>,
 }
 
@@ -36560,27 +40265,47 @@ impl SnapshotDeserializer {
     }
 }
 #[doc="<p>Describes the snapshot created from the imported disk.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotDetail {
     #[doc="<p>A description for the snapshot.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The block device mapping for the snapshot.</p>"]
+    #[serde(rename="DeviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device_name: Option<String>,
     #[doc="<p>The size of the disk in the snapshot, in GiB.</p>"]
+    #[serde(rename="DiskImageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_image_size: Option<f64>,
     #[doc="<p>The format of the disk image from which the snapshot is created.</p>"]
+    #[serde(rename="Format")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub format: Option<String>,
     #[doc="<p>The percentage of progress for the task.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>The snapshot ID of the disk being imported.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>A brief status of the snapshot creation.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>A detailed status message for the snapshot creation.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>The URL used to access the disk image.</p>"]
+    #[serde(rename="Url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
     #[doc="<p>The S3 bucket for the disk image.</p>"]
+    #[serde(rename="UserBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_bucket: Option<UserBucketDetails>,
 }
 
@@ -36704,15 +40429,23 @@ impl SnapshotDetailListDeserializer {
     }
 }
 #[doc="<p>The disk container object for the import snapshot request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotDiskContainer {
     #[doc="<p>The description of the disk image being imported.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The format of the disk image being imported.</p> <p>Valid values: <code>RAW</code> | <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>"]
+    #[serde(rename="Format")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub format: Option<String>,
     #[doc="<p>The URL to the Amazon S3-based disk image being imported. It can either be a https URL (https://..) or an Amazon S3 URL (s3://..).</p>"]
+    #[serde(rename="Url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
     #[doc="<p>The S3 bucket for the disk image.</p>"]
+    #[serde(rename="UserBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_bucket: Option<UserBucket>,
 }
 
@@ -36815,25 +40548,43 @@ impl SnapshotStateDeserializer {
     }
 }
 #[doc="<p>Details about the import snapshot task.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnapshotTaskDetail {
     #[doc="<p>The description of the snapshot.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The size of the disk in the snapshot, in GiB.</p>"]
+    #[serde(rename="DiskImageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_image_size: Option<f64>,
     #[doc="<p>The format of the disk image from which the snapshot is created.</p>"]
+    #[serde(rename="Format")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub format: Option<String>,
     #[doc="<p>The percentage of completion for the import snapshot task.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<String>,
     #[doc="<p>The snapshot ID of the disk being imported.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>A brief status for the import snapshot task.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>A detailed status message for the import snapshot task.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>The URL of the disk image from which the snapshot is created.</p>"]
+    #[serde(rename="Url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
     #[doc="<p>The S3 bucket for the disk image.</p>"]
+    #[serde(rename="UserBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_bucket: Option<UserBucketDetails>,
 }
 
@@ -36912,17 +40663,27 @@ impl SnapshotTaskDetailDeserializer {
     }
 }
 #[doc="<p>Describes the data feed for a Spot instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotDatafeedSubscription {
     #[doc="<p>The Amazon S3 bucket where the Spot instance data feed is located.</p>"]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="<p>The fault codes for the Spot instance request, if any.</p>"]
+    #[serde(rename="Fault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fault: Option<SpotInstanceStateFault>,
     #[doc="<p>The AWS account ID of the account.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>The prefix that is prepended to data feed files.</p>"]
+    #[serde(rename="Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix: Option<String>,
     #[doc="<p>The state of the Spot instance data feed subscription.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 
@@ -36985,43 +40746,79 @@ impl SpotDatafeedSubscriptionDeserializer {
     }
 }
 #[doc="<p>Describes the launch specification for one or more Spot instances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotFleetLaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
+    #[serde(rename="AddressingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p>"]
+    #[serde(rename="BlockDeviceMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="EbsOptimized")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
+    #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
+    #[serde(rename="ImageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<String>,
     #[doc="<p>The instance type. Note that T2 and HS1 instance types are not supported.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
+    #[serde(rename="KernelId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
+    #[serde(rename="KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_name: Option<String>,
     #[doc="<p>Enable or disable monitoring for the instances.</p>"]
+    #[serde(rename="Monitoring")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub monitoring: Option<SpotFleetMonitoring>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
+    #[serde(rename="NetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information.</p>"]
+    #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
+    #[serde(rename="RamdiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The bid price per unit hour for the specified instance type. If this value is not specified, the default is the Spot bid price specified for the fleet. To determine the bid price per unit hour, divide the Spot bid price by the value of <code>WeightedCapacity</code>.</p>"]
+    #[serde(rename="SpotPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price: Option<String>,
     #[doc="<p>The ID of the subnet in which to launch the instances. To specify multiple subnets, separate them using commas; for example, \"subnet-a61dafcf, subnet-65ea5f08\".</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>The tags to apply during creation.</p>"]
+    #[serde(rename="TagSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_specifications: Option<Vec<SpotFleetTagSpecification>>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="UserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_data: Option<String>,
     #[doc="<p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms (instances or a performance characteristic such as vCPUs, memory, or I/O).</p> <p>If the target capacity divided by this value is not a whole number, we round the number of instances to the next whole number. If this value is not specified, the default is 1.</p>"]
+    #[serde(rename="WeightedCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub weighted_capacity: Option<f64>,
 }
 
@@ -37241,9 +41038,11 @@ impl SpotFleetLaunchSpecificationSerializer {
 }
 
 #[doc="<p>Describes whether monitoring is enabled.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotFleetMonitoring {
     #[doc="<p>Enables monitoring for the instance.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="Enabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<bool>,
 }
 
@@ -37308,17 +41107,23 @@ impl SpotFleetMonitoringSerializer {
 }
 
 #[doc="<p>Describes a Spot fleet request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotFleetRequestConfig {
     #[doc="<p>The progress of the Spot fleet request. If there is an error, the status is <code>error</code>. After all bids are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot instances are terminating.</p>"]
+    #[serde(rename="ActivityStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_status: Option<String>,
     #[doc="<p>The creation date and time of the request.</p>"]
+    #[serde(rename="CreateTime")]
     pub create_time: String,
     #[doc="<p>Information about the configuration of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestConfig")]
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestId")]
     pub spot_fleet_request_id: String,
     #[doc="<p>The state of the Spot fleet request.</p>"]
+    #[serde(rename="SpotFleetRequestState")]
     pub spot_fleet_request_state: String,
 }
 
@@ -37384,33 +41189,55 @@ impl SpotFleetRequestConfigDeserializer {
     }
 }
 #[doc="<p>Describes the configuration of a Spot fleet request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotFleetRequestConfigData {
     #[doc="<p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot fleet request. The default is <code>lowestPrice</code>.</p>"]
+    #[serde(rename="AllocationStrategy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allocation_strategy: Option<String>,
     #[doc="<p>A unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>"]
+    #[serde(rename="ExcessCapacityTerminationPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub excess_capacity_termination_policy: Option<String>,
     #[doc="<p>The number of units fulfilled by this request compared to the set target capacity.</p>"]
+    #[serde(rename="FulfilledCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fulfilled_capacity: Option<f64>,
     #[doc="<p>Grants the Spot fleet permission to terminate Spot instances on your behalf when you cancel its Spot fleet request using <a>CancelSpotFleetRequests</a> or when the Spot fleet request expires, if you set <code>terminateInstancesWithExpiration</code>.</p>"]
+    #[serde(rename="IamFleetRole")]
     pub iam_fleet_role: String,
     #[doc="<p>Information about the launch specifications for the Spot fleet request.</p>"]
+    #[serde(rename="LaunchSpecifications")]
     pub launch_specifications: Vec<SpotFleetLaunchSpecification>,
     #[doc="<p>Indicates whether Spot fleet should replace unhealthy instances.</p>"]
+    #[serde(rename="ReplaceUnhealthyInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replace_unhealthy_instances: Option<bool>,
     #[doc="<p>The bid price per unit hour.</p>"]
+    #[serde(rename="SpotPrice")]
     pub spot_price: String,
     #[doc="<p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O.</p>"]
+    #[serde(rename="TargetCapacity")]
     pub target_capacity: i64,
     #[doc="<p>Indicates whether running Spot instances should be terminated when the Spot fleet request expires.</p>"]
+    #[serde(rename="TerminateInstancesWithExpiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub terminate_instances_with_expiration: Option<bool>,
     #[doc="<p>The type of request. Indicates whether the fleet will only <code>request</code> the target capacity or also attempt to <code>maintain</code> it. When you <code>request</code> a certain target capacity, the fleet will only place the required bids. It will not attempt to replenish Spot instances if capacity is diminished, nor will it submit bids in alternative Spot pools if capacity is not available. When you want to <code>maintain</code> a certain target capacity, fleet will place the required bids to meet this target capacity. It will also automatically replenish any interrupted instances. Default: <code>maintain</code>.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>The start date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The default is to start fulfilling the request immediately.</p>"]
+    #[serde(rename="ValidFrom")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_from: Option<String>,
     #[doc="<p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new Spot instance requests are placed or enabled to fulfill the request.</p>"]
+    #[serde(rename="ValidUntil")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_until: Option<String>,
 }
 
@@ -37610,11 +41437,15 @@ impl SpotFleetRequestConfigSetDeserializer {
     }
 }
 #[doc="<p>The tags for a Spot fleet resource.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotFleetTagSpecification {
     #[doc="<p>The type of resource. Currently, the only resource type that is supported is <code>instance</code>.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tags.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -37740,43 +41571,79 @@ impl SpotFleetTagSpecificationListSerializer {
 }
 
 #[doc="<p>Describes a Spot instance request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotInstanceRequest {
     #[doc="<p>If you specified a duration and your Spot instance request was fulfilled, this is the fixed hourly price in effect for the Spot instance while it runs.</p>"]
+    #[serde(rename="ActualBlockHourlyPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actual_block_hourly_price: Option<String>,
     #[doc="<p>The Availability Zone group. If you specify the same Availability Zone group for all Spot instance requests, all Spot instances are launched in the same Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZoneGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone_group: Option<String>,
     #[doc="<p>The duration for the Spot instance, in minutes.</p>"]
+    #[serde(rename="BlockDurationMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_duration_minutes: Option<i64>,
     #[doc="<p>The date and time when the Spot instance request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="CreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<String>,
     #[doc="<p>The fault codes for the Spot instance request, if any.</p>"]
+    #[serde(rename="Fault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fault: Option<SpotInstanceStateFault>,
     #[doc="<p>The instance ID, if an instance has been launched to fulfill the Spot instance request.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p>"]
+    #[serde(rename="LaunchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_group: Option<String>,
     #[doc="<p>Additional information for launching instances.</p>"]
+    #[serde(rename="LaunchSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_specification: Option<LaunchSpecification>,
     #[doc="<p>The Availability Zone in which the bid is launched.</p>"]
+    #[serde(rename="LaunchedAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launched_availability_zone: Option<String>,
     #[doc="<p>The product description associated with the Spot instance.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The ID of the Spot instance request.</p>"]
+    #[serde(rename="SpotInstanceRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>The maximum hourly price (bid) for the Spot instance launched to fulfill the request.</p>"]
+    #[serde(rename="SpotPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price: Option<String>,
     #[doc="<p>The state of the Spot instance request. Spot bid status information can help you track your Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The status code and status message describing the Spot instance request.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<SpotInstanceStatus>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The Spot instance request type.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>The start date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The request becomes active at this date and time.</p>"]
+    #[serde(rename="ValidFrom")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_from: Option<String>,
     #[doc="<p>The end date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). If this is a one-time request, it remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached.</p>"]
+    #[serde(rename="ValidUntil")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub valid_until: Option<String>,
 }
 
@@ -37969,11 +41836,15 @@ impl SpotInstanceStateDeserializer {
     }
 }
 #[doc="<p>Describes a Spot instance state change.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotInstanceStateFault {
     #[doc="<p>The reason code for the Spot instance state change.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>The message for the Spot instance state change.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -38023,13 +41894,19 @@ impl SpotInstanceStateFaultDeserializer {
     }
 }
 #[doc="<p>Describes the status of a Spot instance request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotInstanceStatus {
     #[doc="<p>The status code. For a list of status codes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html#spot-instance-bid-status-understand\">Spot Bid Status Codes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>The description for the status code.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p>The date and time of the most recent status update, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="UpdateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_time: Option<String>,
 }
 
@@ -38097,13 +41974,19 @@ impl SpotInstanceTypeDeserializer {
     }
 }
 #[doc="<p>Describes Spot instance placement.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotPlacement {
     #[doc="<p>The Availability Zone.</p> <p>[Spot fleet only] To specify multiple Availability Zones, separate them using commas; for example, \"us-west-2a, us-west-2b\".</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The name of the placement group (for cluster instances).</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for Spot instances.</p>"]
+    #[serde(rename="Tenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tenancy: Option<String>,
 }
 
@@ -38185,17 +42068,27 @@ impl SpotPlacementSerializer {
 }
 
 #[doc="<p>Describes the maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SpotPrice {
     #[doc="<p>The Availability Zone.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The instance type. Note that T2 and HS1 instance types are not supported.</p>"]
+    #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<String>,
     #[doc="<p>A general description of the AMI.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The maximum price (bid) that you are willing to pay for a Spot instance.</p>"]
+    #[serde(rename="SpotPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub spot_price: Option<String>,
     #[doc="<p>The date and time the request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
+    #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<String>,
 }
 
@@ -38302,19 +42195,31 @@ impl SpotPriceHistoryListDeserializer {
     }
 }
 #[doc="<p>Describes a stale rule in a security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StaleIpPermission {
     #[doc="<p>The start of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>"]
+    #[serde(rename="FromPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from_port: Option<i64>,
     #[doc="<p>The IP protocol name (for <code>tcp</code>, <code>udp</code>, and <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers)</a>.</p>"]
+    #[serde(rename="IpProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_protocol: Option<String>,
     #[doc="<p>One or more IP ranges. Not applicable for stale security group rules.</p>"]
+    #[serde(rename="IpRanges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_ranges: Option<Vec<String>>,
     #[doc="<p>One or more prefix list IDs for an AWS service. Not applicable for stale security group rules.</p>"]
+    #[serde(rename="PrefixListIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub prefix_list_ids: Option<Vec<String>>,
     #[doc="<p>The end of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>"]
+    #[serde(rename="ToPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
     #[doc="<p>One or more security group pairs. Returns the ID of the referenced security group and VPC, and the ID and status of the VPC peering connection.</p>"]
+    #[serde(rename="UserIdGroupPairs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
@@ -38424,19 +42329,30 @@ impl StaleIpPermissionSetDeserializer {
     }
 }
 #[doc="<p>Describes a stale security group (a security group that contains stale rules).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StaleSecurityGroup {
     #[doc="<p>The description of the security group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
     pub group_id: String,
     #[doc="<p>The name of the security group.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>Information about the stale inbound rules in the security group.</p>"]
+    #[serde(rename="StaleIpPermissions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stale_ip_permissions: Option<Vec<StaleIpPermission>>,
     #[doc="<p>Information about the stale outbound rules in the security group.</p>"]
+    #[serde(rename="StaleIpPermissionsEgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stale_ip_permissions_egress: Option<Vec<StaleIpPermission>>,
     #[doc="<p>The ID of the VPC for the security group.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -38545,13 +42461,18 @@ impl StaleSecurityGroupSetDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for StartInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartInstancesRequest {
     #[doc="<p>Reserved.</p>"]
+    #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -38581,9 +42502,11 @@ impl StartInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of StartInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartInstancesResult {
     #[doc="<p>Information about one or more started instances.</p>"]
+    #[serde(rename="StartingInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub starting_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -38645,11 +42568,15 @@ impl StateDeserializer {
     }
 }
 #[doc="<p>Describes a state change.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StateReason {
     #[doc="<p>The reason code for the state change.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>The message for the state change.</p> <ul> <li> <p> <code>Server.InsufficientInstanceCapacity</code>: There was insufficient instance capacity to satisfy the launch request.</p> </li> <li> <p> <code>Server.InternalError</code>: An internal error occurred during instance launch, resulting in termination.</p> </li> <li> <p> <code>Server.ScheduledStop</code>: The instance was stopped due to a scheduled retirement.</p> </li> <li> <p> <code>Server.SpotInstanceTermination</code>: A Spot instance was terminated due to an increase in the market price.</p> </li> <li> <p> <code>Client.InternalError</code>: A client error caused the instance to terminate on launch.</p> </li> <li> <p> <code>Client.InstanceInitiatedShutdown</code>: The instance was shut down using the <code>shutdown -h</code> command from the instance.</p> </li> <li> <p> <code>Client.UserInitiatedShutdown</code>: The instance was shut down using the Amazon EC2 API.</p> </li> <li> <p> <code>Client.VolumeLimitExceeded</code>: The limit on the number of EBS volumes or total storage was exceeded. Decrease usage or request an increase in your limits.</p> </li> <li> <p> <code>Client.InvalidSnapshot.NotFound</code>: The specified snapshot was not found.</p> </li> </ul>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -38741,13 +42668,18 @@ impl StatusTypeDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for StopInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>Forces the instances to stop. The instances do not have an opportunity to flush file system caches or file system metadata. If you use this option, you must perform file system check and repair procedures. This option is not recommended for Windows instances.</p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="Force")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -38777,9 +42709,11 @@ impl StopInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of StopInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopInstancesResult {
     #[doc="<p>Information about one or more stopped instances.</p>"]
+    #[serde(rename="StoppingInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stopping_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -38827,9 +42761,11 @@ impl StopInstancesResultDeserializer {
     }
 }
 #[doc="<p>Describes the storage location for an instance store-backed AMI.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Storage {
     #[doc="<p>An Amazon S3 storage location.</p>"]
+    #[serde(rename="S3")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3: Option<S3Storage>,
 }
 
@@ -38892,11 +42828,15 @@ impl StorageSerializer {
 }
 
 #[doc="<p>Describes a storage location in Amazon S3.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StorageLocation {
     #[doc="<p>The name of the S3 bucket.</p>"]
+    #[serde(rename="Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<String>,
     #[doc="<p>The key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
 }
 
@@ -38937,29 +42877,51 @@ impl StringDeserializer {
     }
 }
 #[doc="<p>Describes a subnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subnet {
     #[doc="<p>Indicates whether a network interface created in this subnet (including a network interface created by <a>RunInstances</a>) receives an IPv6 address.</p>"]
+    #[serde(rename="AssignIpv6AddressOnCreation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assign_ipv_6_address_on_creation: Option<bool>,
     #[doc="<p>The Availability Zone of the subnet.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of unused private IPv4 addresses in the subnet. Note that the IPv4 addresses for any stopped instances are considered unavailable.</p>"]
+    #[serde(rename="AvailableIpAddressCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_ip_address_count: Option<i64>,
     #[doc="<p>The IPv4 CIDR block assigned to the subnet.</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>Indicates whether this is the default subnet for the Availability Zone.</p>"]
+    #[serde(rename="DefaultForAz")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_for_az: Option<bool>,
     #[doc="<p>Information about the IPv6 CIDR blocks associated with the subnet.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociationSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association_set: Option<Vec<SubnetIpv6CidrBlockAssociation>>,
     #[doc="<p>Indicates whether instances launched in this subnet receive a public IPv4 address.</p>"]
+    #[serde(rename="MapPublicIpOnLaunch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub map_public_ip_on_launch: Option<bool>,
     #[doc="<p>The current state of the subnet.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
+    #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the subnet.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC the subnet is in.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -39049,11 +43011,15 @@ impl SubnetDeserializer {
     }
 }
 #[doc="<p>Describes the state of a CIDR block.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubnetCidrBlockState {
     #[doc="<p>The state of a CIDR block.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>A message about the status of the CIDR block, if applicable.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -39129,13 +43095,19 @@ impl SubnetIdStringListSerializer {
 }
 
 #[doc="<p>Describes an IPv6 CIDR block associated with a subnet.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubnetIpv6CidrBlockAssociation {
     #[doc="<p>The association ID for the CIDR block.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>The IPv6 CIDR block.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>Information about the state of the CIDR block.</p>"]
+    #[serde(rename="Ipv6CidrBlockState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_state: Option<SubnetCidrBlockState>,
 }
 
@@ -39302,11 +43274,15 @@ impl SummaryStatusDeserializer {
     }
 }
 #[doc="<p>Describes a tag.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p> <p>Constraints: Tag keys are case-sensitive and accept a maximum of 127 Unicode characters. May not begin with <code>aws:</code> </p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The value of the tag.</p> <p>Constraints: Tag values are case-sensitive and accept a maximum of 255 Unicode characters.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -39377,15 +43353,23 @@ impl TagSerializer {
 }
 
 #[doc="<p>Describes a tag.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagDescription {
     #[doc="<p>The tag key.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The ID of the resource. For example, <code>ami-1a2b3c4d</code>.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
     #[doc="<p>The resource type.</p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -39537,11 +43521,15 @@ impl TagListSerializer {
 }
 
 #[doc="<p>The tags to apply to a resource when the resource is being created.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagSpecification {
     #[doc="<p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. </p>"]
+    #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<String>,
     #[doc="<p>The tags to apply to the resource.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -39579,11 +43567,15 @@ impl TagSpecificationListSerializer {
 }
 
 #[doc="<p>Information about the Convertible Reserved Instance offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetConfiguration {
     #[doc="<p>The number of instances the Convertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The ID of the Convertible Reserved Instance offering.</p>"]
+    #[serde(rename="OfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_id: Option<String>,
 }
 
@@ -39635,11 +43627,14 @@ impl TargetConfigurationDeserializer {
     }
 }
 #[doc="<p>Details about the target configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetConfigurationRequest {
     #[doc="<p>The number of instances the Covertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>"]
+    #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<i64>,
     #[doc="<p>The Convertible Reserved Instance offering ID.</p>"]
+    #[serde(rename="OfferingId")]
     pub offering_id: String,
 }
 
@@ -39676,11 +43671,15 @@ impl TargetConfigurationRequestSetSerializer {
 }
 
 #[doc="<p>The total value of the new Convertible Reserved Instances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TargetReservationValue {
     #[doc="<p>The total value of the Convertible Reserved Instances that make up the exchange. This is the sum of the list value, remaining upfront price, and additional upfront cost of the exchange.</p>"]
+    #[serde(rename="ReservationValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reservation_value: Option<ReservationValue>,
     #[doc="<p>The configuration of the Convertible Reserved Instances that make up the exchange.</p>"]
+    #[serde(rename="TargetConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_configuration: Option<TargetConfiguration>,
 }
 
@@ -39803,11 +43802,14 @@ impl TenancyDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for TerminateInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p> <p>Constraints: Up to 1000 instance IDs. We recommend breaking up this request into smaller batches.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -39833,9 +43835,11 @@ impl TerminateInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of TerminateInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TerminateInstancesResult {
     #[doc="<p>Information about one or more terminated instances.</p>"]
+    #[serde(rename="TerminatingInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub terminating_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -39896,11 +43900,13 @@ impl TrafficTypeDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnassignIpv6AddressesRequest {
     #[doc="<p>The IPv6 addresses to unassign from the network interface.</p>"]
+    #[serde(rename="Ipv6Addresses")]
     pub ipv_6_addresses: Vec<String>,
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
 }
 
@@ -39923,11 +43929,15 @@ impl UnassignIpv6AddressesRequestSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnassignIpv6AddressesResult {
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<String>,
     #[doc="<p>The IPv6 addresses that have been unassigned from the network interface.</p>"]
+    #[serde(rename="UnassignedIpv6Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unassigned_ipv_6_addresses: Option<Vec<String>>,
 }
 
@@ -39980,11 +43990,13 @@ impl UnassignIpv6AddressesResultDeserializer {
     }
 }
 #[doc="<p>Contains the parameters for UnassignPrivateIpAddresses.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnassignPrivateIpAddressesRequest {
     #[doc="<p>The ID of the network interface.</p>"]
+    #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: String,
     #[doc="<p>The secondary private IP addresses to unassign from the network interface. You can specify this option multiple times to unassign more than one IP address.</p>"]
+    #[serde(rename="PrivateIpAddresses")]
     pub private_ip_addresses: Vec<String>,
 }
 
@@ -40010,11 +44022,14 @@ impl UnassignPrivateIpAddressesRequestSerializer {
 }
 
 #[doc="<p>Contains the parameters for UnmonitorInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnmonitorInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    #[serde(rename="DryRun")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
+    #[serde(rename="InstanceIds")]
     pub instance_ids: Vec<String>,
 }
 
@@ -40040,9 +44055,11 @@ impl UnmonitorInstancesRequestSerializer {
 }
 
 #[doc="<p>Contains the output of UnmonitorInstances.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnmonitorInstancesResult {
     #[doc="<p>The monitoring information.</p>"]
+    #[serde(rename="InstanceMonitorings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
 }
 
@@ -40090,11 +44107,14 @@ impl UnmonitorInstancesResultDeserializer {
     }
 }
 #[doc="<p>Information about items that were not successfully processed in a batch call.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsuccessfulItem {
     #[doc="<p>Information about the error.</p>"]
+    #[serde(rename="Error")]
     pub error: UnsuccessfulItemError,
     #[doc="<p>The ID of the resource.</p>"]
+    #[serde(rename="ResourceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_id: Option<String>,
 }
 
@@ -40145,11 +44165,13 @@ impl UnsuccessfulItemDeserializer {
     }
 }
 #[doc="<p>Information about the error that occurred. For more information about errors, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html\">Error Codes</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsuccessfulItemError {
     #[doc="<p>The error code.</p>"]
+    #[serde(rename="Code")]
     pub code: String,
     #[doc="<p>The error message accompanying the error code.</p>"]
+    #[serde(rename="Message")]
     pub message: String,
 }
 
@@ -40280,11 +44302,15 @@ impl UnsuccessfulItemSetDeserializer {
     }
 }
 #[doc="<p>Describes the S3 bucket for the disk image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserBucket {
     #[doc="<p>The name of the S3 bucket where the disk image is located.</p>"]
+    #[serde(rename="S3Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_bucket: Option<String>,
     #[doc="<p>The file name of the disk image.</p>"]
+    #[serde(rename="S3Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key: Option<String>,
 }
 
@@ -40311,11 +44337,15 @@ impl UserBucketSerializer {
 }
 
 #[doc="<p>Describes the S3 bucket for the disk image.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserBucketDetails {
     #[doc="<p>The S3 bucket from which the disk image was created.</p>"]
+    #[serde(rename="S3Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_bucket: Option<String>,
     #[doc="<p>The file name of the disk image.</p>"]
+    #[serde(rename="S3Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key: Option<String>,
 }
 
@@ -40366,9 +44396,11 @@ impl UserBucketDetailsDeserializer {
     }
 }
 #[doc="<p>Describes the user data for an instance.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserData {
     #[doc="<p>The user data. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
+    #[serde(rename="Data")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data: Option<String>,
 }
 
@@ -40403,19 +44435,31 @@ impl UserGroupStringListSerializer {
 }
 
 #[doc="<p>Describes a security group and AWS account ID pair.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserIdGroupPair {
     #[doc="<p>The ID of the security group.</p>"]
+    #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<String>,
     #[doc="<p>The name of the security group. In a request, use this parameter for a security group in EC2-Classic or a default VPC only. For a security group in a nondefault VPC, use the security group ID.</p>"]
+    #[serde(rename="GroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_name: Option<String>,
     #[doc="<p>The status of a VPC peering connection, if applicable.</p>"]
+    #[serde(rename="PeeringStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub peering_status: Option<String>,
     #[doc="<p>The ID of an AWS account. For a referenced security group in another VPC, the account ID of the referenced security group is returned.</p> <p>[EC2-Classic] Required when adding or removing rules that reference a security group in another AWS account.</p>"]
+    #[serde(rename="UserId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_id: Option<String>,
     #[doc="<p>The ID of the VPC for the referenced security group, if applicable.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
     #[doc="<p>The ID of the VPC peering connection, if applicable.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -40680,17 +44724,27 @@ impl ValueStringListSerializer {
 }
 
 #[doc="<p>Describes telemetry for a VPN tunnel.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VgwTelemetry {
     #[doc="<p>The number of accepted routes.</p>"]
+    #[serde(rename="AcceptedRouteCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accepted_route_count: Option<i64>,
     #[doc="<p>The date and time of the last change in status.</p>"]
+    #[serde(rename="LastStatusChange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_status_change: Option<String>,
     #[doc="<p>The Internet-routable IP address of the virtual private gateway's outside interface.</p>"]
+    #[serde(rename="OutsideIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub outside_ip_address: Option<String>,
     #[doc="<p>The status of the VPN tunnel.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>If an error occurs, a description of the error.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -40812,31 +44866,55 @@ impl VirtualizationTypeDeserializer {
     }
 }
 #[doc="<p>Describes a volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Volume {
     #[doc="<p>Information about the volume attachments.</p>"]
+    #[serde(rename="Attachments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attachments: Option<Vec<VolumeAttachment>>,
     #[doc="<p>The Availability Zone for the volume.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The time stamp when volume creation was initiated.</p>"]
+    #[serde(rename="CreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<String>,
     #[doc="<p>Indicates whether the volume will be encrypted.</p>"]
+    #[serde(rename="Encrypted")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information on General Purpose SSD baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for io1 volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
+    #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<i64>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>"]
+    #[serde(rename="KmsKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_id: Option<String>,
     #[doc="<p>The size of the volume, in GiBs.</p>"]
+    #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<i64>,
     #[doc="<p>The snapshot from which the volume was created, if applicable.</p>"]
+    #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<String>,
     #[doc="<p>The volume state.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the volume.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
     #[doc="<p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p>"]
+    #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
 }
 
@@ -40928,19 +45006,31 @@ impl VolumeDeserializer {
     }
 }
 #[doc="<p>Describes volume attachment details.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeAttachment {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
+    #[serde(rename="AttachTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attach_time: Option<String>,
     #[doc="<p>Indicates whether the EBS volume is deleted on instance termination.</p>"]
+    #[serde(rename="DeleteOnTermination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_on_termination: Option<bool>,
     #[doc="<p>The device name.</p>"]
+    #[serde(rename="Device")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
+    #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<String>,
     #[doc="<p>The attachment state of the volume.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the volume.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -41064,9 +45154,10 @@ impl VolumeAttachmentStateDeserializer {
     }
 }
 #[doc="<p>Describes an EBS volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeDetail {
     #[doc="<p>The size of the volume, in GiB.</p>"]
+    #[serde(rename="Size")]
     pub size: i64,
 }
 
@@ -41140,31 +45231,55 @@ impl VolumeListDeserializer {
     }
 }
 #[doc="<p>Describes the modification status of an EBS volume.</p> <p>If the volume has never been modified, some element values will be null.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeModification {
     #[doc="<p>Modification completion or failure time.</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>Current state of modification. Modification state is null for unmodified volumes. </p>"]
+    #[serde(rename="ModificationState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modification_state: Option<String>,
     #[doc="<p>Original IOPS rate of the volume being modified.</p>"]
+    #[serde(rename="OriginalIops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub original_iops: Option<i64>,
     #[doc="<p>Original size of the volume being modified.</p>"]
+    #[serde(rename="OriginalSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub original_size: Option<i64>,
     #[doc="<p>Original EBS volume type of the volume being modified.</p>"]
+    #[serde(rename="OriginalVolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub original_volume_type: Option<String>,
     #[doc="<p>Modification progress from 0 to 100%.</p>"]
+    #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<i64>,
     #[doc="<p>Modification start time </p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>Generic status message on modification progress or failure.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
     #[doc="<p>Target IOPS rate of the volume being modified.</p>"]
+    #[serde(rename="TargetIops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_iops: Option<i64>,
     #[doc="<p>Target size of the volume being modified.</p>"]
+    #[serde(rename="TargetSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_size: Option<i64>,
     #[doc="<p>Target EBS volume type of the volume being modified.</p>"]
+    #[serde(rename="TargetVolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_volume_type: Option<String>,
     #[doc="<p>ID of the volume being modified.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -41327,15 +45442,23 @@ impl VolumeStateDeserializer {
     }
 }
 #[doc="<p>Describes a volume status operation code.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeStatusAction {
     #[doc="<p>The code identifying the operation, for example, <code>enable-volume-io</code>.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>A description of the operation.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the event associated with this operation.</p>"]
+    #[serde(rename="EventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<String>,
     #[doc="<p>The event type associated with this operation.</p>"]
+    #[serde(rename="EventType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_type: Option<String>,
 }
 
@@ -41434,11 +45557,15 @@ impl VolumeStatusActionsListDeserializer {
     }
 }
 #[doc="<p>Describes a volume status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeStatusDetails {
     #[doc="<p>The name of the volume status.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The intended status of the volume status.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -41530,17 +45657,27 @@ impl VolumeStatusDetailsListDeserializer {
     }
 }
 #[doc="<p>Describes a volume status event.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeStatusEvent {
     #[doc="<p>A description of the event.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of this event.</p>"]
+    #[serde(rename="EventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<String>,
     #[doc="<p>The type of this event.</p>"]
+    #[serde(rename="EventType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_type: Option<String>,
     #[doc="<p>The latest end time of the event.</p>"]
+    #[serde(rename="NotAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_after: Option<String>,
     #[doc="<p>The earliest start time of the event.</p>"]
+    #[serde(rename="NotBefore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_before: Option<String>,
 }
 
@@ -41644,11 +45781,15 @@ impl VolumeStatusEventsListDeserializer {
     }
 }
 #[doc="<p>Describes the status of a volume.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeStatusInfo {
     #[doc="<p>The details of the volume status.</p>"]
+    #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Vec<VolumeStatusDetails>>,
     #[doc="<p>The status of the volume.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -41715,17 +45856,27 @@ impl VolumeStatusInfoStatusDeserializer {
     }
 }
 #[doc="<p>Describes the volume status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VolumeStatusItem {
     #[doc="<p>The details of the operation.</p>"]
+    #[serde(rename="Actions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<Vec<VolumeStatusAction>>,
     #[doc="<p>The Availability Zone of the volume.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>A list of events associated with the volume.</p>"]
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<VolumeStatusEvent>>,
     #[doc="<p>The volume ID.</p>"]
+    #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
     #[doc="<p>The volume status.</p>"]
+    #[serde(rename="VolumeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_status: Option<VolumeStatusInfo>,
 }
 
@@ -41861,23 +46012,39 @@ impl VolumeTypeDeserializer {
     }
 }
 #[doc="<p>Describes a VPC.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Vpc {
     #[doc="<p>The IPv4 CIDR block for the VPC.</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>The ID of the set of DHCP options you've associated with the VPC (or <code>default</code> if the default options are associated with the VPC).</p>"]
+    #[serde(rename="DhcpOptionsId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dhcp_options_id: Option<String>,
     #[doc="<p>The allowed tenancy of instances launched into the VPC.</p>"]
+    #[serde(rename="InstanceTenancy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_tenancy: Option<String>,
     #[doc="<p>Information about the IPv6 CIDR blocks associated with the VPC.</p>"]
+    #[serde(rename="Ipv6CidrBlockAssociationSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_association_set: Option<Vec<VpcIpv6CidrBlockAssociation>>,
     #[doc="<p>Indicates whether the VPC is the default VPC.</p>"]
+    #[serde(rename="IsDefault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default: Option<bool>,
     #[doc="<p>The current state of the VPC.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the VPC.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -41952,11 +46119,15 @@ impl VpcDeserializer {
     }
 }
 #[doc="<p>Describes an attachment between a virtual private gateway and a VPC.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcAttachment {
     #[doc="<p>The current state of the attachment.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -42049,11 +46220,15 @@ impl VpcAttachmentListDeserializer {
     }
 }
 #[doc="<p>Describes the state of a CIDR block.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcCidrBlockState {
     #[doc="<p>The state of the CIDR block.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>A message about the status of the CIDR block, if applicable.</p>"]
+    #[serde(rename="StatusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<String>,
 }
 
@@ -42119,13 +46294,19 @@ impl VpcCidrBlockStateCodeDeserializer {
     }
 }
 #[doc="<p>Describes whether a VPC is enabled for ClassicLink.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcClassicLink {
     #[doc="<p>Indicates whether the VPC is enabled for ClassicLink.</p>"]
+    #[serde(rename="ClassicLinkEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classic_link_enabled: Option<bool>,
     #[doc="<p>Any tags assigned to the VPC.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -42234,21 +46415,35 @@ impl VpcClassicLinkListDeserializer {
     }
 }
 #[doc="<p>Describes a VPC endpoint.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcEndpoint {
     #[doc="<p>The date and time the VPC endpoint was created.</p>"]
+    #[serde(rename="CreationTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_timestamp: Option<String>,
     #[doc="<p>The policy document associated with the endpoint.</p>"]
+    #[serde(rename="PolicyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route tables associated with the endpoint.</p>"]
+    #[serde(rename="RouteTableIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub route_table_ids: Option<Vec<String>>,
     #[doc="<p>The name of the AWS service to which the endpoint is associated.</p>"]
+    #[serde(rename="ServiceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_name: Option<String>,
     #[doc="<p>The state of the VPC endpoint.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The ID of the VPC endpoint.</p>"]
+    #[serde(rename="VpcEndpointId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
     #[doc="<p>The ID of the VPC to which the endpoint is associated.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -42374,13 +46569,19 @@ impl VpcIdStringListSerializer {
 }
 
 #[doc="<p>Describes an IPv6 CIDR block associated with a VPC.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcIpv6CidrBlockAssociation {
     #[doc="<p>The association ID for the IPv6 CIDR block.</p>"]
+    #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<String>,
     #[doc="<p>The IPv6 CIDR block.</p>"]
+    #[serde(rename="Ipv6CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>Information about the state of the CIDR block.</p>"]
+    #[serde(rename="Ipv6CidrBlockState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_state: Option<VpcCidrBlockState>,
 }
 
@@ -42520,19 +46721,31 @@ impl VpcListDeserializer {
     }
 }
 #[doc="<p>Describes a VPC peering connection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcPeeringConnection {
     #[doc="<p>Information about the accepter VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
+    #[serde(rename="AccepterVpcInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accepter_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The time that an unaccepted VPC peering connection will expire.</p>"]
+    #[serde(rename="ExpirationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_time: Option<String>,
     #[doc="<p>Information about the requester VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
+    #[serde(rename="RequesterVpcInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requester_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The status of the VPC peering connection.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<VpcPeeringConnectionStateReason>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
+    #[serde(rename="VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -42640,13 +46853,19 @@ impl VpcPeeringConnectionListDeserializer {
     }
 }
 #[doc="<p>Describes the VPC peering connection options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcPeeringConnectionOptionsDescription {
     #[doc="<p>Indicates whether a local VPC can resolve public DNS hostnames to private IP addresses when queried from instances in a peer VPC.</p>"]
+    #[serde(rename="AllowDnsResolutionFromRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>Indicates whether a local ClassicLink connection can communicate with the peer VPC over the VPC peering connection.</p>"]
+    #[serde(rename="AllowEgressFromLocalClassicLinkToRemoteVpc")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>Indicates whether a local VPC can communicate with a ClassicLink connection in the peer VPC over the VPC peering connection.</p>"]
+    #[serde(rename="AllowEgressFromLocalVpcToRemoteClassicLink")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
@@ -42705,11 +46924,15 @@ impl VpcPeeringConnectionOptionsDescriptionDeserializer {
     }
 }
 #[doc="<p>Describes the status of a VPC peering connection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcPeeringConnectionStateReason {
     #[doc="<p>The status of the VPC peering connection.</p>"]
+    #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<String>,
     #[doc="<p>A message that provides more information about the status, if applicable.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -42774,17 +46997,27 @@ impl VpcPeeringConnectionStateReasonCodeDeserializer {
     }
 }
 #[doc="<p>Describes a VPC in a VPC peering connection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcPeeringConnectionVpcInfo {
     #[doc="<p>The IPv4 CIDR block for the VPC.</p>"]
+    #[serde(rename="CidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR block for the VPC.</p>"]
+    #[serde(rename="Ipv6CidrBlockSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_cidr_block_set: Option<Vec<Ipv6CidrBlock>>,
     #[doc="<p>The AWS account ID of the VPC owner.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
     #[doc="<p>Information about the VPC peering connection options for the accepter or requester VPC.</p>"]
+    #[serde(rename="PeeringOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub peering_options: Option<VpcPeeringConnectionOptionsDescription>,
     #[doc="<p>The ID of the VPC.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -42861,27 +47094,47 @@ impl VpcStateDeserializer {
     }
 }
 #[doc="<p>Describes a VPN connection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpnConnection {
     #[doc="<p>The configuration information for the VPN connection's customer gateway (in the native XML format). This element is always present in the <a>CreateVpnConnection</a> response; however, it's present in the <a>DescribeVpnConnections</a> response only if the VPN connection is in the <code>pending</code> or <code>available</code> state.</p>"]
+    #[serde(rename="CustomerGatewayConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateway_configuration: Option<String>,
     #[doc="<p>The ID of the customer gateway at your end of the VPN connection.</p>"]
+    #[serde(rename="CustomerGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_gateway_id: Option<String>,
     #[doc="<p>The VPN connection options.</p>"]
+    #[serde(rename="Options")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub options: Option<VpnConnectionOptions>,
     #[doc="<p>The static routes associated with the VPN connection.</p>"]
+    #[serde(rename="Routes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub routes: Option<Vec<VpnStaticRoute>>,
     #[doc="<p>The current state of the VPN connection.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the VPN connection.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>Information about the VPN tunnel.</p>"]
+    #[serde(rename="VgwTelemetry")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vgw_telemetry: Option<Vec<VgwTelemetry>>,
     #[doc="<p>The ID of the VPN connection.</p>"]
+    #[serde(rename="VpnConnectionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_connection_id: Option<String>,
     #[doc="<p>The ID of the virtual private gateway at the AWS side of the VPN connection.</p>"]
+    #[serde(rename="VpnGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_gateway_id: Option<String>,
 }
 
@@ -43023,9 +47276,11 @@ impl VpnConnectionListDeserializer {
     }
 }
 #[doc="<p>Describes VPN connection options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpnConnectionOptions {
     #[doc="<p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>"]
+    #[serde(rename="StaticRoutesOnly")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub static_routes_only: Option<bool>,
 }
 
@@ -43073,9 +47328,11 @@ impl VpnConnectionOptionsDeserializer {
     }
 }
 #[doc="<p>Describes VPN connection options.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpnConnectionOptionsSpecification {
     #[doc="<p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>"]
+    #[serde(rename="StaticRoutesOnly")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub static_routes_only: Option<bool>,
 }
 
@@ -43098,19 +47355,31 @@ impl VpnConnectionOptionsSpecificationSerializer {
 }
 
 #[doc="<p>Describes a virtual private gateway.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpnGateway {
     #[doc="<p>The Availability Zone where the virtual private gateway was created, if applicable. This field may be empty or not returned.</p>"]
+    #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<String>,
     #[doc="<p>The current state of the virtual private gateway.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the virtual private gateway.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection the virtual private gateway supports.</p>"]
+    #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
     #[doc="<p>Any VPCs attached to the virtual private gateway.</p>"]
+    #[serde(rename="VpcAttachments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_attachments: Option<Vec<VpcAttachment>>,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
+    #[serde(rename="VpnGatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpn_gateway_id: Option<String>,
 }
 
@@ -43246,13 +47515,19 @@ impl VpnStateDeserializer {
     }
 }
 #[doc="<p>Describes a static route for a VPN connection.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpnStaticRoute {
     #[doc="<p>The CIDR block associated with the local subnet of the customer data center.</p>"]
+    #[serde(rename="DestinationCidrBlock")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>Indicates how the routes were provided.</p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
     #[doc="<p>The current state of the static route.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
 }
 

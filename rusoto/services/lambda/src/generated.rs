@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[doc="<p>Provides limits of code size and concurrency associated with the current account and region.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountLimit {
     #[doc="<p>Size, in bytes, of code/dependencies that you can zip into a deployment package (uncompressed zip/jar size) for uploading. The default limit is 250 MB.</p>"]
     #[serde(rename="CodeSizeUnzipped")]
@@ -51,7 +51,7 @@ pub struct AccountLimit {
 }
 
 #[doc="<p>Provides code size usage and function count associated with the current account and region.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AccountUsage {
     #[doc="<p>The number of your account's existing functions per region.</p>"]
     #[serde(rename="FunctionCount")]
@@ -64,7 +64,7 @@ pub struct AccountUsage {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddPermissionRequest {
     #[doc="<p>The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with <code>lambda:</code> followed by the API name . For example, <code>lambda:CreateFunction</code>. You can use wildcard (<code>lambda:*</code>) to grant permission for all AWS Lambda actions. </p>"]
     #[serde(rename="Action")]
@@ -97,7 +97,7 @@ pub struct AddPermissionRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddPermissionResponse {
     #[doc="<p>The permission statement you specified in the request. The response returns the same as a string using a backslash (\"\\\") as an escape character in the JSON.</p>"]
     #[serde(rename="Statement")]
@@ -106,7 +106,7 @@ pub struct AddPermissionResponse {
 }
 
 #[doc="<p>Provides configuration information about a Lambda function version alias.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AliasConfiguration {
     #[doc="<p>Lambda function ARN that is qualified using the alias name as the suffix. For example, if you create an alias called <code>BETA</code> that points to a helloworld function version, the ARN is <code>arn:aws:lambda:aws-regions:acct-id:function:helloworld:BETA</code>.</p>"]
     #[serde(rename="AliasArn")]
@@ -126,7 +126,7 @@ pub struct AliasConfiguration {
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAliasRequest {
     #[doc="<p>Description of the alias.</p>"]
     #[serde(rename="Description")]
@@ -144,7 +144,7 @@ pub struct CreateAliasRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEventSourceMappingRequest {
     #[doc="<p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.</p>"]
     #[serde(rename="BatchSize")]
@@ -170,7 +170,7 @@ pub struct CreateEventSourceMappingRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFunctionRequest {
     #[doc="<p>The code for the Lambda function.</p>"]
     #[serde(rename="Code")]
@@ -237,7 +237,7 @@ pub struct DeadLetterConfig {
     pub target_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteAliasRequest {
     #[doc="<p>The Lambda function name for which the alias is created. Deleting an alias does not delete the function version to which it is pointing. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
@@ -248,14 +248,14 @@ pub struct DeleteAliasRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEventSourceMappingRequest {
     #[doc="<p>The event source mapping ID.</p>"]
     #[serde(rename="UUID")]
     pub uuid: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFunctionRequest {
     #[doc="<p>The Lambda function to delete.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -267,7 +267,7 @@ pub struct DeleteFunctionRequest {
 }
 
 #[doc="<p>The parent object that contains your environment's configuration settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Environment {
     #[doc="<p>The key-value pairs that represent your environment's configuration settings.</p>"]
     #[serde(rename="Variables")]
@@ -276,7 +276,7 @@ pub struct Environment {
 }
 
 #[doc="<p>The parent object that contains error information associated with your configuration settings.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentError {
     #[doc="<p>The error code returned by the environment error object.</p>"]
     #[serde(rename="ErrorCode")]
@@ -289,7 +289,7 @@ pub struct EnvironmentError {
 }
 
 #[doc="<p>The parent object returned that contains your environment's configuration settings or any error information associated with your configuration settings.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EnvironmentResponse {
     #[serde(rename="Error")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -301,7 +301,7 @@ pub struct EnvironmentResponse {
 }
 
 #[doc="<p>Describes mapping between an Amazon Kinesis stream and a Lambda function.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventSourceMappingConfiguration {
     #[doc="<p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records.</p>"]
     #[serde(rename="BatchSize")]
@@ -338,7 +338,7 @@ pub struct EventSourceMappingConfiguration {
 }
 
 #[doc="<p>The code for the Lambda function.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FunctionCode {
     #[doc="<p>Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function.</p>"]
     #[serde(rename="S3Bucket")]
@@ -363,7 +363,7 @@ pub struct FunctionCode {
 }
 
 #[doc="<p>The object for the Lambda function location.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FunctionCodeLocation {
     #[doc="<p>The presigned URL you can use to download the function's .zip file that you previously uploaded. The URL is valid for up to 10 minutes.</p>"]
     #[serde(rename="Location")]
@@ -376,7 +376,7 @@ pub struct FunctionCodeLocation {
 }
 
 #[doc="<p>A complex type that describes function metadata.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FunctionConfiguration {
     #[doc="<p>It is the SHA256 hash of your function deployment package.</p>"]
     #[serde(rename="CodeSha256")]
@@ -452,10 +452,10 @@ pub struct FunctionConfiguration {
     pub vpc_config: Option<VpcConfigResponse>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountSettingsRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAccountSettingsResponse {
     #[serde(rename="AccountLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -465,7 +465,7 @@ pub struct GetAccountSettingsResponse {
     pub account_usage: Option<AccountUsage>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetAliasRequest {
     #[doc="<p>Function name for which the alias is created. An alias is a subresource that exists only in the context of an existing Lambda function so you must specify the function name. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
@@ -476,7 +476,7 @@ pub struct GetAliasRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetEventSourceMappingRequest {
     #[doc="<p>The AWS Lambda assigned ID of the event source mapping.</p>"]
     #[serde(rename="UUID")]
@@ -484,7 +484,7 @@ pub struct GetEventSourceMappingRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFunctionConfigurationRequest {
     #[doc="<p>The name of the Lambda function for which you want to retrieve the configuration information.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -496,7 +496,7 @@ pub struct GetFunctionConfigurationRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFunctionRequest {
     #[doc="<p>The Lambda function name.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -508,7 +508,7 @@ pub struct GetFunctionRequest {
 }
 
 #[doc="<p>This response contains the object for the Lambda function location (see <a>FunctionCodeLocation</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetFunctionResponse {
     #[serde(rename="Code")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -523,7 +523,7 @@ pub struct GetFunctionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyRequest {
     #[doc="<p>Function name whose resource policy you want to retrieve.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -535,7 +535,7 @@ pub struct GetPolicyRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPolicyResponse {
     #[doc="<p>The resource policy associated with the specified function. The response returns the same as a string using a backslash (\"\\\") as an escape character in the JSON.</p>"]
     #[serde(rename="Policy")]
@@ -544,7 +544,7 @@ pub struct GetPolicyResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InvocationRequest {
     #[doc="<p>Using the <code>ClientContext</code> you can pass client-specific information to the Lambda function you are invoking. You can then process the client information in your Lambda function as you choose through the context variable. For an example of a <code>ClientContext</code> JSON, see <a href=\"http://docs.aws.amazon.com/mobileanalytics/latest/ug/PutEvents.html\">PutEvents</a> in the <i>Amazon Mobile Analytics API Reference and User Guide</i>.</p> <p>The ClientContext JSON must be base64-encoded.</p>"]
     #[serde(rename="ClientContext")]
@@ -576,20 +576,32 @@ pub struct InvocationRequest {
 }
 
 #[doc="<p>Upon success, returns an empty response. Otherwise, throws an exception.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InvocationResponse {
     #[doc="<p>Indicates whether an error occurred while executing the Lambda function. If an error occurred this field will have one of two values; <code>Handled</code> or <code>Unhandled</code>. <code>Handled</code> errors are errors that are reported by the function while the <code>Unhandled</code> errors are those detected and reported by AWS Lambda. Unhandled errors include out of memory errors and function timeouts. For information about how to report an <code>Handled</code> error, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/programming-model.html\">Programming Model</a>. </p>"]
+    #[serde(rename="FunctionError")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub function_error: Option<String>,
     #[doc="<p> It is the base64-encoded logs for the Lambda function invocation. This is present only if the invocation type is <code>RequestResponse</code> and the logs were requested. </p>"]
+    #[serde(rename="LogResult")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_result: Option<String>,
     #[doc="<p> It is the JSON representation of the object returned by the Lambda function. This is present only if the invocation type is <code>RequestResponse</code>. </p> <p>In the event of a function error this field contains a message describing the error. For the <code>Handled</code> errors the Lambda function will report this message. For <code>Unhandled</code> errors AWS Lambda reports the message. </p>"]
+    #[serde(rename="Payload")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub payload: Option<Vec<u8>>,
     #[doc="<p>The HTTP status code will be in the 200 range for successful request. For the <code>RequestResponse</code> invocation type this status code will be 200. For the <code>Event</code> invocation type this status code will be 202. For the <code>DryRun</code> invocation type the status code will be 204. </p>"]
+    #[serde(rename="StatusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_code: Option<i64>,
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InvokeAsyncRequest {
     #[doc="<p>The Lambda function name. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
@@ -605,7 +617,7 @@ pub struct InvokeAsyncRequest {
 }
 
 #[doc="<p>Upon success, it returns empty response. Otherwise, throws an exception.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InvokeAsyncResponse {
     #[doc="<p>It will be 202 upon success.</p>"]
     #[serde(rename="Status")]
@@ -613,7 +625,7 @@ pub struct InvokeAsyncResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAliasesRequest {
     #[doc="<p>Lambda function name for which the alias is created. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
@@ -632,7 +644,7 @@ pub struct ListAliasesRequest {
     pub max_items: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAliasesResponse {
     #[doc="<p>A list of aliases.</p>"]
     #[serde(rename="Aliases")]
@@ -645,7 +657,7 @@ pub struct ListAliasesResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEventSourceMappingsRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream. (This parameter is optional.)</p>"]
     #[serde(rename="EventSourceArn")]
@@ -666,7 +678,7 @@ pub struct ListEventSourceMappingsRequest {
 }
 
 #[doc="<p>Contains a list of event sources (see <a>EventSourceMappingConfiguration</a>)</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEventSourceMappingsResponse {
     #[doc="<p>An array of <code>EventSourceMappingConfiguration</code> objects.</p>"]
     #[serde(rename="EventSourceMappings")]
@@ -679,7 +691,7 @@ pub struct ListEventSourceMappingsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFunctionsRequest {
     #[doc="<p>Optional string. If not specified, only the unqualified functions ARNs (Amazon Resource Names) will be returned.</p> <p>Valid value:</p> <p> <code>ALL</code> _ Will return all versions, including <code>$LATEST</code> which will have fully qualified ARNs (Amazon Resource Names).</p>"]
     #[serde(rename="FunctionVersion")]
@@ -700,7 +712,7 @@ pub struct ListFunctionsRequest {
 }
 
 #[doc="<p>Contains a list of AWS Lambda function configurations (see <a>FunctionConfiguration</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListFunctionsResponse {
     #[doc="<p>A list of Lambda functions.</p>"]
     #[serde(rename="Functions")]
@@ -712,14 +724,14 @@ pub struct ListFunctionsResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the function.</p>"]
     #[serde(rename="Resource")]
     pub resource: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsResponse {
     #[doc="<p>The list of tags assigned to the function.</p>"]
     #[serde(rename="Tags")]
@@ -728,7 +740,7 @@ pub struct ListTagsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVersionsByFunctionRequest {
     #[doc="<p>Function name whose versions to list. You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -744,7 +756,7 @@ pub struct ListVersionsByFunctionRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListVersionsByFunctionResponse {
     #[doc="<p>A string, present if there are more function versions.</p>"]
     #[serde(rename="NextMarker")]
@@ -757,7 +769,7 @@ pub struct ListVersionsByFunctionResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PublishVersionRequest {
     #[doc="<p>The SHA256 hash of the deployment package you want to publish. This provides validation on the code you are publishing. If you provide this parameter value must match the SHA256 of the $LATEST version for the publication to succeed.</p>"]
     #[serde(rename="CodeSha256")]
@@ -773,7 +785,7 @@ pub struct PublishVersionRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemovePermissionRequest {
     #[doc="<p>Lambda function whose resource policy you want to remove a permission from.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
@@ -787,7 +799,7 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the Lambda function.</p>"]
     #[serde(rename="Resource")]
@@ -798,7 +810,7 @@ pub struct TagResourceRequest {
 }
 
 #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TracingConfig {
     #[doc="<p>Can be either PassThrough or Active. If PassThrough, Lambda will only trace the request from an upstream service if it contains a tracing header with \"sampled=1\". If Active, Lambda will respect any tracing header it receives from an upstream service. If no tracing header is received, Lambda will call X-Ray for a tracing decision.</p>"]
     #[serde(rename="Mode")]
@@ -807,7 +819,7 @@ pub struct TracingConfig {
 }
 
 #[doc="<p>Parent object of the tracing information associated with your Lambda function.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TracingConfigResponse {
     #[doc="<p>The tracing mode associated with your Lambda function.</p>"]
     #[serde(rename="Mode")]
@@ -815,7 +827,7 @@ pub struct TracingConfigResponse {
     pub mode: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the function.</p>"]
     #[serde(rename="Resource")]
@@ -825,7 +837,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateAliasRequest {
     #[doc="<p>You can change the description of the alias using this parameter.</p>"]
     #[serde(rename="Description")]
@@ -844,7 +856,7 @@ pub struct UpdateAliasRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateEventSourceMappingRequest {
     #[doc="<p>The maximum number of stream records that can be sent to your Lambda function for a single invocation.</p>"]
     #[serde(rename="BatchSize")]
@@ -864,7 +876,7 @@ pub struct UpdateEventSourceMappingRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateFunctionCodeRequest {
     #[doc="<p>This boolean parameter can be used to test your request to AWS Lambda to update the Lambda function and publish a version as an atomic operation. It will do all necessary computation and validation of your code but will not upload it or a publish a version. Each time this operation is invoked, the <code>CodeSha256</code> hash value the provided code will also be computed and returned in the response.</p>"]
     #[serde(rename="DryRun")]
@@ -900,7 +912,7 @@ pub struct UpdateFunctionCodeRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateFunctionConfigurationRequest {
     #[doc="<p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>"]
     #[serde(rename="DeadLetterConfig")]
@@ -951,7 +963,7 @@ pub struct UpdateFunctionConfigurationRequest {
 }
 
 #[doc="<p>If your Lambda function accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and one subnet ID.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcConfig {
     #[doc="<p>A list of one or more security groups IDs in your VPC.</p>"]
     #[serde(rename="SecurityGroupIds")]
@@ -964,7 +976,7 @@ pub struct VpcConfig {
 }
 
 #[doc="<p>VPC configuration associated with your Lambda function.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcConfigResponse {
     #[doc="<p>A list of security group IDs associated with the Lambda function.</p>"]
     #[serde(rename="SecurityGroupIds")]

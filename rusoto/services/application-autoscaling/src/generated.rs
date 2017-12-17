@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Represents a CloudWatch alarm associated with a scaling policy.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Alarm {
     #[doc="<p>The Amazon Resource Name (ARN) of the alarm.</p>"]
     #[serde(rename="AlarmARN")]
@@ -61,7 +61,7 @@ pub struct CustomizedMetricSpecification {
     pub unit: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteScalingPolicyRequest {
     #[doc="<p>The name of the scaling policy.</p>"]
     #[serde(rename="PolicyName")]
@@ -77,10 +77,10 @@ pub struct DeleteScalingPolicyRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteScalingPolicyResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterScalableTargetRequest {
     #[doc="<p>The identifier of the resource associated with the scalable target. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>EMR cluster - The resource type is <code>instancegroup</code> and the unique identifier is the cluster ID and instance group ID. Example: <code>instancegroup/j-2EEZNYKUA1NTV/ig-1791Y4E1L8YI0</code>.</p> </li> <li> <p>AppStream 2.0 fleet - The resource type is <code>fleet</code> and the unique identifier is the fleet name. Example: <code>fleet/sample-fleet</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> </ul>"]
     #[serde(rename="ResourceId")]
@@ -93,10 +93,10 @@ pub struct DeregisterScalableTargetRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterScalableTargetResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalableTargetsRequest {
     #[doc="<p>The maximum number of scalable target results. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>"]
     #[serde(rename="MaxResults")]
@@ -119,7 +119,7 @@ pub struct DescribeScalableTargetsRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalableTargetsResponse {
     #[doc="<p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>"]
     #[serde(rename="NextToken")]
@@ -131,7 +131,7 @@ pub struct DescribeScalableTargetsResponse {
     pub scalable_targets: Option<Vec<ScalableTarget>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalingActivitiesRequest {
     #[doc="<p>The maximum number of scalable target results. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>"]
     #[serde(rename="MaxResults")]
@@ -154,7 +154,7 @@ pub struct DescribeScalingActivitiesRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalingActivitiesResponse {
     #[doc="<p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>"]
     #[serde(rename="NextToken")]
@@ -166,7 +166,7 @@ pub struct DescribeScalingActivitiesResponse {
     pub scaling_activities: Option<Vec<ScalingActivity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalingPoliciesRequest {
     #[doc="<p>The maximum number of scalable target results. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>"]
     #[serde(rename="MaxResults")]
@@ -193,7 +193,7 @@ pub struct DescribeScalingPoliciesRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeScalingPoliciesResponse {
     #[doc="<p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>"]
     #[serde(rename="NextToken")]
@@ -228,7 +228,7 @@ pub struct PredefinedMetricSpecification {
     pub resource_label: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutScalingPolicyRequest {
     #[doc="<p>The name of the scaling policy.</p>"]
     #[serde(rename="PolicyName")]
@@ -257,7 +257,7 @@ pub struct PutScalingPolicyRequest {
         Option<TargetTrackingScalingPolicyConfiguration>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PutScalingPolicyResponse {
     #[doc="<p>The CloudWatch alarms created for the target tracking policy.</p>"]
     #[serde(rename="Alarms")]
@@ -268,7 +268,7 @@ pub struct PutScalingPolicyResponse {
     pub policy_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterScalableTargetRequest {
     #[doc="<p>The maximum value to scale to in response to a scale out event. This parameter is required if you are registering a scalable target and optional if you are updating one.</p>"]
     #[serde(rename="MaxCapacity")]
@@ -293,11 +293,11 @@ pub struct RegisterScalableTargetRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterScalableTargetResponse;
 
 #[doc="<p>Represents a scalable target.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalableTarget {
     #[doc="<p>The Unix timestamp for when the scalable target was created.</p>"]
     #[serde(rename="CreationTime")]
@@ -323,7 +323,7 @@ pub struct ScalableTarget {
 }
 
 #[doc="<p>Represents a scaling activity.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalingActivity {
     #[doc="<p>The unique identifier of the scaling activity.</p>"]
     #[serde(rename="ActivityId")]
@@ -364,7 +364,7 @@ pub struct ScalingActivity {
 }
 
 #[doc="<p>Represents a scaling policy.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalingPolicy {
     #[doc="<p>The CloudWatch alarms associated with the scaling policy.</p>"]
     #[serde(rename="Alarms")]

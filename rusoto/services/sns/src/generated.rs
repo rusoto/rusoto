@@ -65,15 +65,19 @@ impl ActionsListSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddPermissionInput {
     #[doc="<p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>"]
+    #[serde(rename="AWSAccountId")]
     pub aws_account_id: Vec<String>,
     #[doc="<p>The action you want to allow for the specified principal(s).</p> <p>Valid values: any Amazon SNS action name.</p>"]
+    #[serde(rename="ActionName")]
     pub action_name: Vec<String>,
     #[doc="<p>A unique identifier for the new policy statement.</p>"]
+    #[serde(rename="Label")]
     pub label: String,
     #[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -144,9 +148,10 @@ impl BooleanDeserializer {
     }
 }
 #[doc="<p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CheckIfPhoneNumberIsOptedOutInput {
     #[doc="<p>The phone number for which you want to check the opt out status.</p>"]
+    #[serde(rename="phoneNumber")]
     pub phone_number: String,
 }
 
@@ -167,9 +172,11 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
 }
 
 #[doc="<p>The response from the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CheckIfPhoneNumberIsOptedOutResponse {
     #[doc="<p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul>"]
+    #[serde(rename="isOptedOut")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_opted_out: Option<bool>,
 }
 
@@ -217,13 +224,17 @@ impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
     }
 }
 #[doc="<p>Input for ConfirmSubscription action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfirmSubscriptionInput {
     #[doc="<p>Disallows unauthenticated unsubscribes of the subscription. If the value of this parameter is <code>true</code> and the request has an AWS signature, then only the topic owner and the subscription owner can unsubscribe the endpoint. The unsubscribe action requires AWS authentication. </p>"]
+    #[serde(rename="AuthenticateOnUnsubscribe")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub authenticate_on_unsubscribe: Option<String>,
     #[doc="<p>Short-lived token sent to an endpoint during the <code>Subscribe</code> action.</p>"]
+    #[serde(rename="Token")]
     pub token: String,
     #[doc="<p>The ARN of the topic for which you wish to confirm a subscription.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -250,9 +261,11 @@ impl ConfirmSubscriptionInputSerializer {
 }
 
 #[doc="<p>Response for ConfirmSubscriptions action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConfirmSubscriptionResponse {
     #[doc="<p>The ARN of the created subscription.</p>"]
+    #[serde(rename="SubscriptionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_arn: Option<String>,
 }
 
@@ -300,9 +313,11 @@ impl ConfirmSubscriptionResponseDeserializer {
     }
 }
 #[doc="<p>Response from CreateEndpoint action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateEndpointResponse {
     #[doc="<p>EndpointArn returned from CreateEndpoint action.</p>"]
+    #[serde(rename="EndpointArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint_arn: Option<String>,
 }
 
@@ -349,13 +364,16 @@ impl CreateEndpointResponseDeserializer {
     }
 }
 #[doc="<p>Input for CreatePlatformApplication action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePlatformApplicationInput {
     #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html\">SetPlatformApplicationAttributes</a> </p>"]
+    #[serde(rename="Attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
     #[doc="<p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The following platforms are supported: ADM (Amazon Device Messaging), APNS (Apple Push Notification Service), APNS_SANDBOX, and GCM (Google Cloud Messaging).</p>"]
+    #[serde(rename="Platform")]
     pub platform: String,
 }
 
@@ -381,9 +399,11 @@ impl CreatePlatformApplicationInputSerializer {
 }
 
 #[doc="<p>Response from CreatePlatformApplication action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePlatformApplicationResponse {
     #[doc="<p>PlatformApplicationArn is returned.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_application_arn: Option<String>,
 }
 
@@ -432,15 +452,21 @@ impl CreatePlatformApplicationResponseDeserializer {
     }
 }
 #[doc="<p>Input for CreatePlatformEndpoint action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreatePlatformEndpointInput {
     #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetEndpointAttributes.html\">SetEndpointAttributes</a>.</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p>"]
+    #[serde(rename="CustomUserData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub custom_user_data: Option<String>,
     #[doc="<p>PlatformApplicationArn returned from CreatePlatformApplication is used to create a an endpoint.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
     pub platform_application_arn: String,
     #[doc="<p>Unique identifier created by the notification service for an app on a device. The specific name for Token will vary, depending on which notification service is being used. For example, when using APNS as the notification service, you need the device token. Alternatively, when using GCM or ADM, the device token equivalent is called the registration ID.</p>"]
+    #[serde(rename="Token")]
     pub token: String,
 }
 
@@ -472,9 +498,10 @@ impl CreatePlatformEndpointInputSerializer {
 }
 
 #[doc="<p>Input for CreateTopic action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTopicInput {
     #[doc="<p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>"]
+    #[serde(rename="Name")]
     pub name: String,
 }
 
@@ -495,9 +522,11 @@ impl CreateTopicInputSerializer {
 }
 
 #[doc="<p>Response from CreateTopic action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTopicResponse {
     #[doc="<p>The Amazon Resource Name (ARN) assigned to the created topic.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -556,9 +585,10 @@ impl DelegatesListSerializer {
 }
 
 #[doc="<p>Input for DeleteEndpoint action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteEndpointInput {
     #[doc="<p>EndpointArn of endpoint to delete.</p>"]
+    #[serde(rename="EndpointArn")]
     pub endpoint_arn: String,
 }
 
@@ -579,9 +609,10 @@ impl DeleteEndpointInputSerializer {
 }
 
 #[doc="<p>Input for DeletePlatformApplication action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeletePlatformApplicationInput {
     #[doc="<p>PlatformApplicationArn of platform application object to delete.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
     pub platform_application_arn: String,
 }
 
@@ -601,9 +632,10 @@ impl DeletePlatformApplicationInputSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTopicInput {
     #[doc="<p>The ARN of the topic you want to delete.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -638,9 +670,10 @@ impl EndpointDeserializer {
     }
 }
 #[doc="<p>Input for GetEndpointAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetEndpointAttributesInput {
     #[doc="<p>EndpointArn for GetEndpointAttributes input.</p>"]
+    #[serde(rename="EndpointArn")]
     pub endpoint_arn: String,
 }
 
@@ -661,9 +694,11 @@ impl GetEndpointAttributesInputSerializer {
 }
 
 #[doc="<p>Response from GetEndpointAttributes of the EndpointArn.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetEndpointAttributesResponse {
     #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -711,9 +746,10 @@ impl GetEndpointAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Input for GetPlatformApplicationAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPlatformApplicationAttributesInput {
     #[doc="<p>PlatformApplicationArn for GetPlatformApplicationAttributesInput.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
     pub platform_application_arn: String,
 }
 
@@ -734,9 +770,11 @@ impl GetPlatformApplicationAttributesInputSerializer {
 }
 
 #[doc="<p>Response for GetPlatformApplicationAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetPlatformApplicationAttributesResponse {
     #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -785,9 +823,11 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
     }
 }
 #[doc="<p>The input for the <code>GetSMSAttributes</code> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSMSAttributesInput {
     #[doc="<p>A list of the individual attribute names, such as <code>MonthlySpendLimit</code>, for which you want values.</p> <p>For all attribute names, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetSMSAttributes.html\">SetSMSAttributes</a>.</p> <p>If you don't use this parameter, Amazon SNS returns all SMS attributes.</p>"]
+    #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Vec<String>>,
 }
 
@@ -811,9 +851,11 @@ impl GetSMSAttributesInputSerializer {
 }
 
 #[doc="<p>The response from the <code>GetSMSAttributes</code> request.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSMSAttributesResponse {
     #[doc="<p>The SMS attribute names and their values.</p>"]
+    #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -861,9 +903,10 @@ impl GetSMSAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Input for GetSubscriptionAttributes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSubscriptionAttributesInput {
     #[doc="<p>The ARN of the subscription whose properties you want to get.</p>"]
+    #[serde(rename="SubscriptionArn")]
     pub subscription_arn: String,
 }
 
@@ -884,9 +927,11 @@ impl GetSubscriptionAttributesInputSerializer {
 }
 
 #[doc="<p>Response for GetSubscriptionAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetSubscriptionAttributesResponse {
     #[doc="<p>A map of the subscription's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>SubscriptionArn</code> -- the subscription's ARN</p> </li> <li> <p> <code>TopicArn</code> -- the topic ARN that the subscription is associated with</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the subscription's owner</p> </li> <li> <p> <code>ConfirmationWasAuthenticated</code> -- true if the subscription confirmation request was authenticated</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the subscription's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -933,9 +978,10 @@ impl GetSubscriptionAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Input for GetTopicAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTopicAttributesInput {
     #[doc="<p>The ARN of the topic whose properties you want to get.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -956,9 +1002,11 @@ impl GetTopicAttributesInputSerializer {
 }
 
 #[doc="<p>Response for GetTopicAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetTopicAttributesResponse {
     #[doc="<p>A map of the topic's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic's ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic's owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic's access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the \"From\" field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -1006,11 +1054,14 @@ impl GetTopicAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Input for ListEndpointsByPlatformApplication action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEndpointsByPlatformApplicationInput {
     #[doc="<p>NextToken string is used when calling ListEndpointsByPlatformApplication action to retrieve additional records that are available after the first page results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>PlatformApplicationArn for ListEndpointsByPlatformApplicationInput action.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
     pub platform_application_arn: String,
 }
 
@@ -1035,11 +1086,15 @@ impl ListEndpointsByPlatformApplicationInputSerializer {
 }
 
 #[doc="<p>Response for ListEndpointsByPlatformApplication action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListEndpointsByPlatformApplicationResponse {
     #[doc="<p>Endpoints returned for ListEndpointsByPlatformApplication action.</p>"]
+    #[serde(rename="Endpoints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoints: Option<Vec<String>>,
     #[doc="<p>NextToken string is returned when calling ListEndpointsByPlatformApplication action if additional records are available after the first page results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1175,9 +1230,11 @@ impl ListOfPlatformApplicationsDeserializer {
     }
 }
 #[doc="<p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPhoneNumbersOptedOutInput {
     #[doc="<p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>"]
+    #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1200,11 +1257,15 @@ impl ListPhoneNumbersOptedOutInputSerializer {
 }
 
 #[doc="<p>The response from the <code>ListPhoneNumbersOptedOut</code> action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPhoneNumbersOptedOutResponse {
     #[doc="<p>A <code>NextToken</code> string is returned when you call the <code>ListPhoneNumbersOptedOut</code> action if additional records are available after the first page of results.</p>"]
+    #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of phone numbers that are opted out of receiving SMS messages. The list is paginated, and each page can contain up to 100 phone numbers.</p>"]
+    #[serde(rename="phoneNumbers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub phone_numbers: Option<Vec<String>>,
 }
 
@@ -1257,9 +1318,11 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
     }
 }
 #[doc="<p>Input for ListPlatformApplications action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPlatformApplicationsInput {
     #[doc="<p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1282,11 +1345,15 @@ impl ListPlatformApplicationsInputSerializer {
 }
 
 #[doc="<p>Response for ListPlatformApplications action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListPlatformApplicationsResponse {
     #[doc="<p>NextToken string is returned when calling ListPlatformApplications action if additional records are available after the first page results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Platform applications returned when calling ListPlatformApplications action.</p>"]
+    #[serde(rename="PlatformApplications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_applications: Option<Vec<PlatformApplication>>,
 }
 
@@ -1349,11 +1416,14 @@ impl ListStringSerializer {
 }
 
 #[doc="<p>Input for ListSubscriptionsByTopic action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSubscriptionsByTopicInput {
     #[doc="<p>Token returned by the previous <code>ListSubscriptionsByTopic</code> request.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The ARN of the topic for which you wish to find subscriptions.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -1378,11 +1448,15 @@ impl ListSubscriptionsByTopicInputSerializer {
 }
 
 #[doc="<p>Response for ListSubscriptionsByTopic action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSubscriptionsByTopicResponse {
     #[doc="<p>Token to pass along to the next <code>ListSubscriptionsByTopic</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of subscriptions.</p>"]
+    #[serde(rename="Subscriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
@@ -1435,9 +1509,11 @@ impl ListSubscriptionsByTopicResponseDeserializer {
     }
 }
 #[doc="<p>Input for ListSubscriptions action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSubscriptionsInput {
     #[doc="<p>Token returned by the previous <code>ListSubscriptions</code> request.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1460,11 +1536,15 @@ impl ListSubscriptionsInputSerializer {
 }
 
 #[doc="<p>Response for ListSubscriptions action</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListSubscriptionsResponse {
     #[doc="<p>Token to pass along to the next <code>ListSubscriptions</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of subscriptions.</p>"]
+    #[serde(rename="Subscriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
@@ -1515,9 +1595,11 @@ impl ListSubscriptionsResponseDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTopicsInput {
     #[doc="<p>Token returned by the previous <code>ListTopics</code> request.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -1540,11 +1622,15 @@ impl ListTopicsInputSerializer {
 }
 
 #[doc="<p>Response for ListTopics action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTopicsResponse {
     #[doc="<p>Token to pass along to the next <code>ListTopics</code> request. This element is returned if there are additional topics to retrieve.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>A list of topic ARNs.</p>"]
+    #[serde(rename="Topics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topics: Option<Vec<Topic>>,
 }
 
@@ -1651,13 +1737,22 @@ impl MessageAttributeMapSerializer {
 }
 
 #[doc="<p>The user-specified message attribute value. For string data types, the value attribute has the same restrictions on the content as the message body. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_Publish.html\">Publish</a>.</p> <p>Name, type, and value must not be empty or null. In addition, the message body should not be empty or null. All parts of the message attribute, including name, type, and value, are included in the message size restriction, which is currently 256 KB (262,144 bytes). For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html\">Using Amazon SNS Message Attributes</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MessageAttributeValue {
     #[doc="<p>Binary type attributes can store any binary data, for example, compressed data, encrypted data, or images.</p>"]
+    #[serde(rename="BinaryValue")]
+    #[serde(
+                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
+                            default,
+                        )]
     pub binary_value: Option<Vec<u8>>,
     #[doc="<p>Amazon SNS supports the following logical data types: String, Number, and Binary. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html#SNSMessageAttributes.DataTypes\">Message Attribute Data Types</a>.</p>"]
+    #[serde(rename="DataType")]
     pub data_type: String,
     #[doc="<p>Strings are Unicode with UTF8 binary encoding. For a list of code values, see <a href=\"http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters\">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p>"]
+    #[serde(rename="StringValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub string_value: Option<String>,
 }
 
@@ -1716,9 +1811,10 @@ impl NextTokenDeserializer {
     }
 }
 #[doc="<p>Input for the OptInPhoneNumber action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OptInPhoneNumberInput {
     #[doc="<p>The phone number to opt in.</p>"]
+    #[serde(rename="phoneNumber")]
     pub phone_number: String,
 }
 
@@ -1739,7 +1835,7 @@ impl OptInPhoneNumberInputSerializer {
 }
 
 #[doc="<p>The response for the OptInPhoneNumber action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct OptInPhoneNumberResponse;
 
 struct OptInPhoneNumberResponseDeserializer;
@@ -1814,11 +1910,15 @@ impl PhoneNumberListDeserializer {
     }
 }
 #[doc="<p>Platform application object.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlatformApplication {
     #[doc="<p>Attributes for platform application object.</p>"]
+    #[serde(rename="Attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>PlatformApplicationArn for platform application object.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_application_arn: Option<String>,
 }
 
@@ -1885,21 +1985,34 @@ impl ProtocolDeserializer {
     }
 }
 #[doc="<p>Input for Publish action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PublishInput {
     #[doc="<p>The message you want to send to the topic.</p> <p>If you want to send the same message to all transport protocols, include the text of the message as a String value.</p> <p>If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p>Constraints: Messages must be UTF-8 encoded strings at most 256 KB in size (262144 bytes, not 262144 characters).</p> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, \"\", is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul>"]
+    #[serde(rename="Message")]
     pub message: String,
     #[doc="<p>Message attributes for Publish action.</p>"]
+    #[serde(rename="MessageAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_attributes: Option<::std::collections::HashMap<String, MessageAttributeValue>>,
     #[doc="<p>Set <code>MessageStructure</code> to <code>json</code> if you want to send a different message for each protocol. For example, using one publish action, you can send a short message to your SMS subscribers and a longer message to your email subscribers. If you set <code>MessageStructure</code> to <code>json</code>, the value of the <code>Message</code> parameter must: </p> <ul> <li> <p>be a syntactically valid JSON object; and</p> </li> <li> <p>contain at least a top-level JSON key of \"default\" with a value that is a string.</p> </li> </ul> <p>You can define other top-level keys that define the message you want to send to a specific transport protocol (e.g., \"http\").</p> <p>For information about sending different messages for each protocol using the AWS Management Console, go to <a href=\"http://docs.aws.amazon.com/sns/latest/gsg/Publish.html#sns-message-formatting-by-protocol\">Create Different Messages for Each Protocol</a> in the <i>Amazon Simple Notification Service Getting Started Guide</i>. </p> <p>Valid value: <code>json</code> </p>"]
+    #[serde(rename="MessageStructure")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_structure: Option<String>,
     #[doc="<p>The phone number to which you want to deliver an SMS message. Use E.164 format.</p> <p>If you don't specify a value for the <code>PhoneNumber</code> parameter, you must specify a value for the <code>TargetArn</code> or <code>TopicArn</code> parameters.</p>"]
+    #[serde(rename="PhoneNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub phone_number: Option<String>,
     #[doc="<p>Optional parameter to be used as the \"Subject\" line when the message is delivered to email endpoints. This field will also be included, if present, in the standard JSON messages delivered to other endpoints.</p> <p>Constraints: Subjects must be ASCII text that begins with a letter, number, or punctuation mark; must not include line breaks or control characters; and must be less than 100 characters long.</p>"]
+    #[serde(rename="Subject")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subject: Option<String>,
     #[doc="<p>Either TopicArn or EndpointArn, but not both.</p> <p>If you don't specify a value for the <code>TargetArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TopicArn</code> parameters.</p>"]
+    #[serde(rename="TargetArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<String>,
     #[doc="<p>The topic you want to publish to.</p> <p>If you don't specify a value for the <code>TopicArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TargetArn</code> parameters.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -1945,9 +2058,11 @@ impl PublishInputSerializer {
 }
 
 #[doc="<p>Response for Publish action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PublishResponse {
     #[doc="<p>Unique identifier assigned to the published message.</p> <p>Length Constraint: Maximum 100 characters</p>"]
+    #[serde(rename="MessageId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_id: Option<String>,
 }
 
@@ -1994,11 +2109,13 @@ impl PublishResponseDeserializer {
     }
 }
 #[doc="<p>Input for RemovePermission action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemovePermissionInput {
     #[doc="<p>The unique label of the statement you want to remove.</p>"]
+    #[serde(rename="Label")]
     pub label: String,
     #[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -2021,11 +2138,13 @@ impl RemovePermissionInputSerializer {
 }
 
 #[doc="<p>Input for SetEndpointAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetEndpointAttributesInput {
     #[doc="<p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
     #[doc="<p>EndpointArn used for SetEndpointAttributes action.</p>"]
+    #[serde(rename="EndpointArn")]
     pub endpoint_arn: String,
 }
 
@@ -2049,11 +2168,13 @@ impl SetEndpointAttributesInputSerializer {
 }
 
 #[doc="<p>Input for SetPlatformApplicationAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetPlatformApplicationAttributesInput {
     #[doc="<p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS_SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\".</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\".</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul>"]
+    #[serde(rename="Attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
     #[doc="<p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>"]
+    #[serde(rename="PlatformApplicationArn")]
     pub platform_application_arn: String,
 }
 
@@ -2077,9 +2198,10 @@ impl SetPlatformApplicationAttributesInputSerializer {
 }
 
 #[doc="<p>The input for the SetSMSAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSMSAttributesInput {
     #[doc="<p>The default settings for sending SMS messages from your account. You can set values for the following attribute names:</p> <p> <code>MonthlySpendLimit</code> – The maximum amount in USD that you are willing to spend each month to send SMS messages. When Amazon SNS determines that sending an SMS message would incur a cost that exceeds this limit, it stops sending SMS messages within minutes.</p> <important> <p>Amazon SNS stops sending SMS messages within minutes of the limit being crossed. During that interval, if you continue to send SMS messages, you will incur costs that exceed your limit.</p> </important> <p>By default, the spend limit is set to the maximum allowed by Amazon SNS. If you want to exceed the maximum, contact <a href=\"https://aws.amazon.com/premiumsupport/\">AWS Support</a> or your AWS sales representative for a service limit increase.</p> <p> <code>DeliveryStatusIAMRole</code> – The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. For each SMS message that you send, Amazon SNS writes a log that includes the message price, the success or failure status, the reason for failure (if the message failed), the message dwell time, and other information.</p> <p> <code>DeliveryStatusSuccessSamplingRate</code> – The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value can be an integer from 0 - 100. For example, to write logs only for failed deliveries, set this value to <code>0</code>. To write logs for 10% of your successful deliveries, set it to <code>10</code>.</p> <p> <code>DefaultSenderID</code> – A string, such as your business brand, that is displayed as the sender on the receiving device. Support for sender IDs varies by country. The sender ID can be 1 - 11 alphanumeric characters, and it must contain at least one letter.</p> <p> <code>DefaultSMSType</code> – The type of SMS message that you will send by default. You can assign the following values:</p> <ul> <li> <p> <code>Promotional</code> – (Default) Noncritical messages, such as marketing messages. Amazon SNS optimizes the message delivery to incur the lowest cost.</p> </li> <li> <p> <code>Transactional</code> – Critical messages that support customer transactions, such as one-time passcodes for multi-factor authentication. Amazon SNS optimizes the message delivery to achieve the highest reliability.</p> </li> </ul> <p> <code>UsageReportS3Bucket</code> – The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. Each day, Amazon SNS will deliver a usage report as a CSV file to the bucket. The report includes the following information for each SMS message that was successfully delivered by your account:</p> <ul> <li> <p>Time that the message was published (in UTC)</p> </li> <li> <p>Message ID</p> </li> <li> <p>Destination phone number</p> </li> <li> <p>Message type</p> </li> <li> <p>Delivery status</p> </li> <li> <p>Message price (in USD)</p> </li> <li> <p>Part number (a message is split into multiple parts if it is too long for a single message)</p> </li> <li> <p>Total number of parts</p> </li> </ul> <p>To receive the report, the bucket must have a policy that allows the Amazon SNS service principle to perform the <code>s3:PutObject</code> and <code>s3:GetBucketLocation</code> actions.</p> <p>For an example bucket policy and usage report, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_stats.html\">Monitoring SMS Activity</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    #[serde(rename="attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
 }
 
@@ -2101,7 +2223,7 @@ impl SetSMSAttributesInputSerializer {
 }
 
 #[doc="<p>The response for the SetSMSAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSMSAttributesResponse;
 
 struct SetSMSAttributesResponseDeserializer;
@@ -2121,13 +2243,17 @@ impl SetSMSAttributesResponseDeserializer {
     }
 }
 #[doc="<p>Input for SetSubscriptionAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetSubscriptionAttributesInput {
     #[doc="<p>The name of the attribute you want to set. Only a subset of the subscriptions attributes are mutable.</p> <p>Valid values: <code>DeliveryPolicy</code> | <code>RawMessageDelivery</code> </p>"]
+    #[serde(rename="AttributeName")]
     pub attribute_name: String,
     #[doc="<p>The new value for the attribute in JSON format.</p>"]
+    #[serde(rename="AttributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value: Option<String>,
     #[doc="<p>The ARN of the subscription to modify.</p>"]
+    #[serde(rename="SubscriptionArn")]
     pub subscription_arn: String,
 }
 
@@ -2154,13 +2280,17 @@ impl SetSubscriptionAttributesInputSerializer {
 }
 
 #[doc="<p>Input for SetTopicAttributes action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SetTopicAttributesInput {
     #[doc="<p>The name of the attribute you want to set. Only a subset of the topic's attributes are mutable.</p> <p>Valid values: <code>Policy</code> | <code>DisplayName</code> | <code>DeliveryPolicy</code> </p>"]
+    #[serde(rename="AttributeName")]
     pub attribute_name: String,
     #[doc="<p>The new value for the attribute.</p>"]
+    #[serde(rename="AttributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value: Option<String>,
     #[doc="<p>The ARN of the topic to modify.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -2201,13 +2331,17 @@ impl StringDeserializer {
     }
 }
 #[doc="<p>Input for Subscribe action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscribeInput {
     #[doc="<p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with \"http://\"</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with \"https://\"</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul>"]
+    #[serde(rename="Endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<String>,
     #[doc="<p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul>"]
+    #[serde(rename="Protocol")]
     pub protocol: String,
     #[doc="<p>The ARN of the topic you want to subscribe to.</p>"]
+    #[serde(rename="TopicArn")]
     pub topic_arn: String,
 }
 
@@ -2234,9 +2368,11 @@ impl SubscribeInputSerializer {
 }
 
 #[doc="<p>Response for Subscribe action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SubscribeResponse {
     #[doc="<p>The ARN of the subscription, if the service was able to create a subscription immediately (without requiring endpoint owner confirmation).</p>"]
+    #[serde(rename="SubscriptionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_arn: Option<String>,
 }
 
@@ -2284,17 +2420,27 @@ impl SubscribeResponseDeserializer {
     }
 }
 #[doc="<p>A wrapper type for the attributes of an Amazon SNS subscription.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subscription {
     #[doc="<p>The subscription's endpoint (format depends on the protocol).</p>"]
+    #[serde(rename="Endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<String>,
     #[doc="<p>The subscription's owner.</p>"]
+    #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<String>,
     #[doc="<p>The subscription's protocol.</p>"]
+    #[serde(rename="Protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<String>,
     #[doc="<p>The subscription's ARN.</p>"]
+    #[serde(rename="SubscriptionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_arn: Option<String>,
     #[doc="<p>The ARN of the subscription's topic.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -2437,9 +2583,11 @@ impl SubscriptionsListDeserializer {
     }
 }
 #[doc="<p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Topic {
     #[doc="<p>The topic's ARN.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
 }
 
@@ -2565,9 +2713,10 @@ impl TopicsListDeserializer {
     }
 }
 #[doc="<p>Input for Unsubscribe action.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UnsubscribeInput {
     #[doc="<p>The ARN of the subscription to be deleted.</p>"]
+    #[serde(rename="SubscriptionArn")]
     pub subscription_arn: String,
 }
 

@@ -40,11 +40,13 @@ enum DeserializerNext {
     Element(String),
 }
 #[doc="<p>Represents the input of an AddTagsToResource operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource to which the tags are to be added, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
+    #[serde(rename="ResourceName")]
     pub resource_name: String,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
+    #[serde(rename="Tags")]
     pub tags: Vec<Tag>,
 }
 
@@ -66,9 +68,11 @@ impl AddTagsToResourceMessageSerializer {
 }
 
 #[doc="<p>Represents the allowed node types you can use to modify your cache cluster or replication group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AllowedNodeTypeModificationsMessage {
     #[doc="<p>A string list, each element of which specifies a cache node type which you can use to scale your cache cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>"]
+    #[serde(rename="ScaleUpModifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scale_up_modifications: Option<Vec<String>>,
 }
 
@@ -117,13 +121,16 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
     }
 }
 #[doc="<p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeCacheSecurityGroupIngressMessage {
     #[doc="<p>The cache security group that allows network ingress.</p>"]
+    #[serde(rename="CacheSecurityGroupName")]
     pub cache_security_group_name: String,
     #[doc="<p>The Amazon EC2 security group to be authorized for ingress to the cache security group.</p>"]
+    #[serde(rename="EC2SecurityGroupName")]
     pub ec2_security_group_name: String,
     #[doc="<p>The AWS account number of the Amazon EC2 security group owner. Note that this is not the same thing as an AWS access key ID - you must provide a valid AWS account number for this parameter.</p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
     pub ec2_security_group_owner_id: String,
 }
 
@@ -149,8 +156,10 @@ impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AuthorizeCacheSecurityGroupIngressResult {
+    #[serde(rename="CacheSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
@@ -213,9 +222,11 @@ impl AutomaticFailoverStatusDeserializer {
     }
 }
 #[doc="<p>Describes an Availability Zone in which the cache cluster is launched.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AvailabilityZone {
     #[doc="<p>The name of the Availability Zone.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -342,48 +353,92 @@ impl BooleanOptionalDeserializer {
     }
 }
 #[doc="<p>Contains all of the attributes of a specific cache cluster.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheCluster {
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The date and time when the cache cluster was created.</p>"]
+    #[serde(rename="CacheClusterCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_create_time: Option<String>,
     #[doc="<p>The user-supplied identifier of the cache cluster. This identifier is a unique key that identifies a cache cluster.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The current state of this cache cluster, one of the following values: <code>available</code>, <code>creating</code>, <code>deleted</code>, <code>deleting</code>, <code>incompatible-network</code>, <code>modifying</code>, <code>rebooting cache cluster nodes</code>, <code>restore-failed</code>, or <code>snapshotting</code>.</p>"]
+    #[serde(rename="CacheClusterStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_status: Option<String>,
     #[doc="<p>The name of the compute and memory capacity node type for the cache cluster.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>A list of cache nodes that are members of the cache cluster.</p>"]
+    #[serde(rename="CacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_nodes: Option<Vec<CacheNode>>,
+    #[serde(rename="CacheParameterGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group: Option<CacheParameterGroupStatus>,
     #[doc="<p>A list of cache security group elements, composed of name and status sub-elements.</p>"]
+    #[serde(rename="CacheSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_groups: Option<Vec<CacheSecurityGroupMembership>>,
     #[doc="<p>The name of the cache subnet group associated with the cache cluster.</p>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The URL of the web page where you can download the latest ElastiCache client library.</p>"]
+    #[serde(rename="ClientDownloadLandingPage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_download_landing_page: Option<String>,
     #[doc="<p>Represents a Memcached cluster endpoint which, if Automatic Discovery is enabled on the cluster, can be used by an application to connect to any node in the cluster. The configuration endpoint will always have <code>.cfg</code> in it.</p> <p>Example: <code>mem-3.9dvc4r<u>.cfg</u>.usw2.cache.amazonaws.com:11211</code> </p>"]
+    #[serde(rename="ConfigurationEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_endpoint: Option<Endpoint>,
     #[doc="<p>The name of the cache engine (<code>memcached</code> or <code>redis</code>) to be used for this cache cluster.</p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The version of the cache engine that is used in this cache cluster.</p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
+    #[serde(rename="NotificationConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_configuration: Option<NotificationConfiguration>,
     #[doc="<p>The number of cache nodes in the cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
+    #[serde(rename="NumCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_nodes: Option<i64>,
+    #[serde(rename="PendingModifiedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_modified_values: Option<PendingModifiedValues>,
     #[doc="<p>The name of the Availability Zone in which the cache cluster is located or \"Multiple\" if the cache nodes are located in different Availability Zones.</p>"]
+    #[serde(rename="PreferredAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_availability_zone: Option<String>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>The replication group to which this cache cluster belongs. If this field is empty, the cache cluster is not associated with any replication group.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>A list of VPC Security Groups associated with the cache cluster.</p>"]
+    #[serde(rename="SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_groups: Option<Vec<SecurityGroupMembership>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p> </important>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster.</p> <p>Example: <code>05:00-09:00</code> </p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
 }
 
@@ -567,11 +622,15 @@ impl CacheClusterListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeCacheClusters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheClusterMessage {
     #[doc="<p>A list of cache clusters. Each item in the list contains detailed information about one cache cluster.</p>"]
+    #[serde(rename="CacheClusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_clusters: Option<Vec<CacheCluster>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -623,17 +682,27 @@ impl CacheClusterMessageDeserializer {
     }
 }
 #[doc="<p>Provides all of the details about a particular cache engine version.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheEngineVersion {
     #[doc="<p>The description of the cache engine.</p>"]
+    #[serde(rename="CacheEngineDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_engine_description: Option<String>,
     #[doc="<p>The description of the cache engine version.</p>"]
+    #[serde(rename="CacheEngineVersionDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_engine_version_description: Option<String>,
     #[doc="<p>The name of the cache parameter group family associated with this cache engine.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
+    #[serde(rename="CacheParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>The name of the cache engine.</p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The version number of the cache engine.</p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
 }
 
@@ -740,11 +809,15 @@ impl CacheEngineVersionListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <a>DescribeCacheEngineVersions</a> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheEngineVersionMessage {
     #[doc="<p>A list of cache engine version details. Each element in the list contains detailed information about one cache engine version.</p>"]
+    #[serde(rename="CacheEngineVersions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_engine_versions: Option<Vec<CacheEngineVersion>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -796,21 +869,35 @@ impl CacheEngineVersionMessageDeserializer {
     }
 }
 #[doc="<p>Represents an individual cache node within a cache cluster. Each cache node runs its own instance of the cluster's protocol-compliant caching software - either Memcached or Redis.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheNode {
     #[doc="<p>The date and time when the cache node was created.</p>"]
+    #[serde(rename="CacheNodeCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_create_time: Option<String>,
     #[doc="<p>The cache node identifier. A node ID is a numeric identifier (0001, 0002, etc.). The combination of cluster ID and node ID uniquely identifies every cache node used in a customer's AWS account.</p>"]
+    #[serde(rename="CacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_id: Option<String>,
     #[doc="<p>The current state of this cache node.</p>"]
+    #[serde(rename="CacheNodeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_status: Option<String>,
     #[doc="<p>The Availability Zone where this node was created and now resides.</p>"]
+    #[serde(rename="CustomerAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_availability_zone: Option<String>,
     #[doc="<p>The hostname for connecting to this cache node.</p>"]
+    #[serde(rename="Endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<Endpoint>,
     #[doc="<p>The status of the parameter group applied to this cache node.</p>"]
+    #[serde(rename="ParameterGroupStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_group_status: Option<String>,
     #[doc="<p>The ID of the primary node to which this read replica node is synchronized. If this field is empty, this node is not associated with a primary cache cluster.</p>"]
+    #[serde(rename="SourceCacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_cache_node_id: Option<String>,
 }
 
@@ -980,25 +1067,43 @@ impl CacheNodeListDeserializer {
     }
 }
 #[doc="<p>A parameter that has a different value for each cache node type it is applied to. For example, in a Redis cache cluster, a <code>cache.m1.large</code> cache node type would have a larger <code>maxmemory</code> value than a <code>cache.m1.small</code> type.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheNodeTypeSpecificParameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
+    #[serde(rename="AllowedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allowed_values: Option<String>,
     #[doc="<p>A list of cache node types and their corresponding values for this parameter.</p>"]
+    #[serde(rename="CacheNodeTypeSpecificValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type_specific_values: Option<Vec<CacheNodeTypeSpecificValue>>,
     #[doc="<p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Clusters.Rebooting.html\">Rebooting a Cluster</a>.</p>"]
+    #[serde(rename="ChangeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub change_type: Option<String>,
     #[doc="<p>The valid data type for the parameter.</p>"]
+    #[serde(rename="DataType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed.</p>"]
+    #[serde(rename="IsModifiable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest cache engine version to which the parameter can apply.</p>"]
+    #[serde(rename="MinimumEngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
+    #[serde(rename="ParameterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name: Option<String>,
     #[doc="<p>The source of the parameter value.</p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
 }
 
@@ -1120,11 +1225,15 @@ impl CacheNodeTypeSpecificParametersListDeserializer {
     }
 }
 #[doc="<p>A value that applies only to a certain cache node type.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheNodeTypeSpecificValue {
     #[doc="<p>The cache node type for which this value applies.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The value for the cache node type.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -1216,13 +1325,19 @@ impl CacheNodeTypeSpecificValueListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>CreateCacheParameterGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheParameterGroup {
     #[doc="<p>The name of the cache parameter group family that this cache parameter group is compatible with.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
+    #[serde(rename="CacheParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>The name of the cache parameter group.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>The description for this cache parameter group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
 }
 
@@ -1279,13 +1394,19 @@ impl CacheParameterGroupDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeCacheParameters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheParameterGroupDetails {
     #[doc="<p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>"]
+    #[serde(rename="CacheNodeTypeSpecificParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Parameter</a> instances.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
@@ -1381,9 +1502,11 @@ impl CacheParameterGroupListDeserializer {
     }
 }
 #[doc="<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheParameterGroupNameMessage {
     #[doc="<p>The name of the cache parameter group.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
 }
 
@@ -1431,13 +1554,19 @@ impl CacheParameterGroupNameMessageDeserializer {
     }
 }
 #[doc="<p>Status of the cache parameter group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheParameterGroupStatus {
     #[doc="<p>A list of the cache node IDs which need to be rebooted for parameter changes to be applied. A node ID is a numeric identifier (0001, 0002, etc.).</p>"]
+    #[serde(rename="CacheNodeIdsToReboot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_ids_to_reboot: Option<Vec<String>>,
     #[doc="<p>The name of the cache parameter group.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>The status of parameter updates.</p>"]
+    #[serde(rename="ParameterApplyStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_apply_status: Option<String>,
 }
 
@@ -1495,11 +1624,15 @@ impl CacheParameterGroupStatusDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeCacheParameterGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheParameterGroupsMessage {
     #[doc="<p>A list of cache parameter groups. Each element in the list contains detailed information about one cache parameter group.</p>"]
+    #[serde(rename="CacheParameterGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_groups: Option<Vec<CacheParameterGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -1551,15 +1684,23 @@ impl CacheParameterGroupsMessageDeserializer {
     }
 }
 #[doc="<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li> <p> <code>RevokeCacheSecurityGroupIngress</code> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheSecurityGroup {
     #[doc="<p>The name of the cache security group.</p>"]
+    #[serde(rename="CacheSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_name: Option<String>,
     #[doc="<p>The description of the cache security group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>A list of Amazon EC2 security groups that are associated with this cache security group.</p>"]
+    #[serde(rename="EC2SecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_groups: Option<Vec<EC2SecurityGroup>>,
     #[doc="<p>The AWS account ID of the cache security group owner.</p>"]
+    #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<String>,
 }
 
@@ -1620,11 +1761,15 @@ impl CacheSecurityGroupDeserializer {
     }
 }
 #[doc="<p>Represents a cache cluster's status within a particular cache security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheSecurityGroupMembership {
     #[doc="<p>The name of the cache security group.</p>"]
+    #[serde(rename="CacheSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_name: Option<String>,
     #[doc="<p>The membership status in the cache security group. The status changes when a cache security group is modified, or when the cache security groups assigned to a cache cluster are modified.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -1718,11 +1863,15 @@ impl CacheSecurityGroupMembershipListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeCacheSecurityGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheSecurityGroupMessage {
     #[doc="<p>A list of cache security groups. Each element in the list contains detailed information about one group.</p>"]
+    #[serde(rename="CacheSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_groups: Option<Vec<CacheSecurityGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -1827,15 +1976,23 @@ impl CacheSecurityGroupsDeserializer {
     }
 }
 #[doc="<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>CreateCacheSubnetGroup</code> </p> </li> <li> <p> <code>ModifyCacheSubnetGroup</code> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheSubnetGroup {
     #[doc="<p>The description of the cache subnet group.</p>"]
+    #[serde(rename="CacheSubnetGroupDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_description: Option<String>,
     #[doc="<p>The name of the cache subnet group.</p>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>A list of subnets associated with the cache subnet group.</p>"]
+    #[serde(rename="Subnets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>The Amazon Virtual Private Cloud identifier (VPC ID) of the cache subnet group.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -1896,11 +2053,15 @@ impl CacheSubnetGroupDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeCacheSubnetGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CacheSubnetGroupMessage {
     #[doc="<p>A list of cache subnet groups. Each element in the list contains detailed information about one group.</p>"]
+    #[serde(rename="CacheSubnetGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_groups: Option<Vec<CacheSubnetGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -2049,13 +2210,17 @@ impl ClusterIdListDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopySnapshotMessage {
     #[doc="<p>The name of an existing snapshot from which to make a copy.</p>"]
+    #[serde(rename="SourceSnapshotName")]
     pub source_snapshot_name: String,
     #[doc="<p>The Amazon S3 bucket to which the snapshot is exported. This parameter is used only when exporting a snapshot for external access.</p> <p>When using this parameter to export a snapshot, be sure Amazon ElastiCache has the needed permissions to this S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess\">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the <i>Amazon ElastiCache User Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Snapshots.Exporting.html\">Exporting a Snapshot</a> in the <i>Amazon ElastiCache User Guide</i>.</p>"]
+    #[serde(rename="TargetBucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_bucket: Option<String>,
     #[doc="<p>A name for the snapshot copy. ElastiCache does not permit overwriting a snapshot, therefore this name must be unique within its context - ElastiCache or an Amazon S3 bucket if exporting.</p>"]
+    #[serde(rename="TargetSnapshotName")]
     pub target_snapshot_name: String,
 }
 
@@ -2081,8 +2246,10 @@ impl CopySnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopySnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -2129,53 +2296,98 @@ impl CopySnapshotResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a CreateCacheCluster operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheClusterMessage {
     #[doc="<p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached cache clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>"]
+    #[serde(rename="AZMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub az_mode: Option<String>,
     #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
+    #[serde(rename="AuthToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="CacheClusterId")]
     pub cache_cluster_id: String,
     #[doc="<p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the parameter group to associate with this cache cluster. If this argument is omitted, the default parameter group for the specified engine is used. You cannot use any parameter group which has <code>cluster-enabled='yes'</code> when creating a cluster.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of security group names to associate with this cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    #[serde(rename="CacheSecurityGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The name of the subnet group to be used for the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html\">Subnets and Subnet Groups</a>.</p> </important>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The name of the cache engine to be used for this cache cluster.</p> <p>Valid values for this parameter are: <code>memcached</code> | <code>redis</code> </p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The version number of the cache engine to be used for this cache cluster. To view the supported cache engine versions, use the DescribeCacheEngineVersions operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster or replication group and create it anew with the earlier engine version. </p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>"]
+    #[serde(rename="NotificationTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The initial number of cache nodes that the cache cluster has.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <p>If you need more than 20 nodes for your Memcached cluster, please fill out the ElastiCache Limit Increase Request form at <a href=\"http://aws.amazon.com/contact-us/elasticache-node-limit-request/\">http://aws.amazon.com/contact-us/elasticache-node-limit-request/</a>.</p>"]
+    #[serde(rename="NumCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_nodes: Option<i64>,
     #[doc="<p>The port number on which each of the cache nodes accepts connections.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The EC2 Availability Zone in which the cache cluster is created.</p> <p>All nodes belonging to this Memcached cache cluster are placed in the preferred Availability Zone. If you want to create your nodes across multiple Availability Zones, use <code>PreferredAvailabilityZones</code>.</p> <p>Default: System chosen Availability Zone.</p>"]
+    #[serde(rename="PreferredAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_availability_zone: Option<String>,
     #[doc="<p>A list of the Availability Zones in which cache nodes are created. The order of the zones in the list is not important.</p> <p>This option is only supported on Memcached.</p> <note> <p>If you are creating your cache cluster in an Amazon VPC (recommended) you can only locate nodes in Availability Zones that are associated with the subnets in the selected subnet group.</p> <p>The number of Availability Zones listed must equal the value of <code>NumCacheNodes</code>.</p> </note> <p>If you want all the nodes in the same Availability Zone, use <code>PreferredAvailabilityZone</code> instead, or repeat the Availability Zone multiple times in the list.</p> <p>Default: System chosen Availability Zones.</p>"]
+    #[serde(rename="PreferredAvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_availability_zones: Option<Vec<String>>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cache cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <p>The ID of the replication group to which this cache cluster should belong. If this parameter is specified, the cache cluster is added to the specified replication group as a read replica; otherwise, the cache cluster is a standalone primary that is not part of any replication group.</p> <p>If the specified replication group is Multi-AZ enabled and the Availability Zone is not specified, the cache cluster is created in Availability Zones that provide the best spread of read replicas across Availability Zones.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>One or more VPC security groups associated with the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A single-element string list containing an Amazon Resource Name (ARN) that uniquely identifies a Redis RDB snapshot file stored in Amazon S3. The snapshot file is used to populate the node group (shard). The Amazon S3 object name in the ARN cannot contain any commas.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
+    #[serde(rename="SnapshotArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_arns: Option<Vec<String>>,
     #[doc="<p>The name of a Redis snapshot from which to restore data into the new node group (shard). The snapshot status changes to <code>restoring</code> while the new node group (shard) is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
+    #[serde(rename="SnapshotName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_name: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <p> <b>Note:</b> This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2290,8 +2502,10 @@ impl CreateCacheClusterMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheClusterResult {
+    #[serde(rename="CacheCluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster: Option<CacheCluster>,
 }
 
@@ -2339,13 +2553,16 @@ impl CreateCacheClusterResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CreateCacheParameterGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group family that the cache parameter group can be used with.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
+    #[serde(rename="CacheParameterGroupFamily")]
     pub cache_parameter_group_family: String,
     #[doc="<p>A user-specified name for the cache parameter group.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
     pub cache_parameter_group_name: String,
     #[doc="<p>A user-specified description for the cache parameter group.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
 }
 
@@ -2369,8 +2586,10 @@ impl CreateCacheParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheParameterGroupResult {
+    #[serde(rename="CacheParameterGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group: Option<CacheParameterGroup>,
 }
 
@@ -2419,11 +2638,13 @@ impl CreateCacheParameterGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CreateCacheSecurityGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheSecurityGroupMessage {
     #[doc="<p>A name for the cache security group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Cannot be the word \"Default\".</p> <p>Example: <code>mysecuritygroup</code> </p>"]
+    #[serde(rename="CacheSecurityGroupName")]
     pub cache_security_group_name: String,
     #[doc="<p>A description for the cache security group.</p>"]
+    #[serde(rename="Description")]
     pub description: String,
 }
 
@@ -2445,8 +2666,10 @@ impl CreateCacheSecurityGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheSecurityGroupResult {
+    #[serde(rename="CacheSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
@@ -2494,13 +2717,16 @@ impl CreateCacheSecurityGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CreateCacheSubnetGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheSubnetGroupMessage {
     #[doc="<p>A description for the cache subnet group.</p>"]
+    #[serde(rename="CacheSubnetGroupDescription")]
     pub cache_subnet_group_description: String,
     #[doc="<p>A name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>"]
+    #[serde(rename="CacheSubnetGroupName")]
     pub cache_subnet_group_name: String,
     #[doc="<p>A list of VPC subnet IDs for the cache subnet group.</p>"]
+    #[serde(rename="SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
 
@@ -2525,8 +2751,10 @@ impl CreateCacheSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateCacheSubnetGroupResult {
+    #[serde(rename="CacheSubnetGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
@@ -2574,59 +2802,109 @@ impl CreateCacheSubnetGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationGroupMessage {
     #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
+    #[serde(rename="AuthToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <note> <p>ElastiCache Multi-AZ replication groups is not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 and T2 node types.</p> <p>Redis (cluster mode enabled): T2 node types.</p> </li> </ul> </note>"]
+    #[serde(rename="AutomaticFailoverEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automatic_failover_enabled: Option<bool>,
     #[doc="<p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used.</p> <p>If you are running Redis version 3.2.4 or later, only one node group (shard), and want to use a default parameter group, we recommend that you specify the parameter group by name. </p> <ul> <li> <p>To create a Redis (cluster mode disabled) replication group, use <code>CacheParameterGroupName=default.redis3.2</code>.</p> </li> <li> <p>To create a Redis (cluster mode enabled) replication group, use <code>CacheParameterGroupName=default.redis3.2.cluster.on</code>.</p> </li> </ul>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to associate with this replication group.</p>"]
+    #[serde(rename="CacheSecurityGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The name of the cache subnet group to be used for the replication group.</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html\">Subnets and Subnet Groups</a>.</p> </important>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The name of the cache engine to be used for the cache clusters in this replication group.</p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The version number of the cache engine to be used for the cache clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster or replication group and create it anew with the earlier engine version. </p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following: Slots, PrimaryAvailabilityZone, ReplicaAvailabilityZones, ReplicaCount.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter.</p>"]
+    #[serde(rename="NodeGroupConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>"]
+    #[serde(rename="NotificationTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The number of clusters this replication group initially has.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>ReplicasPerNodeGroup</code> instead.</p> <p>If <code>AutomaticFailoverEnabled</code> is <code>true</code>, the value of this parameter must be at least 2. If <code>AutomaticFailoverEnabled</code> is <code>false</code> you can omit this parameter (it will default to 1), or you can explicitly set it to a value between 2 and 6.</p> <p>The maximum permitted value for <code>NumCacheClusters</code> is 6 (primary plus 5 replicas).</p>"]
+    #[serde(rename="NumCacheClusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_clusters: Option<i64>,
     #[doc="<p>An optional parameter that specifies the number of node groups (shards) for this Redis (cluster mode enabled) replication group. For Redis (cluster mode disabled) either omit this parameter or set it to 1.</p> <p>Default: 1</p>"]
+    #[serde(rename="NumNodeGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_node_groups: Option<i64>,
     #[doc="<p>The port number on which each member of the replication group accepts connections.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>A list of EC2 Availability Zones in which the replication group's cache clusters are created. The order of the Availability Zones in the list is the order in which clusters are allocated. The primary cluster is created in the first AZ in the list.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>NodeGroupConfiguration</code> instead.</p> <note> <p>If you are creating your replication group in an Amazon VPC (recommended), you can only locate cache clusters in Availability Zones associated with the subnets in the selected subnet group.</p> <p>The number of Availability Zones listed must equal the value of <code>NumCacheClusters</code>.</p> </note> <p>Default: system chosen Availability Zones.</p>"]
+    #[serde(rename="PreferredCacheClusterAZs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_cache_cluster_a_zs: Option<Vec<String>>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cache cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>The identifier of the cache cluster that serves as the primary for this replication group. This cache cluster must already exist and have a status of <code>available</code>.</p> <p>This parameter is not required if <code>NumCacheClusters</code>, <code>NumNodeGroups</code>, or <code>ReplicasPerNodeGroup</code> is specified.</p>"]
+    #[serde(rename="PrimaryClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary_cluster_id: Option<String>,
     #[doc="<p>An optional parameter that specifies the number of replica nodes in each node group (shard). Valid values are 0 to 5.</p>"]
+    #[serde(rename="ReplicasPerNodeGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replicas_per_node_group: Option<i64>,
     #[doc="<p>A user-created description for the replication group.</p>"]
+    #[serde(rename="ReplicationGroupDescription")]
     pub replication_group_description: String,
     #[doc="<p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
+    #[serde(rename="ReplicationGroupId")]
     pub replication_group_id: String,
     #[doc="<p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A list of Amazon Resource Names (ARN) that uniquely identify the Redis RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new replication group. The Amazon S3 object name in the ARN cannot contain any commas. The new replication group will have the number of node groups (console: shards) specified by the parameter <i>NumNodeGroups</i> or the number of node groups configured by <i>NodeGroupConfiguration</i> regardless of the number of ARNs specified here.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
+    #[serde(rename="SnapshotArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_arns: Option<Vec<String>>,
     #[doc="<p>The name of a snapshot from which to restore data into the new replication group. The snapshot status changes to <code>restoring</code> while the new replication group is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
+    #[serde(rename="SnapshotName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_name: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -2754,8 +3032,10 @@ impl CreateReplicationGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateReplicationGroupResult {
+    #[serde(rename="ReplicationGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group: Option<ReplicationGroup>,
 }
 
@@ -2803,13 +3083,18 @@ impl CreateReplicationGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>CreateSnapshot</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSnapshotMessage {
     #[doc="<p>The identifier of an existing cache cluster. The snapshot is created from this cache cluster.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The identifier of an existing replication group. The snapshot is created from this replication group.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>A name for the snapshot being created.</p>"]
+    #[serde(rename="SnapshotName")]
     pub snapshot_name: String,
 }
 
@@ -2837,8 +3122,10 @@ impl CreateSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateSnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -2885,11 +3172,14 @@ impl CreateSnapshotResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DeleteCacheCluster</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCacheClusterMessage {
     #[doc="<p>The cache cluster identifier for the cluster to be deleted. This parameter is not case sensitive.</p>"]
+    #[serde(rename="CacheClusterId")]
     pub cache_cluster_id: String,
     #[doc="<p>The user-supplied name of a final cache cluster snapshot. This is the unique name that identifies the snapshot. ElastiCache creates the snapshot, and then deletes the cache cluster immediately afterward.</p>"]
+    #[serde(rename="FinalSnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub final_snapshot_identifier: Option<String>,
 }
 
@@ -2913,8 +3203,10 @@ impl DeleteCacheClusterMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCacheClusterResult {
+    #[serde(rename="CacheCluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster: Option<CacheCluster>,
 }
 
@@ -2962,9 +3254,10 @@ impl DeleteCacheClusterResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DeleteCacheParameterGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group to delete.</p> <note> <p>The specified cache security group must not be associated with any cache clusters.</p> </note>"]
+    #[serde(rename="CacheParameterGroupName")]
     pub cache_parameter_group_name: String,
 }
 
@@ -2985,9 +3278,10 @@ impl DeleteCacheParameterGroupMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DeleteCacheSecurityGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCacheSecurityGroupMessage {
     #[doc="<p>The name of the cache security group to delete.</p> <note> <p>You cannot delete the default security group.</p> </note>"]
+    #[serde(rename="CacheSecurityGroupName")]
     pub cache_security_group_name: String,
 }
 
@@ -3008,9 +3302,10 @@ impl DeleteCacheSecurityGroupMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DeleteCacheSubnetGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteCacheSubnetGroupMessage {
     #[doc="<p>The name of the cache subnet group to delete.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p>"]
+    #[serde(rename="CacheSubnetGroupName")]
     pub cache_subnet_group_name: String,
 }
 
@@ -3031,13 +3326,18 @@ impl DeleteCacheSubnetGroupMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DeleteReplicationGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationGroupMessage {
     #[doc="<p>The name of a final node group (shard) snapshot. ElastiCache creates the snapshot from the primary node in the cluster, rather than one of the replicas; this is to ensure that it captures the freshest data. After the final snapshot is taken, the replication group is immediately deleted.</p>"]
+    #[serde(rename="FinalSnapshotIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub final_snapshot_identifier: Option<String>,
     #[doc="<p>The identifier for the cluster to be deleted. This parameter is not case sensitive.</p>"]
+    #[serde(rename="ReplicationGroupId")]
     pub replication_group_id: String,
     #[doc="<p>If set to <code>true</code>, all of the read replicas are deleted, but the primary node is retained.</p>"]
+    #[serde(rename="RetainPrimaryCluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub retain_primary_cluster: Option<bool>,
 }
 
@@ -3065,8 +3365,10 @@ impl DeleteReplicationGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteReplicationGroupResult {
+    #[serde(rename="ReplicationGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group: Option<ReplicationGroup>,
 }
 
@@ -3114,9 +3416,10 @@ impl DeleteReplicationGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DeleteSnapshot</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSnapshotMessage {
     #[doc="<p>The name of the snapshot to be deleted.</p>"]
+    #[serde(rename="SnapshotName")]
     pub snapshot_name: String,
 }
 
@@ -3136,8 +3439,10 @@ impl DeleteSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteSnapshotResult {
+    #[serde(rename="Snapshot")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot: Option<Snapshot>,
 }
 
@@ -3184,17 +3489,27 @@ impl DeleteSnapshotResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DescribeCacheClusters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheClustersMessage {
     #[doc="<p>The user-supplied cluster identifier. If this parameter is specified, only information about that specific cache cluster is returned. This parameter isn't case sensitive.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to show only nodes (API/CLI: clusters) that are not members of a replication group. In practice, this mean Memcached and single node Redis clusters.</p>"]
+    #[serde(rename="ShowCacheClustersNotInReplicationGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub show_cache_clusters_not_in_replication_groups: Option<bool>,
     #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to retrieve information about the individual cache nodes.</p>"]
+    #[serde(rename="ShowCacheNodeInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub show_cache_node_info: Option<bool>,
 }
 
@@ -3233,19 +3548,31 @@ impl DescribeCacheClustersMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeCacheEngineVersions</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheEngineVersionsMessage {
     #[doc="<p>The name of a specific cache parameter group family to return details for.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
+    #[serde(rename="CacheParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>If <code>true</code>, specifies that only the default version of the specified engine or engine and major version combination is to be returned.</p>"]
+    #[serde(rename="DefaultOnly")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_only: Option<bool>,
     #[doc="<p>The cache engine to return. Valid values: <code>memcached</code> | <code>redis</code> </p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The cache engine version to return.</p> <p>Example: <code>1.4.14</code> </p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3288,13 +3615,19 @@ impl DescribeCacheEngineVersionsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeCacheParameterGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheParameterGroupsMessage {
     #[doc="<p>The name of a specific cache parameter group to return details for.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3325,15 +3658,22 @@ impl DescribeCacheParameterGroupsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeCacheParameters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheParametersMessage {
     #[doc="<p>The name of a specific cache parameter group to return details for.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
     pub cache_parameter_group_name: String,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The parameter types to return.</p> <p>Valid values: <code>user</code> | <code>system</code> | <code>engine-default</code> </p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
 }
 
@@ -3366,13 +3706,19 @@ impl DescribeCacheParametersMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeCacheSecurityGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheSecurityGroupsMessage {
     #[doc="<p>The name of the cache security group to return details for.</p>"]
+    #[serde(rename="CacheSecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_name: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3403,13 +3749,19 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeCacheSubnetGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeCacheSubnetGroupsMessage {
     #[doc="<p>The name of the cache subnet group to return details for.</p>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3440,13 +3792,18 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeEngineDefaultParameters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEngineDefaultParametersMessage {
     #[doc="<p>The name of the cache parameter group family.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
+    #[serde(rename="CacheParameterGroupFamily")]
     pub cache_parameter_group_family: String,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
 }
 
@@ -3474,8 +3831,10 @@ impl DescribeEngineDefaultParametersMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEngineDefaultParametersResult {
+    #[serde(rename="EngineDefaults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_defaults: Option<EngineDefaults>,
 }
 
@@ -3524,21 +3883,35 @@ impl DescribeEngineDefaultParametersResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DescribeEvents</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The number of minutes worth of events to retrieve.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
+    #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The identifier of the event source for which events are returned. If not specified, all sources are included in the response.</p>"]
+    #[serde(rename="SourceIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
     #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
 }
 
@@ -3585,13 +3958,19 @@ impl DescribeEventsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeReplicationGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReplicationGroupsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The identifier for the replication group to be described. This parameter is not case sensitive.</p> <p>If you do not specify this parameter, information about all replication groups is returned.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
 }
 
@@ -3622,23 +4001,39 @@ impl DescribeReplicationGroupsMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeReservedCacheNodes</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedCacheNodesMessage {
     #[doc="<p>The cache node type filter value. Use this parameter to show only those reservations matching the specified cache node type.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The duration filter value, specified in years or seconds. Use this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid values: <code>\"Light Utilization\"|\"Medium Utilization\"|\"Heavy Utilization\"</code> </p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The product description filter value. Use this parameter to show only those reservations matching the specified product description.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The reserved cache node identifier filter value. Use this parameter to show only the reservation that matches the specified reservation ID.</p>"]
+    #[serde(rename="ReservedCacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_node_id: Option<String>,
     #[doc="<p>The offering identifier filter value. Use this parameter to show only purchased reservations matching the specified offering identifier.</p>"]
+    #[serde(rename="ReservedCacheNodesOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes_offering_id: Option<String>,
 }
 
@@ -3689,21 +4084,35 @@ impl DescribeReservedCacheNodesMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeReservedCacheNodesOfferingsMessage {
     #[doc="<p>The cache node type filter value. Use this parameter to show only the available offerings matching the specified cache node type.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>Duration filter value, specified in years or seconds. Use this parameter to show only reservations for a given duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>\"Light Utilization\"|\"Medium Utilization\"|\"Heavy Utilization\"</code> </p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The product description filter value. Use this parameter to show only the available offerings matching the specified product description.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The offering identifier filter value. Use this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>"]
+    #[serde(rename="ReservedCacheNodesOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes_offering_id: Option<String>,
 }
 
@@ -3752,11 +4161,15 @@ impl DescribeReservedCacheNodesOfferingsMessageSerializer {
 }
 
 #[doc="<p>Represents the output of a <code>DescribeSnapshots</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotsListMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of snapshots. Each item in the list contains detailed information about one snapshot.</p>"]
+    #[serde(rename="Snapshots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
@@ -3808,21 +4221,35 @@ impl DescribeSnapshotsListMessageDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>DescribeSnapshotsMessage</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeSnapshotsMessage {
     #[doc="<p>A user-supplied cluster identifier. If this parameter is specified, only snapshots associated with that specific cache cluster are described.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 50</p> <p>Constraints: minimum 20; maximum 50.</p>"]
+    #[serde(rename="MaxRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_records: Option<i64>,
     #[doc="<p>A user-supplied replication group identifier. If this parameter is specified, only snapshots associated with that specific replication group are described.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>A Boolean value which if true, the node group (shard) configuration is included in the snapshot description.</p>"]
+    #[serde(rename="ShowNodeGroupConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub show_node_group_config: Option<bool>,
     #[doc="<p>A user-supplied name of the snapshot. If this parameter is specified, only this snapshot are described.</p>"]
+    #[serde(rename="SnapshotName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_name: Option<String>,
     #[doc="<p>If set to <code>system</code>, the output shows snapshots that were automatically created by ElastiCache. If set to <code>user</code> the output shows snapshots that were manually created. If omitted, the output shows both automatically and manually created snapshots.</p>"]
+    #[serde(rename="SnapshotSource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_source: Option<String>,
 }
 
@@ -3883,13 +4310,19 @@ impl DoubleDeserializer {
     }
 }
 #[doc="<p>Provides ownership and status information for an Amazon EC2 security group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EC2SecurityGroup {
     #[doc="<p>The name of the Amazon EC2 security group.</p>"]
+    #[serde(rename="EC2SecurityGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_name: Option<String>,
     #[doc="<p>The AWS account ID of the Amazon EC2 security group owner.</p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_security_group_owner_id: Option<String>,
     #[doc="<p>The status of the Amazon EC2 security group.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -3988,11 +4421,15 @@ impl EC2SecurityGroupListDeserializer {
     }
 }
 #[doc="<p>Represents the information required for client programs to connect to a cache node.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Endpoint {
     #[doc="<p>The DNS hostname of the cache node.</p>"]
+    #[serde(rename="Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub address: Option<String>,
     #[doc="<p>The port number that the cache engine is listening on.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
 }
 
@@ -4042,15 +4479,23 @@ impl EndpointDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeEngineDefaultParameters</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EngineDefaults {
     #[doc="<p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>"]
+    #[serde(rename="CacheNodeTypeSpecificParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
     #[doc="<p>Specifies the name of the cache parameter group family to which the engine default parameters apply.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
+    #[serde(rename="CacheParameterGroupFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>Contains a list of engine default parameters.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
@@ -4110,15 +4555,23 @@ impl EngineDefaultsDeserializer {
     }
 }
 #[doc="<p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a cache cluster, adding or removing a cache node, or rebooting a node.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Event {
     #[doc="<p>The date and time when the event occurred.</p>"]
+    #[serde(rename="Date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<String>,
     #[doc="<p>The text of the event.</p>"]
+    #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p>The identifier for the source of the event. For example, if the event occurred at the cache cluster level, the identifier would be the name of the cache cluster.</p>"]
+    #[serde(rename="SourceIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_identifier: Option<String>,
     #[doc="<p>Specifies the origin of this event - a cache cluster, a parameter group, a security group, etc.</p>"]
+    #[serde(rename="SourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
 }
 
@@ -4219,11 +4672,15 @@ impl EventListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeEvents</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EventsMessage {
     #[doc="<p>A list of events. Each element in the list contains detailed information about one event.</p>"]
+    #[serde(rename="Events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<Vec<Event>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
 }
 
@@ -4314,11 +4771,15 @@ impl KeyListSerializer {
 }
 
 #[doc="<p>The input parameters for the <code>ListAllowedNodeTypeModifications</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListAllowedNodeTypeModificationsMessage {
     #[doc="<p>The name of the cache cluster you want to scale up to a larger node instanced type. ElastiCache uses the cluster id to identify the current node type of this cluster and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The name of the replication group want to scale up to a larger node type. ElastiCache uses the replication group id to identify the current node type being used by this replication group, and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
 }
 
@@ -4345,9 +4806,10 @@ impl ListAllowedNodeTypeModificationsMessageSerializer {
 }
 
 #[doc="<p>The input parameters for the <code>ListTagsForResource</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListTagsForResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource for which you want the list of tags, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
+    #[serde(rename="ResourceName")]
     pub resource_name: String,
 }
 
@@ -4368,41 +4830,74 @@ impl ListTagsForResourceMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyCacheClusterMessage {
     #[doc="<p>Specifies whether the new nodes in this Memcached cache cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached cache clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cache cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html\">Cache Node Considerations for Memcached</a>.</p> </note>"]
+    #[serde(rename="AZMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub az_mode: Option<String>,
     #[doc="<p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cache cluster.</p> <p>If <code>false</code>, changes to the cache cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="ApplyImmediately")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub apply_immediately: Option<bool>,
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The cache cluster identifier. This value is stored as a lowercase string.</p>"]
+    #[serde(rename="CacheClusterId")]
     pub cache_cluster_id: String,
     #[doc="<p>A list of cache node IDs to be removed. A node ID is a numeric identifier (0001, 0002, etc.). This parameter is only valid when <code>NumCacheNodes</code> is less than the existing number of cache nodes. The number of cache node IDs supplied in this parameter must match the difference between the existing number of cache nodes in the cluster or pending cache nodes, whichever is greater, and the value of <code>NumCacheNodes</code> in the request.</p> <p>For example: If you have 3 active cache nodes, 7 pending cache nodes, and the number of cache nodes in this <code>ModifyCacheCluser</code> call is 5, you must list 2 (7 - 5) cache node IDs to remove.</p>"]
+    #[serde(rename="CacheNodeIdsToRemove")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_ids_to_remove: Option<Vec<String>>,
     #[doc="<p>A valid cache node type that you want to scale this cache cluster up to.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the cache parameter group to apply to this cache cluster. This change is asynchronously applied as soon as possible for parameters when the <code>ApplyImmediately</code> parameter is specified as <code>true</code> for this request.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to authorize on this cache cluster. This change is asynchronously applied as soon as possible.</p> <p>You can use this parameter only with clusters that are created outside of an Amazon Virtual Private Cloud (Amazon VPC).</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Must not be \"Default\".</p>"]
+    #[serde(rename="CacheSecurityGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The upgraded version of the cache engine to be run on the cache nodes.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster and create it anew with the earlier engine version. </p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html\">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul>"]
+    #[serde(rename="NewAvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_availability_zones: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cache cluster owner.</p> </note>"]
+    #[serde(rename="NotificationTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The status of the Amazon SNS notification topic. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>"]
+    #[serde(rename="NotificationTopicStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_status: Option<String>,
     #[doc="<p>The number of cache nodes that the cache cluster should have. If the value for <code>NumCacheNodes</code> is greater than the sum of the number of current cache nodes and the number of cache nodes pending creation (which may be zero), more nodes are added. If the value is less than the number of existing cache nodes, nodes are removed. If the value is equal to the number of current cache nodes, any pending add or remove requests are canceled.</p> <p>If you are removing cache nodes, you must use the <code>CacheNodeIdsToRemove</code> parameter to provide the IDs of the specific cache nodes to remove.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <note> <p>Adding or removing Memcached cache nodes can be applied immediately or as a pending operation (see <code>ApplyImmediately</code>).</p> <p>A pending operation to modify the number of cache nodes in a cluster during its maintenance window, whether by adding or removing nodes in accordance with the scale out architecture, is not queued. The customer's latest request to add or remove nodes to the cluster overrides any previous pending operations to modify the number of cache nodes in the cluster. For example, a request to remove 2 nodes would override a previous pending operation to remove 3 nodes. Similarly, a request to add 2 nodes would override a previous pending operation to remove 3 nodes and vice versa. As Memcached cache nodes may now be provisioned in different Availability Zones with flexible cache node placement, a request to add nodes does not automatically override a previous pending operation to add nodes. The customer can modify the previous pending operation to add more nodes or explicitly cancel the pending request and retry the new request. To cancel pending operations to modify the number of cache nodes in a cluster, use the <code>ModifyCacheCluster</code> request and set <code>NumCacheNodes</code> equal to the number of cache nodes currently in the cache cluster.</p> </note>"]
+    #[serde(rename="NumCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_nodes: Option<i64>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>Specifies the VPC Security Groups associated with the cache cluster.</p> <p>This parameter can be used only with clusters that are created in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </note>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster. </p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
 }
 
@@ -4494,8 +4989,10 @@ impl ModifyCacheClusterMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyCacheClusterResult {
+    #[serde(rename="CacheCluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster: Option<CacheCluster>,
 }
 
@@ -4543,11 +5040,13 @@ impl ModifyCacheClusterResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>ModifyCacheParameterGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group to modify.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
     pub cache_parameter_group_name: String,
     #[doc="<p>An array of parameter names and values for the parameter update. You must supply at least one parameter name and value; subsequent arguments are optional. A maximum of 20 parameters may be modified per request.</p>"]
+    #[serde(rename="ParameterNameValues")]
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
@@ -4573,13 +5072,18 @@ impl ModifyCacheParameterGroupMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>ModifyCacheSubnetGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyCacheSubnetGroupMessage {
     #[doc="<p>A description of the cache subnet group.</p>"]
+    #[serde(rename="CacheSubnetGroupDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_description: Option<String>,
     #[doc="<p>The name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>"]
+    #[serde(rename="CacheSubnetGroupName")]
     pub cache_subnet_group_name: String,
     #[doc="<p>The EC2 subnet IDs for the cache subnet group.</p>"]
+    #[serde(rename="SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
 }
 
@@ -4608,8 +5112,10 @@ impl ModifyCacheSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyCacheSubnetGroupResult {
+    #[serde(rename="CacheSubnetGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
@@ -4657,43 +5163,78 @@ impl ModifyCacheSubnetGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>ModifyReplicationGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationGroupMessage {
     #[doc="<p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the replication group.</p> <p>If <code>false</code>, changes to the nodes in the replication group are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>"]
+    #[serde(rename="ApplyImmediately")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub apply_immediately: Option<bool>,
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
+    #[serde(rename="AutomaticFailoverEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automatic_failover_enabled: Option<bool>,
     #[doc="<p>A valid cache node type that you want to scale this replication group to.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the cache parameter group to apply to all of the clusters in this replication group. This change is asynchronously applied as soon as possible for parameters when the <code>ApplyImmediately</code> parameter is specified as <code>true</code> for this request.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to authorize for the clusters in this replication group. This change is asynchronously applied as soon as possible.</p> <p>This parameter can be used only with replication group containing cache clusters running outside of an Amazon Virtual Private Cloud (Amazon VPC).</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Must not be <code>Default</code>.</p>"]
+    #[serde(rename="CacheSecurityGroupNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The upgraded version of the cache engine to be run on the cache clusters in the replication group.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing replication group and create it anew with the earlier engine version. </p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>The name of the Node Group (called shard in the console).</p>"]
+    #[serde(rename="NodeGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_id: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the replication group owner. </p> </note>"]
+    #[serde(rename="NotificationTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The status of the Amazon SNS notification topic for the replication group. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>"]
+    #[serde(rename="NotificationTopicStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_topic_status: Option<String>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>For replication groups with a single primary, if this parameter is specified, ElastiCache promotes the specified cluster in the specified replication group to the primary role. The nodes of all other clusters in the replication group are read replicas.</p>"]
+    #[serde(rename="PrimaryClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary_cluster_id: Option<String>,
     #[doc="<p>A description for the replication group. Maximum length is 255 characters.</p>"]
+    #[serde(rename="ReplicationGroupDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_description: Option<String>,
     #[doc="<p>The identifier of the replication group to modify.</p>"]
+    #[serde(rename="ReplicationGroupId")]
     pub replication_group_id: String,
     #[doc="<p>Specifies the VPC Security Groups associated with the cache clusters in the replication group.</p> <p>This parameter can be used only with replication group containing cache clusters running in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic node group (shard) snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <p> <b>Important</b> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of the node group (shard) specified by <code>SnapshottingClusterId</code>.</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
     #[doc="<p>The cache cluster ID that is used as the daily snapshot source for the replication group. This parameter cannot be set for Redis (cluster mode enabled) replication groups.</p>"]
+    #[serde(rename="SnapshottingClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshotting_cluster_id: Option<String>,
 }
 
@@ -4785,8 +5326,10 @@ impl ModifyReplicationGroupMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyReplicationGroupResult {
+    #[serde(rename="ReplicationGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group: Option<ReplicationGroup>,
 }
 
@@ -4834,17 +5377,27 @@ impl ModifyReplicationGroupResultDeserializer {
     }
 }
 #[doc="<p>Represents a collection of cache nodes in a replication group. One node in the node group is the read/write primary node. All the other nodes are read-only Replica nodes.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NodeGroup {
     #[doc="<p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 15 node groups numbered 0001 to 0015. </p>"]
+    #[serde(rename="NodeGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_id: Option<String>,
     #[doc="<p>A list containing information about individual nodes within the node group (shard).</p>"]
+    #[serde(rename="NodeGroupMembers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_members: Option<Vec<NodeGroupMember>>,
     #[doc="<p>The endpoint of the primary node in this node group (shard).</p>"]
+    #[serde(rename="PrimaryEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary_endpoint: Option<Endpoint>,
     #[doc="<p>The keyspace for this node group (shard).</p>"]
+    #[serde(rename="Slots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slots: Option<String>,
     #[doc="<p>The current state of this replication group - <code>creating</code>, <code>available</code>, etc.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -4908,15 +5461,23 @@ impl NodeGroupDeserializer {
     }
 }
 #[doc="<p>node group (shard) configuration options. Each node group (shard) configuration has the following: <code>Slots</code>, <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NodeGroupConfiguration {
     #[doc="<p>The Availability Zone where the primary node of this node group (shard) is launched.</p>"]
+    #[serde(rename="PrimaryAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary_availability_zone: Option<String>,
     #[doc="<p>A list of Availability Zones to be used for the read replicas. The number of Availability Zones in this list must match the value of <code>ReplicaCount</code> or <code>ReplicasPerNodeGroup</code> if not specified.</p>"]
+    #[serde(rename="ReplicaAvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replica_availability_zones: Option<Vec<String>>,
     #[doc="<p>The number of read replica nodes in this node group (shard).</p>"]
+    #[serde(rename="ReplicaCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replica_count: Option<i64>,
     #[doc="<p>A string that specifies the keyspace for a particular node group. Keyspaces range from 0 to 16,383. The string is in the format <code>startkey-endkey</code>.</p> <p>Example: <code>\"0-3999\"</code> </p>"]
+    #[serde(rename="Slots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slots: Option<String>,
 }
 
@@ -5063,16 +5624,26 @@ impl NodeGroupListDeserializer {
     }
 }
 #[doc="<p>Represents a single node within a node group (shard).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NodeGroupMember {
     #[doc="<p>The ID of the cache cluster to which the node belongs.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The ID of the node within its cache cluster. A node ID is a numeric identifier (0001, 0002, etc.).</p>"]
+    #[serde(rename="CacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_id: Option<String>,
     #[doc="<p>The role that is currently assigned to the node - <code>primary</code> or <code>replica</code>.</p>"]
+    #[serde(rename="CurrentRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_role: Option<String>,
     #[doc="<p>The name of the Availability Zone in which the node is located.</p>"]
+    #[serde(rename="PreferredAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_availability_zone: Option<String>,
+    #[serde(rename="ReadEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_endpoint: Option<Endpoint>,
 }
 
@@ -5180,21 +5751,35 @@ impl NodeGroupMemberListDeserializer {
     }
 }
 #[doc="<p>Represents an individual cache node in a snapshot of a cache cluster.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NodeSnapshot {
     #[doc="<p>A unique identifier for the source cache cluster.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The date and time when the cache node was created in the source cache cluster.</p>"]
+    #[serde(rename="CacheNodeCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_create_time: Option<String>,
     #[doc="<p>The cache node identifier for the node in the source cache cluster.</p>"]
+    #[serde(rename="CacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_id: Option<String>,
     #[doc="<p>The size of the cache on the source cache node.</p>"]
+    #[serde(rename="CacheSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_size: Option<String>,
     #[doc="<p>The configuration for the source node group (shard).</p>"]
+    #[serde(rename="NodeGroupConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_configuration: Option<NodeGroupConfiguration>,
     #[doc="<p>A unique identifier for the source node group (shard).</p>"]
+    #[serde(rename="NodeGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_group_id: Option<String>,
     #[doc="<p>The date and time when the source node's metadata and cache data set was obtained for the snapshot.</p>"]
+    #[serde(rename="SnapshotCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_create_time: Option<String>,
 }
 
@@ -5352,11 +5937,15 @@ impl NodeTypeListDeserializer {
     }
 }
 #[doc="<p>Describes a notification topic and its status. Notification topics are used for publishing ElastiCache events to subscribers using Amazon Simple Notification Service (SNS).</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NotificationConfiguration {
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the topic.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
     #[doc="<p>The current state of the topic.</p>"]
+    #[serde(rename="TopicStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_status: Option<String>,
 }
 
@@ -5407,25 +5996,43 @@ impl NotificationConfigurationDeserializer {
     }
 }
 #[doc="<p>Describes an individual setting that controls some aspect of ElastiCache behavior.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Parameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
+    #[serde(rename="AllowedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allowed_values: Option<String>,
     #[doc="<p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Clusters.Rebooting.html\">Rebooting a Cluster</a>.</p>"]
+    #[serde(rename="ChangeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub change_type: Option<String>,
     #[doc="<p>The valid data type for the parameter.</p>"]
+    #[serde(rename="DataType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed.</p>"]
+    #[serde(rename="IsModifiable")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest cache engine version to which the parameter can apply.</p>"]
+    #[serde(rename="MinimumEngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
+    #[serde(rename="ParameterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name: Option<String>,
     #[doc="<p>The value of the parameter.</p>"]
+    #[serde(rename="ParameterValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_value: Option<String>,
     #[doc="<p>The source of the parameter.</p>"]
+    #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
 }
 
@@ -5507,11 +6114,15 @@ impl ParameterDeserializer {
     }
 }
 #[doc="<p>Describes a name-value pair that is used to update the value of a parameter.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterNameValue {
     #[doc="<p>The name of the parameter.</p>"]
+    #[serde(rename="ParameterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name: Option<String>,
     #[doc="<p>The value of the parameter.</p>"]
+    #[serde(rename="ParameterValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_value: Option<String>,
 }
 
@@ -5605,15 +6216,23 @@ impl PendingAutomaticFailoverStatusDeserializer {
     }
 }
 #[doc="<p>A group of settings that are applied to the cache cluster in the future, or that are currently being applied.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PendingModifiedValues {
     #[doc="<p>A list of cache node IDs that are being removed (or will be removed) from the cache cluster. A node ID is a numeric identifier (0001, 0002, etc.).</p>"]
+    #[serde(rename="CacheNodeIdsToRemove")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_ids_to_remove: Option<Vec<String>>,
     #[doc="<p>The cache node type that this cache cluster or replication group is scaled to.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The new cache engine version that the cache cluster runs.</p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>The new number of cache nodes for the cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
+    #[serde(rename="NumCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_nodes: Option<i64>,
 }
 
@@ -5686,13 +6305,18 @@ impl PreferredAvailabilityZoneListSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>PurchaseReservedCacheNodesOffering</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedCacheNodesOfferingMessage {
     #[doc="<p>The number of cache node instances to reserve.</p> <p>Default: <code>1</code> </p>"]
+    #[serde(rename="CacheNodeCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_count: Option<i64>,
     #[doc="<p>A customer-specified identifier to track this reservation.</p> <note> <p>The Reserved Cache Node ID is an unique customer-specified identifier to track this reservation. If this parameter is not specified, ElastiCache automatically generates an identifier for the reservation.</p> </note> <p>Example: myreservationID</p>"]
+    #[serde(rename="ReservedCacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_node_id: Option<String>,
     #[doc="<p>The ID of the reserved cache node offering to purchase.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>"]
+    #[serde(rename="ReservedCacheNodesOfferingId")]
     pub reserved_cache_nodes_offering_id: String,
 }
 
@@ -5722,8 +6346,10 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PurchaseReservedCacheNodesOfferingResult {
+    #[serde(rename="ReservedCacheNode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_node: Option<ReservedCacheNode>,
 }
 
@@ -5772,11 +6398,13 @@ impl PurchaseReservedCacheNodesOfferingResultDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>RebootCacheCluster</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootCacheClusterMessage {
     #[doc="<p>The cache cluster identifier. This parameter is stored as a lowercase string.</p>"]
+    #[serde(rename="CacheClusterId")]
     pub cache_cluster_id: String,
     #[doc="<p>A list of cache node IDs to reboot. A node ID is a numeric identifier (0001, 0002, etc.). To reboot an entire cache cluster, specify all of the cache node IDs.</p>"]
+    #[serde(rename="CacheNodeIdsToReboot")]
     pub cache_node_ids_to_reboot: Vec<String>,
 }
 
@@ -5799,8 +6427,10 @@ impl RebootCacheClusterMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RebootCacheClusterResult {
+    #[serde(rename="CacheCluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster: Option<CacheCluster>,
 }
 
@@ -5848,11 +6478,15 @@ impl RebootCacheClusterResultDeserializer {
     }
 }
 #[doc="<p>Contains the specific price and frequency of a recurring charges for a reserved cache node, or for a reserved cache node offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RecurringCharge {
     #[doc="<p>The monetary amount of the recurring charge.</p>"]
+    #[serde(rename="RecurringChargeAmount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charge_amount: Option<f64>,
     #[doc="<p>The frequency of the recurring charge.</p>"]
+    #[serde(rename="RecurringChargeFrequency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charge_frequency: Option<String>,
 }
 
@@ -5947,11 +6581,13 @@ impl RecurringChargeListDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>RemoveTagsFromResource</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource from which you want the tags removed, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
+    #[serde(rename="ResourceName")]
     pub resource_name: String,
     #[doc="<p>A list of <code>TagKeys</code> identifying the tags you want removed from the named resource.</p>"]
+    #[serde(rename="TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
@@ -5973,33 +6609,59 @@ impl RemoveTagsFromResourceMessageSerializer {
 }
 
 #[doc="<p>Contains all of the attributes of a specific Redis replication group.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationGroup {
     #[doc="<p>Indicates the status of Multi-AZ for this replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
+    #[serde(rename="AutomaticFailover")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automatic_failover: Option<String>,
     #[doc="<p>The name of the compute and memory capacity node type for each node in the replication group.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>A flag indicating whether or not this replication group is cluster enabled; i.e., whether its data can be partitioned across multiple shards (API/CLI: node groups).</p> <p>Valid values: <code>true</code> | <code>false</code> </p>"]
+    #[serde(rename="ClusterEnabled")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_enabled: Option<bool>,
     #[doc="<p>The configuration endpoint for this replicaiton group. Use the configuration endpoint to connect to this replication group.</p>"]
+    #[serde(rename="ConfigurationEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_endpoint: Option<Endpoint>,
     #[doc="<p>The description of the replication group.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The names of all the cache clusters that are part of this replication group.</p>"]
+    #[serde(rename="MemberClusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub member_clusters: Option<Vec<String>>,
     #[doc="<p>A single element list with information about the nodes in the replication group.</p>"]
+    #[serde(rename="NodeGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_groups: Option<Vec<NodeGroup>>,
     #[doc="<p>A group of settings to be applied to the replication group, either immediately or during the next maintenance window.</p>"]
+    #[serde(rename="PendingModifiedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_modified_values: Option<ReplicationGroupPendingModifiedValues>,
     #[doc="<p>The identifier for the replication group.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </important>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <p> <b>Note:</b> This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
     #[doc="<p>The cache cluster ID that is used as the daily snapshot source for the replication group.</p>"]
+    #[serde(rename="SnapshottingClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshotting_cluster_id: Option<String>,
     #[doc="<p>The current state of this replication group - <code>creating</code>, <code>available</code>, <code>modifying</code>, <code>deleting</code>, <code>create-failed</code>, <code>snapshotting</code>.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -6144,11 +6806,15 @@ impl ReplicationGroupListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeReplicationGroups</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationGroupMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of replication groups. Each item in the list contains detailed information about one replication group.</p>"]
+    #[serde(rename="ReplicationGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_groups: Option<Vec<ReplicationGroup>>,
 }
 
@@ -6200,11 +6866,15 @@ impl ReplicationGroupMessageDeserializer {
     }
 }
 #[doc="<p>The settings to be applied to the Redis replication group, either immediately or during the next maintenance window.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReplicationGroupPendingModifiedValues {
     #[doc="<p>Indicates the status of Multi-AZ for this Redis replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
+    #[serde(rename="AutomaticFailoverStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automatic_failover_status: Option<String>,
     #[doc="<p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>"]
+    #[serde(rename="PrimaryClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub primary_cluster_id: Option<String>,
 }
 
@@ -6256,31 +6926,55 @@ impl ReplicationGroupPendingModifiedValuesDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>PurchaseReservedCacheNodesOffering</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedCacheNode {
     #[doc="<p>The number of cache nodes that have been reserved.</p>"]
+    #[serde(rename="CacheNodeCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_count: Option<i64>,
     #[doc="<p>The cache node type for the reserved cache nodes.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The duration of the reservation in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this reserved cache node.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f64>,
     #[doc="<p>The offering type of this reserved cache node.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The description of the reserved cache node.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved cache node.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The unique identifier for the reservation.</p>"]
+    #[serde(rename="ReservedCacheNodeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_node_id: Option<String>,
     #[doc="<p>The offering identifier.</p>"]
+    #[serde(rename="ReservedCacheNodesOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes_offering_id: Option<String>,
     #[doc="<p>The time the reservation started.</p>"]
+    #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<String>,
     #[doc="<p>The state of the reserved cache node.</p>"]
+    #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
     #[doc="<p>The hourly price charged for this reserved cache node.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f64>,
 }
 
@@ -6416,11 +7110,15 @@ impl ReservedCacheNodeListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeReservedCacheNodes</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedCacheNodeMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved cache nodes. Each element in the list contains detailed information about one node.</p>"]
+    #[serde(rename="ReservedCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
 }
 
@@ -6472,23 +7170,39 @@ impl ReservedCacheNodeMessageDeserializer {
     }
 }
 #[doc="<p>Describes all of the attributes of a reserved cache node offering.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedCacheNodesOffering {
     #[doc="<p>The cache node type for the reserved cache node.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The duration of the offering. in seconds.</p>"]
+    #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this offering.</p>"]
+    #[serde(rename="FixedPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fixed_price: Option<f64>,
     #[doc="<p>The offering type.</p>"]
+    #[serde(rename="OfferingType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub offering_type: Option<String>,
     #[doc="<p>The cache engine used by the offering.</p>"]
+    #[serde(rename="ProductDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved cache node.</p>"]
+    #[serde(rename="RecurringCharges")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>A unique identifier for the reserved cache node offering.</p>"]
+    #[serde(rename="ReservedCacheNodesOfferingId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes_offering_id: Option<String>,
     #[doc="<p>The hourly price charged for this offering.</p>"]
+    #[serde(rename="UsagePrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub usage_price: Option<f64>,
 }
 
@@ -6608,11 +7322,15 @@ impl ReservedCacheNodesOfferingListDeserializer {
     }
 }
 #[doc="<p>Represents the output of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReservedCacheNodesOfferingMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
+    #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved cache node offerings. Each element in the list contains detailed information about one offering.</p>"]
+    #[serde(rename="ReservedCacheNodesOfferings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
 }
 
@@ -6663,13 +7381,18 @@ impl ReservedCacheNodesOfferingMessageDeserializer {
     }
 }
 #[doc="<p>Represents the input of a <code>ResetCacheParameterGroup</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResetCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group to reset.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
     pub cache_parameter_group_name: String,
     #[doc="<p>An array of parameter names to reset to their default values. If <code>ResetAllParameters</code> is <code>true</code>, do not use <code>ParameterNameValues</code>. If <code>ResetAllParameters</code> is <code>false</code>, you must specify the name of at least one parameter to reset.</p>"]
+    #[serde(rename="ParameterNameValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameter_name_values: Option<Vec<ParameterNameValue>>,
     #[doc="<p>If <code>true</code>, all parameters in the cache parameter group are reset to their default values. If <code>false</code>, only the parameters listed by <code>ParameterNameValues</code> are reset to their default values.</p> <p>Valid values: <code>true</code> | <code>false</code> </p>"]
+    #[serde(rename="ResetAllParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reset_all_parameters: Option<bool>,
 }
 
@@ -6701,13 +7424,16 @@ impl ResetCacheParameterGroupMessageSerializer {
 }
 
 #[doc="<p>Represents the input of a <code>RevokeCacheSecurityGroupIngress</code> operation.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeCacheSecurityGroupIngressMessage {
     #[doc="<p>The name of the cache security group to revoke ingress from.</p>"]
+    #[serde(rename="CacheSecurityGroupName")]
     pub cache_security_group_name: String,
     #[doc="<p>The name of the Amazon EC2 security group to revoke access from.</p>"]
+    #[serde(rename="EC2SecurityGroupName")]
     pub ec2_security_group_name: String,
     #[doc="<p>The AWS account number of the Amazon EC2 security group owner. Note that this is not the same thing as an AWS access key ID - you must provide a valid AWS account number for this parameter.</p>"]
+    #[serde(rename="EC2SecurityGroupOwnerId")]
     pub ec2_security_group_owner_id: String,
 }
 
@@ -6731,8 +7457,10 @@ impl RevokeCacheSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevokeCacheSecurityGroupIngressResult {
+    #[serde(rename="CacheSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
@@ -6793,11 +7521,15 @@ impl SecurityGroupIdsListSerializer {
 }
 
 #[doc="<p>Represents a single cache security group and its status.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SecurityGroupMembership {
     #[doc="<p>The identifier of the cache security group.</p>"]
+    #[serde(rename="SecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_id: Option<String>,
     #[doc="<p>The status of the cache security group membership. The status changes whenever a cache security group is modified, or when the cache security groups assigned to a cache cluster are modified.</p>"]
+    #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -6891,55 +7623,103 @@ impl SecurityGroupMembershipListDeserializer {
     }
 }
 #[doc="<p>Represents a copy of an entire Redis cache cluster as of the time when the snapshot was taken.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Snapshot {
     #[doc="<p>This parameter is currently disabled.</p>"]
+    #[serde(rename="AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Indicates the status of Multi-AZ for the source replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
+    #[serde(rename="AutomaticFailover")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automatic_failover: Option<String>,
     #[doc="<p>The date and time when the source cache cluster was created.</p>"]
+    #[serde(rename="CacheClusterCreateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_create_time: Option<String>,
     #[doc="<p>The user-supplied identifier of the source cache cluster.</p>"]
+    #[serde(rename="CacheClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The name of the compute and memory capacity node type for the source cache cluster.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
+    #[serde(rename="CacheNodeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_node_type: Option<String>,
     #[doc="<p>The cache parameter group that is associated with the source cache cluster.</p>"]
+    #[serde(rename="CacheParameterGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>The name of the cache subnet group associated with the source cache cluster.</p>"]
+    #[serde(rename="CacheSubnetGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The name of the cache engine (<code>memcached</code> or <code>redis</code>) used by the source cache cluster.</p>"]
+    #[serde(rename="Engine")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine: Option<String>,
     #[doc="<p>The version of the cache engine version that is used by the source cache cluster.</p>"]
+    #[serde(rename="EngineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub engine_version: Option<String>,
     #[doc="<p>A list of the cache nodes in the source cache cluster.</p>"]
+    #[serde(rename="NodeSnapshots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub node_snapshots: Option<Vec<NodeSnapshot>>,
     #[doc="<p>The number of cache nodes in the source cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
+    #[serde(rename="NumCacheNodes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_cache_nodes: Option<i64>,
     #[doc="<p>The number of node groups (shards) in this snapshot. When restoring from a snapshot, the number of node groups (shards) in the snapshot and in the restored replication group must be the same.</p>"]
+    #[serde(rename="NumNodeGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub num_node_groups: Option<i64>,
     #[doc="<p>The port number used by each cache nodes in the source cache cluster.</p>"]
+    #[serde(rename="Port")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port: Option<i64>,
     #[doc="<p>The name of the Availability Zone in which the source cache cluster is located.</p>"]
+    #[serde(rename="PreferredAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_availability_zone: Option<String>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
+    #[serde(rename="PreferredMaintenanceWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A description of the source replication group.</p>"]
+    #[serde(rename="ReplicationGroupDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_description: Option<String>,
     #[doc="<p>The unique identifier of the source replication group.</p>"]
+    #[serde(rename="ReplicationGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group_id: Option<String>,
     #[doc="<p>The name of a snapshot. For an automatic snapshot, the name is system-generated. For a manual snapshot, this is the user-provided name.</p>"]
+    #[serde(rename="SnapshotName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_name: Option<String>,
     #[doc="<p>For an automatic snapshot, the number of days for which ElastiCache retains the snapshot before deleting it.</p> <p>For manual snapshots, this field reflects the <code>SnapshotRetentionLimit</code> for the source cache cluster when the snapshot was created. This field is otherwise ignored: Manual snapshots do not expire, and can only be deleted using the <code>DeleteSnapshot</code> operation. </p> <p> <b>Important</b> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p>"]
+    #[serde(rename="SnapshotRetentionLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>Indicates whether the snapshot is from an automatic backup (<code>automated</code>) or was created manually (<code>manual</code>).</p>"]
+    #[serde(rename="SnapshotSource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_source: Option<String>,
     #[doc="<p>The status of the snapshot. Valid values: <code>creating</code> | <code>available</code> | <code>restoring</code> | <code>copying</code> | <code>deleting</code>.</p>"]
+    #[serde(rename="SnapshotStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_status: Option<String>,
     #[doc="<p>The daily time range during which ElastiCache takes daily snapshots of the source cache cluster.</p>"]
+    #[serde(rename="SnapshotWindow")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_window: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the topic used by the source cache cluster for publishing notifications.</p>"]
+    #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<String>,
     #[doc="<p>The Amazon Virtual Private Cloud identifier (VPC ID) of the cache subnet group for the source cache cluster.</p>"]
+    #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
@@ -7176,11 +7956,15 @@ impl StringDeserializer {
     }
 }
 #[doc="<p>Represents the subnet associated with a cache cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with ElastiCache.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Subnet {
     #[doc="<p>The Availability Zone associated with the subnet.</p>"]
+    #[serde(rename="SubnetAvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_availability_zone: Option<AvailabilityZone>,
     #[doc="<p>The unique identifier for the subnet.</p>"]
+    #[serde(rename="SubnetIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_identifier: Option<String>,
 }
 
@@ -7300,11 +8084,15 @@ impl TStampDeserializer {
     }
 }
 #[doc="<p>A cost allocation Tag that can be added to an ElastiCache cluster or replication group. Tags are composed of a Key/Value pair. A tag with a null Value is permitted.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key for the tag. May not be null.</p>"]
+    #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The tag's value. May be null.</p>"]
+    #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -7428,9 +8216,11 @@ impl TagListSerializer {
 }
 
 #[doc="<p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>"]
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TagListMessage {
     #[doc="<p>A list of cost allocation tags as key-value pairs.</p>"]
+    #[serde(rename="TagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
 }
 
@@ -7476,11 +8266,13 @@ impl TagListMessageDeserializer {
 
     }
 }
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestFailoverMessage {
     #[doc="<p>The name of the node group (called shard in the console) in this replication group on which automatic failover is to be tested. You may test automatic failover on up to 5 node groups in any rolling 24-hour period.</p>"]
+    #[serde(rename="NodeGroupId")]
     pub node_group_id: String,
     #[doc="<p>The name of the replication group (console: cluster) whose automatic failover is being tested by this operation.</p>"]
+    #[serde(rename="ReplicationGroupId")]
     pub replication_group_id: String,
 }
 
@@ -7502,8 +8294,10 @@ impl TestFailoverMessageSerializer {
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TestFailoverResult {
+    #[serde(rename="ReplicationGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_group: Option<ReplicationGroup>,
 }
 

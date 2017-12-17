@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="Container for the parameters to the GenerateDataSet operation."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataSetRequest {
     #[doc="(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file. These key-value pairs can be used to correlated responses with tracking information from other systems."]
     #[serde(rename="customerDefinedValues")]
@@ -57,7 +57,7 @@ pub struct GenerateDataSetRequest {
 }
 
 #[doc="Container for the result of the GenerateDataSet operation."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenerateDataSetResult {
     #[doc="A unique identifier representing a specific request to the GenerateDataSet operation. This identifier can be used to correlate a request with notifications from the SNS topic."]
     #[serde(rename="dataSetRequestId")]
@@ -66,7 +66,7 @@ pub struct GenerateDataSetResult {
 }
 
 #[doc="Container for the parameters to the StartSupportDataExport operation."]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartSupportDataExportRequest {
     #[doc="(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file."]
     #[serde(rename="customerDefinedValues")]
@@ -94,7 +94,7 @@ pub struct StartSupportDataExportRequest {
 }
 
 #[doc="Container for the result of the StartSupportDataExport operation."]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StartSupportDataExportResult {
     #[doc="A unique identifier representing a specific request to the StartSupportDataExport operation. This identifier can be used to correlate a request with notifications from the SNS topic."]
     #[serde(rename="dataSetRequestId")]

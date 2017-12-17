@@ -29,7 +29,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateFileSystemRequest {
     #[doc="<p>String of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>"]
     #[serde(rename="CreationToken")]
@@ -49,7 +49,7 @@ pub struct CreateFileSystemRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateMountTargetRequest {
     #[doc="<p>ID of the file system for which to create the mount target.</p>"]
     #[serde(rename="FileSystemId")]
@@ -68,7 +68,7 @@ pub struct CreateMountTargetRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateTagsRequest {
     #[doc="<p>ID of the file system whose tags you want to modify (String). This operation modifies the tags only, not the file system.</p>"]
     #[serde(rename="FileSystemId")]
@@ -79,7 +79,7 @@ pub struct CreateTagsRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteFileSystemRequest {
     #[doc="<p>ID of the file system you want to delete.</p>"]
     #[serde(rename="FileSystemId")]
@@ -87,7 +87,7 @@ pub struct DeleteFileSystemRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteMountTargetRequest {
     #[doc="<p>ID of the mount target to delete (String).</p>"]
     #[serde(rename="MountTargetId")]
@@ -95,7 +95,7 @@ pub struct DeleteMountTargetRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteTagsRequest {
     #[doc="<p>ID of the file system whose tags you want to delete (String).</p>"]
     #[serde(rename="FileSystemId")]
@@ -106,7 +106,7 @@ pub struct DeleteTagsRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFileSystemsRequest {
     #[doc="<p>(Optional) Restricts the list to the file system with this creation token (String). You specify a creation token when you create an Amazon EFS file system.</p>"]
     #[serde(rename="CreationToken")]
@@ -126,7 +126,7 @@ pub struct DescribeFileSystemsRequest {
     pub max_items: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeFileSystemsResponse {
     #[doc="<p>Array of file system descriptions.</p>"]
     #[serde(rename="FileSystems")]
@@ -143,14 +143,14 @@ pub struct DescribeFileSystemsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMountTargetSecurityGroupsRequest {
     #[doc="<p>ID of the mount target whose security groups you want to retrieve.</p>"]
     #[serde(rename="MountTargetId")]
     pub mount_target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMountTargetSecurityGroupsResponse {
     #[doc="<p>Array of security groups.</p>"]
     #[serde(rename="SecurityGroups")]
@@ -158,7 +158,7 @@ pub struct DescribeMountTargetSecurityGroupsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMountTargetsRequest {
     #[doc="<p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>"]
     #[serde(rename="FileSystemId")]
@@ -179,7 +179,7 @@ pub struct DescribeMountTargetsRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeMountTargetsResponse {
     #[doc="<p>If the request included the <code>Marker</code>, the response returns that value in this field.</p>"]
     #[serde(rename="Marker")]
@@ -196,7 +196,7 @@ pub struct DescribeMountTargetsResponse {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsRequest {
     #[doc="<p>ID of the file system whose tag set you want to retrieve.</p>"]
     #[serde(rename="FileSystemId")]
@@ -212,7 +212,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DescribeTagsResponse {
     #[doc="<p>If the request included a <code>Marker</code>, the response returns that value in this field.</p>"]
     #[serde(rename="Marker")]
@@ -228,7 +228,7 @@ pub struct DescribeTagsResponse {
 }
 
 #[doc="<p>Description of the file system.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FileSystemDescription {
     #[doc="<p>Time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).</p>"]
     #[serde(rename="CreationTime")]
@@ -269,7 +269,7 @@ pub struct FileSystemDescription {
 }
 
 #[doc="<p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FileSystemSize {
     #[doc="<p>Time at which the size of data, returned in the <code>Value</code> field, was determined. The value is the integer number of seconds since 1970-01-01T00:00:00Z.</p>"]
     #[serde(rename="Timestamp")]
@@ -281,7 +281,7 @@ pub struct FileSystemSize {
 }
 
 #[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ModifyMountTargetSecurityGroupsRequest {
     #[doc="<p>ID of the mount target whose security groups you want to modify.</p>"]
     #[serde(rename="MountTargetId")]
@@ -293,7 +293,7 @@ pub struct ModifyMountTargetSecurityGroupsRequest {
 }
 
 #[doc="<p>Provides a description of a mount target.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MountTargetDescription {
     #[doc="<p>ID of the file system for which the mount target is intended.</p>"]
     #[serde(rename="FileSystemId")]

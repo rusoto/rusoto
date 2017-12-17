@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>Represents the input of, and adds tags to, an on-premises instance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AddTagsToOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances to which to add tags.</p>"]
     #[serde(rename="instanceNames")]
@@ -66,7 +66,7 @@ pub struct AlarmConfiguration {
 }
 
 #[doc="<p>Information about an application.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApplicationInfo {
     #[doc="<p>The application ID.</p>"]
     #[serde(rename="applicationId")]
@@ -104,7 +104,7 @@ pub struct AutoRollbackConfiguration {
 }
 
 #[doc="<p>Information about an Auto Scaling group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AutoScalingGroup {
     #[doc="<p>An Auto Scaling lifecycle event hook name.</p>"]
     #[serde(rename="hook")]
@@ -117,7 +117,7 @@ pub struct AutoScalingGroup {
 }
 
 #[doc="<p>Represents the input of a BatchGetApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetApplicationRevisionsInput {
     #[doc="<p>The name of an AWS CodeDeploy application about which to get revision information.</p>"]
     #[serde(rename="applicationName")]
@@ -128,7 +128,7 @@ pub struct BatchGetApplicationRevisionsInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetApplicationRevisionsOutput {
     #[doc="<p>The name of the application that corresponds to the revisions.</p>"]
     #[serde(rename="applicationName")]
@@ -145,7 +145,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 }
 
 #[doc="<p>Represents the input of a BatchGetApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetApplicationsInput {
     #[doc="<p>A list of application names separated by spaces.</p>"]
     #[serde(rename="applicationNames")]
@@ -154,7 +154,7 @@ pub struct BatchGetApplicationsInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetApplicationsOutput {
     #[doc="<p>Information about the applications.</p>"]
     #[serde(rename="applicationsInfo")]
@@ -163,7 +163,7 @@ pub struct BatchGetApplicationsOutput {
 }
 
 #[doc="<p>Represents the input of a BatchGetDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentGroupsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -174,7 +174,7 @@ pub struct BatchGetDeploymentGroupsInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentGroupsOutput {
     #[doc="<p>Information about the deployment groups.</p>"]
     #[serde(rename="deploymentGroupsInfo")]
@@ -187,7 +187,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 }
 
 #[doc="<p>Represents the input of a BatchGetDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentInstancesInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
     #[serde(rename="deploymentId")]
@@ -198,7 +198,7 @@ pub struct BatchGetDeploymentInstancesInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentInstancesOutput {
     #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
     #[serde(rename="errorMessage")]
@@ -211,7 +211,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 }
 
 #[doc="<p>Represents the input of a BatchGetDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentsInput {
     #[doc="<p>A list of deployment IDs, separated by spaces.</p>"]
     #[serde(rename="deploymentIds")]
@@ -220,7 +220,7 @@ pub struct BatchGetDeploymentsInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetDeploymentsOutput {
     #[doc="<p>Information about the deployments.</p>"]
     #[serde(rename="deploymentsInfo")]
@@ -229,7 +229,7 @@ pub struct BatchGetDeploymentsOutput {
 }
 
 #[doc="<p>Represents the input of a BatchGetOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances about which to get information.</p>"]
     #[serde(rename="instanceNames")]
@@ -238,7 +238,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 }
 
 #[doc="<p>Represents the output of a BatchGetOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BatchGetOnPremisesInstancesOutput {
     #[doc="<p>Information about the on-premises instances.</p>"]
     #[serde(rename="instanceInfos")]
@@ -276,7 +276,7 @@ pub struct BlueInstanceTerminationOption {
     pub termination_wait_time_in_minutes: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ContinueDeploymentInput {
     #[doc="<p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>"]
     #[serde(rename="deploymentId")]
@@ -285,7 +285,7 @@ pub struct ContinueDeploymentInput {
 }
 
 #[doc="<p>Represents the input of a CreateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateApplicationInput {
     #[doc="<p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -293,7 +293,7 @@ pub struct CreateApplicationInput {
 }
 
 #[doc="<p>Represents the output of a CreateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateApplicationOutput {
     #[doc="<p>A unique application ID.</p>"]
     #[serde(rename="applicationId")]
@@ -302,7 +302,7 @@ pub struct CreateApplicationOutput {
 }
 
 #[doc="<p>Represents the input of a CreateDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentConfigInput {
     #[doc="<p>The name of the deployment configuration to create.</p>"]
     #[serde(rename="deploymentConfigName")]
@@ -313,7 +313,7 @@ pub struct CreateDeploymentConfigInput {
 }
 
 #[doc="<p>Represents the output of a CreateDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentConfigOutput {
     #[doc="<p>A unique deployment configuration ID.</p>"]
     #[serde(rename="deploymentConfigId")]
@@ -322,7 +322,7 @@ pub struct CreateDeploymentConfigOutput {
 }
 
 #[doc="<p>Represents the input of a CreateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentGroupInput {
     #[doc="<p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>"]
     #[serde(rename="alarmConfiguration")]
@@ -384,7 +384,7 @@ pub struct CreateDeploymentGroupInput {
 }
 
 #[doc="<p>Represents the output of a CreateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentGroupOutput {
     #[doc="<p>A unique deployment group ID.</p>"]
     #[serde(rename="deploymentGroupId")]
@@ -393,7 +393,7 @@ pub struct CreateDeploymentGroupOutput {
 }
 
 #[doc="<p>Represents the input of a CreateDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -437,7 +437,7 @@ pub struct CreateDeploymentInput {
 }
 
 #[doc="<p>Represents the output of a CreateDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateDeploymentOutput {
     #[doc="<p>A unique deployment ID.</p>"]
     #[serde(rename="deploymentId")]
@@ -446,7 +446,7 @@ pub struct CreateDeploymentOutput {
 }
 
 #[doc="<p>Represents the input of a DeleteApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteApplicationInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -454,7 +454,7 @@ pub struct DeleteApplicationInput {
 }
 
 #[doc="<p>Represents the input of a DeleteDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeploymentConfigInput {
     #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="deploymentConfigName")]
@@ -462,7 +462,7 @@ pub struct DeleteDeploymentConfigInput {
 }
 
 #[doc="<p>Represents the input of a DeleteDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeploymentGroupInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -473,7 +473,7 @@ pub struct DeleteDeploymentGroupInput {
 }
 
 #[doc="<p>Represents the output of a DeleteDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeleteDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>"]
     #[serde(rename="hooksNotCleanedUp")]
@@ -482,7 +482,7 @@ pub struct DeleteDeploymentGroupOutput {
 }
 
 #[doc="<p>Information about a deployment configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentConfigInfo {
     #[doc="<p>The time at which the deployment configuration was created.</p>"]
     #[serde(rename="createTime")]
@@ -503,7 +503,7 @@ pub struct DeploymentConfigInfo {
 }
 
 #[doc="<p>Information about a deployment group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentGroupInfo {
     #[doc="<p>A list of alarms associated with the deployment group.</p>"]
     #[serde(rename="alarmConfiguration")]
@@ -584,7 +584,7 @@ pub struct DeploymentGroupInfo {
 }
 
 #[doc="<p>Information about a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentInfo {
     #[doc="<p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>"]
     #[serde(rename="additionalDeploymentStatusInfo")]
@@ -689,7 +689,7 @@ pub struct DeploymentInfo {
 }
 
 #[doc="<p>Information about the deployment status of the instances in the deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeploymentOverview {
     #[doc="<p>The number of instances in the deployment in a failed state.</p>"]
     #[serde(rename="Failed")]
@@ -744,7 +744,7 @@ pub struct DeploymentStyle {
 }
 
 #[doc="<p>Represents the input of a DeregisterOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeregisterOnPremisesInstanceInput {
     #[doc="<p>The name of the on-premises instance to deregister.</p>"]
     #[serde(rename="instanceName")]
@@ -752,7 +752,7 @@ pub struct DeregisterOnPremisesInstanceInput {
 }
 
 #[doc="<p>Diagnostic information about executable scripts that are part of a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Diagnostics {
     #[doc="<p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul>"]
     #[serde(rename="errorCode")]
@@ -808,7 +808,7 @@ pub struct ELBInfo {
 }
 
 #[doc="<p>Information about a deployment error.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ErrorInformation {
     #[doc="<p>For information about additional error codes, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html\">Error Codes for AWS CodeDeploy</a> in the <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide\">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"]
     #[serde(rename="code")]
@@ -821,7 +821,7 @@ pub struct ErrorInformation {
 }
 
 #[doc="<p>Information about an application revision.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GenericRevisionInfo {
     #[doc="<p>The deployment groups for which this is the current target revision.</p>"]
     #[serde(rename="deploymentGroups")]
@@ -846,7 +846,7 @@ pub struct GenericRevisionInfo {
 }
 
 #[doc="<p>Represents the input of a GetApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApplicationInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -854,7 +854,7 @@ pub struct GetApplicationInput {
 }
 
 #[doc="<p>Represents the output of a GetApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApplicationOutput {
     #[doc="<p>Information about the application.</p>"]
     #[serde(rename="application")]
@@ -863,7 +863,7 @@ pub struct GetApplicationOutput {
 }
 
 #[doc="<p>Represents the input of a GetApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApplicationRevisionInput {
     #[doc="<p>The name of the application that corresponds to the revision.</p>"]
     #[serde(rename="applicationName")]
@@ -874,7 +874,7 @@ pub struct GetApplicationRevisionInput {
 }
 
 #[doc="<p>Represents the output of a GetApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetApplicationRevisionOutput {
     #[doc="<p>The name of the application that corresponds to the revision.</p>"]
     #[serde(rename="applicationName")]
@@ -891,7 +891,7 @@ pub struct GetApplicationRevisionOutput {
 }
 
 #[doc="<p>Represents the input of a GetDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentConfigInput {
     #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="deploymentConfigName")]
@@ -899,7 +899,7 @@ pub struct GetDeploymentConfigInput {
 }
 
 #[doc="<p>Represents the output of a GetDeploymentConfig operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentConfigOutput {
     #[doc="<p>Information about the deployment configuration.</p>"]
     #[serde(rename="deploymentConfigInfo")]
@@ -908,7 +908,7 @@ pub struct GetDeploymentConfigOutput {
 }
 
 #[doc="<p>Represents the input of a GetDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentGroupInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -919,7 +919,7 @@ pub struct GetDeploymentGroupInput {
 }
 
 #[doc="<p>Represents the output of a GetDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentGroupOutput {
     #[doc="<p>Information about the deployment group.</p>"]
     #[serde(rename="deploymentGroupInfo")]
@@ -928,7 +928,7 @@ pub struct GetDeploymentGroupOutput {
 }
 
 #[doc="<p>Represents the input of a GetDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentInput {
     #[doc="<p>A deployment ID associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="deploymentId")]
@@ -936,7 +936,7 @@ pub struct GetDeploymentInput {
 }
 
 #[doc="<p>Represents the input of a GetDeploymentInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentInstanceInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
     #[serde(rename="deploymentId")]
@@ -947,7 +947,7 @@ pub struct GetDeploymentInstanceInput {
 }
 
 #[doc="<p>Represents the output of a GetDeploymentInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentInstanceOutput {
     #[doc="<p>Information about the instance.</p>"]
     #[serde(rename="instanceSummary")]
@@ -956,7 +956,7 @@ pub struct GetDeploymentInstanceOutput {
 }
 
 #[doc="<p>Represents the output of a GetDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetDeploymentOutput {
     #[doc="<p>Information about the deployment.</p>"]
     #[serde(rename="deploymentInfo")]
@@ -965,7 +965,7 @@ pub struct GetDeploymentOutput {
 }
 
 #[doc="<p>Represents the input of a GetOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOnPremisesInstanceInput {
     #[doc="<p>The name of the on-premises instance about which to get information.</p>"]
     #[serde(rename="instanceName")]
@@ -973,7 +973,7 @@ pub struct GetOnPremisesInstanceInput {
 }
 
 #[doc="<p>Represents the output of a GetOnPremisesInstance operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GetOnPremisesInstanceOutput {
     #[doc="<p>Information about the on-premises instance.</p>"]
     #[serde(rename="instanceInfo")]
@@ -1004,7 +1004,7 @@ pub struct GreenFleetProvisioningOption {
 }
 
 #[doc="<p>Information about an on-premises instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceInfo {
     #[doc="<p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>"]
     #[serde(rename="deregisterTime")]
@@ -1037,7 +1037,7 @@ pub struct InstanceInfo {
 }
 
 #[doc="<p>Information about an instance in a deployment.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceSummary {
     #[doc="<p>The deployment ID.</p>"]
     #[serde(rename="deploymentId")]
@@ -1066,7 +1066,7 @@ pub struct InstanceSummary {
 }
 
 #[doc="<p>Information about the most recent attempted or successful deployment to a deployment group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LastDeploymentInfo {
     #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group started.</p>"]
     #[serde(rename="createTime")]
@@ -1087,7 +1087,7 @@ pub struct LastDeploymentInfo {
 }
 
 #[doc="<p>Information about a deployment lifecycle event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LifecycleEvent {
     #[doc="<p>Diagnostic information about the deployment lifecycle event.</p>"]
     #[serde(rename="diagnostics")]
@@ -1112,7 +1112,7 @@ pub struct LifecycleEvent {
 }
 
 #[doc="<p>Represents the input of a ListApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListApplicationRevisionsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -1144,7 +1144,7 @@ pub struct ListApplicationRevisionsInput {
 }
 
 #[doc="<p>Represents the output of a ListApplicationRevisions operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListApplicationRevisionsOutput {
     #[doc="<p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>"]
     #[serde(rename="nextToken")]
@@ -1157,7 +1157,7 @@ pub struct ListApplicationRevisionsOutput {
 }
 
 #[doc="<p>Represents the input of a ListApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListApplicationsInput {
     #[doc="<p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>"]
     #[serde(rename="nextToken")]
@@ -1166,7 +1166,7 @@ pub struct ListApplicationsInput {
 }
 
 #[doc="<p>Represents the output of a ListApplications operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListApplicationsOutput {
     #[doc="<p>A list of application names.</p>"]
     #[serde(rename="applications")]
@@ -1179,7 +1179,7 @@ pub struct ListApplicationsOutput {
 }
 
 #[doc="<p>Represents the input of a ListDeploymentConfigs operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentConfigsInput {
     #[doc="<p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>"]
     #[serde(rename="nextToken")]
@@ -1188,7 +1188,7 @@ pub struct ListDeploymentConfigsInput {
 }
 
 #[doc="<p>Represents the output of a ListDeploymentConfigs operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentConfigsOutput {
     #[doc="<p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>"]
     #[serde(rename="deploymentConfigsList")]
@@ -1201,7 +1201,7 @@ pub struct ListDeploymentConfigsOutput {
 }
 
 #[doc="<p>Represents the input of a ListDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentGroupsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -1213,7 +1213,7 @@ pub struct ListDeploymentGroupsInput {
 }
 
 #[doc="<p>Represents the output of a ListDeploymentGroups operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentGroupsOutput {
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
@@ -1230,7 +1230,7 @@ pub struct ListDeploymentGroupsOutput {
 }
 
 #[doc="<p>Represents the input of a ListDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentInstancesInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
     #[serde(rename="deploymentId")]
@@ -1250,7 +1250,7 @@ pub struct ListDeploymentInstancesInput {
 }
 
 #[doc="<p>Represents the output of a ListDeploymentInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentInstancesOutput {
     #[doc="<p>A list of instance IDs.</p>"]
     #[serde(rename="instancesList")]
@@ -1263,7 +1263,7 @@ pub struct ListDeploymentInstancesOutput {
 }
 
 #[doc="<p>Represents the input of a ListDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -1288,7 +1288,7 @@ pub struct ListDeploymentsInput {
 }
 
 #[doc="<p>Represents the output of a ListDeployments operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListDeploymentsOutput {
     #[doc="<p>A list of deployment IDs.</p>"]
     #[serde(rename="deployments")]
@@ -1301,7 +1301,7 @@ pub struct ListDeploymentsOutput {
 }
 
 #[doc="<p>Represents the input of a ListGitHubAccountTokenNames operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGitHubAccountTokenNamesInput {
     #[doc="<p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>"]
     #[serde(rename="nextToken")]
@@ -1310,7 +1310,7 @@ pub struct ListGitHubAccountTokenNamesInput {
 }
 
 #[doc="<p>Represents the output of a ListGitHubAccountTokenNames operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListGitHubAccountTokenNamesOutput {
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>"]
     #[serde(rename="nextToken")]
@@ -1323,7 +1323,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
 }
 
 #[doc="<p>Represents the input of a ListOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOnPremisesInstancesInput {
     #[doc="<p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>"]
     #[serde(rename="nextToken")]
@@ -1340,7 +1340,7 @@ pub struct ListOnPremisesInstancesInput {
 }
 
 #[doc="<p>Represents the output of list on-premises instances operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ListOnPremisesInstancesOutput {
     #[doc="<p>The list of matching on-premises instance names.</p>"]
     #[serde(rename="instanceNames")]
@@ -1388,7 +1388,7 @@ pub struct OnPremisesTagSet {
 }
 
 #[doc="<p>Represents the input of a RegisterApplicationRevision operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterApplicationRevisionInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
@@ -1403,7 +1403,7 @@ pub struct RegisterApplicationRevisionInput {
 }
 
 #[doc="<p>Represents the input of the register on-premises instance operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RegisterOnPremisesInstanceInput {
     #[doc="<p>The ARN of the IAM session to associate with the on-premises instance.</p>"]
     #[serde(rename="iamSessionArn")]
@@ -1419,7 +1419,7 @@ pub struct RegisterOnPremisesInstanceInput {
 }
 
 #[doc="<p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances from which to remove tags.</p>"]
     #[serde(rename="instanceNames")]
@@ -1430,7 +1430,7 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
 }
 
 #[doc="<p>Information about an application revision.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RevisionInfo {
     #[doc="<p>Information about an application revision, including usage details and associated deployment groups.</p>"]
     #[serde(rename="genericRevisionInfo")]
@@ -1460,7 +1460,7 @@ pub struct RevisionLocation {
 }
 
 #[doc="<p>Information about a deployment rollback.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RollbackInfo {
     #[doc="<p>The ID of the deployment rollback.</p>"]
     #[serde(rename="rollbackDeploymentId")]
@@ -1501,7 +1501,7 @@ pub struct S3Location {
     pub version: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SkipWaitTimeForInstanceTerminationInput {
     #[doc="<p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>"]
     #[serde(rename="deploymentId")]
@@ -1510,7 +1510,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
 }
 
 #[doc="<p>Represents the input of a StopDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopDeploymentInput {
     #[doc="<p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>"]
     #[serde(rename="autoRollbackEnabled")]
@@ -1522,7 +1522,7 @@ pub struct StopDeploymentInput {
 }
 
 #[doc="<p>Represents the output of a StopDeployment operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StopDeploymentOutput {
     #[doc="<p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>"]
     #[serde(rename="status")]
@@ -1591,7 +1591,7 @@ pub struct TargetInstances {
 }
 
 #[doc="<p>Information about a time range.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TimeRange {
     #[doc="<p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note>"]
     #[serde(rename="end")]
@@ -1621,7 +1621,7 @@ pub struct TriggerConfig {
 }
 
 #[doc="<p>Represents the input of an UpdateApplication operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateApplicationInput {
     #[doc="<p>The current name of the application you want to change.</p>"]
     #[serde(rename="applicationName")]
@@ -1634,7 +1634,7 @@ pub struct UpdateApplicationInput {
 }
 
 #[doc="<p>Represents the input of an UpdateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDeploymentGroupInput {
     #[doc="<p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>"]
     #[serde(rename="alarmConfiguration")]
@@ -1701,7 +1701,7 @@ pub struct UpdateDeploymentGroupInput {
 }
 
 #[doc="<p>Represents the output of an UpdateDeploymentGroup operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UpdateDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>"]
     #[serde(rename="hooksNotCleanedUp")]

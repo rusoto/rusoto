@@ -5,7 +5,7 @@ use botocore::{Member, Operation, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name, mutate_type_name_for_streaming};
 
 pub fn generate_struct_attributes(_deserialized: bool) -> String {
-    let derived = vec!["Default", "Debug", "Clone"];
+    let derived = vec!["Default", "Debug", "Clone", "Serialize", "Deserialize"];
     format!("#[derive({})]", derived.join(","))
 }
 
