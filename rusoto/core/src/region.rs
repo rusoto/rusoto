@@ -43,6 +43,9 @@ pub enum Region {
     /// Region that covers Western Europe
     EuWest2,
 
+    /// Region that covers Western Europe
+    EuWest3,
+
     /// Region that covers South America
     SaEast1,
 
@@ -58,8 +61,14 @@ pub enum Region {
     /// Region that covers the Western part of the United States
     UsWest2,
 
+    /// Region that covers the Western part of the United States for the US Government
+    UsGovWest1,
+
     /// Region that covers China
     CnNorth1,
+
+    /// Region that covers North-Western  part of China
+    CnNorthwest1,
 
     /// Specifies a custom region, such as a local Ceph target
     Custom(String)
@@ -103,12 +112,15 @@ impl Display for Region {
             Region::EuCentral1 => "eu-central-1",
             Region::EuWest1 => "eu-west-1",
             Region::EuWest2 => "eu-west-2",
+            Region::EuWest3 => "eu-west-3",
             Region::SaEast1 => "sa-east-1",
             Region::UsEast1 => "us-east-1",
             Region::UsEast2 => "us-east-2",
             Region::UsWest1 => "us-west-1",
             Region::UsWest2 => "us-west-2",
+            Region::UsGovWest1 => "us-gov-west-1",
             Region::CnNorth1 => "cn-north-1",
+            Region::CnNorthwest1 => "cn-northwest-1",
             Region::Custom(ref hostname) => &hostname,
         };
 
@@ -131,12 +143,15 @@ impl FromStr for Region {
             "eu-central-1" | "eucentral1" => Ok(Region::EuCentral1),
             "eu-west-1" | "euwest1" => Ok(Region::EuWest1),
             "eu-west-2" | "euwest2" => Ok(Region::EuWest2),
+            "eu-west-3" | "euwest3" => Ok(Region::EuWest3),
             "sa-east-1" | "saeast1" => Ok(Region::SaEast1),
             "us-east-1" | "useast1" => Ok(Region::UsEast1),
             "us-east-2" | "useast2" => Ok(Region::UsEast2),
             "us-west-1" | "uswest1" => Ok(Region::UsWest1),
             "us-west-2" | "uswest2" => Ok(Region::UsWest2),
+            "us-gov-west-1" | "usgovwest1" => Ok(Region::UsGovWest1),
             "cn-north-1" | "cnnorth1" => Ok(Region::CnNorth1),
+            "cn-northwest-1" | "cnnorthwest1" => Ok(Region::CnNorthwest1),
             s => Err(ParseRegionError::new(s)),
         }
     }
@@ -199,12 +214,15 @@ mod tests {
         assert_eq!("eu-central-1".parse(), Ok(Region::EuCentral1));
         assert_eq!("eu-west-1".parse(), Ok(Region::EuWest1));
         assert_eq!("eu-west-2".parse(), Ok(Region::EuWest2));
+        assert_eq!("eu-west-3".parse(), Ok(Region::EuWest3));
         assert_eq!("sa-east-1".parse(), Ok(Region::SaEast1));
         assert_eq!("us-east-1".parse(), Ok(Region::UsEast1));
         assert_eq!("us-east-2".parse(), Ok(Region::UsEast2));
         assert_eq!("us-west-1".parse(), Ok(Region::UsWest1));
         assert_eq!("us-west-2".parse(), Ok(Region::UsWest2));
+        assert_eq!("us-gov-west-1".parse(), Ok(Region::UsGovWest1));
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
+        assert_eq!("cn-northwest-1".parse(), Ok(Region::CnNorthwest1));
     }
 
     #[test]
@@ -222,12 +240,15 @@ mod tests {
         assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
         assert_eq!(Region::EuWest1.to_string(), "eu-west-1".to_owned());
         assert_eq!(Region::EuWest2.to_string(), "eu-west-2".to_owned());
+        assert_eq!(Region::EuWest3.to_string(), "eu-west-3".to_owned());
         assert_eq!(Region::SaEast1.to_string(), "sa-east-1".to_owned());
         assert_eq!(Region::UsEast1.to_string(), "us-east-1".to_owned());
         assert_eq!(Region::UsEast2.to_string(), "us-east-2".to_owned());
         assert_eq!(Region::UsWest1.to_string(), "us-west-1".to_owned());
         assert_eq!(Region::UsWest2.to_string(), "us-west-2".to_owned());
+        assert_eq!(Region::UsGovWest1.to_string(), "us-gov-west-1".to_owned());
         assert_eq!(Region::CnNorth1.to_string(), "cn-north-1".to_owned());
+        assert_eq!(Region::CnNorthwest1.to_string(), "cn-northwest-1".to_owned());
     }
 
     #[test]
@@ -241,12 +262,15 @@ mod tests {
         assert_tokens(&Region::EuCentral1, &[Token::String("eu-central-1")]);
         assert_tokens(&Region::EuWest1, &[Token::String("eu-west-1")]);
         assert_tokens(&Region::EuWest2, &[Token::String("eu-west-2")]);
+        assert_tokens(&Region::EuWest3, &[Token::String("eu-west-3")]);
         assert_tokens(&Region::SaEast1, &[Token::String("sa-east-1")]);
         assert_tokens(&Region::UsEast1, &[Token::String("us-east-1")]);
         assert_tokens(&Region::UsEast2, &[Token::String("us-east-2")]);
         assert_tokens(&Region::UsWest1, &[Token::String("us-west-1")]);
         assert_tokens(&Region::UsWest2, &[Token::String("us-west-2")]);
         assert_tokens(&Region::CnNorth1, &[Token::String("cn-north-1")]);
+        assert_tokens(&Region::UsGovWest1, &[Token::String("us-gov-west-1")]);
+        assert_tokens(&Region::CnNorthwest1, &[Token::String("cn-northwest-1")]);
     }
 
     #[test]
@@ -267,11 +291,14 @@ mod tests {
         assert_de_tokens(&Region::EuCentral1, &[Token::String("EuCentral1")]);
         assert_de_tokens(&Region::EuWest1, &[Token::String("EuWest1")]);
         assert_de_tokens(&Region::EuWest2, &[Token::String("EuWest2")]);
+        assert_de_tokens(&Region::EuWest3, &[Token::String("EuWest3")]);
         assert_de_tokens(&Region::SaEast1, &[Token::String("SaEast1")]);
         assert_de_tokens(&Region::UsEast1, &[Token::String("UsEast1")]);
         assert_de_tokens(&Region::UsEast2, &[Token::String("UsEast2")]);
         assert_de_tokens(&Region::UsWest1, &[Token::String("UsWest1")]);
         assert_de_tokens(&Region::UsWest2, &[Token::String("UsWest2")]);
+        assert_de_tokens(&Region::UsGovWest1, &[Token::String("UsGovWest1")]);
         assert_de_tokens(&Region::CnNorth1, &[Token::String("CnNorth1")]);
+        assert_de_tokens(&Region::CnNorthwest1, &[Token::String("CnNorthwest1")]);
     }
 }

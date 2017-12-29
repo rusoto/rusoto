@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 (Please put an entry here in each PR)
+ 
+- Added China-northwest, US-Gov-West & Paris regions
 
 ## [0.30.0] - 2017-12-02
 
