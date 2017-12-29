@@ -11,7 +11,8 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use ring::{digest, hmac};
+use hmac::{Hmac, Mac};
+use sha2::{Digest, Sha256};
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
@@ -263,12 +264,12 @@ impl SignedRequest {
                             &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
-        // construct the signing key and sign the string with it
-        let signing_key = signing_key(creds.aws_secret_access_key(),
-                                      date,
-                                      &self.region.to_string(),
-                                      &self.service);
-        let signature = signature(&string_to_sign, &signing_key);
+        // sign the string
+        let signature = sign_string(&string_to_sign,
+                                    creds.aws_secret_access_key(),
+                                    date,
+                                    &self.region.to_string(),
+                                    &self.service);
 
         // build the actual auth header
         let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
@@ -289,27 +290,26 @@ fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
     (digest, len)
 }
 
-/// Takes message and signs it with signing_key
-fn signature(string_to_sign: &str, signing_key: &hmac::SigningKey) -> String {
-    hmac::sign(signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
+#[inline]
+fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
+    let mut hmac = Hmac::<Sha256>::new(secret).expect("failed to create hmac");
+    hmac.input(message);
+    hmac
 }
 
-/// Generates SigningKey using AWS secret, time, region keys and service keys.
-fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::SigningKey {
-    let date_key = hmac::SigningKey::new(&digest::SHA256, format!("AWS4{}", secret).as_bytes());
-    let date_hmac = hmac::sign(&date_key,
-                               date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
-
-    let region_key = hmac::SigningKey::new(&digest::SHA256, date_hmac.as_ref());
-    let region_hmac = hmac::sign(&region_key, region.as_bytes());
-
-    let service_key = hmac::SigningKey::new(&digest::SHA256, region_hmac.as_ref());
-    let service_hmac = hmac::sign(&service_key, service.as_bytes());
-
-    let signing_key = hmac::SigningKey::new(&digest::SHA256, service_hmac.as_ref());
-    let signing_hmac = hmac::sign(&signing_key, b"aws4_request");
-
-    hmac::SigningKey::new(&digest::SHA256, signing_hmac.as_ref())
+/// Takes a message and signs it using AWS secret, time, region keys and service keys.
+fn sign_string(string_to_sign: &str, secret: &str, date: Tm, region: &str, service: &str) -> String {
+    let date_str = date.strftime("%Y%m%d").unwrap().to_string();
+    let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
+        .result().code();
+    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes())
+        .result().code();
+    let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes())
+        .result().code();
+    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request")
+        .result().code();
+    hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
+        .result().code().as_ref().to_hex()
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -485,8 +485,8 @@ fn decode_uri(uri: &str) -> String {
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
-    let h = digest::digest(&digest::SHA256, t.as_ref());
-    h.as_ref().to_hex().to_string()
+    let h = Sha256::digest(t.as_ref());
+    h.as_ref().to_hex()
 }
 
 fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
@@ -532,6 +532,8 @@ fn build_hostname(service: &str, region: &Region) -> String {
 
 #[cfg(test)]
 mod tests {
+    use time::empty_tm;
+
     use credential::{ProvideAwsCredentials, ProfileProvider};
     use Region;
     use ::param::Params;
@@ -604,5 +606,13 @@ mod tests {
         let canonical_uri_string = super::canonical_uri(&request.path);
         assert_eq!("/path%20with%20spaces%3A%20the%20sequel%2B%2B",
                    canonical_uri_string);
+    }
+
+    #[test]
+    fn signature_generation() {
+        let signature_foo = super::sign_string("foo", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", empty_tm(), "us-west-1", "s3");
+        assert_eq!(signature_foo, "29673d1d856a7684ff6f0f53c542bae0bfbb1e564f531aff7568be9fd206383b".to_string());
+        let signature_bar = super::sign_string("bar", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", empty_tm(), "us-west-1", "s3");
+        assert_eq!(signature_bar, "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string());
     }
 }
