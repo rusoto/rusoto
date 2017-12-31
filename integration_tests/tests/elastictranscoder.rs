@@ -144,7 +144,7 @@ fn generate_unique_name(prefix: &str) -> String {
 }
 
 #[test]
-#[should_panic(expected = "arn cannot be null")]
+#[should_panic(expected = "Role cannot be blank")]
 fn create_pipeline_without_arn() {
     use rusoto_elastictranscoder::CreatePipelineRequest;
 
